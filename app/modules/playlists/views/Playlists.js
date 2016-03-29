@@ -120,8 +120,6 @@ export default class Playlists extends CompositeView {
 
         if (!filter) filter = this.channelFilter;
 
-        console.log('_searchCollection', filter);
-
         this.collection.search(filter);
 
         // Cache
@@ -129,8 +127,8 @@ export default class Playlists extends CompositeView {
     }
 
     _onClickLink(e) {
-        let $link = $(e.currentTarget);
-        let route = $link.attr('href');
+        const $link = $(e.currentTarget);
+        let route   = $link.attr('href');
 
         app.navigate(route);
 

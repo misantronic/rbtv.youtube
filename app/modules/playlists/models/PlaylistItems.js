@@ -63,8 +63,8 @@ class PlaylistItems extends Collection {
 
     /** @returns {PlaylistItem} */
     getNextPlaylistItem(videoId) {
-        let model = this.getCurrentPlaylistItem(videoId);
-        let index = this.indexOf(model) + 1;
+        const model = this.getCurrentPlaylistItem(videoId);
+        const index = this.indexOf(model) + 1;
 
         return this.at(index);
     }
@@ -90,7 +90,7 @@ class PlaylistItems extends Collection {
         }
 
         // Cache
-        let models = sessionStorage.get(this._playlistId);
+        const models = sessionStorage.get(this._playlistId);
 
         if (models) {
             this.reset(models);
@@ -125,10 +125,10 @@ class PlaylistItems extends Collection {
     search({ search, date }) {
         this.reset(
             _.filter(this._originalModels, function (model) {
-                let title = model.get('title');
+                const title = model.get('title');
 
                 if (date) {
-                    let publishedAt = model.get('publishedAt');
+                    const publishedAt = model.get('publishedAt');
 
                     // Match date
                     if (date.date() !== publishedAt.date() || date.month() !== publishedAt.month() || date.year() !== publishedAt.year()) {

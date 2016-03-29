@@ -38,8 +38,8 @@ class PlaylistItem extends ItemView {
     }
 
     initialize() {
-        let videoId = this.model.get('videoId');
-        let watched = !!localStorage.get(`${videoId}.info`, 'watched');
+        const videoId = this.model.get('videoId');
+        const watched = !!localStorage.get(`${videoId}.info`, 'watched');
 
         if (watched) {
             this.model.set('_watched', true);
@@ -152,7 +152,7 @@ export default class PlaylistItems extends CompositeView {
     }
 
     _searchCollection() {
-        let filter = this.playlistFilter;
+        const filter = this.playlistFilter;
 
         this.collection.search(filter);
     }
@@ -164,7 +164,7 @@ export default class PlaylistItems extends CompositeView {
     _highlightVideo() {
         this.$childViewContainer.find('.js-playlist-item').removeClass('active');
 
-        let $videoId = this.$childViewContainer.find('[data-videoid="' + this.model.get('videoId') + '"]');
+        const $videoId = this.$childViewContainer.find('[data-videoid="' + this.model.get('videoId') + '"]');
 
         $videoId.addClass('active');
 
@@ -176,7 +176,7 @@ export default class PlaylistItems extends CompositeView {
     }
 
     _routeToVideo() {
-        var currentPlaylistItem = this.collection.getCurrentPlaylistItem(this.model.get('videoId'));
+        const currentPlaylistItem = this.collection.getCurrentPlaylistItem(this.model.get('videoId'));
 
         app.navigate(`playlists/playlist/${currentPlaylistItem.get('playlistId')}/video/${currentPlaylistItem.get('videoId')}`);
     }
@@ -184,7 +184,7 @@ export default class PlaylistItems extends CompositeView {
     _videoPlay() {
         clearInterval(this._playerInterval);
 
-        let videoId = this.model.get('videoId');
+        const videoId = this.model.get('videoId');
 
         if (videoId) {
             $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
@@ -205,7 +205,7 @@ export default class PlaylistItems extends CompositeView {
         const videoId = this.model.get('videoId');
 
         // currentTime
-        let videoInfo = localStorage.get(`${videoId}.info`);
+        const videoInfo = localStorage.get(`${videoId}.info`);
 
         if (videoInfo && videoInfo.currentTime) {
             this._player.seekTo(videoInfo.currentTime);
@@ -218,8 +218,8 @@ export default class PlaylistItems extends CompositeView {
         // Store player-status
         clearInterval(this._playerInterval);
 
-        let updateCurrentTime = () => {
-            let currentTime = Math.round(this._player.getCurrentTime());
+        const updateCurrentTime = () => {
+            const currentTime = Math.round(this._player.getCurrentTime());
 
             localStorage.update(`${videoId}.info`, { currentTime });
         };
@@ -236,10 +236,10 @@ export default class PlaylistItems extends CompositeView {
         localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
 
         // Play next
-        let nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
+        const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
 
         if (nextPlaylistItem) {
-            let nextVideoId = nextPlaylistItem.get('videoId');
+            const nextVideoId = nextPlaylistItem.get('videoId');
 
             // Reset currentTime
             localStorage.update(`${nextVideoId}.info`, { currentTime: 0 });

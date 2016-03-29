@@ -15,6 +15,6 @@ class PlaylistsRouter extends AppRouter {
     }
 }
 
-let playlistsRouter = new PlaylistsRouter();
+const playlistsRouter = new PlaylistsRouter();
 
 export default playlistsRouter;

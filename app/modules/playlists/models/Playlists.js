@@ -76,7 +76,7 @@ class Playlists extends Collection {
         }
 
         // Cache
-        let models = sessionStorage.get(this._channelId);
+        const models = sessionStorage.get(this._channelId);
 
         if (models) {
             this.reset(models);
@@ -114,8 +114,8 @@ class Playlists extends Collection {
     search({ search, rbtv, lp }) {
         this.reset(
             _.filter(this._originalModels, function (model) {
-                let channelId = model.get('channelId');
-                let title     = model.get('title');
+                const channelId = model.get('channelId');
+                const title     = model.get('title');
 
                 if (!rbtv && !lp) {
                     return false;

@@ -44,7 +44,7 @@ class PlaylistsController extends Marionette.Object {
 
     _initVideo(videoId) {
         if (!videoId) {
-            let playlistItem = this._playlistItemsCollection.first();
+            const playlistItem = this._playlistItemsCollection.first();
 
             if (playlistItem) {
                 videoId = playlistItem.get('videoId');

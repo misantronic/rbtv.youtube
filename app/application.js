@@ -41,6 +41,6 @@ class Application extends Marionette.Application {
     }
 }
 
-var app = new Application();
+const app = new Application();
 
 export default app;

@@ -27,12 +27,12 @@ function storageSet(storage, key, value) {
 }
 
 function storageUpdate(storage, key, properties) {
-    var keyValue = storageSet(storage, key) || {};
+    var keyValue = storageGet(storage, key) || {};
 
-    this.set(key, _.extend(keyValue, properties));
+    storageSet(storage, key, _.extend(keyValue, properties));
 }
 
-export let localStorage = {
+export const localStorage = {
     get: function (key, property = null) {
         return storageGet('localStorage', key, property)
     },
@@ -42,11 +42,11 @@ export let localStorage = {
     },
 
     update: function (key, properties) {
-        storageUpdate('localStorage', key, value);
+        storageUpdate('localStorage', key, properties);
     }
 };
 
-export let sessionStorage = {
+export const sessionStorage = {
     get: function (key, property = null) {
         return storageGet('sessionStorage', key, property)
     },
@@ -56,6 +56,6 @@ export let sessionStorage = {
     },
 
     update: function (key, properties) {
-        storageUpdate('sessionStorage', key, value);
+        storageUpdate('sessionStorage', key, properties);
     }
 };
