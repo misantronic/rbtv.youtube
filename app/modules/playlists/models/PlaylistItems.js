@@ -2,12 +2,15 @@ import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
-import {localStorage} from '../../../utils';
+import {sessionStorage} from '../../../utils';
 import Config from '../../../Config';
 
 const parts      = 'snippet, contentDetails';
 const maxResults = 50;
 
+/**
+ * @class PlaylistItemModel
+ */
 class PlaylistItem extends Model {
 
     defaults() {
@@ -58,6 +61,19 @@ class PlaylistItems extends Collection {
         this._Deferred   = null;
     }
 
+    /** @returns {PlaylistItem} */
+    getNextPlaylistItem(videoId) {
+        let model = this.getCurrentPlaylistItem(videoId);
+        let index = this.indexOf(model) + 1;
+
+        return this.at(index);
+    }
+
+    /** @returns {PlaylistItem} */
+    getCurrentPlaylistItem(videoId) {
+        return this.findWhere({ videoId });
+    }
+
     url() {
         return Config.endpoints.playlistItems + '?' + $.param([
                 { name: 'part', value: parts },
@@ -74,10 +90,15 @@ class PlaylistItems extends Collection {
         }
 
         // Cache
-        let models = localStorage.get(this._playlistId);
+        let models = sessionStorage.get(this._playlistId);
 
         if (models) {
             this.reset(models);
+
+            // Parse publishedAt as moment-object
+            this.each(function (model) {
+                model.set('publishedAt', moment(model.get('publishedAt')))
+            });
 
             this._fetchComplete();
         } else {
@@ -101,10 +122,19 @@ class PlaylistItems extends Collection {
         return this.models.concat(response.items);
     }
 
-    search({ search }) {
+    search({ search, date }) {
         this.reset(
             _.filter(this._originalModels, function (model) {
                 let title = model.get('title');
+
+                if (date) {
+                    let publishedAt = model.get('publishedAt');
+
+                    // Match date
+                    if (date.date() !== publishedAt.date() || date.month() !== publishedAt.month() || date.year() !== publishedAt.year()) {
+                        return false;
+                    }
+                }
 
                 return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
             })
@@ -115,7 +145,7 @@ class PlaylistItems extends Collection {
     _fetchComplete() {
         // Cache
         _.defer(function () {
-            localStorage.set(this._playlistId, this.toJSON());
+            sessionStorage.set(this._playlistId, this.toJSON());
 
             this._Deferred.resolve(this);
         }.bind(this));

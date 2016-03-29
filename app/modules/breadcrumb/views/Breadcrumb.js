@@ -28,8 +28,8 @@ class BreadcrumbItem extends ItemView {
     }
 
     _onClick(e) {
-        var $link = $(e.currentTarget);
-        var route = $link.attr('href');
+        let $link = $(e.currentTarget);
+        let route = $link.attr('href');
 
         app.navigate(route);
 

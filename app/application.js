@@ -1,11 +1,16 @@
-import * as Marionette from 'backbone.marionette';
-import playlistsController from './modules/playlists/controller';
-import breadcrumbController from './modules/breadcrumb/controller';
+import * as Marionette from 'backbone.marionette'
+import playlistsController from './modules/playlists/controller'
+import breadcrumbController from './modules/breadcrumb/controller'
 
-import './overrides/marionette.stickit';
-import '../assets/css/application.scss';
-import './modules/playlists/router';
-import './modules/breadcrumb/router';
+// CSS
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import '../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css'
+
+import 'bootstrap-datepicker'
+import './overrides/marionette.stickit'
+import '../assets/css/application.scss'
+import './modules/playlists/router'
+import './modules/breadcrumb/router'
 
 class Application extends Marionette.Application {
 

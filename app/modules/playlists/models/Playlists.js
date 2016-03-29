@@ -2,7 +2,7 @@ import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
-import {localStorage} from '../../../utils';
+import {sessionStorage} from '../../../utils';
 import Config from '../../../Config';
 
 const parts      = 'snippet, contentDetails';
@@ -76,13 +76,21 @@ class Playlists extends Collection {
         }
 
         // Cache
-        let models = localStorage.get(this._channelId);
+        let models = sessionStorage.get(this._channelId);
 
         if (models) {
             this.reset(models);
 
             this._fetchComplete();
         } else {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register(this.url()).then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+                }).catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            }
+
             Collection.prototype.fetch.apply(this, ...args);
         }
 
@@ -130,7 +138,7 @@ class Playlists extends Collection {
     _fetchComplete() {
         // Cache
         _.defer(function () {
-            localStorage.set(this._channelId, this.toJSON());
+            sessionStorage.set(this._channelId, this.toJSON());
 
             this._Deferred.resolve(this);
         }.bind(this));

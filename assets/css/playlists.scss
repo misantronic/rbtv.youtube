@@ -56,8 +56,40 @@
 	}
 }
 
+.playlist-items-form {
+	position: relative;
+
+	.datepicker-label {
+		margin: 0;
+		font-weight: normal;
+		display: inline;
+		cursor: pointer;
+
+		> .datepicker {
+			position: absolute;
+			top: 5px;
+			right: 1px;
+			width: 110px;
+			border: none;
+			color: #BBB;
+		}
+
+		> .glyphicon-calendar {
+			position: absolute;
+			top: 11px;
+			right: 11px;
+			color: #BBB;
+		}
+	}
+
+	.search {
+		border-bottom: none;
+		padding-right: 115px;
+	}
+}
+
 .playlist-items {
-	max-height: 365px;
+	max-height: 395px;
 	border: 1px solid #CCC;
 	overflow: auto;
 
@@ -75,12 +107,34 @@
 			}
 		}
 
-		.thumb {
+		&.watched {
+			.thumb-container {
+				position: relative;
+
+				&:before {
+					content: 'watched';
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					background: #444;
+					font-size: smaller;
+					padding: 2px;
+					color: #FFFFFF;
+					z-index: 10;
+				}
+
+				.thumb {
+					opacity: 0.65;
+				}
+			}
+		}
+
+		.thumb-container .thumb {
 			max-height: 50px;
 		}
 
 		.title {
-			padding-left: 10px;
+			padding: 2px 0 0 10px;
 			line-height: 120%;
 
 			> .link:hover,
@@ -91,4 +145,8 @@
 			}
 		}
 	}
+}
+
+.video-container {
+	padding-left: 10px;
 }

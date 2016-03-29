@@ -14,7 +14,7 @@ class BreadcrumbRouter extends AppRouter {
     }
 
     onRoute() {
-        var fragment = history.getFragment();
+        let fragment = history.getFragment();
 
         if (fragment.indexOf('playlists/playlist/') === 0) {
             this.controller.initPlaylist(fragment.split('/')[2]);

@@ -41,7 +41,7 @@ export default class Playlists extends CompositeView {
         return {
             'change:_search change:_filterByRBTV change:_filterByLP': _.debounce(function () {
                 this._searchCollection();
-            }, 50)
+            }, 700)
         }
     }
 
@@ -120,6 +120,8 @@ export default class Playlists extends CompositeView {
 
         if (!filter) filter = this.channelFilter;
 
+        console.log('_searchCollection', filter);
+
         this.collection.search(filter);
 
         // Cache
@@ -127,8 +129,8 @@ export default class Playlists extends CompositeView {
     }
 
     _onClickLink(e) {
-        var $link = $(e.currentTarget);
-        var route = $link.attr('href');
+        let $link = $(e.currentTarget);
+        let route = $link.attr('href');
 
         app.navigate(route);
 
