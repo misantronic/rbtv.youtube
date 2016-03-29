@@ -112,7 +112,7 @@ export default class PlaylistItems extends CompositeView {
         return {
             'change:videoId': '_highlightVideo _routeToVideo',
 
-            'change:_search change:_searchDate': _.debounce(function () {
+            'change:_search change:_searchDate': _.debounce(() => {
                 this._searchCollection();
                 this._highlightVideo();
             }, 50)
@@ -130,7 +130,7 @@ export default class PlaylistItems extends CompositeView {
 
             '@ui.datepicker': {
                 observe: '_searchDate',
-                onSet: function (val) {
+                onSet: (val) => {
                     return val ? moment(val, 'DD.MM.YYYY') : null;
                 }
             }

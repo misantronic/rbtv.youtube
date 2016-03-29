@@ -83,14 +83,6 @@ class Playlists extends Collection {
 
             this._fetchComplete();
         } else {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register(this.url()).then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ',    registration.scope);
-                }).catch(function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            }
-
             Collection.prototype.fetch.apply(this, ...args);
         }
 
@@ -113,7 +105,7 @@ class Playlists extends Collection {
 
     search({ search, rbtv, lp }) {
         this.reset(
-            _.filter(this._originalModels, function (model) {
+            _.filter(this._originalModels, (model) => {
                 const channelId = model.get('channelId');
                 const title     = model.get('title');
 
@@ -137,11 +129,11 @@ class Playlists extends Collection {
     /** @private */
     _fetchComplete() {
         // Cache
-        _.defer(function () {
+        _.defer(() => {
             sessionStorage.set(this._channelId, this.toJSON());
 
             this._Deferred.resolve(this);
-        }.bind(this));
+        });
 
         this._originalModels = this.models;
     }

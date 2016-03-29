@@ -26,7 +26,7 @@ class BreadcrumbController extends Marionette.Object {
 
         // Retrieve playlist-name
         $.get(`${Config.endpoints.playlists}?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
-            .done(function (data) {
+            .done((data) => {
                 const title = data.items[0].snippet.title;
 
                 this._region.show(
@@ -37,7 +37,7 @@ class BreadcrumbController extends Marionette.Object {
                         ])
                     })
                 );
-            }.bind(this));
+            });
 
         this._currentPlaylistId = playlistId;
     }

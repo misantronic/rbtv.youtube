@@ -39,7 +39,7 @@ export default class Playlists extends CompositeView {
 
     modelEvents() {
         return {
-            'change:_search change:_filterByRBTV change:_filterByLP': _.debounce(function () {
+            'change:_search change:_filterByRBTV change:_filterByLP': _.debounce(() => {
                 this._searchCollection();
             }, 700)
         }

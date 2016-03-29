@@ -96,7 +96,7 @@ class PlaylistItems extends Collection {
             this.reset(models);
 
             // Parse publishedAt as moment-object
-            this.each(function (model) {
+            this.each((model) => {
                 model.set('publishedAt', moment(model.get('publishedAt')))
             });
 
@@ -124,7 +124,7 @@ class PlaylistItems extends Collection {
 
     search({ search, date }) {
         this.reset(
-            _.filter(this._originalModels, function (model) {
+            _.filter(this._originalModels, (model) => {
                 const title = model.get('title');
 
                 if (date) {
@@ -144,11 +144,11 @@ class PlaylistItems extends Collection {
     /** @private */
     _fetchComplete() {
         // Cache
-        _.defer(function () {
+        _.defer(() => {
             sessionStorage.set(this._playlistId, this.toJSON());
 
             this._Deferred.resolve(this);
-        }.bind(this));
+        });
 
         this._originalModels = this.models;
     }

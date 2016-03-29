@@ -19,10 +19,10 @@ class PlaylistsController extends Marionette.Object {
         this._playlistCollection = new PlaylistsCollection();
 
         this._fetchPlaylist(Config.channelRBTV)
-            .done(function () {
+            .done(() => {
                 this._fetchPlaylist(Config.channelLP)
                     .done(this._onPlaylistsLoaded.bind(this))
-            }.bind(this))
+            })
     }
 
     initPlaylist(playlistId, videoId = null) {
