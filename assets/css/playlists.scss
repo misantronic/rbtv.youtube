@@ -1,0 +1,94 @@
+.filter-buttons {
+	float: right;
+	margin: -52px 15px 10px;
+
+	> .btn {
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
+.playlists {
+	display: flex;
+	flex-wrap: wrap;
+
+	.playlist {
+		display: flex;
+
+		.thumbnail {
+			margin-bottom: 30px;
+			width: 100%;
+
+			> img {
+				max-width: 100%;
+			}
+
+			> .caption {
+				width: 100%;
+
+				> .title {
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+					position: relative;
+					padding-right: 40px;
+					margin-top: 10px;
+
+					> .badge {
+						position: absolute;
+						right: 0;
+						top: 4px;
+					}
+				}
+
+				> .description {
+					max-height: 58px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-line-clamp: 3;
+					-webkit-box-orient: vertical;
+					display: -webkit-box;
+					margin: 0;
+				}
+			}
+		}
+	}
+}
+
+.playlist-items {
+	max-height: 365px;
+	border: 1px solid #CCC;
+	overflow: auto;
+
+	> .playlist-item {
+		display: flex;
+		margin-bottom: 5px;
+		padding: 5px;
+		height: 60px;
+
+		&.active {
+			background: #EEE;
+
+			.link {
+				color: #000;
+			}
+		}
+
+		.thumb {
+			max-height: 50px;
+		}
+
+		.title {
+			padding-left: 10px;
+			line-height: 120%;
+
+			> .link:hover,
+			> .link:active,
+			> .link:focus {
+				text-decoration: none;
+				outline: none;
+			}
+		}
+	}
+}
