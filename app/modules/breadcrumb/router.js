@@ -3,7 +3,7 @@ import * as Marionette from 'backbone.marionette';
 import {history} from 'backbone'
 import controller from './controller';
 import playlistsRouter from '../playlists/router'
-import overviewRouter from '../overview/router'
+import overviewRouter from '../activities/router'
 import vidoesRouter from '../videos/router'
 
 class BreadcrumbRouter extends Marionette.Object {

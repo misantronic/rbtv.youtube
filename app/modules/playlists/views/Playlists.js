@@ -7,7 +7,7 @@ import app from '../../../application';
 
 class Playlist extends ItemView {
     get className() {
-        return 'playlist col-xs-12 col-sm-3';
+        return 'item col-xs-12 col-sm-3';
     }
 
     get template() {
@@ -46,7 +46,7 @@ class Playlist extends ItemView {
 }
 
 
-export default class Playlists extends CompositeView {
+class Playlists extends CompositeView {
 
     constructor(options) {
         _.defaults(options, {
@@ -185,3 +185,5 @@ export default class Playlists extends CompositeView {
         this.ui.btnFilterLP.blur();
     }
 }
+
+export default Playlists

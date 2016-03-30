@@ -10,9 +10,24 @@ body {
 	padding: 30px 0;
 
 	.breadcrumb {
-		margin-bottom: 10px;
+		margin-bottom: 20px;
 		padding-top: 15px;
 		padding-bottom: 15px;
+	}
+
+	.btn-to-top {
+		opacity: 0;
+		pointer-events: none;
+		position: fixed;
+		bottom: 10px;
+		right: 10px;
+
+		transition: opacity 0.3s linear;
+
+		&.show {
+			opacity: 1;
+			pointer-events: auto;
+		}
 	}
 }
 
@@ -154,5 +169,79 @@ body {
 	@keyframes sk-circleFadeDelay {
 		0%, 39%, 100% { opacity: 0; }
 		40% { opacity: 1; }
+	}
+}
+
+.items {
+	display: flex;
+	flex-wrap: wrap;
+
+	.item {
+		display: flex;
+
+		.loader {
+			display: none;
+			position: absolute;
+			left: 20px;
+			top: 5px;
+			width: calc(100% - 39px);
+			height: 195px;
+			background: rgba(255, 255, 255, 0.85);
+		}
+
+		&.loading .loader {
+			display: block;
+		}
+
+		.thumbnail {
+			margin-bottom: 30px;
+			width: 100%;
+
+			> .link {
+				display: block;
+				position: relative;
+
+				> .thumb {
+					max-width: 100%;
+				}
+
+				> .publishedAt {
+					position: absolute;
+					right: 10px;
+					bottom: 10px;
+					font-size: 90%;
+				}
+			}
+
+			> .caption {
+				width: 100%;
+
+				> .title {
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+					position: relative;
+					padding-right: 40px;
+					margin-top: 10px;
+					font-size: 17px;
+
+					> .badge {
+						position: absolute;
+						right: 0;
+						top: 0;
+					}
+				}
+
+				> .description {
+					max-height: 58px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-line-clamp: 3;
+					-webkit-box-orient: vertical;
+					display: -webkit-box;
+					margin: 0;
+				}
+			}
+		}
 	}
 }

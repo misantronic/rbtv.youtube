@@ -3,7 +3,8 @@ import {Collection} from 'backbone'
 export default {
     endpoints: {
         playlists: 'https://www.googleapis.com/youtube/v3/playlists',
-        playlistItems: 'https://www.googleapis.com/youtube/v3/playlistItems'
+        playlistItems: 'https://www.googleapis.com/youtube/v3/playlistItems',
+        activities: 'https://www.googleapis.com/youtube/v3/activities'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',

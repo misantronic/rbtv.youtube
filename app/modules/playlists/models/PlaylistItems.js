@@ -19,6 +19,8 @@ class PlaylistItem extends Model {
             etag: null,
             kind: null,
             videoId: null,
+            playlistId: null,
+            channelId: null,
             description: '',
             publishedAt: null,
             thumbnails: null,
@@ -85,9 +87,7 @@ class PlaylistItems extends Collection {
     }
 
     fetch(...args) {
-        if (!this._Deferred) {
-            this._Deferred = $.Deferred();
-        }
+        this._Deferred = this._Deferred || $.Deferred();
 
         // Cache
         const models = sessionStorage.get(this._playlistId);

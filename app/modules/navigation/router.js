@@ -1,6 +1,6 @@
 import * as Marionette from 'backbone.marionette';
 import playlistsRouter from '../playlists/router'
-import overviewRouter from '../overview/router'
+import overviewRouter from '../activities/router'
 import videosRouter from '../videos/router'
 import {history} from 'backbone'
 import Config from '../../Config'

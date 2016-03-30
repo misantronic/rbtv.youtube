@@ -1,6 +1,6 @@
 .filter-buttons {
 	float: right;
-	margin: -52px 15px 10px;
+	margin: -62px 10px 10px;
 
 	> .btn {
 		&:focus {
@@ -9,64 +9,27 @@
 	}
 }
 
-.playlists {
-	display: flex;
-	flex-wrap: wrap;
+.search-label {
+	margin: 0;
+	font-weight: normal;
+	width: 100%;
 
-	.playlist {
-		display: flex;
+	&:before {
+		content: "\e003";
+		position: absolute;
+		top: 10px;
+		left: 30px;
+		display: inline-block;
+		font-family: 'Glyphicons Halflings';
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
 
-		.loader {
-			display: none;
-			position: absolute;
-			left: 20px;
-			top: 5px;
-			width: calc(100% - 39px);
-			height: 195px;
-			background: rgba(255, 255, 255, 0.85);
-		}
-
-		&.loading .loader {
-			display: block;
-		}
-
-		.thumbnail {
-			margin-bottom: 30px;
-			width: 100%;
-
-			> img {
-				max-width: 100%;
-			}
-
-			> .caption {
-				width: 100%;
-
-				> .title {
-					text-overflow: ellipsis;
-					white-space: nowrap;
-					overflow: hidden;
-					position: relative;
-					padding-right: 40px;
-					margin-top: 10px;
-
-					> .badge {
-						position: absolute;
-						right: 0;
-						top: 4px;
-					}
-				}
-
-				> .description {
-					max-height: 58px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					-webkit-line-clamp: 3;
-					-webkit-box-orient: vertical;
-					display: -webkit-box;
-					margin: 0;
-				}
-			}
-		}
+	> .search {
+		padding-left: 40px;
 	}
 }
 

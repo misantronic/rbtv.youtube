@@ -6,8 +6,6 @@ import PlaylistItemsView from './views/PlistlistItems';
 import Config from '../../Config';
 import app from '../../application';
 
-import '../../../assets/css/playlists.scss';
-
 class PlaylistsController extends Marionette.Object {
 
     init(region) {

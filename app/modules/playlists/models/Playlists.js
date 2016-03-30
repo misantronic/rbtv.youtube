@@ -15,6 +15,7 @@ class Playlist extends Model {
             etag: null,
             kind: null,
             itemCount: 0,
+            channelId: null,
             description: '',
             publishedAt: null,
             thumbnails: null,
@@ -78,6 +79,11 @@ class Playlists extends Collection {
 
         if (models) {
             this.reset(models);
+
+            // Parse publishedAt as moment-object
+            this.each((model) => {
+                model.set('publishedAt', moment(model.get('publishedAt')))
+            });
 
             this._fetchComplete();
         } else {

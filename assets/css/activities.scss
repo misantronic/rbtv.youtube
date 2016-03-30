@@ -1,0 +1,14 @@
+.layout-activities {
+	> .loader {
+		display: none;
+
+		&.show {
+			display: block;
+		}
+
+		> .sk-fading-circle {
+			position: relative;
+			top: 0;
+		}
+	}
+}

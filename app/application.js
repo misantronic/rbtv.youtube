@@ -5,22 +5,24 @@ import {history} from 'backbone'
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css'
 import '../assets/css/application.scss'
+import '../assets/css/playlists.scss';
 
 // Modules & overrides
+import '../node_modules/moment/locale/de'
 import 'bootstrap-datepicker'
 import './overrides/marionette.stickit'
 
 // Controller
 import playlistsController from './modules/playlists/controller'
 import breadcrumbController from './modules/breadcrumb/controller'
-import overviewController from './modules/overview/controller'
+import overviewController from './modules/activities/controller'
 import videosController from './modules/videos/controller'
 
 // Router
 import './modules/playlists/router'
 import './modules/breadcrumb/router'
 import './modules/videos/router'
-import './modules/overview/router'
+import './modules/activities/router'
 import './modules/navigation/router'
 
 // Views
