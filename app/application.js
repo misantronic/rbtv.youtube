@@ -16,12 +16,10 @@ import './overrides/marionette.stickit'
 import playlistsController from './modules/playlists/controller'
 import breadcrumbController from './modules/breadcrumb/controller'
 import overviewController from './modules/activities/controller'
-import videosController from './modules/videos/controller'
 
 // Router
 import './modules/playlists/router'
 import './modules/breadcrumb/router'
-import './modules/videos/router'
 import './modules/activities/router'
 import './modules/navigation/router'
 
@@ -52,7 +50,6 @@ class App extends Application {
         breadcrumbController.init(this.getRegion('breadcrumb'));
         playlistsController.init(this.getRegion('main'));
         overviewController.init(this.getRegion('main'));
-        videosController.init(this.getRegion('main'));
 
         this._initNavigation();
 

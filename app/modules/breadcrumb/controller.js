@@ -14,7 +14,7 @@ class BreadcrumbController extends Marionette.Object {
         this._currentPlaylistId = null;
 
         this._showBreadcrumb([
-            { title: 'Playlists' }
+            { title: Config.navigation.findWhere({ route: 'playlists' }).get('title') }
         ]);
     }
 
@@ -24,7 +24,7 @@ class BreadcrumbController extends Marionette.Object {
 
         if (title) {
             return this._showBreadcrumb([
-                { title: 'Playlists', route: 'playlists' },
+                { title: Config.navigation.findWhere({ route: 'playlists' }).get('title'), route: 'playlists' },
                 { title }
             ]);
         }
@@ -50,13 +50,7 @@ class BreadcrumbController extends Marionette.Object {
 
     initOverview() {
         this._showBreadcrumb([
-            { title: 'Overview' }
-        ]);
-    }
-
-    initVideos() {
-        this._showBreadcrumb([
-            { title: 'Videos' }
+            { title: Config.navigation.findWhere({ route: 'overview' }).get('title') }
         ]);
     }
 

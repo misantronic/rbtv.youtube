@@ -15,7 +15,6 @@ export default {
 
     navigation: new Collection([
         { title: 'Übersicht', route: 'overview' },
-        { title: 'Videos', route: 'videos' },
         { title: 'Playlists', route: 'playlists' }
     ])
 }

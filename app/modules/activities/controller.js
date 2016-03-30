@@ -13,14 +13,11 @@ class OverviewController extends Marionette.Object {
     initOverview() {
         var activities = new ActivitiesColection();
 
-        activities
-            .setChannelId(Config.channelRBTV)
-            .fetch()
-            .then(() => {
-                var view = new ActivitiesView({ collection: activities });
+        var view = new ActivitiesView({ collection: activities });
 
-                this._region.show(view);
-            })
+        this._region.show(view);
+
+        view.renderChannel();
     }
 }
 

@@ -2,6 +2,7 @@ import $ from 'jquery'
 import _ from 'underscore'
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
+import Config from '../../../Config'
 
 class Activity extends ItemView {
     get className() {
@@ -22,7 +23,7 @@ class Activities extends CompositeView {
         _.defaults(options, {
             model: new Model({
                 _filterByRBTV: true,
-                _filterByLP: true,
+                _filterByLP: false,
                 _showBtnToTop: false,
                 _loading: false
             })
@@ -37,18 +38,38 @@ class Activities extends CompositeView {
                 $('html, body').animate({ scrollTop: 0 }, 500);
 
                 e.preventDefault();
-            }
+            },
+            'click @ui.btnFilterRBTV': '_onSelectRBTV',
+            'click @ui.btnFilterLP': '_onSelectLP'
         }
     }
 
     modelEvents() {
-        return {}
+        return {
+            'change:_filterByRBTV': (model, val) => {
+                if (val) {
+                    this._currentChannel = Config.channelRBTV;
+
+                    this.renderChannel()
+                }
+            },
+
+            'change:_filterByLP': (model, val) => {
+                if (val) {
+                    this._currentChannel = Config.channelLP;
+
+                    this.renderChannel()
+                }
+            }
+        }
     }
 
     ui() {
         return {
             btnToTop: '.js-btn-to-top',
-            loader: '.js-loader'
+            loader: '.js-loader',
+            btnFilterRBTV: '.js-filter-rbtv',
+            btnFilterLP: '.js-filter-lp'
         }
     }
 
@@ -63,6 +84,18 @@ class Activities extends CompositeView {
             '@ui.loader': {
                 classes: {
                     show: '_loading'
+                }
+            },
+
+            '@ui.btnFilterRBTV': {
+                classes: {
+                    active: '_filterByRBTV'
+                }
+            },
+
+            '@ui.btnFilterLP': {
+                classes: {
+                    active: '_filterByLP'
                 }
             }
         }
@@ -84,6 +117,10 @@ class Activities extends CompositeView {
         return require('../templates/activities.ejs');
     }
 
+    initialize() {
+        this._currentChannel = Config.channelRBTV;
+    }
+
     onRender() {
         this._initScroll();
 
@@ -92,6 +129,23 @@ class Activities extends CompositeView {
 
     onDestroy() {
         this._killScroll();
+    }
+
+    renderChannel(nextPageToken = null) {
+        this.model.set('_loading', true);
+
+        if (!nextPageToken) {
+            this.collection.reset();
+        }
+
+        this.collection
+            .setNextPageToken(nextPageToken)
+            .setChannelId(this._currentChannel)
+            .fetch()
+            .done(() => {
+                this.model.set('_loading', false);
+                this.render();
+            })
     }
 
     _initScroll() {
@@ -103,15 +157,25 @@ class Activities extends CompositeView {
     }
 
     _fetchNext() {
-        if (this.collection.nextPageToken) {
-            this.model.set('_loading', true);
+        const nextPageToken = this.collection.nextPageToken;
 
-            this.collection.fetch()
-                .done(() => {
-                    this.model.set('_loading', false);
-                    this.render();
-                });
+        if (nextPageToken) {
+            this.renderChannel(nextPageToken);
         }
+    }
+
+    _onSelectRBTV() {
+        this.model.set({
+            _filterByRBTV: true,
+            _filterByLP: false
+        });
+    }
+
+    _onSelectLP() {
+        this.model.set({
+            _filterByRBTV: false,
+            _filterByLP: true
+        });
     }
 
     _onScroll() {

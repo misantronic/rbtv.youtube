@@ -49,6 +49,12 @@ class Activities extends Collection {
         return this
     }
 
+    setNextPageToken(val) {
+        this._nextPageToken = val;
+
+        return this
+    }
+
     get nextPageToken() {
         return this._nextPageToken
     }

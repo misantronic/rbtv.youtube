@@ -4,7 +4,6 @@ import {history} from 'backbone'
 import controller from './controller';
 import playlistsRouter from '../playlists/router'
 import overviewRouter from '../activities/router'
-import vidoesRouter from '../videos/router'
 
 class BreadcrumbRouter extends Marionette.Object {
     initialize() {
@@ -12,7 +11,6 @@ class BreadcrumbRouter extends Marionette.Object {
 
         playlistsRouter.on('route', this._onRoute);
         overviewRouter.on('route', this._onRoute);
-        vidoesRouter.on('route', this._onRoute);
     }
 
     /** @type {BreadcrumbController} */
@@ -29,8 +27,6 @@ class BreadcrumbRouter extends Marionette.Object {
             this.controller.initPlaylists();
         } else if (fragment === 'overview') {
             this.controller.initOverview();
-        } else if (fragment === 'videos') {
-            this.controller.initVideos();
         }
     }
 }
