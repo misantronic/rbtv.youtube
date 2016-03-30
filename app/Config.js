@@ -1,3 +1,5 @@
+import {Collection} from 'backbone'
+
 export default {
     endpoints: {
         playlists: 'https://www.googleapis.com/youtube/v3/playlists',
@@ -8,5 +10,11 @@ export default {
 
     channelRBTV: 'UCQvTDmHza8erxZqDkjQ4bQQ',
 
-    channelLP: 'UCtSP1OA6jO4quIGLae7Fb4g'
+    channelLP: 'UCtSP1OA6jO4quIGLae7Fb4g',
+
+    navigation: new Collection([
+        { title: 'Übersicht', route: 'overview' },
+        { title: 'Videos', route: 'videos' },
+        { title: 'Playlists', route: 'playlists' }
+    ])
 }

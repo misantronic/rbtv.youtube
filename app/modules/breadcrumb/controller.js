@@ -48,6 +48,18 @@ class BreadcrumbController extends Marionette.Object {
         this._currentPlaylistId = playlistId;
     }
 
+    initOverview() {
+        this._showBreadcrumb([
+            { title: 'Overview' }
+        ]);
+    }
+
+    initVideos() {
+        this._showBreadcrumb([
+            { title: 'Videos' }
+        ]);
+    }
+
     _showBreadcrumb(list) {
         this._region.show(
             new BreadcrumbView({

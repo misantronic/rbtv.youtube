@@ -15,6 +15,6 @@ class PlaylistsRouter extends AppRouter {
     }
 }
 
-const playlistsRouter = new PlaylistsRouter();
+const router = new PlaylistsRouter();
 
-export default playlistsRouter;
+export default router;

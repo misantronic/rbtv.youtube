@@ -1,11 +1,18 @@
-import {AppRouter} from 'backbone.marionette';
+import _ from 'underscore'
+import * as Marionette from 'backbone.marionette';
+import {history} from 'backbone'
 import controller from './controller';
 import playlistsRouter from '../playlists/router'
-import {history} from 'backbone'
+import overviewRouter from '../overview/router'
+import vidoesRouter from '../videos/router'
 
-class BreadcrumbRouter extends AppRouter {
+class BreadcrumbRouter extends Marionette.Object {
     initialize() {
-        playlistsRouter.on('route', this.onRoute.bind(this))
+        _.bindAll(this, '_onRoute');
+
+        playlistsRouter.on('route', this._onRoute);
+        overviewRouter.on('route', this._onRoute);
+        vidoesRouter.on('route', this._onRoute);
     }
 
     /** @type {BreadcrumbController} */
@@ -13,15 +20,17 @@ class BreadcrumbRouter extends AppRouter {
         return controller
     }
 
-    onRoute() {
+    _onRoute() {
         const fragment = history.getFragment();
 
         if (fragment.indexOf('playlists/playlist/') === 0) {
             this.controller.initPlaylist(fragment.split('/')[2]);
-        }
-
-        if (fragment === 'playlists') {
+        } else if (fragment === 'playlists') {
             this.controller.initPlaylists();
+        } else if (fragment === 'overview') {
+            this.controller.initOverview();
+        } else if (fragment === 'videos') {
+            this.controller.initVideos();
         }
     }
 }
