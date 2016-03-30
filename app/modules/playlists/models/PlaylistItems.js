@@ -102,7 +102,7 @@ class PlaylistItems extends Collection {
 
             this._fetchComplete();
         } else {
-            Collection.prototype.fetch.apply(this, ...args);
+            super.fetch.apply(this, ...args);
         }
 
         return this._Deferred.promise();

@@ -71,9 +71,7 @@ class Playlists extends Collection {
     }
 
     fetch(...args) {
-        if (!this._Deferred) {
-            this._Deferred = $.Deferred();
-        }
+        this._Deferred = this._Deferred || $.Deferred();
 
         // Cache
         const models = sessionStorage.get(this._channelId);
@@ -83,7 +81,7 @@ class Playlists extends Collection {
 
             this._fetchComplete();
         } else {
-            Collection.prototype.fetch.apply(this, ...args);
+            super.fetch.apply(this, ...args);
         }
 
         return this._Deferred.promise();
