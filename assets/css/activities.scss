@@ -11,4 +11,22 @@
 			top: 0;
 		}
 	}
+
+	.modal-activities > .modal-dialog {
+		@media (min-width: 768px) {
+			width: 675px;
+		}
+
+		.modal-title {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			width: 95%;
+		}
+
+		.modal-body {
+			background: #000;
+			min-height: 425px;
+		}
+	}
 }

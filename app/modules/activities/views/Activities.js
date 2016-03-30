@@ -3,6 +3,7 @@ import _ from 'underscore'
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import Config from '../../../Config'
+import {sessionStorage} from '../../../utils'
 
 class Activity extends ItemView {
     get className() {
@@ -13,8 +14,18 @@ class Activity extends ItemView {
         return require('../templates/activity.ejs');
     }
 
+    ui() {
+        return {
+            link: '.js-link'
+        }
+    }
+
     onRender() {
-        this.stickit();
+        // Remove modal-settings for mobile devices
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.ui.link.removeAttr('data-toggle');
+            this.ui.link.removeAttr('data-target');
+        }
     }
 }
 
@@ -34,13 +45,10 @@ class Activities extends CompositeView {
 
     events() {
         return {
-            'click @ui.btnToTop': (e) => {
-                $('html, body').animate({ scrollTop: 0 }, 500);
-
-                e.preventDefault();
-            },
+            'click @ui.btnToTop': '_onBtnToTop',
             'click @ui.btnFilterRBTV': '_onSelectRBTV',
-            'click @ui.btnFilterLP': '_onSelectLP'
+            'click @ui.btnFilterLP': '_onSelectLP',
+            'click @ui.link': '_onCLickLink'
         }
     }
 
@@ -66,6 +74,7 @@ class Activities extends CompositeView {
 
     ui() {
         return {
+            link: '.js-link',
             btnToTop: '.js-btn-to-top',
             loader: '.js-loader',
             btnFilterRBTV: '.js-filter-rbtv',
@@ -176,6 +185,30 @@ class Activities extends CompositeView {
             _filterByRBTV: false,
             _filterByLP: true
         });
+    }
+
+    _onBtnToTop(e) {
+        $('html, body').animate({ scrollTop: 0 }, 500);
+
+        e.preventDefault();
+    }
+
+    _onCLickLink(e) {
+        const $link   = $(e.currentTarget);
+        const videoId = $link.data('videoid');
+        const title   = $link.data('title');
+
+        this.$('#modal-activities-body').replaceWith('<div id="modal-activities-body"></div>');
+
+        this.$('.js-modal-activities')
+            .one('shown.bs.modal', () => {
+                this._player = new YT.Player('modal-activities-body', {
+                    height: '390',
+                    width: '100%',
+                    videoId: videoId
+                });
+            })
+            .find('.js-modal-title').text(title);
     }
 
     _onScroll() {

@@ -11,6 +11,7 @@ module.exports = {
 			'backbone.stickit',
 			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
+			'bootstrap',
 			'tether'
 		],
 		application: __dirname + '/app/entry'
@@ -30,7 +31,7 @@ module.exports = {
 			{ test: /\.css$/, loader: 'style-loader!css-loader' },
 			{ test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },
 			{ test: /\.(jpe*g|png|gif|svg|woff2*|eot|ttf)$/, loader: 'file-loader?name=assets/[hash].[ext]' },
-			{ test: /bootstrap\.js/, loader: 'imports?jQuery=jquery,Tether=tether' },
+			{ test: /bootstrap\/js/, loader: 'imports?jQuery=jquery,Tether=tether' },
 			{
 				test: /\.jsx?$/,
 				exclude: /(node_modules|bower_components|vendor)/,
