@@ -13,7 +13,38 @@ class Playlist extends ItemView {
     get template() {
         return require('../templates/playlist.ejs');
     }
+
+    ui() {
+        return {
+            link: '.js-link'
+        }
+    }
+
+    events() {
+        return {
+            'click @ui.link': '_onClickLink'
+        };
+    }
+
+    bindings() {
+        return {
+            ':el': {
+                classes: {
+                    loading: '_loading'
+                }
+            }
+        }
+    }
+
+    onRender() {
+        this.stickit();
+    }
+
+    _onClickLink() {
+        this.model.set('_loading', true)
+    }
 }
+
 
 export default class Playlists extends CompositeView {
 
@@ -22,7 +53,8 @@ export default class Playlists extends CompositeView {
             model: new Model({
                 _search: '',
                 _filterByRBTV: true,
-                _filterByLP: true
+                _filterByLP: true,
+                _loading: false
             })
         });
 
@@ -70,6 +102,10 @@ export default class Playlists extends CompositeView {
 
             '@ui.search': '_search'
         };
+    }
+
+    get className() {
+        return 'layout-playlists'
     }
 
     get childView() {
@@ -129,6 +165,8 @@ export default class Playlists extends CompositeView {
     _onClickLink(e) {
         const $link = $(e.currentTarget);
         let route   = $link.attr('href');
+
+        this.model.set('_loading', true);
 
         app.navigate(route);
 

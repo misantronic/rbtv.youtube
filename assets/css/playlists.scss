@@ -16,6 +16,20 @@
 	.playlist {
 		display: flex;
 
+		.loader {
+			display: none;
+			position: absolute;
+			left: 20px;
+			top: 5px;
+			width: calc(100% - 39px);
+			height: 195px;
+			background: rgba(255, 255, 255, 0.85);
+		}
+
+		&.loading .loader {
+			display: block;
+		}
+
 		.thumbnail {
 			margin-bottom: 30px;
 			width: 100%;
