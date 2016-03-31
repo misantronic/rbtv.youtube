@@ -3,7 +3,7 @@ import _ from 'underscore'
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import Config from '../../../Config'
-import {sessionStorage} from '../../../utils'
+import BtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 
 class Activity extends ItemView {
     get className() {
@@ -22,7 +22,7 @@ class Activity extends ItemView {
 
     onRender() {
         // Remove modal-settings for mobile devices
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             this.ui.link.removeAttr('data-toggle');
             this.ui.link.removeAttr('data-target');
         }
@@ -35,7 +35,6 @@ class Activities extends CompositeView {
             model: new Model({
                 _filterByRBTV: true,
                 _filterByLP: false,
-                _showBtnToTop: false,
                 _loading: false
             })
         });
@@ -43,9 +42,16 @@ class Activities extends CompositeView {
         super(options);
     }
 
+    behaviors() {
+        return {
+            BtnToTop: {
+                behaviorClass: BtnToTop
+            }
+        }
+    }
+
     events() {
         return {
-            'click @ui.btnToTop': '_onBtnToTop',
             'click @ui.btnFilterRBTV': '_onSelectRBTV',
             'click @ui.btnFilterLP': '_onSelectLP',
             'click @ui.link': '_onCLickLink'
@@ -75,7 +81,6 @@ class Activities extends CompositeView {
     ui() {
         return {
             link: '.js-link',
-            btnToTop: '.js-btn-to-top',
             loader: '.js-loader',
             btnFilterRBTV: '.js-filter-rbtv',
             btnFilterLP: '.js-filter-lp'
@@ -84,12 +89,6 @@ class Activities extends CompositeView {
 
     bindings() {
         return {
-            '@ui.btnToTop': {
-                classes: {
-                    show: '_showBtnToTop'
-                }
-            },
-
             '@ui.loader': {
                 classes: {
                     show: '_loading'
@@ -187,12 +186,6 @@ class Activities extends CompositeView {
         });
     }
 
-    _onBtnToTop(e) {
-        $('html, body').animate({ scrollTop: 0 }, 500);
-
-        e.preventDefault();
-    }
-
     _onCLickLink(e) {
         const $link   = $(e.currentTarget);
         const videoId = $link.data('videoid');
@@ -219,8 +212,6 @@ class Activities extends CompositeView {
             this._killScroll();
             this._fetchNext();
         }
-
-        this.model.set('_showBtnToTop', y >= window.innerHeight)
     }
 }
 

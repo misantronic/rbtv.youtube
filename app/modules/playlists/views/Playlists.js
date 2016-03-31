@@ -4,6 +4,7 @@ import {CompositeView, ItemView} from 'backbone.marionette';
 import {Model} from 'backbone';
 import {localStorage} from '../../../utils';
 import app from '../../../application';
+import BtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 
 class Playlist extends ItemView {
     get className() {
@@ -61,6 +62,14 @@ class Playlists extends CompositeView {
         super(options);
     }
 
+    behaviors() {
+        return {
+            BtnToTop: {
+                behaviorClass: BtnToTop
+            }
+        }
+    }
+
     events() {
         return {
             'click @ui.btnFilterRBTV': '_onToggleRBTV',
@@ -82,7 +91,8 @@ class Playlists extends CompositeView {
             link: '.js-link',
             search: '.js-search',
             btnFilterRBTV: '.js-filter-rbtv',
-            btnFilterLP: '.js-filter-lp'
+            btnFilterLP: '.js-filter-lp',
+            btnToTop: '.js-btn-to-top'
         }
     }
 

@@ -10,7 +10,7 @@
 }
 
 .search-label {
-	margin: 0;
+	margin: 0 0 20px;
 	font-weight: normal;
 	width: 100%;
 
@@ -30,6 +30,13 @@
 
 	> .search {
 		padding-left: 40px;
+	}
+}
+
+.items-playlists {
+	> .item > .thumbnail > .link > .thumb {
+		margin-top: -24px;
+		margin-bottom: -24px;
 	}
 }
 
@@ -66,9 +73,9 @@
 }
 
 .playlist-items {
-	max-height: 395px;
-	border: 1px solid #CCC;
+	height: 395px;
 	overflow: auto;
+	background: #FFFFFF;
 
 	> .playlist-item {
 		display: flex;

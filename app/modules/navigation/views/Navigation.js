@@ -38,7 +38,7 @@ class Navigation extends CollectionView {
     }
 
     get className() {
-        return 'navigation nav nav-pills'
+        return 'navigation container nav nav-pills'
     }
 
     get childView() {
