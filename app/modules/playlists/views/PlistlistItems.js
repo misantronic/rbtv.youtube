@@ -187,17 +187,21 @@ export default class PlaylistItems extends CompositeView {
         const videoId = this.model.get('videoId');
 
         if (videoId) {
-            $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
+            if(this._player) {
+                this._player.loadVideoById(videoId, 0);
+            } else {
+                $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
 
-            this._player = new YT.Player('yt-video-container', {
-                height: '390',
-                width: '640',
-                videoId: videoId,
-                events: {
-                    'onReady': this._onVideoReady.bind(this),
-                    'onStateChange': this._onVideoStateChange.bind(this)
-                }
-            });
+                this._player = new YT.Player('yt-video-container', {
+                    height: '390',
+                    width: '640',
+                    videoId: videoId,
+                    events: {
+                        'onReady': this._onVideoReady.bind(this),
+                        'onStateChange': this._onVideoStateChange.bind(this)
+                    }
+                });
+            }
         }
     }
 
