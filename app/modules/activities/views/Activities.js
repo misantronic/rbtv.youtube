@@ -30,7 +30,7 @@ class Activity extends ItemView {
 }
 
 class Activities extends CompositeView {
-    constructor(options) {
+    constructor(options = {}) {
         _.defaults(options, {
             model: new Model({
                 _filterByRBTV: true,
@@ -157,6 +157,8 @@ class Activities extends CompositeView {
     }
 
     _initScroll() {
+        this._killScroll();
+
         $(window).on('scroll.activities', this._onScroll.bind(this));
     }
 

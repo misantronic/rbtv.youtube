@@ -57,7 +57,7 @@ let autoplay = false;
 
 export default class PlaylistItems extends CompositeView {
 
-    constructor(options) {
+    constructor(options = {}) {
         _.defaults(options, {
             model: new Model({
                 _search: '',
