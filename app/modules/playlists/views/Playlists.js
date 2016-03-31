@@ -48,7 +48,7 @@ class Playlist extends ItemView {
 
 class Playlists extends CompositeView {
 
-    constructor(options) {
+    constructor(options = {}) {
         _.defaults(options, {
             model: new Model({
                 _search: '',
@@ -80,11 +80,15 @@ class Playlists extends CompositeView {
     modelEvents() {
         return {
             'change:_search': _.debounce(() => {
-                this.searchCollection();
+                this.renderCollection(
+                    _.extend(this.channelFilter, { resetResults: true })
+                );
             }, 700),
 
             'change:_filterByRBTV change:_filterByLP': () => {
-                this.searchCollection();
+                this.renderCollection(
+                    _.extend(this.channelFilter, { resetResults: true })
+                );
             }
         }
     }
@@ -153,20 +157,29 @@ class Playlists extends CompositeView {
         this.model.set('_loading', val);
     }
 
-    initialize() {
-
-    }
-
     onRender() {
+        this._initScroll();
+
         this.stickit();
     }
 
-    searchCollection(fromCache = false) {
+    onDestroy() {
+        this._killScroll();
+    }
+
+    /**
+     *
+     * @param {Boolean|Object} filter
+     * @param {Backbone.Collection} collection
+     */
+    renderCollection(filter = false, collection = null) {
+        if (collection) {
+            this.collection = collection;
+        }
+
         this.loading = false;
 
-        let filter;
-
-        if (fromCache) {
+        if (filter === true) {
             filter = localStorage.get('playlists.filter');
 
             if (filter) {
@@ -182,10 +195,13 @@ class Playlists extends CompositeView {
             filter = this.channelFilter;
         }
 
+        // Cache filter
+        localStorage.set('playlists.filter', filter);
+
+        // Search collection
         this.collection.search(filter);
 
-        // Cache
-        localStorage.set('playlists.filter', filter);
+        this.render();
     }
 
     _onClickLink(e) {
@@ -209,6 +225,29 @@ class Playlists extends CompositeView {
         this.model.set('_filterByLP', !this.model.get('_filterByLP'));
 
         this.ui.btnFilterLP.blur();
+    }
+
+    _initScroll() {
+        this._killScroll();
+
+        $(window).on('scroll.playlists', this._onScroll.bind(this));
+    }
+
+    _killScroll() {
+        $(window).off('scroll.playlists');
+    }
+
+    _onScroll() {
+        const maxY = $(document).height() - window.innerHeight - 600;
+        const y    = window.scrollY;
+
+        if (y >= maxY) {
+            this._killScroll();
+
+            this.renderCollection(
+                _.extend(this.channelFilter, { increaseResults: true })
+            );
+        }
     }
 }
 

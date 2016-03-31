@@ -5,8 +5,9 @@ import {Model, Collection} from 'backbone';
 import {sessionStorage} from '../../../utils';
 import Config from '../../../Config';
 
-const parts      = 'snippet, contentDetails';
-const maxResults = 50;
+const parts          = 'snippet, contentDetails';
+const maxResults     = 50;
+const defaultResults = 24;
 
 class Playlist extends Model {
     defaults() {
@@ -49,6 +50,7 @@ class Playlists extends Collection {
 
         this.model = Playlist;
 
+        this._displayResults = defaultResults;
         this._originalModels = [];
     }
 
@@ -77,10 +79,10 @@ class Playlists extends Collection {
         this._Deferred = this._Deferred || $.Deferred();
 
         // Cache
-        const models = sessionStorage.get(this._channelId);
+        const cachedModels = sessionStorage.get(this._channelId);
 
-        if (models) {
-            this.reset(models);
+        if (cachedModels) {
+            this.reset(cachedModels);
 
             // Parse publishedAt as moment-object
             this.each((model) => {
@@ -109,27 +111,37 @@ class Playlists extends Collection {
         return this.models.concat(response.items);
     }
 
-    search({ search, rbtv, lp }) {
-        this.reset(
-            _.filter(this._originalModels, (model) => {
-                const channelId = model.get('channelId');
-                const title     = model.get('title');
+    search({ search, rbtv, lp, increaseResults, resetResults }) {
+        var models = _.filter(this._originalModels, (model) => {
+            const channelId = model.get('channelId');
+            const title     = model.get('title');
 
-                if (!rbtv && !lp) {
-                    return false;
-                }
+            if (!rbtv && !lp) {
+                return false;
+            }
 
-                if (rbtv && !lp && channelId !== Config.channelRBTV) {
-                    return false;
-                }
+            if (rbtv && !lp && channelId !== Config.channelRBTV) {
+                return false;
+            }
 
-                if (lp && !rbtv && channelId !== Config.channelLP) {
-                    return false;
-                }
+            if (lp && !rbtv && channelId !== Config.channelLP) {
+                return false;
+            }
 
-                return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
-            })
-        )
+            return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+        });
+
+        if (increaseResults) {
+            this._displayResults += defaultResults;
+        }
+
+        if (resetResults) {
+            this._displayResults = defaultResults;
+        }
+
+        models = _.offset(models, 0, this._displayResults);
+
+        this.reset(models)
     }
 
     /** @private */
