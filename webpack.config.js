@@ -63,7 +63,7 @@ module.exports = {
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
 		new HtmlWebpackPlugin({
-			template: __dirname + '/templates/index.html',
+			template: __dirname + '/templates/index.ejs',
 			filename: 'index.html',
 			inject: true
 		}),
