@@ -17,7 +17,7 @@ class PlaylistsController extends Marionette.Object {
         this._currentPlaylistId = null;
 
         const collection = new PlaylistsCollection();
-        const view       = new PlaylistsView({ collection: collection });
+        const view       = new PlaylistsView();
 
         this._region.show(view);
 
@@ -25,7 +25,7 @@ class PlaylistsController extends Marionette.Object {
 
         this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
             .done(() => {
-                view.searchCollection(true);
+                view.renderCollection(true, collection);
             });
     }
 
