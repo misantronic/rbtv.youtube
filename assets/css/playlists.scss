@@ -34,9 +34,13 @@
 }
 
 .items-playlists {
-	> .item > .thumbnail > .link > .thumb {
-		margin-top: -24px;
-		margin-bottom: -24px;
+	> .item > .thumbnail > .link {
+		min-height: 142px;
+
+		> .thumb {
+			margin-top: -24px;
+			margin-bottom: -24px;
+		}
 	}
 }
 
@@ -133,4 +137,19 @@
 
 .video-container {
 	padding-left: 10px;
+}
+
+.layout-playlists {
+	> .loader {
+		display: none;
+
+		&.show {
+			display: block;
+		}
+
+		> .sk-fading-circle {
+			position: relative;
+			top: 0;
+		}
+	}
 }

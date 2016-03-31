@@ -46,7 +46,6 @@ class Playlist extends ItemView {
     }
 }
 
-
 class Playlists extends CompositeView {
 
     constructor(options) {
@@ -80,9 +79,13 @@ class Playlists extends CompositeView {
 
     modelEvents() {
         return {
-            'change:_search change:_filterByRBTV change:_filterByLP': _.debounce(() => {
-                this._searchCollection();
-            }, 700)
+            'change:_search': _.debounce(() => {
+                this.searchCollection();
+            }, 700),
+
+            'change:_filterByRBTV change:_filterByLP': () => {
+                this.searchCollection();
+            }
         }
     }
 
@@ -92,7 +95,8 @@ class Playlists extends CompositeView {
             search: '.js-search',
             btnFilterRBTV: '.js-filter-rbtv',
             btnFilterLP: '.js-filter-lp',
-            btnToTop: '.js-btn-to-top'
+            btnToTop: '.js-btn-to-top',
+            loader: '.js-loader'
         }
     }
 
@@ -110,7 +114,13 @@ class Playlists extends CompositeView {
                 }
             },
 
-            '@ui.search': '_search'
+            '@ui.search': '_search',
+
+            '@ui.loader': {
+                classes: {
+                    show: '_loading'
+                }
+            }
         };
     }
 
@@ -130,9 +140,7 @@ class Playlists extends CompositeView {
         return require('../templates/playlists.ejs');
     }
 
-    /**
-     * @returns {{search: String, rbtv: String|null, lp: String|null}}
-     */
+    /** @returns {{search: String, rbtv: String|null, lp: String|null}} */
     get channelFilter() {
         return {
             search: this.model.get('_search'),
@@ -141,15 +149,21 @@ class Playlists extends CompositeView {
         }
     }
 
+    set loading(val) {
+        this.model.set('_loading', val);
+    }
+
     initialize() {
-        this._searchCollection(true);
+
     }
 
     onRender() {
         this.stickit();
     }
 
-    _searchCollection(fromCache = false) {
+    searchCollection(fromCache = false) {
+        this.loading = false;
+
         let filter;
 
         if (fromCache) {
@@ -164,7 +178,9 @@ class Playlists extends CompositeView {
             }
         }
 
-        if (!filter) filter = this.channelFilter;
+        if (!filter) {
+            filter = this.channelFilter;
+        }
 
         this.collection.search(filter);
 

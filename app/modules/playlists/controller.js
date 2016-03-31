@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import * as Marionette from 'backbone.marionette';
 import PlaylistsCollection from './models/Playlists';
 import PlaylistItemsCollection from './models/PlaylistItems';
@@ -13,14 +14,19 @@ class PlaylistsController extends Marionette.Object {
     }
 
     initPlaylists() {
-        this._currentPlaylistId  = null;
-        this._playlistCollection = new PlaylistsCollection();
+        this._currentPlaylistId = null;
 
-        this._fetchPlaylist(Config.channelRBTV)
+        const collection = new PlaylistsCollection();
+        const view       = new PlaylistsView({ collection: collection });
+
+        this._region.show(view);
+
+        view.loading = true;
+
+        this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
             .done(() => {
-                this._fetchPlaylist(Config.channelLP)
-                    .done(this._onPlaylistsLoaded.bind(this))
-            })
+                view.searchCollection(true);
+            });
     }
 
     initPlaylist(playlistId, videoId = null) {
@@ -56,18 +62,38 @@ class PlaylistsController extends Marionette.Object {
         this._playlistItemsView.videoId = videoId;
     }
 
-    /** @private */
-    _fetchPlaylist(channelId) {
-        this._playlistCollection.channelId = channelId;
+    /**
+     *
+     * @param {PlaylistsCollection} collection
+     * @param {Array} channels
+     * @returns {Promise}
+     * @private
+     */
+    _fetchPlaylists(collection, ...channels) {
+        let i          = 0;
+        const Deferred = $.Deferred();
 
-        return this._playlistCollection.fetch();
-    }
+        const _fetchPlaylist = (channelId) => {
+            if (!channelId) {
+                // resolve promise
+                Deferred.resolve(collection);
 
-    /** @private */
-    _onPlaylistsLoaded() {
-        this._playlistView = new PlaylistsView({ collection: this._playlistCollection });
+                return;
+            }
 
-        this._region.show(this._playlistView);
+            collection
+                .setChannelId(channelId)
+                .fetch()
+                .done(() => {
+                    i++;
+
+                    _fetchPlaylist(channels[i]);
+                });
+        };
+
+        _fetchPlaylist(channels[i]);
+
+        return Deferred.promise();
     }
 
     /** @private */

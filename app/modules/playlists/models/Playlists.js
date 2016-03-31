@@ -56,9 +56,11 @@ class Playlists extends Collection {
         return 'title';
     }
 
-    set channelId(val) {
+    setChannelId(val) {
         this._channelId = val;
         this._Deferred  = null;
+
+        return this;
     }
 
     url() {
