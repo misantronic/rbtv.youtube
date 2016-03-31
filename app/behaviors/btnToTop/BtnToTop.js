@@ -16,7 +16,9 @@ class BtnToTop extends Behavior {
         this.$el.append(template);
 
         // Add scrolling
-        $(window).on('scroll.behavior.btnToTop', this._onScroll.bind(this));
+        $(window)
+            .off('scroll.behavior.btnToTop')
+            .on('scroll.behavior.btnToTop', this._onScroll.bind(this));
 
         // Bind stickit
         this.view.addBinding(null, '.js-btn-to-top', {
