@@ -1,6 +1,6 @@
 body {
 	background: #FCFCFC !important;
-	font-family: Raleway,sans-serif;
+	font-family: Raleway, Arial, sans-serif;
 
 	&:before {
 		content: ' ';
@@ -43,16 +43,34 @@ body {
 }
 
 .form-control {
-	border: none;
-
 	&:focus {
-		border: none;
 		box-shadow: none;
 	}
 }
 
 .app {
-	padding: 140px 0;
+	padding: 250px 0 0;
+
+	> .bg {
+		background: #FFF;
+		min-height: 480px;
+		position: relative;
+
+		&:before {
+			content: ' ';
+			position: absolute;
+			left: 0;
+			top: -94px;
+			background: url(../img/content_top.png) no-repeat left top;
+			background-size: 1670px 94px;
+			height: 94px;
+			width: 100%;
+		}
+
+		> .container {
+
+		}
+	}
 
 	.breadcrumb {
 		margin-bottom: 20px;
@@ -255,7 +273,6 @@ body {
 		.thumbnail {
 			margin-bottom: 30px;
 			width: 100%;
-			border: none;
 
 			> .link {
 				display: block;

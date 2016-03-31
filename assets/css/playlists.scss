@@ -143,10 +143,7 @@
 .layout-playlists {
 	> .loader {
 		display: none;
-
-		&.show {
-			display: block;
-		}
+		//margin-top: 100px;
 
 		> .sk-fading-circle {
 			position: relative;

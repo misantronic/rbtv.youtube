@@ -158,8 +158,6 @@ class Playlists extends CompositeView {
     }
 
     onRender() {
-        this._initScroll();
-
         this.stickit();
     }
 
@@ -202,13 +200,15 @@ class Playlists extends CompositeView {
         this.collection.search(filter);
 
         this.render();
+
+        this._initScroll();
     }
 
     _onClickLink(e) {
         const $link = $(e.currentTarget);
         let route   = $link.attr('href');
 
-        this.model.set('_loading', true);
+        this.loading = true;
 
         app.navigate(route);
 

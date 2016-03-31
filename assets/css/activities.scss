@@ -1,10 +1,7 @@
 .layout-activities {
 	> .loader {
 		display: none;
-
-		&.show {
-			display: block;
-		}
+		//margin-top: 140px;
 
 		> .sk-fading-circle {
 			position: relative;

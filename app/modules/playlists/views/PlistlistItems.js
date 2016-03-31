@@ -6,6 +6,8 @@ import {Model} from 'backbone'
 import {localStorage} from '../../../utils'
 import app from '../../../application'
 
+let autoplay = false;
+
 class PlaylistItem extends ItemView {
     get className() {
         return 'playlist-item js-playlist-item';
@@ -53,9 +55,7 @@ class PlaylistItem extends ItemView {
     }
 }
 
-let autoplay = false;
-
-export default class PlaylistItems extends CompositeView {
+class PlaylistItems extends CompositeView {
 
     constructor(options = {}) {
         _.defaults(options, {
@@ -284,3 +284,5 @@ export default class PlaylistItems extends CompositeView {
     }
 
 }
+
+export default PlaylistItems
