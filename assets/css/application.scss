@@ -309,10 +309,10 @@ body {
 		.loader {
 			display: none;
 			position: absolute;
-			left: 19px;
-			top: 4px;
-			width: calc(100% - 38px);
-			height: 143px;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
 			background: rgba(255, 255, 255, 0.85);
 		}
 
