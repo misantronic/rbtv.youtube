@@ -2,7 +2,6 @@ import $ from 'jquery'
 import _ from 'underscore'
 import {CollectionView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
-import Config from '../../../Config'
 
 class SearchItem extends ItemView {
     get className() {
@@ -25,6 +24,16 @@ class SearchItem extends ItemView {
             this.ui.link.removeAttr('data-toggle');
             this.ui.link.removeAttr('data-target');
         }
+    }
+}
+
+class SearchItemEmpty extends ItemView {
+    get className() {
+        return 'item item-empty text-center col-xs-12';
+    }
+
+    get template() {
+        return require('../../activities/templates/activityEmpty.ejs');
     }
 }
 
@@ -60,6 +69,10 @@ class Search extends CollectionView {
 
     get childView() {
         return SearchItem;
+    }
+
+    get emptyView() {
+        return SearchItemEmpty;
     }
 
     set loading(val) {
