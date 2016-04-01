@@ -206,7 +206,7 @@ class Playlists extends CompositeView {
 
     _onClickLink(e) {
         const $link = $(e.currentTarget);
-        let route   = $link.attr('href');
+        let route   = $link.attr('href').substr(1);
 
         this.loading = true;
 
