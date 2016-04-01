@@ -134,6 +134,12 @@ class Playlists extends CompositeView {
                 classes: {
                     show: '_loading'
                 }
+            },
+
+            ':el': {
+                classes: {
+                    loading: '_loading'
+                }
             }
         };
     }
