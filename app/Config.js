@@ -1,10 +1,13 @@
 import {Collection} from 'backbone'
 
+const apiBaseUrl = 'https://www.googleapis.com/youtube/v3';
+
 export default {
     endpoints: {
-        playlists: 'https://www.googleapis.com/youtube/v3/playlists',
-        playlistItems: 'https://www.googleapis.com/youtube/v3/playlistItems',
-        activities: 'https://www.googleapis.com/youtube/v3/activities'
+        playlists: apiBaseUrl + '/playlists',
+        playlistItems: apiBaseUrl + '/playlistItems',
+        activities: apiBaseUrl + '/activities',
+        search: apiBaseUrl + '/search'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',
