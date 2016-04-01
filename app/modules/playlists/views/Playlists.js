@@ -52,7 +52,7 @@ class PlaylistEmpty extends ItemView {
     }
 
     get template() {
-        return require('../../activities/templates/activityEmpty.ejs');
+        return require('../../search/templates/empty.ejs');
     }
 }
 

@@ -9,7 +9,7 @@ class SearchItem extends ItemView {
     }
 
     get template() {
-        return require('../../activities/templates/activity.ejs');
+        return require('../templates/videoItem.ejs');
     }
 
     ui() {
@@ -33,7 +33,7 @@ class SearchItemEmpty extends ItemView {
     }
 
     get template() {
-        return require('../../activities/templates/activityEmpty.ejs');
+        return require('../templates/empty.ejs');
     }
 }
 

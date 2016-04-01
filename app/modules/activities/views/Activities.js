@@ -12,7 +12,7 @@ class Activity extends ItemView {
     }
 
     get template() {
-        return require('../templates/activity.ejs');
+        return require('../../search/templates/videoItem.ejs');
     }
 
     ui() {
