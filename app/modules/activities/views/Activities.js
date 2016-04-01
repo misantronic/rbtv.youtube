@@ -4,6 +4,7 @@ import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import Config from '../../../Config'
 import BtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import searchController from '../../search/controller'
 
 class Activity extends ItemView {
     get className() {
@@ -35,7 +36,8 @@ class Activities extends CompositeView {
             model: new Model({
                 _filterByRBTV: true,
                 _filterByLP: false,
-                _loading: false
+                _loading: false,
+                _search: ''
             })
         });
 
@@ -64,7 +66,7 @@ class Activities extends CompositeView {
                 if (val) {
                     this._currentChannel = Config.channelRBTV;
 
-                    this.renderChannel()
+                    this.renderActivities()
                 }
             },
 
@@ -72,14 +74,22 @@ class Activities extends CompositeView {
                 if (val) {
                     this._currentChannel = Config.channelLP;
 
-                    this.renderChannel()
+                    this.renderActivities()
                 }
-            }
+            },
+
+            'change:_search': _.debounce(() => {
+                if(!this._search()) {
+                    // Re-init activities
+                    this.renderActivities();
+                }
+            }, 500)
         }
     }
 
     ui() {
         return {
+            search: '.js-search',
             link: '.js-link',
             loader: '.js-loader',
             btnFilterRBTV: '.js-filter-rbtv',
@@ -105,7 +115,9 @@ class Activities extends CompositeView {
                 classes: {
                     active: '_filterByLP'
                 }
-            }
+            },
+
+            '@ui.search': '_search'
         }
     }
 
@@ -125,6 +137,10 @@ class Activities extends CompositeView {
         return require('../templates/activities.ejs');
     }
 
+    set loading(val) {
+        this.model.set('_loading', val);
+    }
+
     initialize() {
         this._currentChannel = Config.channelRBTV;
     }
@@ -139,11 +155,20 @@ class Activities extends CompositeView {
         this._killScroll();
     }
 
-    renderChannel(nextPageToken = null) {
-        this.model.set('_loading', true);
+    renderActivities(nextPageToken = null) {
+        if (this.$childViewContainer) {
+            this.$childViewContainer.show();
+        }
+
+        this.loading = true;
 
         if (!nextPageToken) {
             this.collection.reset();
+        }
+
+        // Check search
+        if (this._search()) {
+            return;
         }
 
         this.collection
@@ -151,9 +176,43 @@ class Activities extends CompositeView {
             .setChannelId(this._currentChannel)
             .fetch()
             .done(() => {
-                this.model.set('_loading', false);
+                this.loading = false;
+
                 this.render();
             })
+    }
+
+    /**
+     * @returns {String}
+     * @private
+     */
+    _search() {
+        var searchVal = this.model.get('_search');
+
+        if (searchVal) {
+            // Init search
+
+            this._killScroll();
+            if (this.$childViewContainer) {
+                this.$childViewContainer.hide();
+            }
+
+            this.loading = true;
+
+            /** @type {SearchView} */
+            var view = searchController.prepareSearch(searchVal);
+
+            view.renderSearch(this._currentChannel).done(() => {
+                this.loading = false;
+
+                // Attach html
+                this.$('.js-search-items').html(view.$el).show();
+            });
+        } else {
+            this.$('.js-search-items').empty();
+        }
+
+        return searchVal;
     }
 
     _initScroll() {
@@ -170,7 +229,7 @@ class Activities extends CompositeView {
         const nextPageToken = this.collection.nextPageToken;
 
         if (nextPageToken) {
-            this.renderChannel(nextPageToken);
+            this.renderActivities(nextPageToken);
         }
     }
 

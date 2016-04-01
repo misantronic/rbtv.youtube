@@ -1,11 +1,10 @@
 import * as Marionette from 'backbone.marionette'
-import Config from '../../Config'
 import ActivitiesColection from './models/Activities'
 import ActivitiesView from './views/Activities'
 
 import '../../../assets/css/activities.scss';
 
-class OverviewController extends Marionette.Object {
+class ActivitiesController extends Marionette.Object {
     init(region) {
         this._region = region;
     }
@@ -17,8 +16,8 @@ class OverviewController extends Marionette.Object {
 
         this._region.show(view);
 
-        view.renderChannel();
+        view.renderActivities();
     }
 }
 
-export default new OverviewController();
+export default new ActivitiesController();
