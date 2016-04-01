@@ -117,7 +117,13 @@ class Activities extends CompositeView {
                 }
             },
 
-            '@ui.search': '_search'
+            '@ui.search': '_search',
+
+            ':el': {
+                classes: {
+                    loading: '_loading'
+                }
+            }
         }
     }
 

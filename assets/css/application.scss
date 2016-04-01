@@ -134,6 +134,10 @@ body {
 			}
 		}
 	}
+
+	.loading .item-empty {
+		display: none;
+	}
 }
 
 .loader {

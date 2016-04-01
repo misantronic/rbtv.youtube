@@ -46,6 +46,16 @@ class Playlist extends ItemView {
     }
 }
 
+class PlaylistEmpty extends ItemView {
+    get className() {
+        return 'item item-empty text-center col-xs-12';
+    }
+
+    get template() {
+        return require('../../activities/templates/activityEmpty.ejs');
+    }
+}
+
 class Playlists extends CompositeView {
 
     constructor(options = {}) {
@@ -134,6 +144,10 @@ class Playlists extends CompositeView {
 
     get childView() {
         return Playlist;
+    }
+
+    get emptyView() {
+        return PlaylistEmpty;
     }
 
     get childViewContainer() {
