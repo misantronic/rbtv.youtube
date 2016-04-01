@@ -197,14 +197,18 @@ class Activities extends CompositeView {
                 this.$childViewContainer.hide();
             }
 
-            this.loading = true;
-
             /** @type {SearchView} */
             var view = searchController.prepareSearch(searchVal);
 
-            view.renderSearch(this._currentChannel).done(() => {
-                this.loading = false;
+            this.listenTo(view, 'loading:start', () => {
+                this.loading = true;
+            });
 
+            this.listenTo(view, 'loading:stop', () => {
+                this.loading = false;
+            });
+
+            view.renderSearch(this._currentChannel).done(() => {
                 // Attach html
                 this.$('.js-search-items').html(view.$el).show();
             });

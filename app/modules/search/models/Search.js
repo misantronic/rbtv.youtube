@@ -83,6 +83,10 @@ class Search extends Collection {
     parse(response) {
         this._nextPageToken = response.nextPageToken;
 
+        if(response.items.length === 0) {
+            this._nextPageToken = null;
+        }
+
         return this.models.concat(response.items)
     }
 }

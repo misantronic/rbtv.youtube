@@ -35,25 +35,22 @@ class Search extends CollectionView {
     constructor(options = {}) {
         _.defaults(options, {
             model: new Model({
-                _filterByRBTV: true,
-                _filterByLP: false,
-                _loading: false,
-                _search: ''
+                _loading: false
             })
         });
 
         super(options);
     }
 
-    events() {
+    modelEvents() {
         return {
-            'click @ui.link': '_onCLickLink'
-        }
-    }
-
-    ui() {
-        return {
-            link: '.js-link'
+            'change:_loading': (model, val) => {
+                if (val) {
+                    this.trigger('loading:start');
+                } else {
+                    this.trigger('loading:stop');
+                }
+            }
         }
     }
 
@@ -65,18 +62,20 @@ class Search extends CollectionView {
         return SearchItem;
     }
 
+    set loading(val) {
+        this.model.set('_loading', val);
+    }
+
     onRender() {
         this._initScroll();
-
-        this.stickit();
     }
 
     onDestroy() {
         this._killScroll();
     }
 
-    renderSearch(channelId, nextPageToken = null) {
-        this.model.set('_loading', true);
+    renderSearch(channelId = null, nextPageToken = null) {
+        this.loading = true;
 
         if (!nextPageToken) {
             this.collection.reset();
@@ -90,6 +89,8 @@ class Search extends CollectionView {
             .setNextPageToken(nextPageToken)
             .fetch()
             .then(() => {
+                this.loading = false;
+
                 this.render();
             })
     }
@@ -110,24 +111,6 @@ class Search extends CollectionView {
         if (nextPageToken) {
             this.renderSearch(null, nextPageToken);
         }
-    }
-
-    _onCLickLink(e) {
-        const $link   = $(e.currentTarget);
-        const videoId = $link.data('videoid');
-        const title   = $link.data('title');
-
-        // this.$('#modal-activities-body').replaceWith('<div id="modal-activities-body"></div>');
-        //
-        // this.$('.js-modal-activities')
-        //     .one('shown.bs.modal', () => {
-        //         this._player = new YT.Player('modal-activities-body', {
-        //             height: '390',
-        //             width: '100%',
-        //             videoId: videoId
-        //         });
-        //     })
-        //     .find('.js-modal-title').text(title);
     }
 
     _onScroll() {
