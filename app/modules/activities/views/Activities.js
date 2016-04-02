@@ -79,7 +79,7 @@ class Activities extends CompositeView {
             },
 
             'change:_search': _.debounce(() => {
-                if(!this._search()) {
+                if (!this._search()) {
                     // Re-init activities
                     this.renderActivities();
                 }
@@ -117,7 +117,33 @@ class Activities extends CompositeView {
                 }
             },
 
-            '@ui.search': '_search',
+            '@ui.search': {
+                observe: '_search',
+                attributes: [
+                    {
+                        observe: '_filterByRBTV',
+                        name: 'placeholder',
+                        onGet: (val) => {
+                            if(val) {
+                                return 'Channel \'Rocket Beans TV\' durchsuchen...';
+                            } else {
+                                return 'Channel \'Let\'s Play\' durchsuchen...';
+                            }
+                        }
+                    },
+                    {
+                        observe: '_filterByLP',
+                        name: 'placeholder',
+                        onGet: (val) => {
+                            if(val) {
+                                return 'Channel \'Let`s Play\' durchsuchen...';
+                            } else {
+                                return 'Channel \'Rocket Beans TV\' durchsuchen...';
+                            }
+                        }
+                    }
+                ]
+            },
 
             ':el': {
                 classes: {
