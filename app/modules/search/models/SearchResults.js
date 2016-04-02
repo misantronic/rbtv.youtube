@@ -8,7 +8,7 @@ const maxResults = 30;
 const order      = 'date';
 const type       = 'video';
 
-class SearchItem extends Model {
+class SearchResult extends Model {
     defaults() {
         return {
             id: null,
@@ -38,11 +38,11 @@ class SearchItem extends Model {
     }
 }
 
-class Search extends Collection {
+class SearchResults extends Collection {
     constructor(...args) {
         super(...args);
 
-        this.model = SearchItem;
+        this.model = SearchResult;
     }
 
     setChannelId(val) {
@@ -91,4 +91,4 @@ class Search extends Collection {
     }
 }
 
-export default Search
+export default SearchResults

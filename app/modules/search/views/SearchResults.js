@@ -3,7 +3,7 @@ import _ from 'underscore'
 import {CollectionView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 
-class SearchItem extends ItemView {
+class SearchResult extends ItemView {
     get className() {
         return 'item col-xs-12 col-sm-4';
     }
@@ -38,7 +38,7 @@ class SearchItemEmpty extends ItemView {
 }
 
 /**
- * @class SearchView
+ * @class SearchResultsView
  */
 class SearchResults extends CollectionView {
     constructor(options = {}) {
@@ -68,7 +68,7 @@ class SearchResults extends CollectionView {
     }
 
     get childView() {
-        return SearchItem;
+        return SearchResult;
     }
 
     get emptyView() {
