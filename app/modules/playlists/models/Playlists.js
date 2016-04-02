@@ -75,14 +75,20 @@ class Playlists extends Collection {
             ]);
     }
 
-    fetch(...args) {
+    fetch(options = {}) {
+        // Use silent flag on options
+        // to prevent instant rendering of the collection
+        var silentOpts = { silent: true };
+
+        _.extend(options, silentOpts);
+
         this._Deferred = this._Deferred || $.Deferred();
 
         // Cache
         const cachedModels = sessionStorage.get(this._channelId);
 
         if (cachedModels) {
-            this.reset(cachedModels);
+            this.reset(cachedModels, silentOpts);
 
             // Parse publishedAt as moment-object
             this.each((model) => {
@@ -91,7 +97,7 @@ class Playlists extends Collection {
 
             this._fetchComplete();
         } else {
-            super.fetch.apply(this, ...args);
+            super.fetch.call(this, options);
         }
 
         return this._Deferred.promise();
@@ -139,9 +145,16 @@ class Playlists extends Collection {
             this._displayResults = defaultResults;
         }
 
+        var prevNumModels = this.models.length;
+
         models = _.offset(models, 0, this._displayResults);
 
-        this.reset(models)
+        // Reset collection only if:
+        // 1. collection is normally filtered
+        // 2. number of models is increased while scrolling
+        if(!increaseResults || (increaseResults && models.length !== prevNumModels)) {
+            this.reset(models);
+        }
     }
 
     /** @private */
@@ -150,6 +163,7 @@ class Playlists extends Collection {
         _.defer(() => {
             sessionStorage.set(this._channelId, this.toJSON());
 
+            // This resolve finally finishes fetch()-process
             this._Deferred.resolve(this);
         });
 

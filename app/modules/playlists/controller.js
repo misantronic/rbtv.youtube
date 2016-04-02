@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import _ from 'underscore'
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
 import PlaylistItemsCollection from './models/PlaylistItems'
@@ -17,7 +16,7 @@ class PlaylistsController extends Marionette.Object {
         this._currentPlaylistId = null;
 
         const collection = new PlaylistsCollection();
-        const view       = new PlaylistsView();
+        const view       = new PlaylistsView({ collection: collection });
 
         this._region.show(view);
 
@@ -25,7 +24,7 @@ class PlaylistsController extends Marionette.Object {
 
         this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
             .done(() => {
-                view.renderCollection(true, collection);
+                view.renderCollection(true);
             });
     }
 

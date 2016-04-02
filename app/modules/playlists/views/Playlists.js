@@ -188,15 +188,8 @@ class Playlists extends CompositeView {
     /**
      *
      * @param {Boolean|Object} filter
-     * @param {Backbone.Collection} collection
      */
-    renderCollection(filter = false, collection = null) {
-        if (collection) {
-            this.collection = collection;
-        }
-
-        this.loading = false;
-
+    renderCollection(filter = false) {
         if (filter === true) {
             filter = localStorage.get('playlists.filter');
 
@@ -216,10 +209,10 @@ class Playlists extends CompositeView {
         // Cache filter
         localStorage.set('playlists.filter', filter);
 
+        this.loading = false;
+
         // Search collection
         this.collection.search(filter);
-
-        this.render();
 
         this._initScroll();
     }
