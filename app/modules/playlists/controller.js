@@ -1,11 +1,11 @@
 import $ from 'jquery'
-import * as Marionette from 'backbone.marionette';
-import PlaylistsCollection from './models/Playlists';
-import PlaylistItemsCollection from './models/PlaylistItems';
-import PlaylistsView from './views/Playlists';
-import PlaylistItemsView from './views/PlistlistItems';
-import Config from '../../Config';
-import app from '../../application';
+import _ from 'underscore'
+import * as Marionette from 'backbone.marionette'
+import PlaylistsCollection from './models/Playlists'
+import PlaylistItemsCollection from './models/PlaylistItems'
+import PlaylistsView from './views/Playlists'
+import PlaylistItemsView from './views/PlistlistItems'
+import Config from '../../Config'
 
 class PlaylistsController extends Marionette.Object {
 
@@ -42,7 +42,11 @@ class PlaylistsController extends Marionette.Object {
 
         this._playlistItemsCollection
             .fetch()
-            .then(this._onPlaylistItemsLoaded.bind(this))
+            .then(() => {
+                this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
+
+                this._region.show(this._playlistItemsView);
+            })
             .then(this._initVideo.bind(this, videoId));
     }
 
@@ -53,11 +57,15 @@ class PlaylistsController extends Marionette.Object {
             if (playlistItem) {
                 videoId = playlistItem.get('videoId');
 
-                app.navigate(`playlists/playlist/${this._currentPlaylistId}/video/${videoId}`);
+                // Workaround: Pre-Select first item in playlist
+                // without affecting the users back-button-history
+                this._playlistItemsView.model.set('videoId', videoId, { silent: true });
+                this._playlistItemsView._highlightVideo();
+                this._playlistItemsView._routeToVideo(true);
+
+                return;
             }
         }
-
-        if (_.isNull(videoId) || !this._playlistItemsView) return;
 
         this._playlistItemsView.videoId = videoId;
     }
@@ -94,13 +102,6 @@ class PlaylistsController extends Marionette.Object {
         _fetchPlaylist(channels[i]);
 
         return Deferred.promise();
-    }
-
-    /** @private */
-    _onPlaylistItemsLoaded() {
-        this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
-
-        this._region.show(this._playlistItemsView);
     }
 }
 

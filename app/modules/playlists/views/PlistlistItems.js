@@ -110,7 +110,10 @@ class PlaylistItems extends CompositeView {
 
     modelEvents() {
         return {
-            'change:videoId': '_highlightVideo _routeToVideo',
+            'change:videoId': () => {
+                this._highlightVideo();
+                this._routeToVideo();
+            },
 
             'change:_search change:_searchDate': _.debounce(() => {
                 this._searchCollection();
@@ -175,10 +178,13 @@ class PlaylistItems extends CompositeView {
             }, 250);
     }
 
-    _routeToVideo() {
+    _routeToVideo(replaceState = false) {
         const currentPlaylistItem = this.collection.getCurrentPlaylistItem(this.model.get('videoId'));
 
-        app.navigate(`playlists/playlist/${currentPlaylistItem.get('playlistId')}/video/${currentPlaylistItem.get('videoId')}`);
+        app.navigate(
+            `playlists/playlist/${currentPlaylistItem.get('playlistId')}/video/${currentPlaylistItem.get('videoId')}`,
+            { replace: replaceState }
+        );
     }
 
     _videoPlay() {
