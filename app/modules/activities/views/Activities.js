@@ -105,34 +105,6 @@ class Activities extends CompositeView {
                 }
             },
 
-            // '@ui.search': {
-            //     observe: '_search',
-            //     attributes: [
-            //         {
-            //             observe: '_filterByRBTV',
-            //             name: 'placeholder',
-            //             onGet: (val) => {
-            //                 if(val) {
-            //                     return 'Channel \'Rocket Beans TV\' durchsuchen...';
-            //                 } else {
-            //                     return 'Channel \'Let\'s Play\' durchsuchen...';
-            //                 }
-            //             }
-            //         },
-            //         {
-            //             observe: '_filterByLP',
-            //             name: 'placeholder',
-            //             onGet: (val) => {
-            //                 if(val) {
-            //                     return 'Channel \'Let`s Play\' durchsuchen...';
-            //                 } else {
-            //                     return 'Channel \'Rocket Beans TV\' durchsuchen...';
-            //                 }
-            //             }
-            //         }
-            //     ]
-            // },
-
             ':el': {
                 classes: {
                     loading: '_loading'
