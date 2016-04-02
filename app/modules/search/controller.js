@@ -1,26 +1,26 @@
 import * as Marionette from 'backbone.marionette'
 import SearchColection from './models/Search'
-import SearchView from './views/Search'
+import SearchResultsView from './views/SearchResults'
 
 class SearchController extends Marionette.Object {
 
     initialize() {
-        /** @type {SearchView} */
-        this._view = null;
+        /** @type {SearchResults} */
+        this._searchResultsView = null;
     }
 
     prepareSearch(q) {
-        if (!this._view) {
+        if (!this._searchResultsView) {
             const collection = new SearchColection();
 
-            this._view = new SearchView({ collection: collection });
+            this._searchResultsView = new SearchResultsView({ collection: collection });
         }
 
-        this._view.collection
+        this._searchResultsView.collection
             .setNextPageToken(null)
             .setQ(q);
 
-        return this._view;
+        return this._searchResultsView;
     }
 }
 

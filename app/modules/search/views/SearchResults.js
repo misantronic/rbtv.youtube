@@ -40,7 +40,7 @@ class SearchItemEmpty extends ItemView {
 /**
  * @class SearchView
  */
-class Search extends CollectionView {
+class SearchResults extends CollectionView {
     constructor(options = {}) {
         _.defaults(options, {
             model: new Model({
@@ -137,4 +137,4 @@ class Search extends CollectionView {
     }
 }
 
-export default Search
+export default SearchResults
