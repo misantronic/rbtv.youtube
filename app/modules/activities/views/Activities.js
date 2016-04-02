@@ -3,7 +3,8 @@ import _ from 'underscore'
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import Config from '../../../Config'
-import BtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
 
 class Activity extends ItemView {
@@ -47,15 +48,17 @@ class Activities extends CompositeView {
     behaviors() {
         return {
             BtnToTop: {
-                behaviorClass: BtnToTop
+                behaviorClass: BehaviorBtnToTop
+            },
+            Search: {
+                behaviorClass: BehaviorSearch,
+                container: '.js-search-container'
             }
         }
     }
 
     events() {
         return {
-            'click @ui.btnFilterRBTV': '_onSelectRBTV',
-            'click @ui.btnFilterLP': '_onSelectLP',
             'click @ui.link': '_onCLickLink'
         }
     }
@@ -89,11 +92,8 @@ class Activities extends CompositeView {
 
     ui() {
         return {
-            search: '.js-search',
             link: '.js-link',
-            loader: '.js-loader',
-            btnFilterRBTV: '.js-filter-rbtv',
-            btnFilterLP: '.js-filter-lp'
+            loader: '.js-loader'
         }
     }
 
@@ -105,45 +105,33 @@ class Activities extends CompositeView {
                 }
             },
 
-            '@ui.btnFilterRBTV': {
-                classes: {
-                    active: '_filterByRBTV'
-                }
-            },
-
-            '@ui.btnFilterLP': {
-                classes: {
-                    active: '_filterByLP'
-                }
-            },
-
-            '@ui.search': {
-                observe: '_search',
-                attributes: [
-                    {
-                        observe: '_filterByRBTV',
-                        name: 'placeholder',
-                        onGet: (val) => {
-                            if(val) {
-                                return 'Channel \'Rocket Beans TV\' durchsuchen...';
-                            } else {
-                                return 'Channel \'Let\'s Play\' durchsuchen...';
-                            }
-                        }
-                    },
-                    {
-                        observe: '_filterByLP',
-                        name: 'placeholder',
-                        onGet: (val) => {
-                            if(val) {
-                                return 'Channel \'Let`s Play\' durchsuchen...';
-                            } else {
-                                return 'Channel \'Rocket Beans TV\' durchsuchen...';
-                            }
-                        }
-                    }
-                ]
-            },
+            // '@ui.search': {
+            //     observe: '_search',
+            //     attributes: [
+            //         {
+            //             observe: '_filterByRBTV',
+            //             name: 'placeholder',
+            //             onGet: (val) => {
+            //                 if(val) {
+            //                     return 'Channel \'Rocket Beans TV\' durchsuchen...';
+            //                 } else {
+            //                     return 'Channel \'Let\'s Play\' durchsuchen...';
+            //                 }
+            //             }
+            //         },
+            //         {
+            //             observe: '_filterByLP',
+            //             name: 'placeholder',
+            //             onGet: (val) => {
+            //                 if(val) {
+            //                     return 'Channel \'Let`s Play\' durchsuchen...';
+            //                 } else {
+            //                     return 'Channel \'Rocket Beans TV\' durchsuchen...';
+            //                 }
+            //             }
+            //         }
+            //     ]
+            // },
 
             ':el': {
                 classes: {
@@ -229,7 +217,7 @@ class Activities extends CompositeView {
                 this.$childViewContainer.hide();
             }
 
-            /** @type {SearchView} */
+            /** @type {SearchResultsView} */
             var view = searchController.prepareSearch(searchVal);
 
             this.listenTo(view, 'loading:start', () => {
@@ -250,7 +238,7 @@ class Activities extends CompositeView {
 
         return searchVal;
     }
-
+    
     _initScroll() {
         this._killScroll();
 
@@ -267,20 +255,6 @@ class Activities extends CompositeView {
         if (nextPageToken) {
             this.renderActivities(nextPageToken);
         }
-    }
-
-    _onSelectRBTV() {
-        this.model.set({
-            _filterByRBTV: true,
-            _filterByLP: false
-        });
-    }
-
-    _onSelectLP() {
-        this.model.set({
-            _filterByRBTV: false,
-            _filterByLP: true
-        });
     }
 
     _onCLickLink(e) {

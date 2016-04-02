@@ -4,7 +4,8 @@ import {CompositeView, ItemView} from 'backbone.marionette';
 import {Model} from 'backbone';
 import {localStorage} from '../../../utils';
 import app from '../../../application';
-import BtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import BehaviorSearch from '../../../behaviors/search/Search'
 
 class Playlist extends ItemView {
     get className() {
@@ -74,15 +75,18 @@ class Playlists extends CompositeView {
     behaviors() {
         return {
             BtnToTop: {
-                behaviorClass: BtnToTop
+                behaviorClass: BehaviorBtnToTop
+            },
+            Search: {
+                behaviorClass: BehaviorSearch,
+                container: '.js-search-container',
+                filterCheckboxBehavior: true
             }
         }
     }
 
     events() {
         return {
-            'click @ui.btnFilterRBTV': '_onToggleRBTV',
-            'click @ui.btnFilterLP': '_onToggleLP',
             'click @ui.link': '_onClickLink'
         };
     }
@@ -106,30 +110,12 @@ class Playlists extends CompositeView {
     ui() {
         return {
             link: '.js-link',
-            search: '.js-search',
-            btnFilterRBTV: '.js-filter-rbtv',
-            btnFilterLP: '.js-filter-lp',
-            btnToTop: '.js-btn-to-top',
             loader: '.js-loader'
         }
     }
 
     bindings() {
         return {
-            '@ui.btnFilterRBTV': {
-                classes: {
-                    active: '_filterByRBTV'
-                }
-            },
-
-            '@ui.btnFilterLP': {
-                classes: {
-                    active: '_filterByLP'
-                }
-            },
-
-            '@ui.search': '_search',
-
             '@ui.loader': {
                 classes: {
                     show: '_loading'
@@ -226,18 +212,6 @@ class Playlists extends CompositeView {
         app.navigate(route);
 
         e.preventDefault();
-    }
-
-    _onToggleRBTV() {
-        this.model.set('_filterByRBTV', !this.model.get('_filterByRBTV'));
-
-        this.ui.btnFilterRBTV.blur();
-    }
-
-    _onToggleLP() {
-        this.model.set('_filterByLP', !this.model.get('_filterByLP'));
-
-        this.ui.btnFilterLP.blur();
     }
 
     _initScroll() {
