@@ -251,8 +251,6 @@ class Activities extends CompositeView {
         const nextPageToken = this.collection.nextPageToken;
 
         if (nextPageToken) {
-            console.log('_fetchNext()', nextPageToken);
-
             this._killScroll();
 
             this.renderActivities(nextPageToken);
