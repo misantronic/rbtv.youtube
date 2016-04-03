@@ -15,7 +15,7 @@ class Search extends Behavior {
         }
 
         // Remove container from options
-        _.omit(this.options, 'container');
+        this.options = _.omit(this.options, 'container');
 
         // Set-up options for view
         var options = _.defaults(this.options, {
