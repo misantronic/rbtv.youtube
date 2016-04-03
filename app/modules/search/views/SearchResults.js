@@ -35,16 +35,6 @@ class SearchItemEmpty extends ItemView {
     get template() {
         return require('../templates/empty.ejs');
     }
-
-    onRender() {
-        this.$el.css('opacity', 0);
-
-        _.defer(() => {
-            this.$el.animate({
-                opacity: 1
-            });
-        });
-    }
 }
 
 class SearchResults extends CollectionView {
