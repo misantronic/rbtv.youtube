@@ -120,7 +120,7 @@ class Activities extends CompositeView {
                         onGet: (title) => {
                             var autocompleteObj = _.findWhere(autocompleteDefaults, { title });
 
-                            if(autocompleteObj) {
+                            if (autocompleteObj) {
                                 this.ui.btnPlaylist
                                     .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
                                     .text(`Zur '${autocompleteObj.title}' Playlist`);
@@ -189,6 +189,8 @@ class Activities extends CompositeView {
             return;
         }
 
+        this._animateDelay = 0;
+
         this.collection
             .setNextPageToken(nextPageToken)
             .setChannelId(this._currentChannel)
@@ -215,7 +217,7 @@ class Activities extends CompositeView {
                 this.$childViewContainer.hide();
             }
 
-            /** @type {SearchResultsView} */
+            /** @type {SearchResults} */
             var view = searchController.prepareSearch(searchVal);
 
             this.listenTo(view, 'loading:start', () => {
@@ -226,10 +228,10 @@ class Activities extends CompositeView {
                 this.loading = false;
             });
 
-            view.renderSearchResults(this._currentChannel).done(() => {
-                // Attach html
-                this.$('.js-search-items').html(view.$el).show();
-            });
+            // Attach html
+            this.$('.js-search-items').html(view.render().$el);
+
+            view.renderSearchResults(this._currentChannel);
         } else {
             this.$('.js-search-items').empty();
         }

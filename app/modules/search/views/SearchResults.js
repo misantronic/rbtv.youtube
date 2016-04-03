@@ -47,9 +47,6 @@ class SearchItemEmpty extends ItemView {
     }
 }
 
-/**
- * @class SearchResultsView
- */
 class SearchResults extends CollectionView {
     constructor(options = {}) {
         _.defaults(options, {
@@ -89,10 +86,6 @@ class SearchResults extends CollectionView {
         this.model.set('_loading', val);
     }
 
-    onRender() {
-        this._initScroll();
-    }
-
     onDestroy() {
         this._killScroll();
     }
@@ -108,13 +101,15 @@ class SearchResults extends CollectionView {
             this.collection.setChannelId(channelId);
         }
 
+        this._animateDelay = 0;
+
         return this.collection
             .setNextPageToken(nextPageToken)
             .fetch()
             .then(() => {
                 this.loading = false;
 
-                this.render();
+                this._initScroll();
             })
     }
 
@@ -132,6 +127,8 @@ class SearchResults extends CollectionView {
         const nextPageToken = this.collection.nextPageToken;
 
         if (nextPageToken) {
+            this._killScroll();
+
             this.renderSearchResults(null, nextPageToken);
         }
     }
@@ -141,7 +138,6 @@ class SearchResults extends CollectionView {
         const y    = window.scrollY;
 
         if (y >= maxY) {
-            this._killScroll();
             this._fetchNext();
         }
     }

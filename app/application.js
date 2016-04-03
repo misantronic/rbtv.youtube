@@ -11,6 +11,7 @@ import '../assets/css/playlists.scss';
 import '../node_modules/moment/locale/de'
 import 'bootstrap-datepicker'
 import './overrides/marionette.stickit'
+import './overrides/marionette.js'
 import './overrides/underscore'
 
 // Controller
