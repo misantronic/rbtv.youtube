@@ -35,6 +35,16 @@ class SearchItemEmpty extends ItemView {
     get template() {
         return require('../templates/empty.ejs');
     }
+
+    onRender() {
+        this.$el.css('opacity', 0);
+
+        _.defer(() => {
+            this.$el.animate({
+                opacity: 1
+            });
+        });
+    }
 }
 
 /**
@@ -87,7 +97,7 @@ class SearchResults extends CollectionView {
         this._killScroll();
     }
 
-    renderSearch(channelId = null, nextPageToken = null) {
+    renderSearchResults(channelId = null, nextPageToken = null) {
         this.loading = true;
 
         if (!nextPageToken) {
@@ -122,7 +132,7 @@ class SearchResults extends CollectionView {
         const nextPageToken = this.collection.nextPageToken;
 
         if (nextPageToken) {
-            this.renderSearch(null, nextPageToken);
+            this.renderSearchResults(null, nextPageToken);
         }
     }
 
