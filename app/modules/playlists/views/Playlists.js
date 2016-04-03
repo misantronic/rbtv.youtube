@@ -194,7 +194,7 @@ class Playlists extends CompositeView {
         }
 
         // Cache filter
-        localStorage.set('playlists.filter', filter);
+        localStorage.set('playlists.filter', _.omit(filter, 'increaseResults', 'resetResults'));
 
         this.loading = false;
 
