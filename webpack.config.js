@@ -12,7 +12,8 @@ module.exports = {
 			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
 			'bootstrap',
-			'tether'
+			'tether',
+			'fuckadblock'
 		],
 		application: __dirname + '/app/entry'
 	},

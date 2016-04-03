@@ -34,7 +34,8 @@ class App extends Application {
         return {
             main: '#region-main',
             breadcrumb: '#region-breadcrumb',
-            navigation: '#region-navigation'
+            navigation: '#region-navigation',
+            adBlock: '#region-adblock'
         }
     }
 
@@ -54,6 +55,7 @@ class App extends Application {
         overviewController.init(this.getRegion('main'));
 
         this._initNavigation();
+        this._detectAdBlock();
 
         history.start();
 
@@ -62,6 +64,14 @@ class App extends Application {
     
     _initNavigation() {
         this.getRegion('navigation').show(new NavigationView());
+    }
+
+    _detectAdBlock() {
+        fuckAdBlock.on(true, () => {
+            // detected
+            this.getRegion('adBlock').$el.show();
+        });
+        fuckAdBlock.check();
     }
 }
 
