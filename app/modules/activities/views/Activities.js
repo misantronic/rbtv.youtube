@@ -120,7 +120,7 @@ class Activities extends CompositeView {
                         onGet: (title) => {
                             var autocompleteObj = _.findWhere(autocompleteDefaults, { title });
 
-                            if (autocompleteObj) {
+                            if (autocompleteObj && autocompleteObj.playlistId) {
                                 this.ui.btnPlaylist
                                     .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
                                     .text(`Zur '${autocompleteObj.title}' Playlist`);

@@ -94,5 +94,11 @@ export default [
         expr: /^nerd/i,
         channel: 'rbtv',
         playlistId: 'PLsksxTH4pR3LQKx_i3iTwmmfCP8z9uIk5'
+    },
+    {
+        title: 'Let\'s Play',
+        expr: /^let/i,
+        channel: 'lp',
+        playlistId: ''
     }
 ]
