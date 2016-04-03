@@ -1,8 +1,8 @@
 import _ from 'underscore';
 import {CollectionView, CompositeView} from 'backbone.marionette'
 
-var _insertAfterFn1 = CollectionView.prototype._insertAfter;
-var _insertAfterFn2 = CompositeView.prototype._insertAfter;
+let _insertAfterFn1 = CollectionView.prototype._insertAfter;
+let _insertAfterFn2 = CompositeView.prototype._insertAfter;
 
 function _insertAfter(method, childView) {
     // Ensure delay

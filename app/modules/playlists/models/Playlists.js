@@ -118,7 +118,7 @@ class Playlists extends Collection {
     }
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {
-        var models = _.filter(this._originalModels, (model) => {
+        let models = _.filter(this._originalModels, (model) => {
             const channelId = model.get('channelId');
             const title     = model.get('title');
 
