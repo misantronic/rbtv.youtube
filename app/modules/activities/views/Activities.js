@@ -66,23 +66,13 @@ class Activities extends CompositeView {
 
     modelEvents() {
         return {
-            'change:_filterByRBTV': (model, val) => {
-                if (val) {
+            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(() => {
+                if(this.model.get('_filterByRBTV')) {
                     this._currentChannel = Config.channelRBTV;
-
-                    this.renderActivities()
-                }
-            },
-
-            'change:_filterByLP': (model, val) => {
-                if (val) {
+                } else if(this.model.get('_filterByLP')) {
                     this._currentChannel = Config.channelLP;
-
-                    this.renderActivities()
                 }
-            },
 
-            'change:_search': _.debounce(() => {
                 if (!this._search()) {
                     // Re-init activities
                     this.renderActivities();
@@ -188,8 +178,6 @@ class Activities extends CompositeView {
         if (this._search()) {
             return;
         }
-
-        this._animateDelay = 0;
 
         this.collection
             .setNextPageToken(nextPageToken)

@@ -71,7 +71,13 @@ class Search extends LayoutView {
             this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(autocompleteDefaults) });
 
             this.listenTo(this._autocompleteView, 'childview:link:selected', (itemView) => {
-                this.model.set('_search', itemView.model.get('title'));
+                var model = itemView.model;
+
+                this.model.set({
+                    _filterByRBTV: model.get('channel') === 'rbtv',
+                    _filterByLP: model.get('channel') === 'lp',
+                    _search: model.get('title')
+                });
 
                 this.ui.search.focus();
             });
