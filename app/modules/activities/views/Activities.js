@@ -166,8 +166,6 @@ class Activities extends CompositeView {
     }
 
     onRender() {
-        this._initScroll();
-
         this.stickit();
     }
 
@@ -197,6 +195,8 @@ class Activities extends CompositeView {
             .fetch()
             .done(() => {
                 this.loading = false;
+
+                this._initScroll();
             })
     }
 
@@ -251,6 +251,10 @@ class Activities extends CompositeView {
         const nextPageToken = this.collection.nextPageToken;
 
         if (nextPageToken) {
+            console.log('_fetchNext()', nextPageToken);
+
+            this._killScroll();
+
             this.renderActivities(nextPageToken);
         }
     }
@@ -278,7 +282,6 @@ class Activities extends CompositeView {
         const y    = window.scrollY;
 
         if (y >= maxY) {
-            this._killScroll();
             this._fetchNext();
         }
     }
