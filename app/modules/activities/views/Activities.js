@@ -86,7 +86,7 @@ class Activities extends CompositeView {
                     // Re-init activities
                     this.renderActivities();
                 }
-            }, 500)
+            }, 350)
         }
     }
 
@@ -169,8 +169,6 @@ class Activities extends CompositeView {
             .fetch()
             .done(() => {
                 this.loading = false;
-
-                this.render();
             })
     }
 
@@ -210,7 +208,7 @@ class Activities extends CompositeView {
 
         return searchVal;
     }
-    
+
     _initScroll() {
         this._killScroll();
 
