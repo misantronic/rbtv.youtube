@@ -15,12 +15,16 @@ function _insertAfter(method, childView) {
         this._animateDelay = 0;
     }, 1300);
 
+    // Initial hide element
     childView.$el.css('opacity', 0);
 
+    // Call original _insertAfter method
     method.call(this, childView);
 
+    // Calculate delay
     this._animateDelay = Math.min(1200, this._animateDelay + 100);
 
+    // FadeIn
     childView.$el.delay(this._animateDelay).animate({ opacity: 1 }, 150);
 }
 
