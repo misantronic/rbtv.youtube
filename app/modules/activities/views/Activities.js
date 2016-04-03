@@ -6,6 +6,7 @@ import Config from '../../../Config'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
+import autocompleteDefaults from '../../search/data/autocompleteDefaults';
 
 class Activity extends ItemView {
     get className() {
@@ -93,7 +94,8 @@ class Activities extends CompositeView {
     ui() {
         return {
             link: '.js-link',
-            loader: '.js-loader'
+            loader: '.js-loader',
+            btnPlaylist: '.js-playlist'
         }
     }
 
@@ -109,7 +111,33 @@ class Activities extends CompositeView {
                 classes: {
                     loading: '_loading'
                 }
+            },
+
+            '@ui.btnPlaylist': {
+                classes: {
+                    show: {
+                        observe: '_search',
+                        onGet: (title) => {
+                            var autocompleteObj = _.findWhere(autocompleteDefaults, { title });
+
+                            if(autocompleteObj) {
+                                this.ui.btnPlaylist
+                                    .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
+                                    .text(`Zur '${autocompleteObj.title}' Playlist`);
+
+                                return true;
+                            }
+
+                            this.ui.btnPlaylist
+                                .attr('href', 'javascript:void(0)')
+                                .text('');
+
+                            return false;
+                        }
+                    }
+                }
             }
+
         }
     }
 
@@ -198,7 +226,7 @@ class Activities extends CompositeView {
                 this.loading = false;
             });
 
-            view.renderSearch(this._currentChannel).done(() => {
+            view.renderSearchResults(this._currentChannel).done(() => {
                 // Attach html
                 this.$('.js-search-items').html(view.$el).show();
             });
