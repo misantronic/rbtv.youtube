@@ -1,5 +1,8 @@
+import _ from 'underscore'
 import {Model} from 'backbone'
 import {LayoutView} from 'backbone.marionette'
+import AutocompleteView from './Autocomplete'
+import {Autocomplete, autocompleteDefaults} from '../models/Autocomplete'
 
 class Search extends LayoutView {
     constructor(options = {}) {
@@ -16,6 +19,12 @@ class Search extends LayoutView {
 
     get template() {
         return require('../templates/search.ejs');
+    }
+
+    regions() {
+        return {
+            autocomplete: '.region-autocomplete'
+        }
     }
 
     ui() {
@@ -50,15 +59,36 @@ class Search extends LayoutView {
             '@ui.search': '_search'
         }
     }
+    initialize() {
+        var autocompleteEnabled = this.getOption('autocomplete');
+
+        this._autocompleteEnabled = _.isUndefined(autocompleteEnabled) ? true : autocompleteEnabled;
+    }
 
     onRender() {
+        if(this._autocompleteEnabled) {
+            this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(autocompleteDefaults) });
+
+            this.listenTo(this._autocompleteView, 'childview:link:selected', (itemView) => {
+                this.model.set('_search', itemView.model.get('title'));
+
+                this.ui.search.focus();
+            });
+
+            this.listenTo(this.model, 'change:_search', (model, val) => {
+                this._autocompleteView.collection.search(val);
+            });
+
+            this.getRegion('autocomplete').show(this._autocompleteView);
+        }
+
         this.stickit();
     }
 
     _onSelectRBTV() {
         const filterCheckboxBehavior = this.getOption('filterCheckboxBehavior');
 
-        if(filterCheckboxBehavior) {
+        if (filterCheckboxBehavior) {
             // Checkbox-Behavior
             this.model.set('_filterByRBTV', !this.model.get('_filterByRBTV'));
         } else {
@@ -75,7 +105,7 @@ class Search extends LayoutView {
     _onSelectLP() {
         const filterCheckboxBehavior = this.getOption('filterCheckboxBehavior');
 
-        if(filterCheckboxBehavior) {
+        if (filterCheckboxBehavior) {
             // Checkbox-Behavior (multiple-select)
             this.model.set('_filterByLP', !this.model.get('_filterByLP'));
         } else {

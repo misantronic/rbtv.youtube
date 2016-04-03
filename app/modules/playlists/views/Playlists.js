@@ -80,7 +80,8 @@ class Playlists extends CompositeView {
             Search: {
                 behaviorClass: BehaviorSearch,
                 container: '.js-search-container',
-                filterCheckboxBehavior: true
+                filterCheckboxBehavior: true,
+                autocomplete: false
             }
         }
     }

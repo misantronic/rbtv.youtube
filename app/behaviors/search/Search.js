@@ -20,6 +20,7 @@ class Search extends Behavior {
         // Set-up options for view
         var options = _.defaults(this.options, {
             filterCheckboxBehavior: false,
+            autocomplete: true,
             model: this.view.model
         });
 

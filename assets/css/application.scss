@@ -26,6 +26,8 @@ body {
 	}
 }
 
+// OVERRIDE DEFAULTS
+
 .thumbnail, .form-control, .btn, .breadcrumb {
 	border-radius: 0 !important;
 }
@@ -36,8 +38,8 @@ body {
 
 .btn-primary {
 	color: #fff;
-	background-image: -webkit-linear-gradient(left,color-stop(#ff217c 0),color-stop(#ff9186 100%));
-	background-image: linear-gradient(to right,#ff217c 0,#ff9186 100%);
+	background-image: -webkit-linear-gradient(left, color-stop(#ff217c 0), color-stop(#ff9186 100%));
+	background-image: linear-gradient(to right, #ff217c 0, #ff9186 100%);
 	background-repeat: repeat-x;
 	border: none;
 }
@@ -96,36 +98,74 @@ body {
 
 	.search-container {
 		position: relative;
+		display: flex;
+		margin: 0 0 20px;
 
-		> .search-label {
-			margin: 0 0 20px;
-			font-weight: normal;
-			width: 100%;
+		> .search-label-container {
+			flex: 2 0 0;
 			position: relative;
 
-			&:before {
-				content: "\e003";
-				position: absolute;
-				top: 10px;
-				left: 14px;
-				display: inline-block;
-				font-family: 'Glyphicons Halflings';
-				font-style: normal;
-				font-weight: 400;
-				line-height: 1;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
+			> .search-label {
+				margin: 0;
+				font-weight: normal;
+				position: relative;
+				width: 100%;
+
+				&:before {
+					content: "\e003";
+					position: absolute;
+					top: 10px;
+					left: 14px;
+					display: inline-block;
+					font-family: 'Glyphicons Halflings';
+					font-style: normal;
+					font-weight: 400;
+					line-height: 1;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+				}
+
+				> .search {
+					padding: 0 0 0 40px;
+					border-right: none;
+				}
 			}
 
-			> .search {
-				padding: 0 240px 0 40px;
+			.items-autocomplete {
+				position: absolute;
+				top: 6px;
+				right: 0;
+				z-index: 100;
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+
+				> .item-autocomplete {
+					margin: 0 10px 0 0;
+					font-size: 12px;
+
+					&:hover,
+					&.selected {
+						background: #CCC;
+
+						> .autocomplete-item-link {
+							text-decoration: none;
+						}
+					}
+
+					> .autocomplete-item-link {
+						color: #FFF;
+
+						&:focus {
+							outline: none;
+							text-decoration: none;
+						}
+					}
+				}
 			}
 		}
 
 		> .filter-buttons {
-			position: absolute;
-			right: 0;
-			top: 0;
 
 			> .btn {
 				&:focus {
