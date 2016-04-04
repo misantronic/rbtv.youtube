@@ -376,6 +376,8 @@ body {
 		.thumbnail {
 			margin-bottom: 30px;
 			width: 100%;
+			display: flex;
+			flex-direction: column;
 
 			> .link {
 				display: block;
@@ -398,6 +400,9 @@ body {
 
 			> .caption {
 				width: 100%;
+				display: flex;
+				flex-direction: column;
+				flex-grow: 2;
 
 				> .title {
 					text-overflow: ellipsis;
@@ -422,7 +427,21 @@ body {
 					-webkit-line-clamp: 3;
 					-webkit-box-orient: vertical;
 					display: -webkit-box;
-					margin: 0;
+				}
+
+				> .team {
+					min-height: 20px;
+					margin: auto 0 0 0;
+
+					> .label {
+						margin-right: 5px;
+						cursor: pointer;
+						font-size: 12px;
+
+						&:last-of-type {
+							margin-right: 0;
+						}
+					}
 				}
 			}
 		}

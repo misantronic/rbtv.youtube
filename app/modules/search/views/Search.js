@@ -3,7 +3,7 @@ import {Model} from 'backbone'
 import {LayoutView} from 'backbone.marionette'
 import AutocompleteView from './Autocomplete'
 import {Autocomplete} from '../models/Autocomplete'
-import autocompleteDefaults from '../data/autocompleteDefaults';
+import autocompleteDefaults from '../../../data/autocompleteDefaults';
 
 class Search extends LayoutView {
     constructor(options = {}) {

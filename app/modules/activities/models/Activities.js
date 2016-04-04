@@ -17,7 +17,8 @@ class Activity extends Model {
             description: '',
             publishedAt: null,
             thumbnails: null,
-            title: ''
+            title: '',
+            tags: null
         }
     }
 

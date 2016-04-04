@@ -7,7 +7,8 @@ export default {
         playlists: apiBaseUrl + '/playlists',
         playlistItems: apiBaseUrl + '/playlistItems',
         activities: apiBaseUrl + '/activities',
-        search: apiBaseUrl + '/search'
+        search: apiBaseUrl + '/search',
+        videos: apiBaseUrl + '/videos'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',

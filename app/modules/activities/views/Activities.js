@@ -6,36 +6,17 @@ import Config from '../../../Config'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
-import autocompleteDefaults from '../../search/data/autocompleteDefaults';
+import autocompleteDefaults from '../../../data/autocompleteDefaults';
+import VideoCollection from '../../videos/models/Videos'
+import {SearchResult} from '../../search/views/SearchResults'
 import {props} from '../../decorators'
-
-class Activity extends ItemView {
-
-    @props({
-        className: 'item col-xs-12 col-sm-4',
-
-        template: require('../../search/templates/videoItem.ejs'),
-
-        ui: {
-            link: '.js-link'
-        }
-    })
-
-    onRender() {
-        // Remove modal-settings for mobile devices
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            this.ui.link.removeAttr('data-toggle');
-            this.ui.link.removeAttr('data-target');
-        }
-    }
-}
 
 class Activities extends CompositeView {
 
     @props({
         className: 'layout-activities',
 
-        childView: Activity,
+        childView: SearchResult,
 
         childViewContainer: '.js-activities',
 
@@ -63,7 +44,7 @@ class Activities extends CompositeView {
         },
 
         modelEvents: {
-            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(function() {
+            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(function () {
                 if (this.model.get('_filterByRBTV')) {
                     this._currentChannel = Config.channelRBTV;
                 } else if (this.model.get('_filterByLP')) {
@@ -100,7 +81,7 @@ class Activities extends CompositeView {
                 classes: {
                     show: {
                         observe: '_search',
-                        onGet: function(title) {
+                        onGet: function (title) {
                             let autocompleteObj = _.findWhere(autocompleteDefaults, { title });
 
                             if (autocompleteObj && autocompleteObj.playlistId) {
@@ -159,10 +140,11 @@ class Activities extends CompositeView {
             .setNextPageToken(nextPageToken)
             .setChannelId(this._currentChannel)
             .fetch()
-            .done(() => {
+            .done((data) => {
                 this.loading = false;
 
                 this._initScroll();
+                this._fetchVideoDetails(data);
             })
     }
 
@@ -221,6 +203,32 @@ class Activities extends CompositeView {
 
             this.renderActivities(nextPageToken);
         }
+    }
+
+    _fetchVideoDetails(activitiesData) {
+        let videoIds = _.map(activitiesData.items, (activityData) => {
+            return activityData.contentDetails.upload.videoId;
+        });
+
+        let videoCollection = new VideoCollection();
+
+        videoCollection
+            .setVideoIds(videoIds)
+            .fetch()
+            .done(() => {
+                this.collection.each((activityModel) => {
+                    let id         = activityModel.get('videoId');
+                    let videoModel = videoCollection.findWhere({ id });
+
+                    if(videoModel) {
+                        // Set tags on activitiy-model
+                        activityModel.set(
+                            'tags',
+                            videoModel.get('tags')
+                        );
+                    }
+                });
+            });
     }
 
     _onCLickLink(e) {

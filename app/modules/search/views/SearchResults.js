@@ -2,21 +2,64 @@ import $ from 'jquery'
 import _ from 'underscore'
 import {CollectionView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
+import VideoCollection from '../../videos/models/Videos'
+import beans from '../../../data/beans'
+import {props} from '../../decorators'
 
 class SearchResult extends ItemView {
-    get className() {
-        return 'item col-xs-12 col-sm-4';
-    }
 
-    get template() {
-        return require('../templates/videoItem.ejs');
-    }
+    @props({
+        className: 'item col-xs-12 col-sm-4',
 
-    ui() {
-        return {
+        template: require('../templates/videoItem.ejs'),
+
+        ui: {
             link: '.js-link'
+        },
+
+        bindings: {
+            '.js-team': {
+                observe: 'tags',
+                update: function ($el, tags) {
+                    if (tags) {
+                        // Map only first names
+                        tags = _.map(tags, (tag) => {
+                            if (tag.toLowerCase() === 'daniel budiman') {
+                                return 'budi';
+                            }
+
+                            return tag.split(' ')[0]
+                        });
+
+                        // Match names
+                        let names = _.iintersection(beans, tags);
+
+                        if (names.length) {
+                            let htmlStr = '';
+                            for (var i = 0; i < names.length; i++) {
+                                let name = names[i].substr(0, 1).toUpperCase() + names[i].substr(1);
+
+                                if (i < 5) {
+                                    htmlStr += `<span class="label label-info">${name.substr(0, 1).toUpperCase()}${name.substr(1)}</span>`;
+                                }
+
+                                names[i] = name;
+                            }
+
+                            $el.html(htmlStr);
+
+                            if (names.length > 5) {
+                                let additionalNames = names.slice(5, names.length);
+
+                                $el.append(`<span class="label label-default" data-toggle="tooltip" data-placement="top" title="${additionalNames.join(' ')}">+${additionalNames.length}</span>`)
+                                $el.find('[data-toggle="tooltip"]').tooltip();
+                            }
+                        }
+                    }
+                }
+            }
         }
-    }
+    })
 
     onRender() {
         // Remove modal-settings for mobile devices
@@ -24,6 +67,8 @@ class SearchResult extends ItemView {
             this.ui.link.removeAttr('data-toggle');
             this.ui.link.removeAttr('data-target');
         }
+
+        this.stickit();
     }
 }
 
@@ -96,9 +141,10 @@ class SearchResults extends CollectionView {
         return this.collection
             .setNextPageToken(nextPageToken)
             .fetch()
-            .then(() => {
+            .then((data) => {
                 this.loading = false;
 
+                this._fetchVideoDetails(data);
                 this._initScroll();
             })
     }
@@ -123,6 +169,32 @@ class SearchResults extends CollectionView {
         }
     }
 
+    _fetchVideoDetails(searchData) {
+        let videoIds = _.map(searchData.items, (searchItemData) => {
+            return searchItemData.id.videoId;
+        });
+
+        let videoCollection = new VideoCollection();
+
+        videoCollection
+            .setVideoIds(videoIds)
+            .fetch()
+            .done(() => {
+                this.collection.each((searchModel) => {
+                    let id         = searchModel.get('videoId');
+                    let videoModel = videoCollection.findWhere({ id });
+
+                    if (videoModel) {
+                        // Set tags on activitiy-model
+                        searchModel.set(
+                            'tags',
+                            videoModel.get('tags')
+                        );
+                    }
+                });
+            });
+    }
+
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 800;
         const y    = window.scrollY;
@@ -133,4 +205,5 @@ class SearchResults extends CollectionView {
     }
 }
 
+export {SearchResult}
 export default SearchResults
