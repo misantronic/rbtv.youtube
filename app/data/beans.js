@@ -37,5 +37,6 @@ export default [
     'Hannes',
     'Miriam',
     'Max',
-    'Robin'
+    'Robin',
+    'Alwin'
 ]
