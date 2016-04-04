@@ -78,7 +78,7 @@ class Playlists extends Collection {
     fetch(options = {}) {
         // Use silent flag on options
         // to prevent instant rendering of the collection
-        var silentOpts = { silent: true };
+        let silentOpts = { silent: true };
 
         _.extend(options, silentOpts);
 
@@ -145,7 +145,7 @@ class Playlists extends Collection {
             this._displayResults = defaultResults;
         }
 
-        var prevNumModels = this.models.length;
+        let prevNumModels = this.models.length;
 
         models = _.offset(models, 0, this._displayResults);
 

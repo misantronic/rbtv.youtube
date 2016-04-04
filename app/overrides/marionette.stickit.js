@@ -1,7 +1,7 @@
 import _ from 'underscore';
 import {View} from 'backbone';
 
-var addBindingFn = View.prototype.addBinding;
+let addBindingFn = View.prototype.addBinding;
 
 _.extend(View.prototype, {
     addBinding: function (optionalModel, selector, binding) {

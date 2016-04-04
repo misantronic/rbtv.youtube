@@ -61,7 +61,7 @@ class Search extends LayoutView {
         }
     }
     initialize() {
-        var autocompleteEnabled = this.getOption('autocomplete');
+        let autocompleteEnabled = this.getOption('autocomplete');
 
         this._autocompleteEnabled = _.isUndefined(autocompleteEnabled) ? true : autocompleteEnabled;
     }
@@ -71,7 +71,7 @@ class Search extends LayoutView {
             this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(autocompleteDefaults) });
 
             this.listenTo(this._autocompleteView, 'childview:link:selected', (itemView) => {
-                var model = itemView.model;
+                let model = itemView.model;
 
                 this.model.set({
                     _filterByRBTV: model.get('channel') === 'rbtv',

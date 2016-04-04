@@ -27,7 +27,7 @@ function storageSet(storage, key, value) {
 }
 
 function storageUpdate(storage, key, properties) {
-    var keyValue = storageGet(storage, key) || {};
+    let keyValue = storageGet(storage, key) || {};
 
     storageSet(storage, key, _.extend(keyValue, properties));
 }

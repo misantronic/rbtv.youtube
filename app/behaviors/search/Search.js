@@ -18,7 +18,7 @@ class Search extends Behavior {
         this.options = _.omit(this.options, 'container');
 
         // Set-up options for view
-        var options = _.defaults(this.options, {
+        let options = _.defaults(this.options, {
             filterCheckboxBehavior: false,
             autocomplete: true,
             model: this.view.model

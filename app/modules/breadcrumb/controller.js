@@ -20,7 +20,7 @@ class BreadcrumbController extends Marionette.Object {
 
     initPlaylist(playlistId) {
         // Cache
-        var title = sessionStorage.get(`${playlistId}.info`, 'title');
+        let title = sessionStorage.get(`${playlistId}.info`, 'title');
 
         if (title) {
             return this._showBreadcrumb([

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/webpack && node www/index.js",
+    "webpack": "./node_modules/.bin/webpack --watch",
+    "www": "node www/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "David Schkalee",

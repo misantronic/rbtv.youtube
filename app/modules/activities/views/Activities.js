@@ -108,7 +108,7 @@ class Activities extends CompositeView {
                     show: {
                         observe: '_search',
                         onGet: (title) => {
-                            var autocompleteObj = _.findWhere(autocompleteDefaults, { title });
+                            let autocompleteObj = _.findWhere(autocompleteDefaults, { title });
 
                             if (autocompleteObj && autocompleteObj.playlistId) {
                                 this.ui.btnPlaylist
@@ -195,7 +195,7 @@ class Activities extends CompositeView {
      * @private
      */
     _search() {
-        var searchVal = this.model.get('_search');
+        let searchVal = this.model.get('_search');
 
         if (searchVal) {
             // Init search
@@ -206,7 +206,7 @@ class Activities extends CompositeView {
             }
 
             /** @type {SearchResults} */
-            var view = searchController.prepareSearch(searchVal);
+            let view = searchController.prepareSearch(searchVal);
 
             this.listenTo(view, 'loading:start', () => {
                 this.loading = true;
