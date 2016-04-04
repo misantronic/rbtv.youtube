@@ -33,14 +33,21 @@ module.exports = {
 			{ test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },
 			{ test: /\.(jpe*g|png|gif|svg|woff2*|eot|ttf)$/, loader: 'file-loader?name=assets/[hash].[ext]' },
 			{ test: /bootstrap\/js/, loader: 'imports?jQuery=jquery,Tether=tether' },
-			{
-				test: /\.jsx?$/,
-				exclude: /(node_modules|bower_components|vendor)/,
-				loader: 'babel',
-				query: {
-					presets: ['es2015']
-				}
-			}
+            {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components|vendor)/,
+                loader: 'babel',
+                query: {
+                    presets: [
+                        'es2015',
+                        'stage-0',
+                        'react'
+                    ],
+                    plugins: [
+                        ["transform-decorators-legacy"]
+                    ]
+                }
+            }
 		]
 	},
 

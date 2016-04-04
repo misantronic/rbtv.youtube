@@ -6,37 +6,31 @@ import {localStorage} from '../../../utils';
 import app from '../../../application';
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
+import {props} from '../../decorators'
 
 class Playlist extends ItemView {
-    get className() {
-        return 'item col-xs-12 col-sm-3';
-    }
 
-    get template() {
-        return require('../templates/playlist.ejs');
-    }
-
-    ui() {
-        return {
+    @props({
+        ui: {
             link: '.js-link'
-        }
-    }
+        },
 
-    events() {
-        return {
+        events: {
             'click @ui.link': '_onClickLink'
-        };
-    }
+        },
 
-    bindings() {
-        return {
+        className: 'item col-xs-12 col-sm-3',
+
+        template: require('../templates/playlist.ejs'),
+
+        bindings: {
             ':el': {
                 classes: {
                     loading: '_loading'
                 }
             }
         }
-    }
+    })
 
     onRender() {
         this.stickit();
@@ -48,32 +42,35 @@ class Playlist extends ItemView {
 }
 
 class PlaylistEmpty extends ItemView {
-    get className() {
-        return 'item item-empty text-center col-xs-12';
-    }
+    @props({
+        className: 'item item-empty text-center col-xs-12',
 
-    get template() {
-        return require('../../search/templates/empty.ejs');
+        template: require('../../search/templates/empty.ejs')
+    })
+
+    initialize() {
+
     }
 }
 
 class Playlists extends CompositeView {
 
     constructor(options = {}) {
-        _.defaults(options, {
-            model: new Model({
-                _search: '',
-                _filterByRBTV: true,
-                _filterByLP: true,
-                _loading: false
-            })
-        });
-
         super(options);
     }
 
-    behaviors() {
-        return {
+    @props({
+        className: 'layout-playlists',
+
+        childView: Playlist,
+
+        emptyView: PlaylistEmpty,
+
+        template: require('../templates/playlists.ejs'),
+
+        childViewContainer: '.js-playlists',
+
+        behaviors: {
             BtnToTop: {
                 behaviorClass: BehaviorBtnToTop
             },
@@ -83,17 +80,13 @@ class Playlists extends CompositeView {
                 filterCheckboxBehavior: true,
                 autocomplete: false
             }
-        }
-    }
+        },
 
-    events() {
-        return {
+        events: {
             'click @ui.link': '_onClickLink'
-        };
-    }
+        },
 
-    modelEvents() {
-        return {
+        modelEvents: {
             'change:_search': _.debounce(() => {
                 this.renderCollection(
                     _.extend(this.channelFilter, { resetResults: true })
@@ -105,18 +98,14 @@ class Playlists extends CompositeView {
                     _.extend(this.channelFilter, { resetResults: true })
                 );
             }
-        }
-    }
+        },
 
-    ui() {
-        return {
+        ui: {
             link: '.js-link',
             loader: '.js-loader'
-        }
-    }
+        },
 
-    bindings() {
-        return {
+        bindings: {
             '@ui.loader': {
                 classes: {
                     show: '_loading'
@@ -128,28 +117,15 @@ class Playlists extends CompositeView {
                     loading: '_loading'
                 }
             }
-        };
-    }
+        },
 
-    get className() {
-        return 'layout-playlists'
-    }
-
-    get childView() {
-        return Playlist;
-    }
-
-    get emptyView() {
-        return PlaylistEmpty;
-    }
-
-    get childViewContainer() {
-        return '.js-playlists'
-    }
-
-    get template() {
-        return require('../templates/playlists.ejs');
-    }
+        model: new Model({
+            _search: '',
+            _filterByRBTV: true,
+            _filterByLP: true,
+            _loading: false
+        })
+    })
 
     /** @returns {{search: String, rbtv: String|null, lp: String|null}} */
     get channelFilter() {

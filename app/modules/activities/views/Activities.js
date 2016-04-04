@@ -7,21 +7,19 @@ import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
 import autocompleteDefaults from '../../search/data/autocompleteDefaults';
+import {props} from '../../decorators'
 
 class Activity extends ItemView {
-    get className() {
-        return 'item col-xs-12 col-sm-4';
-    }
 
-    get template() {
-        return require('../../search/templates/videoItem.ejs');
-    }
+    @props({
+        className: 'item col-xs-12 col-sm-4',
 
-    ui() {
-        return {
+        template: require('../../search/templates/videoItem.ejs'),
+
+        ui: {
             link: '.js-link'
         }
-    }
+    })
 
     onRender() {
         // Remove modal-settings for mobile devices
@@ -33,21 +31,24 @@ class Activity extends ItemView {
 }
 
 class Activities extends CompositeView {
-    constructor(options = {}) {
-        _.defaults(options, {
-            model: new Model({
-                _filterByRBTV: true,
-                _filterByLP: false,
-                _loading: false,
-                _search: ''
-            })
-        });
 
-        super(options);
-    }
+    @props({
+        className: 'layout-activities',
 
-    behaviors() {
-        return {
+        childView: Activity,
+
+        childViewContainer: '.js-activities',
+
+        template: require('../templates/activities.ejs'),
+
+        model: new Model({
+            _filterByRBTV: true,
+            _filterByLP: false,
+            _loading: false,
+            _search: ''
+        }),
+
+        behaviors: {
             BtnToTop: {
                 behaviorClass: BehaviorBtnToTop
             },
@@ -55,21 +56,17 @@ class Activities extends CompositeView {
                 behaviorClass: BehaviorSearch,
                 container: '.js-search-container'
             }
-        }
-    }
+        },
 
-    events() {
-        return {
+        events: {
             'click @ui.link': '_onCLickLink'
-        }
-    }
+        },
 
-    modelEvents() {
-        return {
-            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(() => {
-                if(this.model.get('_filterByRBTV')) {
+        modelEvents: {
+            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(function() {
+                if (this.model.get('_filterByRBTV')) {
                     this._currentChannel = Config.channelRBTV;
-                } else if(this.model.get('_filterByLP')) {
+                } else if (this.model.get('_filterByLP')) {
                     this._currentChannel = Config.channelLP;
                 }
 
@@ -78,19 +75,15 @@ class Activities extends CompositeView {
                     this.renderActivities();
                 }
             }, 350)
-        }
-    }
+        },
 
-    ui() {
-        return {
+        ui: {
             link: '.js-link',
             loader: '.js-loader',
             btnPlaylist: '.js-playlist'
-        }
-    }
+        },
 
-    bindings() {
-        return {
+        bindings: {
             '@ui.loader': {
                 classes: {
                     show: '_loading'
@@ -107,7 +100,7 @@ class Activities extends CompositeView {
                 classes: {
                     show: {
                         observe: '_search',
-                        onGet: (title) => {
+                        onGet: function(title) {
                             let autocompleteObj = _.findWhere(autocompleteDefaults, { title });
 
                             if (autocompleteObj && autocompleteObj.playlistId) {
@@ -127,25 +120,8 @@ class Activities extends CompositeView {
                     }
                 }
             }
-
         }
-    }
-
-    get className() {
-        return 'layout-activities'
-    }
-
-    get childView() {
-        return Activity;
-    }
-
-    get childViewContainer() {
-        return '.js-activities'
-    }
-
-    get template() {
-        return require('../templates/activities.ejs');
-    }
+    })
 
     set loading(val) {
         this.model.set('_loading', val);

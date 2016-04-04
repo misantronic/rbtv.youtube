@@ -1,31 +1,26 @@
 import {CollectionView, ItemView} from 'backbone.marionette'
-import {Collection} from 'backbone'
 import Config from '../../../Config'
+import {props} from '../../decorators'
 
 import '../../../../assets/css/navigation.scss'
 
 class NavigationItem extends ItemView {
-    get tagName() {
-        return 'li'
-    }
 
-    get className() {
-        return 'navigation-item'
-    }
+    @props({
+        tagName: 'li',
 
-    get template() {
-        return require('../templates/navigationItem.ejs');
-    }
+        className: 'navigation-item',
 
-    bindings() {
-        return {
+        template: require('../templates/navigationItem.ejs'),
+
+        bindings: {
             ':el': {
                 classes: {
                     'active': '_active'
                 }
             }
         }
-    }
+    })
 
     onRender() {
         this.stickit();
@@ -33,17 +28,22 @@ class NavigationItem extends ItemView {
 }
 
 class Navigation extends CollectionView {
-    get tagName() {
-        return 'ul'
-    }
 
-    get className() {
-        return 'navigation container nav nav-pills'
-    }
+    @props({
+        tagName: 'ul',
 
-    get childView() {
-        return NavigationItem
-    }
+        className: 'navigation container nav nav-pills',
+
+        childView: NavigationItem,
+
+        bindings: {
+            ':el': {
+                classes: {
+                    'active': '_active'
+                }
+            }
+        }
+    })
 
     initialize() {
         this.collection = Config.navigation;

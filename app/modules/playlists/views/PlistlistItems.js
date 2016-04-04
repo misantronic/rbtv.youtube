@@ -5,39 +5,33 @@ import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {localStorage} from '../../../utils'
 import app from '../../../application'
+import {props} from '../../decorators'
 
 let autoplay = false;
 
 class PlaylistItem extends ItemView {
-    get className() {
-        return 'playlist-item js-playlist-item';
-    }
 
-    get template() {
-        return require('../templates/playlistItem.ejs');
-    }
+    @props({
+        className: 'playlist-item js-playlist-item',
 
-    ui() {
-        return {
+        template: require('../templates/playlistItem.ejs'),
+
+        ui: {
             link: '.js-link'
-        }
-    }
+        },
 
-    bindings() {
-        return {
+        bindings: {
             ':el': {
                 classes: {
                     'watched': '_watched'
                 }
             }
-        }
-    }
+        },
 
-    triggers() {
-        return {
+        triggers: {
             'click @ui.link': 'link:clicked'
         }
-    }
+    })
 
     initialize() {
         const videoId = this.model.get('videoId');
@@ -57,36 +51,28 @@ class PlaylistItem extends ItemView {
 
 class PlaylistItems extends CompositeView {
 
-    constructor(options = {}) {
-        _.defaults(options, {
-            model: new Model({
-                _search: '',
-                _searchDate: null,
-                videoId: null
-            })
-        });
+    @props({
+        model: new Model({
+            _search: '',
+            _searchDate: null,
+            videoId: null
+        }),
 
-        super(options);
-    }
-
-    ui() {
-        return {
+        ui: {
             search: '.js-search',
             datepicker: '.js-datepicker'
-        }
-    }
+        },
 
-    get childView() {
-        return PlaylistItem;
-    }
+        childView: PlaylistItem,
 
-    get childViewContainer() {
-        return '.js-playlist-items'
-    }
+        childViewContainer: '.js-playlist-items',
 
-    get template() {
-        return require('../templates/playlistItems.ejs');
-    }
+        childEvent: {
+            'link:clicked': '_onClickLink'
+        },
+
+        template: require('../templates/playlistItems.ejs')
+    })
 
     set videoId(val) {
         this.model.set('videoId', val);
@@ -99,26 +85,6 @@ class PlaylistItems extends CompositeView {
         return {
             search: this.model.get('_search'),
             date: this.model.get('_searchDate')
-        }
-    }
-
-    childEvents() {
-        return {
-            'link:clicked': '_onClickLink'
-        }
-    }
-
-    modelEvents() {
-        return {
-            'change:videoId': () => {
-                this._highlightVideo();
-                this._routeToVideo();
-            },
-
-            'change:_search change:_searchDate': _.debounce(() => {
-                this._searchCollection();
-                this._highlightVideo();
-            }, 50)
         }
     }
 
@@ -137,6 +103,20 @@ class PlaylistItems extends CompositeView {
                     return val ? moment(val, 'DD.MM.YYYY') : null;
                 }
             }
+        }
+    }
+
+    modelEvents() {
+        return {
+            'change:videoId': () => {
+                this._highlightVideo();
+                this._routeToVideo();
+            },
+
+            'change:_search change:_searchDate': _.debounce(() => {
+                this._searchCollection();
+                this._highlightVideo();
+            }, 50)
         }
     }
 
@@ -193,7 +173,7 @@ class PlaylistItems extends CompositeView {
         const videoId = this.model.get('videoId');
 
         if (videoId) {
-            if(this._player) {
+            if (this._player) {
                 this._player.loadVideoById(videoId, 0);
             } else {
                 $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');

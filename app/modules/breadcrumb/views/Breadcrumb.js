@@ -1,31 +1,25 @@
 import {ItemView, CollectionView} from 'backbone.marionette'
 import $ from 'jquery'
 import app from '../../../application'
+import {props} from '../../decorators'
 
 class BreadcrumbItem extends ItemView {
-    get tagName() {
-        return 'li'
-    }
 
-    get className() {
-        return 'breadcrumb-item'
-    }
+    @props({
+        tagName: 'li',
 
-    get template() {
-        return require('../templates/breadcrumbItem.ejs');
-    }
+        className: 'breadcrumb-item',
 
-    ui() {
-        return {
+        template: require('../templates/breadcrumbItem.ejs'),
+
+        ui: {
             link: '.js-link'
-        }
-    }
+        },
 
-    events() {
-        return {
+        events: {
             'click @ui.link': '_onClick'
-        };
-    }
+        }
+    })
 
     _onClick(e) {
         const $link = $(e.currentTarget);
@@ -38,16 +32,17 @@ class BreadcrumbItem extends ItemView {
 }
 
 class Breadcrumb extends CollectionView {
-    get tagName() {
-        return 'ul'
-    }
 
-    get className() {
-        return 'breadcrumb'
-    }
+    @props({
+        tagName: 'ul',
 
-    get childView() {
-        return BreadcrumbItem
+        className: 'breadcrumb',
+
+        childView: BreadcrumbItem
+    })
+
+    initialize() {
+        
     }
 }
 
