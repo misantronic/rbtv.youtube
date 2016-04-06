@@ -86,20 +86,6 @@ class Playlists extends CompositeView {
             'click @ui.link': '_onClickLink'
         },
 
-        modelEvents: {
-            'change:_search': _.debounce(() => {
-                this.renderCollection(
-                    _.extend(this.channelFilter, { resetResults: true })
-                );
-            }, 700),
-
-            'change:_filterByRBTV change:_filterByLP': () => {
-                this.renderCollection(
-                    _.extend(this.channelFilter, { resetResults: true })
-                );
-            }
-        },
-
         ui: {
             link: '.js-link',
             loader: '.js-loader'
@@ -138,6 +124,22 @@ class Playlists extends CompositeView {
 
     set loading(val) {
         this.model.set('_loading', val);
+    }
+
+    modelEvents() {
+        return {
+            'change:_search': _.debounce(() => {
+                this.renderCollection(
+                    _.extend(this.channelFilter, { resetResults: true })
+                );
+            }, 700),
+
+            'change:_filterByRBTV change:_filterByLP': () => {
+                this.renderCollection(
+                    _.extend(this.channelFilter, { resetResults: true })
+                );
+            }
+        }
     }
 
     onRender() {
