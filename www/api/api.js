@@ -1,3 +1,5 @@
+require('./db');
+
 var activities = require('./endpoints/activities');
 
 module.exports = {
