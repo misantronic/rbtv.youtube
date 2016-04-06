@@ -1,7 +1,13 @@
-var request = require('./../request');
+var request = require('../request');
+var cache   = require('../cache');
 
 module.exports = function (req, res) {
-	var query = req.query;
+    var query = req.query;
 
-	request(res, 'activities', query);
+    var cacheConfig = new cache.Config(
+        'activities.'+ query.channelId + '_' + query.pageToken + '_' + query.maxResults,
+        60 * 5 // 5 mins
+    );
+
+    request(res, 'activities', query, cacheConfig);
 };

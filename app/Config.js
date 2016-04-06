@@ -1,6 +1,6 @@
 import {Collection} from 'backbone'
 
-const apiBaseUrl = 'https://www.googleapis.com/youtube/v3';
+const apiBaseUrl = '/api';
 
 export default {
     endpoints: {
