@@ -84,21 +84,7 @@ class Playlists extends Collection {
 
         this._Deferred = this._Deferred || $.Deferred();
 
-        // Cache
-        const cachedModels = sessionStorage.get(this._channelId);
-
-        if (cachedModels) {
-            this.reset(cachedModels, silentOpts);
-
-            // Parse publishedAt as moment-object
-            this.each((model) => {
-                model.set('publishedAt', moment(model.get('publishedAt')))
-            });
-
-            this._fetchComplete();
-        } else {
-            super.fetch.call(this, options);
-        }
+        super.fetch.call(this, options);
 
         return this._Deferred.promise();
     }
@@ -159,10 +145,7 @@ class Playlists extends Collection {
 
     /** @private */
     _fetchComplete() {
-        // Cache
         _.defer(() => {
-            sessionStorage.set(this._channelId, this.toJSON());
-
             // This resolve finally finishes fetch()-process
             this._Deferred.resolve(this);
         });

@@ -89,21 +89,7 @@ class PlaylistItems extends Collection {
     fetch(...args) {
         this._Deferred = this._Deferred || $.Deferred();
 
-        // Cache
-        const models = sessionStorage.get(this._playlistId);
-
-        if (models) {
-            this.reset(models);
-
-            // Parse publishedAt as moment-object
-            this.each((model) => {
-                model.set('publishedAt', moment(model.get('publishedAt')))
-            });
-
-            this._fetchComplete();
-        } else {
-            super.fetch.apply(this, ...args);
-        }
+        super.fetch.apply(this, ...args);
 
         return this._Deferred.promise();
     }
@@ -143,10 +129,7 @@ class PlaylistItems extends Collection {
 
     /** @private */
     _fetchComplete() {
-        // Cache
         _.defer(() => {
-            sessionStorage.set(this._playlistId, this.toJSON());
-
             this._Deferred.resolve(this);
         });
 
