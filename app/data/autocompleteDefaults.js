@@ -96,6 +96,12 @@ export default [
         playlistId: 'PLsksxTH4pR3LQKx_i3iTwmmfCP8z9uIk5'
     },
     {
+        title: 'Press Select',
+        expr: /^press/i,
+        channel: 'rbtv',
+        playlistId: 'PLsksxTH4pR3LZ4CPFFfWqZp2WMDAmd7Om'
+    },
+    {
         title: 'Let\'s Play',
         expr: /^let/i,
         channel: 'lp',
