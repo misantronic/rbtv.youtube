@@ -38,6 +38,7 @@
     "imports-loader": "^0.6.5",
     "jquery": "^2.2.2",
     "moment": "^2.12.0",
+    "mongoose": "^4.4.11",
     "node-jquery-param": "0.0.2",
     "node-sass": "^3.4.2",
     "promise": "^7.1.1",
