@@ -71,7 +71,6 @@ class SearchResults extends Collection {
         return Config.endpoints.search + '?' + $.param([
                 { name: 'part', value: parts },
                 { name: 'maxResults', value: maxResults },
-                { name: 'key', value: Config.key },
                 { name: 'channelId', value: this._channelId },
                 { name: 'q', value: this._q },
                 { name: 'order', value: order },

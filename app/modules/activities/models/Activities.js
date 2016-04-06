@@ -64,7 +64,6 @@ class Activities extends Collection {
         return Config.endpoints.activities + '?' + $.param([
                 { name: 'part', value: parts },
                 { name: 'maxResults', value: maxResults },
-                { name: 'key', value: Config.key },
                 { name: 'channelId', value: this._channelId },
                 { name: 'pageToken', value: this._nextPageToken }
             ]);

@@ -80,7 +80,6 @@ class PlaylistItems extends Collection {
         return Config.endpoints.playlistItems + '?' + $.param([
                 { name: 'part', value: parts },
                 { name: 'maxResults', value: maxResults },
-                { name: 'key', value: Config.key },
                 { name: 'playlistId', value: this._playlistId },
                 { name: 'pageToken', value: this._nextPageToken }
             ]);
