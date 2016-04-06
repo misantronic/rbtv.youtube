@@ -6,7 +6,7 @@ module.exports = function (req, res) {
 
     var cacheConfig = new cache.Config(
         'playlistItem.'+ query.playlistId +'_'+ query.pageToken +'_'+ query.maxResults,
-        60 * 10 // 10 mins
+        60 * 60 // 60 mins
     );
 
     request(res, 'playlistItems', query, cacheConfig);
