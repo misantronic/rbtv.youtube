@@ -6,7 +6,7 @@ module.exports = function (req, res) {
 
     var cacheConfig = new cache.Config(
         'search.'+ query.channelId + '_'+ query.pageToken + '_'+ encodeURIComponent(query.q),
-        60 * 60 * 24 // 3 days
+        60 * 60 * 24 * 2 // 2 days
     );
 
     request(res, 'search', query, cacheConfig);
