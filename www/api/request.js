@@ -64,7 +64,7 @@ module.exports = function (response, endpoint, query, cacheConfig) {
             if (value) {
                 endRequest(200, value);
 
-                resolve(JSON.parse(value));
+                resolve(JSON.parse(value), /* fromCache= */ true);
             } else {
                 // Request live-data
                 requestData();
