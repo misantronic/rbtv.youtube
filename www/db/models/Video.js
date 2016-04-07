@@ -1,4 +1,4 @@
-var db = require('../../db');
+var db = require('../db');
 
 var videoSchema = new db.Schema({
     _id: { type: String, unique: false },

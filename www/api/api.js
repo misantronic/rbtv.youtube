@@ -1,4 +1,4 @@
-require('./db');
+require('./../db/db');
 
 module.exports = {
     init: function (app) {
