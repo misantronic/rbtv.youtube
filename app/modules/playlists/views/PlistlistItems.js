@@ -52,6 +52,8 @@ class PlaylistItem extends ItemView {
 class PlaylistItems extends CompositeView {
 
     @props({
+        className: 'layout-playlists-items row',
+
         model: new Model({
             _search: '',
             _searchDate: null,
