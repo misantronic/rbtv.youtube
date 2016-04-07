@@ -133,6 +133,8 @@ class PlaylistItems extends CompositeView {
             weekStart: 1
         });
 
+        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
+
         this.stickit();
     }
 
@@ -180,23 +182,17 @@ class PlaylistItems extends CompositeView {
             } else {
                 $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
 
-                let width  = 640;
-                let height = 390;
-
-                if(window.innerWidth <= 768) {
-                    width = '100%';
-                    height = window.innerWidth * 0.51;
-                }
-
                 this._player = new YT.Player('yt-video-container', {
-                    width: width,
-                    height: height,
+                    width: 200,
+                    height: 200,
                     videoId: videoId,
                     events: {
                         'onReady': this._onVideoReady.bind(this),
                         'onStateChange': this._onVideoStateChange.bind(this)
                     }
                 });
+
+                this._videoSetSize();
             }
         }
     }
@@ -260,6 +256,22 @@ class PlaylistItems extends CompositeView {
 
                 autoplay = false;
             }
+
+            this._onResize();
+        }
+    }
+
+    _videoSetSize() {
+        if (this._player) {
+            let width  = 640;
+            let height = width * 0.51;
+
+            if (window.innerWidth <= 768) {
+                width  = '100%';
+                height = window.innerWidth * 0.51;
+            }
+
+            this._player.setSize(width, height);
         }
     }
 
@@ -276,6 +288,20 @@ class PlaylistItems extends CompositeView {
             case YT.PlayerState.ENDED:
                 this._videoEnded();
                 break;
+        }
+    }
+
+    _onResize() {
+        this._videoSetSize();
+
+        var playlistItems = this.$('.js-playlist-items');
+
+        if (window.innerWidth <= 768) {
+            var top = playlistItems.offset().top;
+
+            playlistItems.css('height', window.innerHeight - top);
+        } else {
+            playlistItems.removeAttr('style');
         }
     }
 

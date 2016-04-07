@@ -1,11 +1,21 @@
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
+
 #region-navigation {
 	padding: 20px 0;
 	background: #fff;
+
+	@media (max-width: $screen-sm-min) {
+		padding: 0;
+	}
 }
 
 .navigation {
 	justify-content: flex-end;
 	display: flex;
+
+	@media (max-width: $screen-sm-min) {
+		justify-content: center;
+	}
 
 	> .navigation-item {
 		> .navigation-item-link {

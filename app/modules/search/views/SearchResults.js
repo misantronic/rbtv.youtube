@@ -5,6 +5,7 @@ import {Model} from 'backbone'
 import VideoCollection from '../../videos/models/Videos'
 import beans from '../../../data/beans'
 import {props} from '../../decorators'
+import app from '../../../application'
 
 class SearchResult extends ItemView {
 
@@ -79,13 +80,9 @@ class SearchResult extends ItemView {
 
         this.stickit();
 
-        $(window).on('resize.' + this.cid, _.debounce(() => {
+        this.listenTo(app.channel, 'resize', _.debounce(() => {
             this.model.trigger('change:tags');
         }, 100));
-    }
-
-    onDestroy() {
-        $(window).off('resize.' + this.cid);
     }
 }
 
