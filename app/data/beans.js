@@ -41,5 +41,6 @@ export default [
     'Alwin',
     'Ralph',
     'Aurel',
-    'Florentin'
+    'Florentin',
+    'Wolf'
 ]
