@@ -30,11 +30,11 @@ module.exports = {
         var identifier = cacheConfig.identifier;
         var cacheKey   = identifier.length > 100 ? identifier.substr(0, 97) + '...' : identifier;
 
-        console.time('Cache ' + cacheKey);
+        console.time('Redis: Cache ' + cacheKey);
 
         redis.get(identifier, (err, data) => {
             if (!_.isNull(data)) {
-                console.timeEnd('Cache ' + cacheKey);
+                console.timeEnd('Redis: Cache ' + cacheKey);
             }
 
             callback(err, data);
@@ -56,10 +56,10 @@ module.exports = {
             if (expires) {
                 redis.expire(identifier, expires, (err, res) => {
                     if (err) {
-                        return console.error('Error trying to set expire for ' + identifier + '. ' + err);
+                        return console.error('Redis: Error trying to set expire for ' + identifier + '. ' + err);
                     }
 
-                    console.log('Expires in ' + expires);
+                    console.log('Redis: Expires in ' + expires);
                 });
             }
         }
