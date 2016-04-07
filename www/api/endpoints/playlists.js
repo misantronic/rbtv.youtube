@@ -11,7 +11,7 @@ module.exports = function (req, res) {
             query: query,
             cacheConfig: new cache.Config(
                 cache.rk('playlists', query.channelId, query.pageToken, query.maxResults),
-                60 * 60 * 24 * 7 // 7 days
+                60 * 60 * 24 * 3 // 3 days
             )
         })
     );
