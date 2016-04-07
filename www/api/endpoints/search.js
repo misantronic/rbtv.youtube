@@ -9,5 +9,12 @@ module.exports = function (req, res) {
         60 * 60 * 24 * 2 // 2 days
     );
 
-    request(res, 'search', query, cacheConfig);
+    request(
+        new request.Config({
+            response: res,
+            endpoint: 'search',
+            query: query,
+            cacheConfig: cacheConfig
+        })
+    );
 };

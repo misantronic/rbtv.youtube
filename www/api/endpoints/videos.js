@@ -1,34 +1,43 @@
 var _          = require('underscore');
+var Promise    = require('promise');
 var request    = require('./../request');
 var cache      = require('../cache');
-var VideoModel = require('../../db/models/Video');
-var saveVideo  = require('../../db/saveVideo');
+var VideoModel = require('../../db/videos/models/Video');
+var saveVideo  = require('../../db/videos/saveVideo');
+var getVideos  = require('../../db/videos/getVideos');
 
 module.exports = function (req, res) {
-    var query = req.query;
+    var query    = req.query;
+    var videoIds = query.id.split(',');
 
-    var cacheConfig = new cache.Config(
-        cache.rk('videos', query.id),
-        60 * 60 * 24 * 7 // 7 days
-    );
+    getVideos(videoIds)
+        .then(videoResult => {
+            var itemsFromDB   = videoResult.itemsFromDB;
+            var itemsNotFound = videoResult.itemsNotFound;
 
-    request(res, 'videos', query, cacheConfig)
-        .done((videoData, fromCache) => {
-            if (!fromCache) {
-                // Save/Update videos in mongoDB
-                _.each(videoData.items, function (videoItem) {
-                    saveVideo({
-                        _id: videoItem.id,
-                        etag: videoItem.etag,
-                        kind: videoItem.kind,
-                        channelId: videoItem.snippet.channelId,
-                        description: videoItem.snippet.description,
-                        publishedAt: videoItem.snippet.publishedAt,
-                        thumbnails: videoItem.snippet.thumbnails,
-                        tags: videoItem.snippet.tags,
-                        title: videoItem.snippet.title
-                    });
+            // Update query
+            query.id = itemsNotFound.join(',');
+
+            request(
+                new request.Config({
+                    response: res,
+                    endpoint: 'videos',
+                    query: query,
+                    items: itemsFromDB
+                })
+            )
+                .then(requestResult => {
+                    var videoData = requestResult.data;
+                    var fromCache = requestResult.fromCache;
+
+                    if (!fromCache) {
+                        // Save/Update videos in mongoDB
+                        _.each(videoData.items, function (videoItem) {
+                            videoItem._id = videoItem.id;
+
+                            saveVideo(videoItem);
+                        });
+                    }
                 });
-            }
         });
 };

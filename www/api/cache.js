@@ -42,9 +42,11 @@ module.exports = {
     /**
      *
      * @param {CacheConfig} cacheConfig
-     * @param {*} value
+     * @param {String} value
      */
     set: function (cacheConfig, value) {
+        if(!cacheConfig) return;
+
         var identifier = cacheConfig.identifier;
         var expires    = cacheConfig.expires;
 

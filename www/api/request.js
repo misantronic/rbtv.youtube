@@ -1,3 +1,4 @@
+var _       = require('underscore');
 var https   = require('https');
 var param   = require('node-jquery-param');
 var Promise = require('promise');
@@ -5,16 +6,31 @@ var cache   = require('./cache');
 
 var key = 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk';
 
+function Config(options) {
+    _.extend(this, options);
+}
+
+/** @type {CacheConfig} */
+Config.prototype.cacheConfig = null;
+Config.prototype.response = null;
+Config.prototype.endpoint = null;
+Config.prototype.query    = null;
+Config.prototype.items    = null;
+
 /**
- * @param response
- * @param {String} endpoint
- * @param {Object} query
- * @param {CacheConfig} cacheConfig
+ * @param {Config} config
+ * @return {Promise}
  */
-module.exports = function (response, endpoint, query, cacheConfig) {
-    return new Promise(function(resolve, reject) {
+function request(config) {
+    var response    = config.response;
+    var endpoint    = config.endpoint;
+    var query       = config.query;
+    var cacheConfig = config.cacheConfig;
+    var items       = config.items || [];
+
+    return new Promise(function (resolve, reject) {
         var requestData = () => {
-            console.time('Request '+ endpoint);
+            console.time('Request ' + endpoint);
 
             https
                 .get({
@@ -28,24 +44,23 @@ module.exports = function (response, endpoint, query, cacheConfig) {
                     }
                 }, (res) => {
 
-                    var dataChunks = [];
+                    var buffer = '';
 
                     res
                         .on('data', (chunk) => {
-                            dataChunks.push(chunk);
+                            buffer += chunk;
                         })
                         .on('end', function () {
-                            var data = Buffer.concat(dataChunks);
+                            var dataStr = buffer.toString();
+                            var dataObj = JSON.parse(dataStr);
 
-                            endRequest(res.statusCode, data);
+                            endRequest(res.statusCode, dataObj);
 
-                            console.timeEnd('Request '+ endpoint);
+                            console.timeEnd('Request ' + endpoint);
 
-                            var dataStr = data.toString();
+                            resolve({ data: dataObj });
 
                             cache.set(cacheConfig, dataStr);
-
-                            resolve(JSON.parse(dataStr));
                         });
                 })
                 .on('error', (e) => {
@@ -56,19 +71,40 @@ module.exports = function (response, endpoint, query, cacheConfig) {
         };
 
         var endRequest = (statusCode, data) => {
+            var dataIsObject = _.isObject(data);
+
+            if(items.length && dataIsObject) {
+                data.items = data.items.concat(items);
+            }
+
             response.writeHead(statusCode, { "Content-Type": "application/json" });
-            response.end(data);
+            response.end(
+                dataIsObject ? JSON.stringify(data) : data
+            );
         };
 
-        cache.get(cacheConfig, function (err, value) {
+        var processCache = (err, value) => {
             if (value) {
                 endRequest(200, value);
 
-                resolve(JSON.parse(value), /* fromCache= */ true);
+                resolve({
+                    data: JSON.parse(value),
+                    fromCache: true
+                });
             } else {
                 // Request live-data
                 requestData();
             }
-        });
+        };
+
+        if (endpoint === 'videos' && !query.id && items.length) {
+            processCache(null, JSON.stringify({ items: items }));
+        } else {
+            cache.get(cacheConfig, processCache);
+        }
     });
-};
+}
+
+request.Config = Config;
+
+module.exports = request;
