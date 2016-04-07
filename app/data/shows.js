@@ -104,7 +104,6 @@ export default [
     {
         title: 'Let\'s Play',
         expr: /^let/i,
-        channel: 'lp',
-        playlistId: ''
+        channel: 'lp'
     }
 ]
