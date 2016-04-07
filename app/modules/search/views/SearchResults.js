@@ -32,14 +32,23 @@ class SearchResult extends ItemView {
                         });
 
                         // Match names
-                        let names = _.iintersection(beans, tags);
+                        let names    = _.iintersection(beans, tags);
+                        let maxItems = 4;
+
+                        if (window.innerWidth >= 1200) {
+                            maxItems = 5;
+                        } else if (window.innerWidth >= 992) {
+                            maxItems = 4;
+                        } else if (window.innerWidth >= 768) {
+                            maxItems = 3;
+                        }
 
                         if (names.length) {
                             let htmlStr = '';
                             for (var i = 0; i < names.length; i++) {
                                 let name = names[i].substr(0, 1).toUpperCase() + names[i].substr(1);
 
-                                if (i < 5) {
+                                if (i < maxItems) {
                                     htmlStr += `<span class="label label-info">${name.substr(0, 1).toUpperCase()}${name.substr(1)}</span>`;
                                 }
 
@@ -48,8 +57,8 @@ class SearchResult extends ItemView {
 
                             $el.html(htmlStr);
 
-                            if (names.length > 5) {
-                                let additionalNames = names.slice(5, names.length);
+                            if (names.length > maxItems) {
+                                let additionalNames = names.slice(maxItems, names.length);
 
                                 $el.append(`<span class="label label-default" data-toggle="tooltip" data-placement="top" title="${additionalNames.join(' ')}">+${additionalNames.length}</span>`)
                                 $el.find('[data-toggle="tooltip"]').tooltip();
@@ -69,6 +78,14 @@ class SearchResult extends ItemView {
         }
 
         this.stickit();
+
+        $(window).on('resize.' + this.cid, _.debounce(() => {
+            this.model.trigger('change:tags');
+        }, 100));
+    }
+
+    onDestroy() {
+        $(window).off('resize.' + this.cid);
     }
 }
 

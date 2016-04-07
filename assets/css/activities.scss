@@ -16,7 +16,9 @@
 	}
 
 	.items .item .thumbnail > .link > .thumb {
-		min-height: 262px;
+		@media (min-width: 1200px) {
+			min-height: 262px;
+		}
 	}
 
 	.modal-activities > .modal-dialog {

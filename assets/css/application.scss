@@ -1,28 +1,32 @@
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
+
 body {
 	background: #FCFCFC !important;
 	font-family: Raleway, Arial, sans-serif;
 
-	&:before {
-		content: ' ';
-		position: absolute;
-		left: 0;
-		top: 70px;
-		background: url(../img/bg_top.png) no-repeat left top;
-		background-size: 100% 110px;
-		height: 110px;
-		width: 100%;
-		z-index: 10;
-	}
+	@media (min-width: $screen-xs-min) {
+		&:before {
+			content: ' ';
+			position: absolute;
+			left: 0;
+			top: 70px;
+			background: url(../img/bg_top.png) no-repeat left top;
+			background-size: 100% 110px;
+			height: 110px;
+			width: 100%;
+			z-index: 10;
+		}
 
-	&:after {
-		content: ' ';
-		background: url(../img/bg.jpg) no-repeat left top / cover;
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		z-index: -1;
+		&:after {
+			content: ' ';
+			background: url(../img/bg.jpg) no-repeat left top / cover;
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
 	}
 }
 
@@ -51,8 +55,12 @@ body {
 }
 
 .app {
-	padding: 250px 0 0;
+	padding: 0;
 	position: relative;
+
+	@media (min-width: $screen-xs-min) {
+		padding-top: 250px;
+	}
 
 	> .bg {
 		background: #FFF;
@@ -60,19 +68,17 @@ body {
 		position: relative;
 		padding-bottom: 25px;
 
-		&:before {
-			content: ' ';
-			position: absolute;
-			left: 0;
-			top: -94px;
-			background: url(../img/content_top.png) no-repeat left top;
-			background-size: 100% 94px;
-			height: 94px;
-			width: 100%;
-		}
-
-		> .container {
-
+		@media (min-width: $screen-xs-min) {
+			&:before {
+				content: ' ';
+				position: absolute;
+				left: 0;
+				top: -94px;
+				background: url(../img/content_top.png) no-repeat left top;
+				background-size: 100% 94px;
+				height: 94px;
+				width: 100%;
+			}
 		}
 	}
 
