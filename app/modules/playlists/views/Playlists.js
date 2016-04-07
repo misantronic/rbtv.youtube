@@ -26,7 +26,7 @@ class Playlist extends ItemView {
         bindings: {
             ':el': {
                 classes: {
-                    loading: '_loading'
+                    loading: '_loadingItems'
                 }
             }
         }
@@ -37,7 +37,7 @@ class Playlist extends ItemView {
     }
 
     _onClickLink() {
-        this.model.set('_loading', true)
+        this.model.set('_loadingItems', true)
     }
 }
 
@@ -109,7 +109,8 @@ class Playlists extends CompositeView {
             _search: '',
             _filterByRBTV: true,
             _filterByLP: true,
-            _loading: false
+            _loading: false,
+            _loadingItems: false
         })
     })
 
@@ -185,8 +186,6 @@ class Playlists extends CompositeView {
     _onClickLink(e) {
         const $link = $(e.currentTarget);
         let route   = $link.attr('href').substr(1);
-
-        this.loading = true;
 
         app.navigate(route);
 
