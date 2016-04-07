@@ -25,8 +25,14 @@ class SearchResult extends ItemView {
                     if (tags) {
                         // Map only first names
                         tags = _.map(tags, (tag) => {
+                            // Special cases
                             if (tag.toLowerCase() === 'daniel budiman') {
                                 return 'budi';
+                            }
+
+                            // Special cases
+                            if(tag.toLowerCase() === 'eddy') {
+                                return 'etienne';
                             }
 
                             return tag.split(' ')[0]
@@ -48,9 +54,10 @@ class SearchResult extends ItemView {
                             let htmlStr = '';
                             for (var i = 0; i < names.length; i++) {
                                 let name = names[i].substr(0, 1).toUpperCase() + names[i].substr(1);
+                                let Name = name.substr(0, 1).toUpperCase() + name.substr(1);
 
                                 if (i < maxItems) {
-                                    htmlStr += `<span class="label label-info">${name.substr(0, 1).toUpperCase()}${name.substr(1)}</span>`;
+                                    htmlStr += `<span class="label label-info js-name" data-name="${Name}">${Name}</span>`;
                                 }
 
                                 names[i] = name;
