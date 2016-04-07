@@ -1,3 +1,5 @@
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
+
 .items-playlists {
 	> .item > .thumbnail > .link {
 		min-height: 142px;
@@ -102,7 +104,16 @@
 }
 
 .video-container {
-	padding-left: 10px;
+	padding-bottom: 10px;
+
+	@media (min-width: $screen-sm-min) {
+		padding-left: 10px;
+		padding-bottom: 0;
+	}
+
+	> iframe {
+		max-width: 100%;
+	}
 }
 
 .layout-playlists {
