@@ -116,7 +116,7 @@ class PlaylistItems extends CompositeView {
             'change:_search change:_searchDate': _.debounce(() => {
                 this._searchCollection();
                 this._highlightVideo();
-            }, 50)
+            }, 500)
         }
     }
 
@@ -178,9 +178,17 @@ class PlaylistItems extends CompositeView {
             } else {
                 $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
 
+                let width  = 640;
+                let height = 390;
+
+                if(window.innerWidth <= 768) {
+                    width = '100%';
+                    height = window.innerWidth * 0.51;
+                }
+
                 this._player = new YT.Player('yt-video-container', {
-                    height: '390',
-                    width: '640',
+                    width: width,
+                    height: height,
                     videoId: videoId,
                     events: {
                         'onReady': this._onVideoReady.bind(this),
