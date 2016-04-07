@@ -1,3 +1,5 @@
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
+
 .layout-activities {
 	> .loader {
 		display: none;
@@ -16,13 +18,13 @@
 	}
 
 	.items .item .thumbnail > .link > .thumb {
-		@media (min-width: 1200px) {
+		@media (min-width: $screen-lg-min) {
 			min-height: 262px;
 		}
 	}
 
 	.modal-activities > .modal-dialog {
-		@media (min-width: 768px) {
+		@media (min-width: $screen-sm-min) {
 			width: 675px;
 		}
 
