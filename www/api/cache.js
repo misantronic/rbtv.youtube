@@ -1,8 +1,6 @@
 var _       = require('underscore');
 var Promise = require('promise');
-var rtg     = require('url').parse(process.env.REDIS_URL);
 var redis   = require('redis').createClient(process.env.REDIS_URL);
-
 
 function CacheConfig(identifier, expires) {
     this.identifier = identifier;
@@ -65,5 +63,13 @@ module.exports = {
         }
     },
 
-    Config: CacheConfig
+    Config: CacheConfig,
+
+    rk: function () {
+        var keys = _.toArray(arguments);
+
+        console.log('key:', keys[0] + '.' + _.rest(keys).join(':'));
+
+        return keys[0] +'.'+ _.rest(keys).join(':');
+    }
 };

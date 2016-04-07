@@ -1,14 +1,14 @@
 var _          = require('underscore');
 var request    = require('./../request');
 var cache      = require('../cache');
-var VideoModel = require('../db/models/Video');
-var saveVideo  = require('../db/saveVideo');
+var VideoModel = require('../../db/models/Video');
+var saveVideo  = require('../../db/saveVideo');
 
 module.exports = function (req, res) {
     var query = req.query;
 
     var cacheConfig = new cache.Config(
-        'videos.' + query.id,
+        cache.rk('videos', query.id),
         60 * 60 * 24 * 7 // 7 days
     );
 

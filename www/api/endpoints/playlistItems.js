@@ -5,7 +5,7 @@ module.exports = function (req, res) {
     var query = req.query;
 
     var cacheConfig = new cache.Config(
-        'playlistItem.'+ query.playlistId +'_'+ query.pageToken +'_'+ query.maxResults,
+        cache.rk('playlistItem', query.playlistId, query.pageToken, query.maxResults),
         60 * 60 // 60 mins
     );
 
