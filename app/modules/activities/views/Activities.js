@@ -6,7 +6,7 @@ import Config from '../../../Config'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
-import autocompleteDefaults from '../../../data/autocompleteDefaults';
+import shows from '../../../data/shows';
 import VideoCollection from '../../videos/models/Videos'
 import {SearchResult} from '../../search/views/SearchResults'
 import {props} from '../../decorators'
@@ -82,7 +82,7 @@ class Activities extends CompositeView {
                     show: {
                         observe: '_search',
                         onGet: function (title) {
-                            let autocompleteObj = _.findWhere(autocompleteDefaults, { title });
+                            let autocompleteObj = _.findWhere(shows, { title });
 
                             if (autocompleteObj && autocompleteObj.playlistId) {
                                 this.ui.btnPlaylist

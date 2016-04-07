@@ -3,7 +3,8 @@ import {Model} from 'backbone'
 import {LayoutView} from 'backbone.marionette'
 import AutocompleteView from './Autocomplete'
 import {Autocomplete} from '../models/Autocomplete'
-import autocompleteDefaults from '../../../data/autocompleteDefaults';
+import shows from '../../../data/shows';
+import beans from '../../../data/beans';
 
 class Search extends LayoutView {
     constructor(options = {}) {
@@ -68,7 +69,16 @@ class Search extends LayoutView {
 
     onRender() {
         if(this._autocompleteEnabled) {
-            this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(autocompleteDefaults) });
+            // Merge beans and shows
+            let showBeans = _.map(beans, (bean) => {
+                return {
+                    title: bean,
+                    expr: new RegExp('^'+ bean.substr(0, 2), 'i'),
+                    channel: 'rbtv'
+                }
+            });
+
+            this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(shows.concat(showBeans)) });
 
             this.listenTo(this._autocompleteView, 'childview:link:selected', (itemView) => {
                 let model = itemView.model;
