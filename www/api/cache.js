@@ -68,8 +68,6 @@ module.exports = {
     rk: function () {
         var keys = _.toArray(arguments);
 
-        console.log('key:', keys[0] + '.' + _.rest(keys).join(':'));
-
         return keys[0] +'.'+ _.rest(keys).join(':');
     }
 };
