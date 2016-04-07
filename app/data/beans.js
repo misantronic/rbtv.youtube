@@ -3,6 +3,7 @@ export default [
     'Nils',
     'Budi',
     'Etienne',
+    'Eddy',
     'Arno',
     'Michael',
     'Dennis',
