@@ -11,5 +11,7 @@ module.exports = {
         app.get('/api/search', require('./endpoints/search'));
 
         app.get('/api/videos', require('./endpoints/videos'));
+
+        app.post('/api/mergePlaylists', require('./endpoints/mergePlaylists'));
     }
 };

@@ -2,6 +2,11 @@ var _       = require('underscore');
 var Promise = require('promise');
 var redis   = require('redis').createClient(process.env.REDIS_URL);
 
+/**
+ * @param {String} identifier
+ * @param {Number} [expires]
+ * @constructor
+ */
 function CacheConfig(identifier, expires) {
     this.identifier = identifier;
     this.expires    = expires || 300;
