@@ -8,7 +8,8 @@ export default {
         playlistItems: apiBaseUrl + '/playlistItems',
         activities: apiBaseUrl + '/activities',
         search: apiBaseUrl + '/search',
-        videos: apiBaseUrl + '/videos'
+        videos: apiBaseUrl + '/videos',
+        mergePlaylist: apiBaseUrl +'/mergePlaylists'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',
