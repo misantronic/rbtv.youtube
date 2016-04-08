@@ -54,10 +54,6 @@ class PlaylistItems extends Collection {
         this._allModels = [];
     }
 
-    static get urlRoot() {
-        return 'https://www.googleapis.com/youtube/v3/playlistItems';
-    }
-
     set playlistId(val) {
         this._playlistId = val;
         this._Deferred   = null;
