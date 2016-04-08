@@ -32,7 +32,7 @@ class BreadcrumbController extends Marionette.Object {
         if (this._currentPlaylistId === playlistId) return;
 
         // Retrieve playlist-name
-        $.get(`${Config.endpoints.playlists}?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
+        $.get(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
             .done((data) => {
                 const title = data.items[0]['snippet'].title;
 
