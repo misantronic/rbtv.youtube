@@ -22,9 +22,19 @@ class PlaylistsController extends Marionette.Object {
 
         view.loading = true;
 
-        this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
-            .done(() => {
-                view.renderCollection(true);
+        $.getJSON(Config.endpoints.playlists)
+            .done((collectionData) => {
+                if(!collectionData) {
+                    this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
+                        .done(() => {
+                            view.renderCollection(true);
+                        });
+                } else {
+                    // Apply cached collectionData to collection
+                    collection.allModels = new PlaylistsCollection(collectionData).models;
+
+                    view.renderCollection(true);
+                }
             });
     }
 
@@ -84,6 +94,17 @@ class PlaylistsController extends Marionette.Object {
             if (!channelId) {
                 // resolve promise
                 Deferred.resolve(collection);
+
+                // let playlistsData = _.map(collection.allModels, (model) => {
+                //     return model.originalResponseData
+                // });
+
+                $.ajax({
+                    url: Config.endpoints.mergePlaylist,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(collection.allModels)
+                });
 
                 return;
             }
