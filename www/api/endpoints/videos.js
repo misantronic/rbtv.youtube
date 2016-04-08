@@ -1,4 +1,5 @@
 var _          = require('underscore');
+var moment     = require('moment');
 var Promise    = require('promise');
 var request    = require('./../request');
 var cache      = require('../cache');
@@ -25,19 +26,19 @@ module.exports = function (req, res) {
                     query: query,
                     items: itemsFromDB
                 })
-            )
-                .then(requestResult => {
-                    var videoData = requestResult.data;
-                    var fromCache = requestResult.fromCache;
+            ).then(requestResult => {
+                var videoData = requestResult.data;
+                var fromCache = requestResult.fromCache;
 
-                    if (!fromCache) {
-                        // Save/Update videos in mongoDB
-                        _.each(videoData.items, function (videoItem) {
-                            videoItem._id = videoItem.id;
+                if (!fromCache) {
+                    // Save/Update videos in mongoDB
+                    _.each(videoData.items, function (videoItem) {
+                        videoItem._id     = videoItem.id;
+                        videoItem.expires = moment().add(7, 'days').toDate();
 
-                            saveVideo(videoItem);
-                        });
-                    }
-                });
+                        saveVideo(videoItem);
+                    });
+                }
+            });
         });
 };

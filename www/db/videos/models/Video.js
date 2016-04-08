@@ -1,19 +1,18 @@
 var db = require('../../db');
 
-var videoSchema = new db.Schema({
+module.exports = db.model('Videos', new db.Schema({
     _id: String,
     id: String,
     kind: String,
     etag: String,
+    expires: { type: Date, default: Date.now },
     snippet: {
         categoryId: String,
         channelId: String,
         title: String,
         description: String,
         tags: [],
-        publishedAt: {
-            type: Date, default: Date.now
-        },
+        publishedAt: { type: Date, default: Date.now },
         thumbnails: {
             default: {
                 width: Number,
@@ -42,6 +41,4 @@ var videoSchema = new db.Schema({
             }
         }
     }
-});
-
-module.exports = db.model('Videos', videoSchema);
+}));

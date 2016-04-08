@@ -1,4 +1,5 @@
 var _          = require('underscore');
+var moment     = require('moment');
 var Promise    = require('promise');
 var VideoModel = require('./models/Video');
 
@@ -13,12 +14,21 @@ module.exports = function (videoIds) {
         var itemsNotFound = [];
         var itemsFromDB   = [];
         var cnt           = 0;
+        var now           = moment();
 
         // Check videoIds in mongoDB
         _.each(videoIds, function (videoId) {
-            VideoModel.findById(videoId, function (err, videoObj) {
-                if (videoObj) {
-                    itemsFromDB.push(videoObj);
+            VideoModel.findById(videoId, function (err, videoModel) {
+                if (videoModel) {
+                    var expires = moment(videoModel.expires);
+
+                    if (expires.diff(now) > 0) {
+                        itemsFromDB.push(
+                            _.omit(videoModel.toObject(), '__v', '_id')
+                        );
+                    } else {
+                        itemsNotFound.push(videoId);
+                    }
                 } else {
                     itemsNotFound.push(videoId);
                 }

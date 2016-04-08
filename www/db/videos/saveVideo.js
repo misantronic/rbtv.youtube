@@ -7,10 +7,10 @@ module.exports = function (videoItem) {
             // Update
             VideoModel.findByIdAndUpdate(
                 videoItem._id,
-                { $set: _.omit(videoItem, '_id') },
+                { $set: _.omit(videoItem, '_id', '__v') },
                 function (err) {
                     if (err) {
-                        console.error('Mongo: Error trying to update videoItem', err)
+                        console.error('Mongo: Error trying to update videoItem', err);
                     }
                 }
             )
@@ -19,7 +19,7 @@ module.exports = function (videoItem) {
             new VideoModel(videoItem)
                 .save(function (err) {
                     if (err) {
-                        console.error('Mongo: Error trying to save videoItem', err)
+                        console.error('Mongo: Error trying to save videoItem', err);
                     }
                 });
         }
