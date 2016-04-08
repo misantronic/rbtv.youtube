@@ -101,7 +101,10 @@ class Activities extends CompositeView {
                     }
                 }
             }
-        }
+        },
+
+        /** @type {xhr} */
+        _currentSearchXHR: null
     })
 
     set loading(val) {
@@ -177,7 +180,11 @@ class Activities extends CompositeView {
             // Attach html
             this.$('.js-search-items').html(view.render().$el);
 
-            view.renderSearchResults(this._currentChannel);
+            if(this.$currentSearchXHR) {
+                this.$currentSearchXHR.abort();
+            }
+
+            this.$currentSearchXHR = view.renderSearchResults(this._currentChannel);
         } else {
             this.$('.js-search-items').empty();
         }
@@ -220,7 +227,7 @@ class Activities extends CompositeView {
                     let id         = activityModel.get('videoId');
                     let videoModel = videoCollection.findWhere({ id });
 
-                    if(videoModel) {
+                    if (videoModel) {
                         // Set tags on activitiy-model
                         activityModel.set(
                             'tags',
