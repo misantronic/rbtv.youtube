@@ -51,11 +51,21 @@ class Playlists extends Collection {
         this.model = Playlist;
 
         this._displayResults = defaultResults;
-        this._originalModels = [];
+        this._allModels      = [];
     }
 
     get comparator() {
         return 'title';
+    }
+
+    get allModels() {
+        return this._allModels;
+    }
+
+    set allModels(val) {
+        this._allModels = val;
+
+        this.reset(_.first(this._allModels, defaultResults));
     }
 
     setChannelId(val) {
@@ -103,7 +113,7 @@ class Playlists extends Collection {
     }
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {
-        let models = _.filter(this._originalModels, (model) => {
+        let models = _.filter(this._allModels, (model) => {
             const channelId = model.get('channelId');
             const title     = model.get('title');
 
@@ -137,7 +147,7 @@ class Playlists extends Collection {
         // Reset collection only if:
         // 1. collection is normally filtered
         // 2. number of models is increased while scrolling
-        if(!increaseResults || (increaseResults && models.length !== prevNumModels)) {
+        if (!increaseResults || (increaseResults && models.length !== prevNumModels)) {
             this.reset(models);
         }
     }
@@ -149,7 +159,7 @@ class Playlists extends Collection {
             this._Deferred.resolve(this);
         });
 
-        this._originalModels = this.models;
+        this._allModels = this.models;
     }
 
 }
