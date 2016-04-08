@@ -31,7 +31,7 @@ class SearchResult extends ItemView {
                             }
 
                             // Special cases
-                            if(tag.toLowerCase() === 'eddy') {
+                            if (tag.toLowerCase() === 'eddy') {
                                 return 'etienne';
                             }
 
@@ -159,15 +159,18 @@ class SearchResults extends CollectionView {
 
         this._animateDelay = 0;
 
-        return this.collection
+        let xhr = this.collection
             .setNextPageToken(nextPageToken)
-            .fetch()
-            .then((data) => {
-                this.loading = false;
+            .fetch();
 
-                this._fetchVideoDetails(data);
-                this._initScroll();
-            })
+        xhr.then((data) => {
+            this.loading = false;
+
+            this._fetchVideoDetails(data);
+            this._initScroll();
+        });
+
+        return xhr;
     }
 
     _initScroll() {
