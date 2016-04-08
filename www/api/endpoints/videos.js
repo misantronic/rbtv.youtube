@@ -1,7 +1,7 @@
 var _          = require('underscore');
 var moment     = require('moment');
 var Promise    = require('promise');
-var request    = require('./../request');
+var fetch      = require('./../fetch');
 var cache      = require('../cache');
 var VideoModel = require('../../db/videos/models/Video');
 var saveVideo  = require('../../db/videos/saveVideo');
@@ -16,19 +16,19 @@ module.exports = function (req, res) {
             var itemsFromDB   = videoResult.itemsFromDB;
             var itemsNotFound = videoResult.itemsNotFound;
 
+            var config = new fetch.Config({
+                endpoint: 'videos',
+                query: query
+            });
+
             // Update query
             query.id = itemsNotFound.join(',');
 
-            request(
-                new request.Config({
-                    endpoint: 'videos',
-                    query: query
-                })
-            ).then(result => {
+            fetch(config).then(result => {
                 var fromCache = result.fromCache;
                 var items     = result.data.items.concat(itemsFromDB);
 
-                request.end(res, items);
+                fetch.end(res, items);
 
                 if (!fromCache) {
                     // Save/Update videos in mongoDB

@@ -1,10 +1,10 @@
-var request = require('../request');
-var cache   = require('../cache');
+var fetch = require('../fetch');
+var cache = require('../cache');
 
 module.exports = function (req, res) {
     var query = req.query;
 
-    var config = new request.Config({
+    var config = new fetch.Config({
         response: res,
         endpoint: 'activities',
         query: query,
@@ -14,7 +14,7 @@ module.exports = function (req, res) {
         )
     });
 
-    request(config).then(function (result) {
-        request.end(res, result.data);
+    fetch(config).then(function (result) {
+        fetch.end(res, result.data);
     });
 };

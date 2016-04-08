@@ -1,7 +1,7 @@
-var _       = require('underscore');
-var param   = require('node-jquery-param');
-var request = require('./../request');
-var cache   = require('../cache');
+var _     = require('underscore');
+var param = require('node-jquery-param');
+var fetch = require('./../fetch');
+var cache = require('../cache');
 
 module.exports = function (req, res) {
     var output      = { items: [] };
@@ -10,17 +10,17 @@ module.exports = function (req, res) {
     function performRequest(channelId, pageToken, callback) {
         pageToken = pageToken || '';
 
-        request(
-            new request.Config({
-                endpoint: 'playlists',
-                query: {
-                    part: 'snippet,contentDetails',
-                    maxResults: 50,
-                    channelId: channelId,
-                    pageToken: pageToken
-                }
-            })
-        ).then(result => {
+        var config = new fetch.Config({
+            endpoint: 'playlists',
+            query: {
+                part: 'snippet,contentDetails',
+                maxResults: 50,
+                channelId: channelId,
+                pageToken: pageToken
+            }
+        });
+
+        fetch(config).then(result => {
             var data = result.data;
 
             output.items = output.items.concat(result.data.items);
@@ -37,7 +37,7 @@ module.exports = function (req, res) {
     cache.get(cacheConfig, function (err, val) {
         if(val) {
             // Cached data
-            request.end(res, val);
+            fetch.end(res, val);
         } else {
             // Fetch all playlists
             performRequest('UCQvTDmHza8erxZqDkjQ4bQQ', null, function () {
@@ -45,7 +45,7 @@ module.exports = function (req, res) {
                     var outputStr = JSON.stringify(output);
 
                     // Done
-                    request.end(res, outputStr);
+                    fetch.end(res, outputStr);
 
                     // Cache
                     cache.set(cacheConfig, outputStr);

@@ -1,6 +1,6 @@
-var _       = require('underscore');
-var request = require('./../request');
-var cache   = require('../cache');
+var _     = require('underscore');
+var fetch = require('./../fetch');
+var cache = require('../cache');
 
 module.exports = function (req, res) {
     var playlistId  = req.query.playlistId;
@@ -10,17 +10,17 @@ module.exports = function (req, res) {
     function performRequest(pageToken, callback) {
         pageToken = pageToken || '';
 
-        request(
-            new request.Config({
-                endpoint: 'playlistItems',
-                query: {
-                    part: 'snippet,contentDetails',
-                    maxResults: 50,
-                    playlistId: playlistId,
-                    pageToken: pageToken
-                }
-            })
-        ).then(result => {
+        var config = new fetch.Config({
+            endpoint: 'playlistItems',
+            query: {
+                part: 'snippet,contentDetails',
+                maxResults: 50,
+                playlistId: playlistId,
+                pageToken: pageToken
+            }
+        });
+
+        fetch(config).then(result => {
             var data = result.data;
 
             output.items = output.items.concat(result.data.items);
@@ -37,14 +37,14 @@ module.exports = function (req, res) {
     cache.get(cacheConfig, function (err, val) {
         if (val) {
             // Cached data
-            request.end(res, val);
+            fetch.end(res, val);
         } else {
             // Fetch all playlists
             performRequest(null, function () {
                 var outputStr = JSON.stringify(output);
 
                 // Done
-                request.end(res, outputStr);
+                fetch.end(res, outputStr);
 
                 // Cache
                 cache.set(cacheConfig, outputStr);
