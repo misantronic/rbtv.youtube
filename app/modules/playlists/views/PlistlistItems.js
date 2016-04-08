@@ -148,6 +148,8 @@ class PlaylistItems extends CompositeView {
         this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
 
         this.stickit();
+
+        scrollTo(0, window.innerWidth > 768 ? 300 : 0);
     }
 
     _searchCollection() {
