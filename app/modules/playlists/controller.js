@@ -49,14 +49,30 @@ class PlaylistsController extends Marionette.Object {
 
         this._currentPlaylistId = playlistId;
 
-        this._playlistItemsCollection
-            .fetch()
-            .then(() => {
-                this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
+        $.getJSON(Config.endpoints.playlistItems +'?playlistId='+ playlistId)
+            .done((collectionData) => {
+                if(!collectionData) {
+                    this._playlistItemsCollection
+                        .fetch()
+                        .then(() => {
+                            this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
 
-                this._region.show(this._playlistItemsView);
-            })
-            .then(this._initVideo.bind(this, videoId));
+                            this._region.show(this._playlistItemsView);
+
+                            this._playlistItemsCollection.merge();
+                        })
+                        .then(this._initVideo.bind(this, videoId));
+                } else {
+                    // Apply cached collectionData to collection
+                    this._playlistItemsCollection.allModels = new PlaylistItemsCollection(collectionData).models;
+
+                    this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
+
+                    this._region.show(this._playlistItemsView);
+
+                    this._initVideo(videoId);
+                }
+            });
     }
 
     _initVideo(videoId) {
@@ -95,16 +111,7 @@ class PlaylistsController extends Marionette.Object {
                 // resolve promise
                 Deferred.resolve(collection);
 
-                // let playlistsData = _.map(collection.allModels, (model) => {
-                //     return model.originalResponseData
-                // });
-
-                $.ajax({
-                    url: Config.endpoints.mergePlaylist,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(collection.allModels)
-                });
+                collection.merge();
 
                 return;
             }
