@@ -2,6 +2,20 @@ var _       = require('underscore');
 var Promise = require('promise');
 var redis   = require('redis').createClient(process.env.REDIS_URL);
 
+redis
+    .on('connect', () => {
+        console.log('Redis: Connected to:', process.env.REDIS_URL)
+    })
+    .on('reconnecting', () => {
+        console.log('Redis: Reconnecting...');
+    })
+    .on('error', (err) => {
+        console.error('Redis: Connection error', err);
+    })
+    .on('end', () => {
+        console.log('Redis: Connection ended');
+    });
+
 /**
  * @param {String} identifier
  * @param {Number} [expires]
@@ -50,7 +64,7 @@ module.exports = {
      * @param {String} value
      */
     set: function (cacheConfig, value) {
-        if(!cacheConfig) return;
+        if (!cacheConfig) return;
 
         var identifier = cacheConfig.identifier;
         var expires    = cacheConfig.expires;
@@ -75,6 +89,6 @@ module.exports = {
     rk: function () {
         var keys = _.toArray(arguments);
 
-        return keys[0] +'.'+ _.rest(keys).join(':');
+        return keys[0] + '.' + _.rest(keys).join(':');
     }
 };
