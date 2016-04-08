@@ -57,19 +57,21 @@ class PlaylistItems extends CompositeView {
         model: new Model({
             _search: '',
             _searchDate: null,
-            videoId: null
+            videoId: null,
+            _loading: false
         }),
 
         ui: {
             search: '.js-search',
-            datepicker: '.js-datepicker'
+            datepicker: '.js-datepicker',
+            loader: '.js-loader'
         },
 
         childView: PlaylistItem,
 
         childViewContainer: '.js-playlist-items',
 
-        childEvent: {
+        childEvents: {
             'link:clicked': '_onClickLink'
         },
 
@@ -78,6 +80,10 @@ class PlaylistItems extends CompositeView {
 
     set videoId(val) {
         this.model.set('videoId', val);
+    }
+
+    set loading(val) {
+        this.model.set('_loading', val);
     }
 
     /**
@@ -103,6 +109,12 @@ class PlaylistItems extends CompositeView {
                 observe: '_searchDate',
                 onSet: (val) => {
                     return val ? moment(val, 'DD.MM.YYYY') : null;
+                }
+            },
+
+            '@ui.loader': {
+                classes: {
+                    show: '_loading'
                 }
             }
         }
@@ -177,7 +189,7 @@ class PlaylistItems extends CompositeView {
         const videoId = this.model.get('videoId');
 
         if (videoId) {
-            if (this._player) {
+            if (this._player && this._player.loadVideoById) {
                 this._player.loadVideoById(videoId, 0);
             } else {
                 $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');

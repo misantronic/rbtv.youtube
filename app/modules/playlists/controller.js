@@ -4,7 +4,6 @@ import PlaylistsCollection from './models/Playlists'
 import PlaylistItemsCollection from './models/PlaylistItems'
 import PlaylistsView from './views/Playlists'
 import PlaylistItemsView from './views/PlistlistItems'
-import Config from '../../Config'
 
 class PlaylistsController extends Marionette.Object {
 
@@ -22,19 +21,10 @@ class PlaylistsController extends Marionette.Object {
 
         view.loading = true;
 
-        $.getJSON(Config.endpoints.playlists)
-            .done((collectionData) => {
-                if(!collectionData) {
-                    this._fetchPlaylists(collection, Config.channelRBTV, Config.channelLP)
-                        .done(() => {
-                            view.renderCollection(true);
-                        });
-                } else {
-                    // Apply cached collectionData to collection
-                    collection.allModels = new PlaylistsCollection(collectionData).models;
-
-                    view.renderCollection(true);
-                }
+        // Check cache for playlists
+        collection.fetch({ silent: true })
+            .done(() => {
+                view.renderCollection(true);
             });
     }
 
@@ -43,36 +33,25 @@ class PlaylistsController extends Marionette.Object {
             return this._initVideo(videoId);
         }
 
-        this._playlistItemsCollection = new PlaylistItemsCollection();
+        let collection = new PlaylistItemsCollection();
+        let view       = new PlaylistItemsView({ collection });
 
-        this._playlistItemsCollection.playlistId = playlistId;
+        this._currentPlaylistId = collection.playlistId = playlistId;
 
-        this._currentPlaylistId = playlistId;
+        this._region.show(view);
 
-        $.getJSON(Config.endpoints.playlistItems +'?playlistId='+ playlistId)
-            .done((collectionData) => {
-                if(!collectionData) {
-                    this._playlistItemsCollection
-                        .fetch()
-                        .then(() => {
-                            this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
+        view.loading = true;
 
-                            this._region.show(this._playlistItemsView);
+        // Check cache for playlistItems
+        collection.fetch()
+            .done(() => {
+                view.loading = false;
 
-                            this._playlistItemsCollection.merge();
-                        })
-                        .then(this._initVideo.bind(this, videoId));
-                } else {
-                    // Apply cached collectionData to collection
-                    this._playlistItemsCollection.allModels = new PlaylistItemsCollection(collectionData).models;
-
-                    this._playlistItemsView = new PlaylistItemsView({ collection: this._playlistItemsCollection });
-
-                    this._region.show(this._playlistItemsView);
-
-                    this._initVideo(videoId);
-                }
+                this._initVideo(videoId);
             });
+
+        this._playlistItemsCollection = collection;
+        this._playlistItemsView       = view;
     }
 
     _initVideo(videoId) {
@@ -87,48 +66,13 @@ class PlaylistsController extends Marionette.Object {
                 this._playlistItemsView.model.set('videoId', videoId, { silent: true });
                 this._playlistItemsView._highlightVideo();
                 this._playlistItemsView._routeToVideo(true);
+                this._playlistItemsView._videoPlay();
 
                 return;
             }
         }
 
         this._playlistItemsView.videoId = videoId;
-    }
-
-    /**
-     *
-     * @param {PlaylistsCollection} collection
-     * @param {Array} channels
-     * @returns {Promise}
-     * @private
-     */
-    _fetchPlaylists(collection, ...channels) {
-        let i          = 0;
-        const Deferred = $.Deferred();
-
-        const _fetchPlaylist = (channelId) => {
-            if (!channelId) {
-                // resolve promise
-                Deferred.resolve(collection);
-
-                collection.merge();
-
-                return;
-            }
-
-            collection
-                .setChannelId(channelId)
-                .fetch()
-                .done(() => {
-                    i++;
-
-                    _fetchPlaylist(channels[i]);
-                });
-        };
-
-        _fetchPlaylist(channels[i]);
-
-        return Deferred.promise();
     }
 }
 

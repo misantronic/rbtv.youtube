@@ -21,18 +21,18 @@ module.exports = function (req, res) {
 
             request(
                 new request.Config({
-                    response: res,
                     endpoint: 'videos',
-                    query: query,
-                    items: itemsFromDB
+                    query: query
                 })
-            ).then(requestResult => {
-                var videoData = requestResult.data;
-                var fromCache = requestResult.fromCache;
+            ).then(result => {
+                var fromCache = result.fromCache;
+                var items     = result.data.items.concat(itemsFromDB);
+
+                request.end(res, items);
 
                 if (!fromCache) {
                     // Save/Update videos in mongoDB
-                    _.each(videoData.items, function (videoItem) {
+                    _.each(result.data.items, function (videoItem) {
                         videoItem._id     = videoItem.id;
                         videoItem.expires = moment().add(7, 'days').toDate();
 

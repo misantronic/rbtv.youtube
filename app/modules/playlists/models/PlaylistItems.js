@@ -1,12 +1,8 @@
-import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
-import {sessionStorage} from '../../../utils';
 import Config from '../../../Config';
-
-const parts      = 'snippet, contentDetails';
-const maxResults = 50;
+import {props} from '../../decorators'
 
 /**
  * @class PlaylistItemModel
@@ -46,23 +42,16 @@ class PlaylistItem extends Model {
 }
 
 class PlaylistItems extends Collection {
-    constructor(...args) {
-        super(...args);
+    @props({
+        model: PlaylistItem,
 
-        this.model = PlaylistItem;
-
-        this._allModels = [];
-    }
+        url: function () {
+            return Config.endpoints.playlistItems +'?playlistId='+ this._playlistId;
+        }
+    })
 
     set playlistId(val) {
         this._playlistId = val;
-        this._Deferred   = null;
-    }
-
-    set allModels(val) {
-        this._allModels = val;
-
-        this.reset(this._allModels);
     }
 
     /** @returns {PlaylistItem} */
@@ -78,38 +67,15 @@ class PlaylistItems extends Collection {
         return this.findWhere({ videoId });
     }
 
-    url() {
-        return Config.endpoints.playlistItems + '?' + $.param([
-                { name: 'part', value: parts },
-                { name: 'maxResults', value: maxResults },
-                { name: 'playlistId', value: this._playlistId },
-                { name: 'pageToken', value: this._nextPageToken }
-            ]);
-    }
-
-    fetch(...args) {
-        this._Deferred = this._Deferred || $.Deferred();
-
-        super.fetch.apply(this, ...args);
-
-        return this._Deferred.promise();
-    }
-
     parse(response) {
-        this._nextPageToken = null;
-
-        if (response.nextPageToken) {
-            this._nextPageToken = response.nextPageToken;
-
-            this.fetch();
-        } else {
-            this._fetchComplete();
-        }
-
-        return this.models.concat(response.items);
+        return response.items;
     }
 
     search({ search, date }) {
+        if(!this._allModels) {
+            this._allModels = this.models;
+        }
+
         this.reset(
             _.filter(this._allModels, (model) => {
                 const title = model.get('title');
@@ -126,24 +92,6 @@ class PlaylistItems extends Collection {
                 return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
             })
         )
-    }
-
-    merge() {
-        return $.ajax({
-            url: Config.endpoints.mergePlaylistItems +'?playlistId='+ this._playlistId,
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(this._allModels)
-        })
-    }
-
-    /** @private */
-    _fetchComplete() {
-        _.defer(() => {
-            this._Deferred.resolve(this);
-        });
-
-        this._allModels = this.models;
     }
 }
 

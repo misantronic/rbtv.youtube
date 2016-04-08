@@ -66,6 +66,10 @@ module.exports = {
     set: function (cacheConfig, value) {
         if (!cacheConfig) return;
 
+        if(_.isObject(value)) {
+            value = JSON.stringify(value);
+        }
+
         var identifier = cacheConfig.identifier;
         var expires    = cacheConfig.expires;
 

@@ -57,10 +57,6 @@ class Videos extends Collection {
                 { name: 'id', value: this._videoIds.join(',') }
             ]);
     }
-
-    parse(response) {
-        return response.items;
-    }
 }
 
 export default Videos

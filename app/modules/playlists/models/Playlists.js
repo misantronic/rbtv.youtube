@@ -3,9 +3,8 @@ import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
 import Config from '../../../Config';
+import {props} from '../../decorators'
 
-const parts          = 'snippet, contentDetails';
-const maxResults     = 50;
 const defaultResults = 24;
 
 class Playlist extends Model {
@@ -44,70 +43,25 @@ class Playlist extends Model {
  */
 class Playlists extends Collection {
 
-    constructor(...args) {
-        super(...args);
+    @props({
+        model: Playlist,
 
-        this.model = Playlist;
+        comparator: 'title',
 
-        this._displayResults = defaultResults;
-        this._allModels      = [];
-    }
+        _displayResults: defaultResults,
 
-    get comparator() {
-        return 'title';
-    }
-
-    set allModels(val) {
-        this._allModels = val;
-
-        this.reset(_.first(this._allModels, defaultResults));
-    }
-
-    setChannelId(val) {
-        this._channelId = val;
-        this._Deferred  = null;
-
-        return this;
-    }
-
-    url() {
-        return Config.endpoints.playlists + '?' + $.param([
-                { name: 'part', value: parts },
-                { name: 'maxResults', value: maxResults },
-                { name: 'channelId', value: this._channelId },
-                { name: 'pageToken', value: this._nextPageToken }
-            ]);
-    }
-
-    fetch(options = {}) {
-        // Use silent flag on options
-        // to prevent instant rendering of the collection
-        let silentOpts = { silent: true };
-
-        _.extend(options, silentOpts);
-
-        this._Deferred = this._Deferred || $.Deferred();
-
-        super.fetch.call(this, options);
-
-        return this._Deferred.promise();
-    }
+        url: Config.endpoints.playlists
+    })
 
     parse(response) {
-        this._nextPageToken = null;
-
-        if (response.nextPageToken) {
-            this._nextPageToken = response.nextPageToken;
-
-            this.fetch();
-        } else {
-            this._fetchComplete();
-        }
-
-        return this.models.concat(response.items);
+        return response.items;
     }
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {
+        if(!this._allModels) {
+            this._allModels = this.models;
+        }
+
         let models = _.filter(this._allModels, (model) => {
             const channelId = model.get('channelId');
             const title     = model.get('title');
@@ -145,25 +99,6 @@ class Playlists extends Collection {
         if (!increaseResults || (increaseResults && models.length !== prevNumModels)) {
             this.reset(models);
         }
-    }
-    
-    merge() {
-        return $.ajax({
-            url: Config.endpoints.mergePlaylist,
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(this._allModels)
-        })
-    }
-
-    /** @private */
-    _fetchComplete() {
-        _.defer(() => {
-            // This resolve finally finishes fetch()-process
-            this._Deferred.resolve(this);
-        });
-
-        this._allModels = this.models;
     }
 
 }

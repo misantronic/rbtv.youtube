@@ -12,24 +12,29 @@ function Config(options) {
 
 /** @type {CacheConfig} */
 Config.prototype.cacheConfig = null;
-Config.prototype.response = null;
 Config.prototype.endpoint = null;
 Config.prototype.query    = null;
-Config.prototype.items    = null;
 
 /**
  * @param {Config} config
  * @return {Promise}
  */
 function request(config) {
-    var response    = config.response;
     var endpoint    = config.endpoint;
     var query       = config.query;
     var cacheConfig = config.cacheConfig;
-    var items       = config.items || [];
 
     return new Promise(function (resolve, reject) {
-        var requestData = () => {
+        cache.get(cacheConfig, function (err, value) {
+            if (value) {
+                resolve({
+                    data: JSON.parse(value),
+                    fromCache: true
+                });
+                return;
+            }
+
+            // Request live-data
             console.time('Request ' + endpoint);
 
             https
@@ -54,11 +59,12 @@ function request(config) {
                             var dataStr = buffer.toString();
                             var dataObj = JSON.parse(dataStr);
 
-                            endRequest(res.statusCode, dataObj);
-
                             console.timeEnd('Request ' + endpoint);
 
-                            resolve({ data: dataObj });
+                            resolve({
+                                data: dataObj,
+                                fromCache: false
+                            });
 
                             cache.set(cacheConfig, dataStr);
                         });
@@ -68,42 +74,23 @@ function request(config) {
 
                     reject();
                 });
-        };
-
-        var endRequest = (statusCode, data) => {
-            var dataIsObject = _.isObject(data);
-
-            if(items.length && dataIsObject) {
-                data.items = data.items.concat(items);
-            }
-
-            response.writeHead(statusCode, { "Content-Type": "application/json" });
-            response.end(
-                dataIsObject ? JSON.stringify(data) : data
-            );
-        };
-
-        var processCache = (err, value) => {
-            if (value) {
-                endRequest(200, value);
-
-                resolve({
-                    data: JSON.parse(value),
-                    fromCache: true
-                });
-            } else {
-                // Request live-data
-                requestData();
-            }
-        };
-
-        if (endpoint === 'videos' && !query.id && items.length) {
-            processCache(null, JSON.stringify({ items: items }));
-        } else {
-            cache.get(cacheConfig, processCache);
-        }
+        });
     });
 }
+
+/**
+ *
+ * @param response
+ * @param {String} items
+ */
+request.end = function (response, items) {
+    if(_.isObject(items)) {
+        items = JSON.stringify(items);
+    }
+
+    response.writeHead(200, { "Content-Type": "application/json" });
+    response.end(items);
+};
 
 request.Config = Config;
 
