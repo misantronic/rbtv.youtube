@@ -51,7 +51,7 @@ class PlaylistItems extends Collection {
 
         this.model = PlaylistItem;
 
-        this._originalModels = [];
+        this._allModels = [];
     }
 
     static get urlRoot() {
@@ -61,6 +61,12 @@ class PlaylistItems extends Collection {
     set playlistId(val) {
         this._playlistId = val;
         this._Deferred   = null;
+    }
+
+    set allModels(val) {
+        this._allModels = val;
+
+        this.reset(this._allModels);
     }
 
     /** @returns {PlaylistItem} */
@@ -109,7 +115,7 @@ class PlaylistItems extends Collection {
 
     search({ search, date }) {
         this.reset(
-            _.filter(this._originalModels, (model) => {
+            _.filter(this._allModels, (model) => {
                 const title = model.get('title');
 
                 if (date) {
@@ -126,13 +132,22 @@ class PlaylistItems extends Collection {
         )
     }
 
+    merge() {
+        return $.ajax({
+            url: Config.endpoints.mergePlaylistItems +'?playlistId='+ this._playlistId,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(this._allModels)
+        })
+    }
+
     /** @private */
     _fetchComplete() {
         _.defer(() => {
             this._Deferred.resolve(this);
         });
 
-        this._originalModels = this.models;
+        this._allModels = this.models;
     }
 }
 

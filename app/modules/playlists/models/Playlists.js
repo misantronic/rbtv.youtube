@@ -2,7 +2,6 @@ import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
-import {sessionStorage} from '../../../utils';
 import Config from '../../../Config';
 
 const parts          = 'snippet, contentDetails';
@@ -56,10 +55,6 @@ class Playlists extends Collection {
 
     get comparator() {
         return 'title';
-    }
-
-    get allModels() {
-        return this._allModels;
     }
 
     set allModels(val) {
@@ -150,6 +145,15 @@ class Playlists extends Collection {
         if (!increaseResults || (increaseResults && models.length !== prevNumModels)) {
             this.reset(models);
         }
+    }
+    
+    merge() {
+        return $.ajax({
+            url: Config.endpoints.mergePlaylist,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(this._allModels)
+        })
     }
 
     /** @private */
