@@ -25,56 +25,57 @@ function request(config) {
     var cacheConfig = config.cacheConfig;
 
     return new Promise(function (resolve, reject) {
-        cache.get(cacheConfig, function (err, value) {
-            if (value) {
-                resolve({
-                    data: JSON.parse(value),
-                    fromCache: true
-                });
-                return;
-            }
+        cache.get(cacheConfig)
+            .then(value => {
+                if (value) {
+                    resolve({
+                        data: JSON.parse(value),
+                        fromCache: true
+                    });
+                    return;
+                }
 
-            // Request live-data
-            console.time('Request ' + endpoint);
+                // Request live-data
+                console.time('Request ' + endpoint);
 
-            https
-                .get({
-                    hostname: 'www.googleapis.com',
-                    port: 443,
-                    path: '/youtube/v3/' + endpoint + '?' + param(query) + '&key=' + key,
-                    method: 'GET',
-                    headers: {
-                        Origin: 'http://rbtv-youtube.herokuapp.com',
-                        Referer: 'http://rbtv-youtube.herokuapp.com/api/activities'
-                    }
-                }, (res) => {
+                https
+                    .get({
+                        hostname: 'www.googleapis.com',
+                        port: 443,
+                        path: '/youtube/v3/' + endpoint + '?' + param(query) + '&key=' + key,
+                        method: 'GET',
+                        headers: {
+                            Origin: 'http://rbtv-youtube.herokuapp.com',
+                            Referer: 'http://rbtv-youtube.herokuapp.com/api/activities'
+                        }
+                    }, (res) => {
 
-                    var buffer = '';
+                        var buffer = '';
 
-                    res
-                        .on('data', (chunk) => {
-                            buffer += chunk;
-                        })
-                        .on('end', function () {
-                            var dataStr = buffer.toString();
-                            var dataObj = JSON.parse(dataStr);
+                        res
+                            .on('data', (chunk) => {
+                                buffer += chunk;
+                            })
+                            .on('end', function () {
+                                var dataStr = buffer.toString();
+                                var dataObj = JSON.parse(dataStr);
 
-                            console.timeEnd('Request ' + endpoint);
+                                console.timeEnd('Request ' + endpoint);
 
-                            resolve({
-                                data: dataObj,
-                                fromCache: false
+                                resolve({
+                                    data: dataObj,
+                                    fromCache: false
+                                });
+
+                                cache.set(cacheConfig, dataStr);
                             });
+                    })
+                    .on('error', (e) => {
+                        console.log(e);
 
-                            cache.set(cacheConfig, dataStr);
-                        });
-                })
-                .on('error', (e) => {
-                    console.log(e);
-
-                    reject();
-                });
-        });
+                        reject();
+                    });
+            });
     });
 }
 
