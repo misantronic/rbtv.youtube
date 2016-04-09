@@ -24,11 +24,16 @@ module.exports = function (req, res) {
             // Update query
             query.id = itemsNotFound.join(',');
 
+            if(!query.id) {
+                fetch.end(res, itemsFromDB);
+                return;
+            }
+
             fetch(config).then(result => {
                 var fromCache = result.fromCache;
                 var items     = result.data.items.concat(itemsFromDB);
 
-                fetch.end(res, items);
+
 
                 if (!fromCache) {
                     // Save/Update videos in mongoDB
