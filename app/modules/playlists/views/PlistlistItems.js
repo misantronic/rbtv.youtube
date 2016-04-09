@@ -100,7 +100,7 @@ class PlaylistItems extends CompositeView {
         return {
             '.js-video-container': {
                 observe: 'videoId',
-                update: _.debounce(this._videoPlay, 500)
+                update: _.debounce(this._videoInit, 500)
             },
 
             '@ui.search': '_search',
@@ -135,6 +135,8 @@ class PlaylistItems extends CompositeView {
     }
 
     initialize() {
+        this.videoId = null;
+
         this._playerInterval = 0;
     }
 
@@ -163,6 +165,8 @@ class PlaylistItems extends CompositeView {
     }
 
     _highlightVideo() {
+        if (!this.$childViewContainer) return;
+
         this.$childViewContainer.find('.js-playlist-item').removeClass('active');
 
         const $videoId = this.$childViewContainer.find('[data-videoid="' + this.model.get('videoId') + '"]');
@@ -177,6 +181,10 @@ class PlaylistItems extends CompositeView {
     }
 
     _routeToVideo(replaceState = false) {
+        var videoId = this.model.get('videoId');
+
+        if (!videoId) return;
+
         const currentPlaylistItem = this.collection.getCurrentPlaylistItem(this.model.get('videoId'));
 
         app.navigate(
@@ -185,7 +193,7 @@ class PlaylistItems extends CompositeView {
         );
     }
 
-    _videoPlay() {
+    _videoInit() {
         clearInterval(this._playerInterval);
 
         const videoId = this.model.get('videoId');

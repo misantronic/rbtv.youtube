@@ -29,7 +29,7 @@ class PlaylistsController extends Marionette.Object {
     }
 
     initPlaylist(playlistId, videoId = null) {
-        if (playlistId === this._currentPlaylistId) {
+        if (!_.isNull(playlistId) && playlistId === this._currentPlaylistId) {
             return this._initVideo(videoId);
         }
 
@@ -56,6 +56,8 @@ class PlaylistsController extends Marionette.Object {
 
     _initVideo(videoId) {
         if (!videoId) {
+            this._playlistItemsView.videoId = null;
+
             const playlistItem = this._playlistItemsCollection.first();
 
             if (playlistItem) {
@@ -66,7 +68,7 @@ class PlaylistsController extends Marionette.Object {
                 this._playlistItemsView.model.set('videoId', videoId, { silent: true });
                 this._playlistItemsView._highlightVideo();
                 this._playlistItemsView._routeToVideo(true);
-                this._playlistItemsView._videoPlay();
+                this._playlistItemsView._videoInit();
 
                 return;
             }
