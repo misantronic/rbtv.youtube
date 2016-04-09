@@ -103,7 +103,13 @@ module.exports = {
 
             identifierItems = this.rk2(identifier);
 
-            redis.rpush.apply(redis, [].concat(identifierItems, list));
+            var pipeline = redis.pipeline();
+
+            _.each(items, item => {
+                pipeline.rpush(identifierItems, JSON.stringify(item));
+            });
+
+            pipeline.exec();
         }
 
         // Set other parameters on redis
@@ -136,8 +142,6 @@ module.exports = {
 
         var key  = keys[0];
         var rest = _.rest(keys);
-
-        console.log(key, rest);
 
         if(rest.length) {
             key += '.' + rest.join(':');
