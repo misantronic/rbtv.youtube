@@ -2,6 +2,7 @@ import $ from 'jquery'
 import moment from 'moment'
 import {Model, Collection} from 'backbone'
 import Config from '../../../Config'
+import {props} from '../../decorators'
 
 const parts      = 'snippet';
 const maxResults = 50;
@@ -37,13 +38,14 @@ class Video extends Model {
 }
 
 class Videos extends Collection {
-    constructor(...args) {
-        super(...args);
+    @props({
+        model: Video
+    })
 
-        this.model = Video;
-    }
-
-    /** @param {Array} val */
+    /**
+     * @param {Array} val
+     * @returns {Videos}
+     */
     setVideoIds(val) {
         this._videoIds = val;
 
