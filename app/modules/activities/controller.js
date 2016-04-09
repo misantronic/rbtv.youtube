@@ -10,9 +10,7 @@ class ActivitiesController extends Marionette.Object {
     }
 
     initOverview() {
-        let activities = new ActivitiesColection();
-
-        let view = new ActivitiesView({ collection: activities });
+        let view = new ActivitiesView({ collection: new ActivitiesColection() });
 
         this._region.show(view);
 
