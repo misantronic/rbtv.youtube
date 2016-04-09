@@ -40,8 +40,9 @@ module.exports = {
      */
     get: function (cacheConfig) {
         if (!cacheConfig) {
-            callback(null, null);
-            return;
+            return new Promise(function(resolve) {
+                resolve(null);
+            });
         }
 
         var identifier = cacheConfig.identifier;
@@ -53,6 +54,8 @@ module.exports = {
             if (!_.isNull(data)) {
                 console.timeEnd('Redis: Cache ' + cacheKey);
             }
+
+            return data;
         });
     },
 
