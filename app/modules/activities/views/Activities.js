@@ -217,25 +217,27 @@ class Activities extends CompositeView {
             return activityData.contentDetails.upload.videoId;
         });
 
-        let videoCollection = new VideoCollection();
+        if(videoIds.length) {
+            let videoCollection = new VideoCollection();
 
-        videoCollection
-            .setVideoIds(videoIds)
-            .fetch()
-            .done(() => {
-                this.collection.each((activityModel) => {
-                    let id         = activityModel.get('videoId');
-                    let videoModel = videoCollection.findWhere({ id });
+            videoCollection
+                .setVideoIds(videoIds)
+                .fetch()
+                .done(() => {
+                    this.collection.each((activityModel) => {
+                        let id         = activityModel.get('videoId');
+                        let videoModel = videoCollection.findWhere({ id });
 
-                    if (videoModel) {
-                        // Set tags on activitiy-model
-                        activityModel.set(
-                            'tags',
-                            videoModel.get('tags')
-                        );
-                    }
+                        if (videoModel) {
+                            // Set tags on activitiy-model
+                            activityModel.set(
+                                'tags',
+                                videoModel.get('tags')
+                            );
+                        }
+                    });
                 });
-            });
+        }
     }
 
     _onCLickLink(e) {
