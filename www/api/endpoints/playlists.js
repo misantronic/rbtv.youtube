@@ -40,8 +40,12 @@ function initRequest(channelId) {
 }
 
 module.exports = function (req, res) {
-    var output      = { items: [] };
-    var cacheConfig = new cache.Config('playlists', 60 * 60 * 24);
+    var output = { items: [] };
+
+    var cacheConfig = new cache.Config(
+        cache.rk('playlists'),
+        60 * 60 * 24
+    );
 
     cache.get(cacheConfig)
         .done(value => {
@@ -64,7 +68,7 @@ module.exports = function (req, res) {
                 fetch.end(res, outputStr);
 
                 // Cache
-                cache.set(cacheConfig, outputStr);
+                cache.set(cacheConfig, output);
             });
         });
 };

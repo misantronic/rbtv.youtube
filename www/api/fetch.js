@@ -25,13 +25,21 @@ function request(config) {
     var cacheConfig = config.cacheConfig;
 
     return new Promise(function (resolve, reject) {
+        function resolvePromise(data, fromCache) {
+            if(_.isString(data)) {
+                data = JSON.parse(data);
+            }
+
+            resolve({
+                data: data,
+                fromCache: fromCache
+            });
+        }
+
         cache.get(cacheConfig)
             .then(value => {
                 if (value) {
-                    resolve({
-                        data: JSON.parse(value),
-                        fromCache: true
-                    });
+                    resolvePromise(value, true);
                     return;
                 }
 
@@ -62,12 +70,9 @@ function request(config) {
 
                                 console.timeEnd('Request ' + endpoint);
 
-                                resolve({
-                                    data: dataObj,
-                                    fromCache: false
-                                });
+                                resolvePromise(dataObj, false);
 
-                                cache.set(cacheConfig, dataStr);
+                                cache.set(cacheConfig, dataObj);
                             });
                     })
                     .on('error', (e) => {

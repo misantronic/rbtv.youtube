@@ -48,7 +48,7 @@ module.exports = function (req, res) {
                     fetch.end(res, outputStr);
 
                     // Cache
-                    cache.set(cacheConfig, outputStr);
+                    cache.set(cacheConfig, output);
                 });
             }
         });

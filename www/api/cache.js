@@ -40,51 +40,91 @@ module.exports = {
      */
     get: function (cacheConfig) {
         if (!cacheConfig) {
-            return new Promise(function(resolve) {
+            return new Promise(function (resolve) {
                 resolve(null);
             });
         }
 
-        var identifier = cacheConfig.identifier;
-        var cacheKey   = identifier.length > 100 ? identifier.substr(0, 97) + '...' : identifier;
+        var identifier      = cacheConfig.identifier;
+        var identifierItems = this.rk2(identifier);
+        var logKey          = identifier.length > 100 ? identifier.substr(0, 97) + '...' : identifier;
 
-        console.time('Redis: Cache ' + cacheKey);
+        console.time('Redis: Cache ' + logKey);
 
-        return redis.get(identifier).then(data => {
-            if (!_.isNull(data)) {
-                console.timeEnd('Redis: Cache ' + cacheKey);
-            }
+        return redis
+            .pipeline()
+            .get(identifier)
+            .lrange(identifierItems, 0, -1)
+            .exec()
+            .then(results => {
+                var valueMeta  = results[0][1];
+                var valueItems = results[1][1];
 
-            return data;
-        });
+                if (!valueMeta && valueItems.length === 0) {
+                    return null;
+                }
+
+                // Parse meta-data
+                valueMeta = JSON.parse(valueMeta) || {};
+
+                // Parse items
+                if (valueItems.length !== 0) {
+                    valueMeta.items = _.map(valueItems, item => {
+                        return JSON.parse(item);
+                    });
+                }
+
+                console.timeEnd('Redis: Cache ' + logKey);
+
+                return valueMeta;
+            });
     },
 
     /**
      *
      * @param {CacheConfig} cacheConfig
-     * @param {String} value
+     * @param {*} value
      */
     set: function (cacheConfig, value) {
-        if (!cacheConfig) return;
-
-        if (_.isObject(value)) {
-            value = JSON.stringify(value);
-        }
+        if (!cacheConfig || !cacheConfig.identifier) return;
 
         var identifier = cacheConfig.identifier;
         var expires    = cacheConfig.expires;
+        var identifierItems;
 
-        if (identifier) {
-            redis.set(identifier, value);
+        // Look for items
+        var items = _.isArray(value) ? value : value.items || null;
 
-            if (expires) {
-                redis.expire(identifier, expires, (err, res) => {
-                    if (err) {
-                        return console.error('Redis: Error trying to set expire for ' + identifier + '. ' + err);
-                    }
+        // Push items to redis
+        if (items) {
+            var list = _.map(items, item => {
+                return JSON.stringify(item);
+            });
 
-                    console.log('Redis: Expires in ' + expires);
-                });
+            identifierItems = this.rk2(identifier);
+
+            redis.rpush.apply(redis, [].concat(identifierItems, list));
+        }
+
+        // Set other parameters on redis
+        if (_.isObject(value) || !_.isArray(value)) {
+            // Remove items-property
+            value = _.omit(value, 'items');
+
+            // Check if object is empty
+            if (_.keys(value).length !== 0) {
+                value = JSON.stringify(value);
+
+                redis.set(identifier, value);
+            }
+        }
+
+        // Set expire-parameter
+        if (expires) {
+            redis.expire(identifier, expires);
+
+            if (identifierItems) {
+                redis.expire(identifierItems, expires);
             }
         }
     },
@@ -94,6 +134,19 @@ module.exports = {
     rk: function () {
         var keys = _.toArray(arguments);
 
-        return keys[0] + '.' + _.rest(keys).join(':');
+        var key  = keys[0];
+        var rest = _.rest(keys);
+
+        console.log(key, rest);
+
+        if(rest.length) {
+            key += '.' + rest.join(':');
+        }
+
+        return key;
+    },
+
+    rk2: function (identifier) {
+        return this.rk(identifier, 'items');
     }
 };
