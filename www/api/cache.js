@@ -1,6 +1,7 @@
 var _       = require('underscore');
 var Promise = require('promise');
-var redis   = require('redis').createClient(process.env.REDIS_URL);
+var Redis   = require('ioredis');
+var redis   = new Redis(process.env.REDIS_URL);
 
 redis
     .on('connect', () => {
@@ -36,9 +37,8 @@ module.exports = {
     /**
      *
      * @param {CacheConfig} cacheConfig
-     * @param {Function} callback
      */
-    get: function (cacheConfig, callback) {
+    get: function (cacheConfig) {
         if (!cacheConfig) {
             callback(null, null);
             return;
@@ -49,12 +49,10 @@ module.exports = {
 
         console.time('Redis: Cache ' + cacheKey);
 
-        redis.get(identifier, (err, data) => {
+        return redis.get(identifier).then(data => {
             if (!_.isNull(data)) {
                 console.timeEnd('Redis: Cache ' + cacheKey);
             }
-
-            callback(err, data);
         });
     },
 
@@ -66,7 +64,7 @@ module.exports = {
     set: function (cacheConfig, value) {
         if (!cacheConfig) return;
 
-        if(_.isObject(value)) {
+        if (_.isObject(value)) {
             value = JSON.stringify(value);
         }
 
@@ -74,7 +72,7 @@ module.exports = {
         var expires    = cacheConfig.expires;
 
         if (identifier) {
-            redis.set(identifier, value, redis.print);
+            redis.set(identifier, value);
 
             if (expires) {
                 redis.expire(identifier, expires, (err, res) => {

@@ -34,23 +34,24 @@ module.exports = function (req, res) {
         });
     }
 
-    cache.get(cacheConfig, function (err, val) {
-        if(val) {
-            // Cached data
-            fetch.end(res, val);
-        } else {
-            // Fetch all playlists
-            performRequest('UCQvTDmHza8erxZqDkjQ4bQQ', null, function () {
-                performRequest('UCtSP1OA6jO4quIGLae7Fb4g', null, function () {
-                    var outputStr = JSON.stringify(output);
+    cache.get(cacheConfig)
+        .then(value => {
+            if(value) {
+                // Cached data
+                fetch.end(res, value);
+            } else {
+                // Fetch all playlists
+                performRequest('UCQvTDmHza8erxZqDkjQ4bQQ', null, function () {
+                    performRequest('UCtSP1OA6jO4quIGLae7Fb4g', null, function () {
+                        var outputStr = JSON.stringify(output);
 
-                    // Done
-                    fetch.end(res, outputStr);
+                        // Done
+                        fetch.end(res, outputStr);
 
-                    // Cache
-                    cache.set(cacheConfig, outputStr);
+                        // Cache
+                        cache.set(cacheConfig, outputStr);
+                    });
                 });
-            });
-        }
-    });
+            }
+        });
 };
