@@ -35,9 +35,13 @@ class Video extends LayoutView {
             },
 
             'change:id': (model, videoId) => {
+                model.set('_loading', true);
+
                 model.fetch().then(() => {
                     this._initVideo();
                     this._initRelatedVideos();
+
+                    model.set('_loading', false);
                 });
             },
 
@@ -59,6 +63,14 @@ class Video extends LayoutView {
 
             'change:description': (model, description) => {
                 this.ui.description.html(description);
+            },
+
+            'change:_loading': (model, val) => {
+                if (val) {
+                    this.$el.addClass('loading');
+                } else {
+                    this.$el.removeClass('loading');
+                }
             }
         }
     }
@@ -84,10 +96,19 @@ class Video extends LayoutView {
 
                 this._player.cueVideoById(videoId, currentTime);
             } else {
-                $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
+                let containerId = 'yt-video-container';
+                let container   = this.$('#' + containerId);
+                let height      = container.css('height', 'auto').height();
+                let $container         = $('<div id="' + containerId + '"></div>');
+
+                if (height) {
+                    $container.css('height', height)
+                }
+
+                container.replaceWith($container);
 
                 var initPlayer = function () {
-                    this._player = new YT.Player('yt-video-container', {
+                    this._player = new YT.Player(containerId, {
                         width: 200,
                         height: 200,
                         videoId: videoId,

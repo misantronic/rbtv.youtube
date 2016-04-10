@@ -1,40 +1,62 @@
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
 
 .layout-video {
+	position: relative;
 
-	.video-details {
-		display: flex;
+	.video-content {
 
-		.publishedAt {
-			font-weight: bold;
+		.video-details {
+			display: flex;
+
+			.publishedAt {
+				font-weight: bold;
+			}
+
+			.views {
+				font-weight: bold;
+			}
+
+			.description {
+				white-space: pre-wrap;
+				margin: 10px 0 0;
+				padding: 10px 0;
+				border-top: 1px solid #CCC;
+			}
+
+			.count-likes,
+			.count-dislikes {
+				position: relative;
+				top: -2px;
+				margin-left: 4px;
+			}
+
+			.count-likes {
+				margin-right: 10px;
+			}
 		}
 
-		.views {
-			font-weight: bold;
-		}
-
-		.description {
-			white-space: pre-wrap;
-			margin: 10px 0 0;
-			padding: 10px 0;
-			border-top: 1px solid #CCC;
-			max-height: 230px;
-			overflow: auto;
-		}
-
-		.count-likes,
-		.count-dislikes {
-			position: relative;
-			top: -2px;
-			margin-left: 4px;
-		}
-
-		.count-likes {
-			margin-right: 10px;
+		.related-items {
+			margin-top: 10px;
+			max-height: 500px;
+			height: auto;
 		}
 	}
 
-	.related-items {
+	.loader {
+		display: none;
+		position: absolute;
+		top: 50%;
+		margin-top: -20px;
+		left: 50%;
+	}
 
+	&.loading {
+		.loader {
+			display: block;
+		}
+
+		.video-content {
+			opacity: 0.25;
+		}
 	}
 }
