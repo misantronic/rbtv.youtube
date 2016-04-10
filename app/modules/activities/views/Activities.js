@@ -147,7 +147,7 @@ class Activities extends CompositeView {
                 this.loading = false;
 
                 this._initScroll();
-                this._fetchVideoDetails();
+                this._fetchVideoDetails(data);
             })
     }
 
@@ -212,9 +212,9 @@ class Activities extends CompositeView {
         }
     }
 
-    _fetchVideoDetails() {
-        let videoIds = this.collection.map(model => {
-            return model.get('videoId');
+    _fetchVideoDetails(collectionData) {
+        let videoIds = _.map(collectionData.items, modelData => {
+            return modelData.contentDetails.upload.videoId;
         });
 
         if(videoIds.length) {

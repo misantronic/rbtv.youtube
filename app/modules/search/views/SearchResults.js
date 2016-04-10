@@ -194,8 +194,8 @@ class SearchResults extends CollectionView {
     }
 
     _fetchVideoDetails(searchData) {
-        let videoIds = this.collection.map(model => {
-            return model.get('videoId');
+        let videoIds = _.map(searchData.items, modelData => {
+            return modelData.id.videoId;
         });
 
         if(videoIds.length) {
