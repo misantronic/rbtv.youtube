@@ -1,7 +1,7 @@
 {
   "name": "rbtv.youtube",
   "version": "0.0.1",
-  "description": "",
+  "description": "A YouTube-Alternative for Rocket Beans TV.",
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/webpack && node www/index.js",
@@ -34,7 +34,9 @@
     "ejs-loader": "^0.2.1",
     "express": "4.13.3",
     "file-loader": "^0.8.5",
+    "flat": "^2.0.0",
     "fuckadblock": "^3.2.1",
+    "hiredis": "^0.4.1",
     "html-webpack-plugin": "^2.14.0",
     "imports-loader": "^0.6.5",
     "ioredis": "^1.15.1",
@@ -49,5 +51,9 @@
     "tether": "^1.2.0",
     "underscore": "^1.8.3",
     "webpack": "^1.12.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/misantronic/rbtv.youtube.git"
   }
 }
