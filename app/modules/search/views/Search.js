@@ -5,47 +5,34 @@ import AutocompleteView from './Autocomplete'
 import {Autocomplete} from '../models/Autocomplete'
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
+import {props} from '../../decorators'
 
 class Search extends LayoutView {
-    constructor(options = {}) {
-        _.defaults(options, {
-            model: new Model()
-        });
+    @props({
+        model: new Model(),
 
-        super(options);
-    }
+        className: 'layout-search search-container',
 
-    get className() {
-        return 'layout-search search-container'
-    }
+        template: require('../templates/search.ejs'),
 
-    get template() {
-        return require('../templates/search.ejs');
-    }
-
-    regions() {
-        return {
+        regions: {
             autocomplete: '.region-autocomplete'
-        }
-    }
+        },
 
-    ui() {
-        return {
+        ui: {
             search: '.js-search',
             btnFilterRBTV: '.js-filter-rbtv',
-            btnFilterLP: '.js-filter-lp'
-        }
-    }
+            btnFilterLP: '.js-filter-lp',
+            btnReset: '.js-reset'
+        },
 
-    events() {
-        return {
+        events: {
             'click @ui.btnFilterRBTV': '_onSelectRBTV',
-            'click @ui.btnFilterLP': '_onSelectLP'
-        }
-    }
+            'click @ui.btnFilterLP': '_onSelectLP',
+            'click @ui.btnReset': '_onReset'
+        },
 
-    bindings() {
-        return {
+        bindings: {
             '@ui.btnFilterRBTV': {
                 classes: {
                     active: '_filterByRBTV'
@@ -58,9 +45,15 @@ class Search extends LayoutView {
                 }
             },
 
-            '@ui.search': '_search'
+            '@ui.search': {
+                observe: '_search',
+                classes: {
+                    'has-value': '_search'
+                }
+            }
         }
-    }
+    })
+
     initialize() {
         let autocompleteEnabled = this.getOption('autocomplete');
 
@@ -134,6 +127,10 @@ class Search extends LayoutView {
         }
 
         this.ui.btnFilterLP.blur();
+    }
+
+    _onReset() {
+        this.model.set('_search', '');
     }
 }
 export default Search
