@@ -19,7 +19,7 @@ module.exports = function (req, res) {
             var config = new fetch.Config({
                 endpoint: 'videos',
                 query: {
-                    part: 'snippet',
+                    part: 'snippet,contentDetails',
                     maxResults: 50,
                     id: itemsNotFound.join(',')
                 }

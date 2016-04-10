@@ -40,5 +40,12 @@ module.exports = db.model('Videos', new db.Schema({
                 url: String
             }
         }
+    },
+    contentDetails: {
+        caption: String,
+        definition: String,
+        dimension: String,
+        duration: String,
+        licensedContent: Boolean
     }
 }));
