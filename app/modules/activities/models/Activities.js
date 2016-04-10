@@ -18,7 +18,8 @@ class Activity extends Model {
             publishedAt: null,
             thumbnails: null,
             title: '',
-            tags: null
+            tags: null,
+            duration: null
         }
     }
 

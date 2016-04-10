@@ -32,8 +32,31 @@ class Video extends Model {
             publishedAt: moment(response.snippet.publishedAt),
             thumbnails: response.snippet.thumbnails,
             tags: response.snippet.tags,
-            title: response.snippet.title
+            title: response.snippet.title,
+            duration: moment.duration(response.contentDetails.duration)
         };
+    }
+
+    /**
+     * @param {moment.duration} duration
+     * @returns {String}
+     */
+    static humanizeDuration(duration) {
+        if (!duration) {
+            return '';
+        }
+
+        let hours = ('0'+ duration.hours()).slice(-2);
+        let mins  = ('0'+ duration.minutes()).slice(-2);
+        let secs  = ('0'+ duration.seconds()).slice(-2);
+
+        // Add minutes + seconds
+        var arr = [ mins, secs ];
+
+        // Add hours
+        if(hours !== '00') arr.unshift(hours);
+
+        return arr.join(':');
     }
 }
 
@@ -59,4 +82,5 @@ class Videos extends Collection {
     }
 }
 
+export {Video, Videos}
 export default Videos

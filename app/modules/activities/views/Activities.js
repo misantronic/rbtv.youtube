@@ -180,7 +180,7 @@ class Activities extends CompositeView {
             // Attach html
             this.$('.js-search-items').html(view.render().$el);
 
-            if(this.$currentSearchXHR) {
+            if (this.$currentSearchXHR) {
                 this.$currentSearchXHR.abort();
             }
 
@@ -217,7 +217,7 @@ class Activities extends CompositeView {
             return modelData.contentDetails.upload.videoId;
         });
 
-        if(videoIds.length) {
+        if (videoIds.length) {
             let videoCollection = new VideoCollection();
 
             videoCollection
@@ -230,10 +230,10 @@ class Activities extends CompositeView {
 
                         if (videoModel) {
                             // Set tags on activitiy-model
-                            activityModel.set(
-                                'tags',
-                                videoModel.get('tags')
-                            );
+                            activityModel.set({
+                                tags: videoModel.get('tags'),
+                                duration: videoModel.get('duration')
+                            });
                         }
                     });
                 });

@@ -2,7 +2,7 @@ import $ from 'jquery'
 import _ from 'underscore'
 import {CollectionView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
-import VideoCollection from '../../videos/models/Videos'
+import {Video, Videos} from '../../videos/models/Videos'
 import beans from '../../../data/beans'
 import {props} from '../../decorators'
 import app from '../../../application'
@@ -15,11 +15,13 @@ class SearchResult extends ItemView {
         template: require('../templates/videoItem.ejs'),
 
         ui: {
-            link: '.js-link'
+            link: '.js-link',
+            team: '.js-team',
+            duration: '.js-duration'
         },
 
         bindings: {
-            '.js-team': {
+            '@ui.team': {
                 observe: 'tags',
                 update: function ($el, tags) {
                     if (tags) {
@@ -73,6 +75,14 @@ class SearchResult extends ItemView {
                             }
                         }
                     }
+                }
+            },
+
+            '@ui.duration': {
+                observe: 'duration',
+
+                update: function ($el, val) {
+                    $el.text(Video.humanizeDuration(val));
                 }
             }
         }
@@ -198,23 +208,23 @@ class SearchResults extends CollectionView {
             return modelData.id.videoId;
         });
 
-        if(videoIds.length) {
-            let videoCollection = new VideoCollection();
+        if (videoIds.length) {
+            let videos = new Videos();
 
-            videoCollection
+            videos
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
                     this.collection.each((searchModel) => {
                         let id         = searchModel.get('videoId');
-                        let videoModel = videoCollection.findWhere({ id });
+                        let videoModel = videos.findWhere({ id });
 
                         if (videoModel) {
                             // Set tags on activitiy-model
-                            searchModel.set(
-                                'tags',
-                                videoModel.get('tags')
-                            );
+                            searchModel.set({
+                                tags: videoModel.get('tags'),
+                                duration: videoModel.get('duration')
+                            });
                         }
                     });
                 });

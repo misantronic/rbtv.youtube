@@ -2,6 +2,7 @@
 	<a class="link js-link" data-videoid="<%- videoId %>" data-title="<%- title %>" href="https://www.youtube.com/watch?v=<%- videoId %>" data-toggle="modal" data-target=".js-modal-activities">
 		<img class="thumb" src="<%- thumbnails.high.url %>">
 		<span class="publishedAt label label-default"><%- publishedAt.fromNow() %></span>
+		<span class="duration js-duration label label-default"></span>
 	</a>
 	<div class="caption">
 		<h3 class="title" title="<%- title %>">
