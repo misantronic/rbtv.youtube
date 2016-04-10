@@ -15,7 +15,12 @@ class Video extends LayoutView {
 
         ui: {
             title: '.js-title',
-            video: '.js-video-container'
+            video: '.js-video-container',
+            publishedAt: '.js-publishedAt',
+            views: '.js-views',
+            description: '.js-description',
+            likes: '.js-count-likes',
+            dislikes: '.js-count-dislikes'
         },
 
         regions: {
@@ -34,6 +39,26 @@ class Video extends LayoutView {
                     this._initVideo();
                     this._initRelatedVideos();
                 });
+            },
+
+            'change:publishedAt': (model, publishedAt) => {
+                this.ui.publishedAt.text(publishedAt.format('LLLL'))
+            },
+
+            'change:statistics': (model, statistics) => {
+                let views    = statistics.viewCount;
+                let likes    = statistics.likeCount;
+                let dislikes = statistics.dislikeCount;
+
+                this.ui.views.text(views);
+
+                this.ui.likes.text(likes);
+
+                this.ui.dislikes.text(dislikes);
+            },
+
+            'change:description': (model, description) => {
+                this.ui.description.html(description);
             }
         }
     }
@@ -159,7 +184,7 @@ class Video extends LayoutView {
 
         switch (e.data) {
             case YT.PlayerState.UNSTARTED:
-                
+
                 break;
             case YT.PlayerState.PLAYING:
                 this._videoPlaying();
