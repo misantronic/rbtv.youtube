@@ -1,7 +1,10 @@
 var _       = require('underscore');
 var Promise = require('promise');
+var flatten = require('flat');
 var Redis   = require('ioredis');
 var redis   = new Redis(process.env.REDIS_URL);
+
+require('../../app/overrides/underscore');
 
 redis
     .on('connect', () => {
@@ -53,19 +56,19 @@ module.exports = {
 
         return redis
             .pipeline()
-            .get(identifier)
+            .hgetall(identifier)
             .lrange(identifierItems, 0, -1)
             .exec()
             .then(results => {
                 var valueMeta  = results[0][1];
                 var valueItems = results[1][1];
 
-                if (!valueMeta && valueItems.length === 0) {
+                if (_.isEmptyObject(valueMeta) && valueItems.length === 0) {
                     return null;
                 }
 
                 // Parse meta-data
-                valueMeta = JSON.parse(valueMeta) || {};
+                valueMeta = flatten.unflatten(valueMeta);
 
                 // Parse items
                 if (valueItems.length !== 0) {
@@ -88,12 +91,12 @@ module.exports = {
     set: function (cacheConfig, value) {
         if (!cacheConfig || !cacheConfig.identifier) return;
 
+        var pipeline, items;
         var identifier = cacheConfig.identifier;
         var expires    = cacheConfig.expires;
-        var identifierItems;
 
         // Look for items
-        var items = _.isArray(value) ? value : value.items || null;
+        items = _.isArray(value) ? value : value.items || null;
 
         // Push items to redis
         if (items) {
@@ -101,27 +104,40 @@ module.exports = {
                 return JSON.stringify(item);
             });
 
-            identifierItems = this.rk2(identifier);
+            var identifierItems = this.rk2(identifier);
 
-            var pipeline = redis.pipeline();
+            pipeline = redis.pipeline();
 
+            // Pipe items to pipeline
             _.each(items, item => {
-                pipeline.rpush(identifierItems, JSON.stringify(item));
+                pipeline.rpush(this.rk2(identifier), JSON.stringify(item));
             });
 
             pipeline.exec();
         }
 
         // Set other parameters on redis
-        if (_.isObject(value) || !_.isArray(value)) {
-            // Remove items-property
+        if (_.isString(value)) {
+            // String
+            value = JSON.stringify(value);
+
+            redis.set(identifier, value);
+        } else if (_.isObject(value) || !_.isArray(value)) {
+            // Object: Remove items-property
             value = _.omit(value, 'items');
 
             // Check if object is empty
-            if (_.keys(value).length !== 0) {
-                value = JSON.stringify(value);
+            if (!_.isEmptyObject(value)) {
+                items = flatten(value);
 
-                redis.set(identifier, value);
+                pipeline = redis.pipeline();
+
+                // Pipe items to pipeline
+                _.each(items, (item, key) => {
+                    pipeline.hmset(identifier, key, item);
+                });
+
+                pipeline.exec();
             }
         }
 
@@ -143,7 +159,7 @@ module.exports = {
         var key  = keys[0];
         var rest = _.rest(keys);
 
-        if(rest.length) {
+        if (rest.length) {
             key += '.' + rest.join(':');
         }
 
