@@ -157,7 +157,7 @@ module.exports = {
         var keys = _.toArray(arguments);
 
         var key  = keys[0];
-        var rest = _.rest(keys);
+        var rest = _.chain(keys).rest().compact().value();
 
         if (rest.length) {
             key += '.' + rest.join(':');
