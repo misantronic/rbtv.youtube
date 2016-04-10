@@ -54,8 +54,6 @@ class Videos extends Collection {
 
     url() {
         return Config.endpoints.videos + '?' + $.param([
-                { name: 'part', value: parts },
-                { name: 'maxResults', value: maxResults },
                 { name: 'id', value: this._videoIds.join(',') }
             ]);
     }

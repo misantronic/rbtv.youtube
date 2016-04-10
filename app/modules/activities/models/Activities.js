@@ -62,8 +62,6 @@ class Activities extends Collection {
 
     url() {
         return Config.endpoints.activities + '?' + $.param([
-                { name: 'part', value: parts },
-                { name: 'maxResults', value: maxResults },
                 { name: 'channelId', value: this._channelId },
                 { name: 'pageToken', value: this._nextPageToken }
             ]);
