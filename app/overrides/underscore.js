@@ -1,10 +1,10 @@
-import _ from 'underscore'
+var _ = require('underscore');
 
 _.mixin({
     offset: function (arr, offset, length) {
-        let newArr = [];
+        var newArr = [];
 
-        for (let i = offset; i < offset + length; i++) {
+        for (var i = offset; i < offset + length; i++) {
             if (!arr[i]) break;
 
             newArr.push(arr[i]);
@@ -13,7 +13,9 @@ _.mixin({
         return newArr;
     },
 
-    iintersection: function (array, ...rest) {
+    iintersection: function (array) {
+        var rest = _.rest(arguments);
+
         array = _.map(array, (item) => {
             return _.isString(item) ? item.toLowerCase() : item;
         });
@@ -28,5 +30,9 @@ _.mixin({
                 return _.indexOf(other, item) >= 0;
             });
         });
+    },
+
+    isEmptyObject: function (obj) {
+        return _.keys(obj).length === 0;
     }
 });
