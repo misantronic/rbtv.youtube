@@ -3,11 +3,6 @@ import Config from '../../../Config'
 import $ from 'jquery'
 import moment from 'moment'
 
-const parts      = 'snippet';
-const maxResults = 30;
-const order      = 'date';
-const type       = 'video';
-
 class SearchResult extends Model {
     defaults() {
         return {
@@ -69,12 +64,8 @@ class SearchResults extends Collection {
 
     url() {
         return Config.endpoints.search + '?' + $.param([
-                { name: 'part', value: parts },
-                { name: 'maxResults', value: maxResults },
                 { name: 'channelId', value: this._channelId },
                 { name: 'q', value: this._q },
-                { name: 'order', value: order },
-                { name: 'type', value: type },
                 { name: 'pageToken', value: this._nextPageToken }
             ]);
     }
