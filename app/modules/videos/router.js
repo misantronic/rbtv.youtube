@@ -4,7 +4,7 @@ import controller from './controller';
 class Router extends AppRouter {
     get appRoutes() {
         return {
-            'overview': 'initOverview'
+            'video/:videoId': 'initVideo'
         }
     }
 

@@ -1,7 +1,7 @@
 import {AppRouter} from 'backbone.marionette';
 import controller from './controller';
 
-class PlaylistsRouter extends AppRouter {
+class Router extends AppRouter {
     get appRoutes() {
         return {
             'playlists': 'initPlaylists',
@@ -15,6 +15,6 @@ class PlaylistsRouter extends AppRouter {
     }
 }
 
-const router = new PlaylistsRouter();
+const router = new Router();
 
 export default router;

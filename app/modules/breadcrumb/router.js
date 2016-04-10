@@ -4,13 +4,15 @@ import {history} from 'backbone'
 import controller from './controller';
 import playlistsRouter from '../playlists/router'
 import overviewRouter from '../activities/router'
+import videoRouter from '../videos/router'
 
-class BreadcrumbRouter extends Marionette.Object {
+class Router extends Marionette.Object {
     initialize() {
         _.bindAll(this, '_onRoute');
 
         playlistsRouter.on('route', this._onRoute);
         overviewRouter.on('route', this._onRoute);
+        videoRouter.on('route', this._onRoute);
     }
 
     /** @type {BreadcrumbController} */
@@ -23,6 +25,8 @@ class BreadcrumbRouter extends Marionette.Object {
 
         if (fragment.indexOf('playlists/playlist/') === 0) {
             this.controller.initPlaylist(fragment.split('/')[2]);
+        } else if (fragment.indexOf('video/') === 0) {
+            this.controller.initVideo();
         } else if (fragment === 'playlists') {
             this.controller.initPlaylists();
         } else if (fragment === 'overview') {
@@ -31,6 +35,6 @@ class BreadcrumbRouter extends Marionette.Object {
     }
 }
 
-const breadcrumbRouter = new BreadcrumbRouter();
+const breadcrumbRouter = new Router();
 
 export default breadcrumbRouter;

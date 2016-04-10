@@ -329,4 +329,5 @@ class PlaylistItems extends CompositeView {
 
 }
 
+export {PlaylistItem, PlaylistItems}
 export default PlaylistItems

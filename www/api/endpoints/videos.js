@@ -8,8 +8,7 @@ var saveVideo  = require('../../db/videos/saveVideo');
 var getVideos  = require('../../db/videos/getVideos');
 
 module.exports = function (req, res) {
-    var query    = req.query;
-    var videoIds = query.id.split(',');
+    var videoIds = req.query.id.split(',');
 
     getVideos(videoIds)
         .then(videoResult => {
@@ -19,7 +18,7 @@ module.exports = function (req, res) {
             var config = new fetch.Config({
                 endpoint: 'videos',
                 query: {
-                    part: 'snippet,contentDetails',
+                    part: 'snippet,contentDetails,statistics',
                     maxResults: 50,
                     id: itemsNotFound.join(',')
                 }

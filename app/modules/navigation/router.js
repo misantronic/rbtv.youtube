@@ -4,7 +4,7 @@ import overviewRouter from '../activities/router'
 import {history} from 'backbone'
 import Config from '../../Config'
 
-class NavigationRouter extends Marionette.Object {
+class Router extends Marionette.Object {
     initialize() {
         playlistsRouter.on('route', this._onRoute.bind(this));
         overviewRouter.on('route', this._onRoute.bind(this));
@@ -19,6 +19,6 @@ class NavigationRouter extends Marionette.Object {
     }
 }
 
-const router = new NavigationRouter();
+const router = new Router();
 
 export default router;

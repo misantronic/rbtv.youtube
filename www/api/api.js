@@ -10,6 +10,8 @@ module.exports = {
 
         app.get('/api/search', require('./endpoints/search'));
 
+        app.get('/api/related', require('./endpoints/related'));
+
         app.get('/api/videos', require('./endpoints/videos'));
     }
 };

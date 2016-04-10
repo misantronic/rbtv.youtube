@@ -114,15 +114,18 @@ class SearchItemEmpty extends ItemView {
 }
 
 class SearchResults extends CollectionView {
-    constructor(options = {}) {
-        _.defaults(options, {
-            model: new Model({
-                _loading: false
-            })
-        });
+    
+    @props({
+        className: 'items items-search js-search row',
 
-        super(options);
-    }
+        childView: SearchResult,
+
+        emptyView: SearchItemEmpty,
+
+        model: new Model({
+            _loading: false
+        })
+    })
 
     modelEvents() {
         return {
@@ -134,18 +137,6 @@ class SearchResults extends CollectionView {
                 }
             }
         }
-    }
-
-    get className() {
-        return 'items items-search js-search row'
-    }
-
-    get childView() {
-        return SearchResult;
-    }
-
-    get emptyView() {
-        return SearchItemEmpty;
     }
 
     set loading(val) {

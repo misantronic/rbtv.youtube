@@ -38,6 +38,9 @@ class SearchResults extends Collection {
         super(...args);
 
         this.model = SearchResult;
+
+        this._q                = '';
+        this._relatedToVideoId = '';
     }
 
     setChannelId(val) {
@@ -58,23 +61,37 @@ class SearchResults extends Collection {
         return this;
     }
 
+    setRelatedToVideoId(val) {
+        this._relatedToVideoId = val;
+
+        return this;
+    }
+
     get nextPageToken() {
         return this._nextPageToken
     }
 
     url() {
-        return Config.endpoints.search + '?' + $.param([
-                { name: 'channelId', value: this._channelId },
-                { name: 'q', value: this._q },
-                { name: 'pageToken', value: this._nextPageToken }
-            ]);
+        if(this._q) {
+            return Config.endpoints.search + '?' + $.param([
+                    { name: 'channelId', value: this._channelId },
+                    { name: 'q', value: this._q },
+                    { name: 'pageToken', value: this._nextPageToken }
+                ]);   
+        } else {
+            return Config.endpoints.related + '?' + $.param([
+                    { name: 'channelId', value: this._channelId },
+                    { name: 'relatedToVideoId', value: this._relatedToVideoId },
+                    { name: 'pageToken', value: this._nextPageToken }
+                ]);
+        }
     }
 
     parse(response) {
         this._nextPageToken = response.nextPageToken;
 
-        if(response.items) {
-            if(response.items.length === 0) {
+        if (response.items) {
+            if (response.items.length === 0) {
                 this._nextPageToken = null;
             }
 

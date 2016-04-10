@@ -47,5 +47,12 @@ module.exports = db.model('Videos', new db.Schema({
         dimension: String,
         duration: String,
         licensedContent: Boolean
+    },
+    statistics: {
+        viewCount: Number,
+        likeCount: Number,
+        dislikeCount: Number,
+        favoriteCount: Number,
+        commentCount: Number
     }
 }));

@@ -39,10 +39,6 @@ class Activities extends CompositeView {
             }
         },
 
-        events: {
-            'click @ui.link': '_onCLickLink'
-        },
-
         modelEvents: {
             'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(function () {
                 if (this.model.get('_filterByRBTV')) {
@@ -238,24 +234,6 @@ class Activities extends CompositeView {
                     });
                 });
         }
-    }
-
-    _onCLickLink(e) {
-        const $link   = $(e.currentTarget);
-        const videoId = $link.data('videoid');
-        const title   = $link.data('title');
-
-        this.$('#modal-activities-body').replaceWith('<div id="modal-activities-body"></div>');
-
-        this.$('.js-modal-activities')
-            .one('shown.bs.modal', () => {
-                this._player = new YT.Player('modal-activities-body', {
-                    height: '390',
-                    width: '100%',
-                    videoId: videoId
-                });
-            })
-            .find('.js-modal-title').text(title);
     }
 
     _onScroll() {

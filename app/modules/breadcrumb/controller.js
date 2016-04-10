@@ -54,6 +54,12 @@ class BreadcrumbController extends Marionette.Object {
         ]);
     }
 
+    initVideo() {
+        this._showBreadcrumb([
+            { title: 'Video' }
+        ]);
+    }
+
     _showBreadcrumb(list) {
         this._region.show(
             new BreadcrumbView({
