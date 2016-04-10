@@ -18,13 +18,14 @@ module.exports = function (req, res) {
 
             var config = new fetch.Config({
                 endpoint: 'videos',
-                query: query
+                query: {
+                    part: 'snippet',
+                    maxResults: 50,
+                    id: itemsNotFound.join(',')
+                }
             });
 
-            // Update query
-            query.id = itemsNotFound.join(',');
-
-            if(!query.id) {
+            if (!config.query.id) {
                 fetch.end(res, itemsFromDB);
                 return;
             }
@@ -33,7 +34,7 @@ module.exports = function (req, res) {
                 var fromCache = result.fromCache;
                 var items     = result.data.items.concat(itemsFromDB);
 
-
+                fetch.end(res, items);
 
                 if (!fromCache) {
                     // Save/Update videos in mongoDB

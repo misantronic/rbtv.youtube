@@ -2,7 +2,12 @@ var fetch = require('../fetch');
 var cache = require('../cache');
 
 module.exports = function (req, res) {
-    var query = req.query;
+    var query = {
+        part: 'snippet,contentDetails',
+        maxResults: 30,
+        channelId: req.query.channelId,
+        pageToken: req.query.pageToken
+    };
 
     var config = new fetch.Config({
         response: res,
