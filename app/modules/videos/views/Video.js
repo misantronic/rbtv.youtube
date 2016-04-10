@@ -53,7 +53,11 @@ class Video extends LayoutView {
 
         if (videoId) {
             if (this._player && this._player.cueVideoById) {
-                this._player.cueVideoById(videoId);
+                // currentTime
+                const videoInfo   = localStorage.get(`${videoId}.info`) || {};
+                const currentTime = videoInfo.currentTime || 0;
+
+                this._player.cueVideoById(videoId, currentTime);
             } else {
                 $('#yt-video-container').replaceWith('<div id="yt-video-container"></div>');
 
@@ -102,17 +106,6 @@ class Video extends LayoutView {
         this.getRegion('related').show(view);
 
         collection.fetch();
-    }
-
-    _videoBeforePlay() {
-        // const videoId = this.model.id;
-        //
-        // // currentTime
-        // const videoInfo = localStorage.get(`${videoId}.info`);
-        //
-        // if (videoInfo && videoInfo.currentTime) {
-        //     this._player.seekTo(videoInfo.currentTime);
-        // }
     }
 
     _videoPlaying() {
@@ -166,7 +159,7 @@ class Video extends LayoutView {
 
         switch (e.data) {
             case YT.PlayerState.UNSTARTED:
-                this._videoBeforePlay();
+                
                 break;
             case YT.PlayerState.PLAYING:
                 this._videoPlaying();
