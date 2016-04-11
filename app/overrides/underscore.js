@@ -30,9 +30,5 @@ _.mixin({
                 return _.indexOf(other, item) >= 0;
             });
         });
-    },
-
-    isEmptyObject: function (obj) {
-        return _.keys(obj).length === 0;
     }
 });

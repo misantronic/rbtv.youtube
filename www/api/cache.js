@@ -4,8 +4,6 @@ var flatten = require('flat');
 var Redis   = require('ioredis');
 var redis   = new Redis(process.env.REDIS_URL);
 
-require('../../app/overrides/underscore');
-
 redis
     .on('connect', () => {
         console.log('Redis: Connected to:', process.env.REDIS_URL)
@@ -63,7 +61,7 @@ module.exports = {
                 var valueMeta  = results[0][1];
                 var valueItems = results[1][1];
 
-                if (_.isEmptyObject(valueMeta) && valueItems.length === 0) {
+                if (_.isEmpty(valueMeta) && valueItems.length === 0) {
                     return null;
                 }
 
@@ -127,7 +125,7 @@ module.exports = {
             value = _.omit(value, 'items');
 
             // Check if object is empty
-            if (!_.isEmptyObject(value)) {
+            if (!_.isEmpty(value)) {
                 items = flatten(value);
 
                 pipeline = redis.pipeline();
