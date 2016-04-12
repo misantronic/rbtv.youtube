@@ -30,7 +30,7 @@ class PlaylistsController extends Marionette.Object {
             });
 
         // Update breadcrumb
-        channels.breadcrumb.trigger('replace', { title: 'Playlists', route: 'playlists' });
+        channels.breadcrumb.replace({ title: 'Playlists', route: 'playlists' });
     }
 
     initPlaylist(playlistId, videoId = null) {
