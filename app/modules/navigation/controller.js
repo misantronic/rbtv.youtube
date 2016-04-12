@@ -1,13 +1,11 @@
 import * as Marionette from 'backbone.marionette';
-import playlistsRouter from '../playlists/router'
-import overviewRouter from '../activities/router'
 import {history} from 'backbone'
 import Config from '../../Config'
+import channels from '../../channels'
 
 class Router extends Marionette.Object {
     initialize() {
-        playlistsRouter.on('route', this._onRoute.bind(this));
-        overviewRouter.on('route', this._onRoute.bind(this));
+        this.listenTo(channels.breadcrumb, 'replace', this._onRoute);
     }
 
     _onRoute() {

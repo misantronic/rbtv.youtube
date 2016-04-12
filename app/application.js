@@ -23,10 +23,9 @@ import videosController from './modules/videos/controller'
 
 // Router
 import './modules/playlists/router'
-import './modules/breadcrumb/router'
 import './modules/activities/router'
 import './modules/videos/router'
-import './modules/navigation/router'
+import './modules/navigation/controller'
 
 // Views
 import NavigationView from './modules/navigation/views/Navigation'
