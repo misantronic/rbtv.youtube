@@ -121,7 +121,7 @@ class Video extends LayoutView {
                     this._videoSetSize();
                 }.bind(this);
 
-                if (!YT.Player) {
+                if (!YT || !YT.Player) {
                     window.onYouTubeIframeAPIReady = initPlayer;
                 } else {
                     initPlayer();
@@ -204,9 +204,6 @@ class Video extends LayoutView {
         const videoId = this.model.id;
 
         switch (e.data) {
-            case YT.PlayerState.UNSTARTED:
-
-                break;
             case YT.PlayerState.PLAYING:
                 this._videoPlaying();
                 break;
