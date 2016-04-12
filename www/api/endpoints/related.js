@@ -7,6 +7,7 @@ module.exports = function (req, res) {
         part: 'snippet',
         maxResults: 20,
         type: 'video',
+        order: 'date',
         regionCode: 'DE',
         relevanceLanguage: 'de',
         relatedToVideoId: req.query.relatedToVideoId,
