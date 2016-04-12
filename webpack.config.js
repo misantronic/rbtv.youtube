@@ -12,7 +12,6 @@ module.exports = {
 			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
 			'bootstrap',
-			'tether',
 			'fuckadblock'
 		],
 		application: __dirname + '/app/entry'
@@ -24,18 +23,15 @@ module.exports = {
 	},
 
 	module: {
-
-		preLoaders: [],
-
 		loaders: [
 			{ test: /\.ejs$/, loader: 'ejs-loader' },
 			{ test: /\.css$/, loader: 'style-loader!css-loader' },
 			{ test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },
 			{ test: /\.(jpe*g|png|gif|svg|woff2*|eot|ttf)$/, loader: 'file-loader?name=assets/[hash].[ext]' },
-			{ test: /bootstrap\/js/, loader: 'imports?jQuery=jquery,Tether=tether' },
+			{ test: /bootstrap\/js/, loader: 'imports?jQuery=jquery' },
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components|vendor)/,
+                exclude: /(node_modules|vendor)/,
                 loader: 'babel',
                 query: {
                     presets: [
@@ -51,16 +47,11 @@ module.exports = {
 		]
 	},
 
-	resolve: {
-		modulesDirectories: ['node_modules']
-	},
-
 	plugins: [
 		new webpack.optimize.DedupePlugin(),
 
 		new webpack.ProvidePlugin({
-			_: 'underscore',
-			'window.Tether': 'tether'
+			_: 'underscore'
 		}),
 
 		new webpack.optimize.OccurenceOrderPlugin(true),
@@ -82,11 +73,7 @@ module.exports = {
 			inject: true
 		}),
 
-		new CleanWebpackPlugin(['public'], {
-			root: __dirname,
-			verbose: true,
-			dry: false
-		})
+		new CleanWebpackPlugin(['public'])
 	],
 
 	devtool: 'sourcemap',
