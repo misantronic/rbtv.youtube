@@ -30,7 +30,7 @@ class PlaylistItem extends Model {
             id: response.id,
             etag: response.etag,
             kind: response.kind,
-            videoId: response.contentDetails.videoId,
+            videoId: response.snippet.resourceId.videoId,
             playlistId: response.snippet.playlistId,
             channelId: response.snippet.channelId,
             description: response.snippet.description,

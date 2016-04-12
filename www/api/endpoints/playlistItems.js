@@ -13,7 +13,7 @@ module.exports = function (req, res) {
         var config = new fetch.Config({
             endpoint: 'playlistItems',
             query: {
-                part: 'snippet,contentDetails',
+                part: 'snippet',
                 maxResults: 50,
                 playlistId: playlistId,
                 pageToken: pageToken
