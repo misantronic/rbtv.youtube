@@ -3,7 +3,7 @@ import {history} from 'backbone'
 import Config from '../../Config'
 import channels from '../../channels'
 
-class Router extends Marionette.Object {
+class Controller extends Marionette.Object {
     initialize() {
         this.listenTo(channels.breadcrumb, 'replace', this._onRoute);
     }
@@ -17,6 +17,4 @@ class Router extends Marionette.Object {
     }
 }
 
-const router = new Router();
-
-export default router;
+export default new Controller();
