@@ -100,6 +100,14 @@ class SearchResult extends ItemView {
         this.listenTo(app.channel, 'resize', _.debounce(() => {
             this.model.trigger('change:tags');
         }, 100));
+
+        this.$('[data-toggle="tooltip"]').tooltip({
+            delay: { show: 250, hide: 100 }
+        });
+    }
+
+    onDestroy() {
+        this.$('[data-toggle="tooltip"]').tooltip('destroy')
     }
 }
 
