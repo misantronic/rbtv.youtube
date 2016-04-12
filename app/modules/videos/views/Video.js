@@ -6,6 +6,7 @@ import {localStorage} from '../../../utils'
 import {props} from '../../decorators'
 import RelatedResults from '../../search/views/RelatedResults'
 import RelatedResultsCollection from '../../search/models/RelatedResults'
+import youtubeController from '../../youtube/controller'
 
 class Video extends LayoutView {
     @props({
@@ -20,7 +21,15 @@ class Video extends LayoutView {
             views: '.js-views',
             description: '.js-description',
             likes: '.js-count-likes',
-            dislikes: '.js-count-dislikes'
+            dislikes: '.js-count-dislikes',
+            btnLike: '.js-btn-like',
+            btnDislike: '.js-btn-dislike'
+        },
+
+        events: {
+            'click @ui.btnLike': '_onClickLike',
+
+            'click @ui.btnDislike': '_onClickDislike'
         },
 
         regions: {
@@ -37,9 +46,10 @@ class Video extends LayoutView {
             'change:id': (model, videoId) => {
                 model.set('_loading', true);
 
-                model.fetch().then(() => {
+                model.fetchLive().then(() => {
                     this._initVideo();
                     this._initRelatedVideos();
+                    this._initRatings();
 
                     model.set('_loading', false);
                 });
@@ -71,12 +81,28 @@ class Video extends LayoutView {
                 } else {
                     this.$el.removeClass('loading');
                 }
+            },
+
+            'change:_liked': (model, val) => {
+                if (val) {
+                    this.ui.btnLike.addClass('active');
+                } else {
+                    this.ui.btnLike.removeClass('active');
+                }
+            },
+
+            'change:_disliked': (model, val) => {
+                if (val) {
+                    this.ui.btnDislike.addClass('active');
+                } else {
+                    this.ui.btnDislike.removeClass('active');
+                }
             }
         }
     }
 
     initialize() {
-        _.bindAll(this, '_initVideo');
+        _.bindAll(this, '_initVideo', '_onRated', '_onVideoReady', '_onVideoStateChange');
 
         this._playerInterval = 0;
 
@@ -92,44 +118,44 @@ class Video extends LayoutView {
 
         const videoId = this.model.id;
 
-        if (videoId) {
-            if (this._player && this._player.cueVideoById) {
-                // currentTime
-                const videoInfo   = localStorage.get(`${videoId}.info`) || {};
-                const currentTime = videoInfo.currentTime || 0;
+        if (!videoId) return;
 
-                this._player.cueVideoById(videoId, currentTime);
+        if (this._player && this._player.cueVideoById) {
+            // currentTime
+            const videoInfo   = localStorage.get(`${videoId}.info`) || {};
+            const currentTime = videoInfo.currentTime || 0;
+
+            this._player.cueVideoById(videoId, currentTime);
+        } else {
+            let containerId = 'yt-video-container';
+            let container   = this.$('#' + containerId);
+            let height      = container.css('height', 'auto').height();
+            let $container  = $('<div id="' + containerId + '"></div>');
+
+            if (height) {
+                $container.css('height', height)
+            }
+
+            container.replaceWith($container);
+
+            var initPlayer = function () {
+                this._player = new YT.Player(containerId, {
+                    width: '100%',
+                    height: '100%',
+                    videoId: videoId,
+                    events: {
+                        'onReady': this._onVideoReady,
+                        'onStateChange': this._onVideoStateChange
+                    }
+                });
+
+                this._videoSetSize();
+            }.bind(this);
+
+            if (typeof YT === 'undefined' || !YT.Player) {
+                window.onYouTubeIframeAPIReady = initPlayer;
             } else {
-                let containerId = 'yt-video-container';
-                let container   = this.$('#' + containerId);
-                let height      = container.css('height', 'auto').height();
-                let $container         = $('<div id="' + containerId + '"></div>');
-
-                if (height) {
-                    $container.css('height', height)
-                }
-
-                container.replaceWith($container);
-
-                var initPlayer = function () {
-                    this._player = new YT.Player(containerId, {
-                        width: '100%',
-                        height: '100%',
-                        videoId: videoId,
-                        events: {
-                            'onReady': this._onVideoReady.bind(this),
-                            'onStateChange': this._onVideoStateChange.bind(this)
-                        }
-                    });
-
-                    this._videoSetSize();
-                }.bind(this);
-
-                if (typeof YT === 'undefined' || !YT.Player) {
-                    window.onYouTubeIframeAPIReady = initPlayer;
-                } else {
-                    initPlayer();
-                }
+                initPlayer();
             }
         }
     }
@@ -156,6 +182,19 @@ class Video extends LayoutView {
         this.getRegion('related').show(view);
 
         collection.fetch();
+    }
+
+    _initRatings() {
+        const videoId = this.model.id;
+
+        var ratingXHR = youtubeController.getRating(videoId);
+
+        ratingXHR.then((rating) => {
+            this.model.set({
+                _liked: rating === 'like',
+                _disliked: rating === 'dislike'
+            });
+        })
     }
 
     _videoPlaying() {
@@ -215,6 +254,54 @@ class Video extends LayoutView {
 
     _onResize() {
         this._videoSetSize();
+    }
+
+    _onClickLike() {
+        let rating = this.model.get('_liked') ? 'none' : 'like';
+
+        youtubeController
+            .addRating(rating, this.model.id)
+            .done(this._onRated);
+    }
+
+    _onClickDislike() {
+        let rating = this.model.get('_disliked') ? 'none' : 'dislike';
+
+        youtubeController
+            .addRating(rating, this.model.id)
+            .done(this._onRated);
+    }
+
+    _onRated(rating) {
+        let liked      = rating === 'like';
+        let disliked   = rating === 'dislike';
+        let statistics = this.model.get('statistics');
+
+        if (liked) {
+            statistics.likeCount++;
+
+            if (this.model.get('_disliked')) {
+                statistics.dislikeCount--;
+            }
+        }
+
+        if (disliked) {
+            statistics.dislikeCount++;
+
+            if (this.model.get('_liked')) {
+                statistics.likeCount--;
+            }
+        }
+
+
+        this.model.set({
+            _liked: liked,
+            _disliked: disliked,
+            statistics: statistics
+        });
+
+        // Manually trigger change on statistics
+        this.model.trigger('change:statistics', this.model, statistics);
     }
 }
 

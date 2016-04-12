@@ -8,9 +8,10 @@ var saveVideo  = require('../../db/videos/saveVideo');
 var getVideos  = require('../../db/videos/getVideos');
 
 module.exports = function (req, res) {
-    var videoIds = req.query.id.split(',');
+    var videoIds  = req.query.id.split(',');
+    var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache;
 
-    getVideos(videoIds)
+    getVideos(videoIds, fromCache)
         .then(videoResult => {
             var itemsFromDB   = videoResult.itemsFromDB;
             var itemsNotFound = videoResult.itemsNotFound;

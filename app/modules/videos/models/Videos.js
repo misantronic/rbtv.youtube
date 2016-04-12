@@ -61,8 +61,11 @@ class Video extends Model {
             throw new Error('Please specify an id for this model');
         }
 
+        var fromCache = _.isUndefined(this._fromCache) ? true : this._fromCache;
+
         return Config.endpoints.videos + '?' + $.param([
-                { name: 'id', value: this.id }
+                { name: 'id', value: this.id },
+                { name: 'fromCache', value: fromCache }
             ]);
     }
 
@@ -84,6 +87,14 @@ class Video extends Model {
             duration: moment.duration(response.contentDetails.duration),
             statistics: response.statistics
         };
+    }
+
+    fetchLive() {
+        this._fromCache = false;
+
+        return this.fetch().then(() => {
+            this._fromCache = true;
+        });
     }
 
     /**

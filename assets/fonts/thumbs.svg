@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2016 by original authors @ fontello.com</metadata>
+<defs>
+<font id="thumbs" horiz-adv-x="1000" >
+<font-face font-family="thumbs" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="thumbs-up" unicode="&#xe800;" d="M582 480q2-6 58-13t108-24 52-47q0-72-61-284t-107-212q-144 0-288 42t-144 88l0 342q0 14 15 34t46 45 53 41 62 43 46 31q50 34 104 100t85 104 41 26q48-76 29-137t-59-119-40-60z m-432-4q14 0 0-14-50-50-50-104l0-318q0-50 52-104 10-10-2-10-26 0-55 8t-62 45-33 99l0 242q0 62 33 100t63 47 54 9z" horiz-adv-x="800" />
+
+<glyph glyph-name="thumbs-down" unicode="&#xe801;" d="M218 218q-2 6-57 13t-108 24-53 47q0 72 62 285t106 213q144 0 288-43t144-89l0-342q0-10-8-24t-25-30-32-29-42-32-41-29-41-28l-33-22q-50-34-104-100t-85-104-41-26q-48 76-29 137t59 119 40 60z m432 4q-12 0 2 14 48 50 48 104l0 318q0 50-52 104-10 10 2 10 26 0 55-8t62-45 33-99l0-242q0-48-18-81t-45-48-48-21-39-6z" horiz-adv-x="800" />
+</font>
+</defs>
+</svg>

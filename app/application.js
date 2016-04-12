@@ -1,6 +1,8 @@
 import {Application} from 'backbone.marionette'
 import {history} from 'backbone'
 import $ from 'jquery'
+import Config from './Config'
+import youtubeController from './modules/youtube/controller'
 
 // CSS
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -57,6 +59,7 @@ class App extends Application {
         overviewController.init(this.getRegion('main'));
         videosController.init(this.getRegion('main'));
 
+        this._initAuthorization();
         this._initNavigation();
         this._detectAdBlock();
 
@@ -66,9 +69,28 @@ class App extends Application {
 
         $(window).on('resize.app', (e) => {
             this.channel.trigger('resize', e);
-        })
+        });
     }
-    
+
+    _initAuthorization() {
+        /**
+         * Each Ajax-Request is checked for:
+         * 1. the requested-url is part of the API-url
+         * 2. a Token exists with the credentials
+         */
+        if (typeof document !== 'undefined') {
+            $(document).ajaxSend(function (e, xhr, options) {
+                // if (!!options.url.match(globals.PUBLIC_API) && !options.url.match(globals.PUBLIC_API + 'oauth')) {
+                    var ytData = youtubeController.data;
+
+                    if (ytData) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + ytData.access_token); // jshint ignore:line
+                    }
+                // }
+            }.bind(this));
+        }
+    }
+
     _initNavigation() {
         this.getRegion('navigation').show(new NavigationView());
     }
