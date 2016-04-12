@@ -1,4 +1,5 @@
 import * as Marionette from 'backbone.marionette'
+import _ from 'underscore'
 import {Collection} from 'backbone'
 import BreadcrumbView from './views/Breadcrumb'
 import channels from '../../channels'
@@ -22,7 +23,7 @@ class BreadcrumbController extends Marionette.Object {
     }
 
     _onReplace(...routes) {
-        if(!this.collection) {
+        if (!this.collection) {
             this._initColletion();
         }
 
@@ -30,11 +31,23 @@ class BreadcrumbController extends Marionette.Object {
     }
 
     _onPush(...routes) {
-        if(!this.collection) {
+        if (!this.collection) {
             this._initColletion();
         }
 
-        this.collection.add(routes);
+        _.each(routes, route => {
+            if (route.type) {
+                var model = this.collection.findWhere({ type: route.type });
+
+                this.collection.remove(model);
+            }
+
+            this.collection.add(route);
+        });
+    }
+
+    _getLength() {
+        return this.collection ? this.collection.length : 0;
     }
 }
 

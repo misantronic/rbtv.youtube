@@ -20,7 +20,7 @@ class VideosController extends Marionette.Object {
 
             // Update breadcrumb
             this.listenTo(model, 'change:title', (model, title) => {
-                channels.breadcrumb.push(title);
+                channels.breadcrumb.push({ title, type: 'video' });
             });
         }
 

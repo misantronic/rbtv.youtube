@@ -18,7 +18,7 @@ class ActivitiesController extends Marionette.Object {
         view.renderActivities();
 
         // Update breadcrumb
-        channels.breadcrumb.replace('Übersicht', 'overview');
+        channels.breadcrumb.replace({ title: 'Übersicht', route: 'overview' });
     }
 }
 

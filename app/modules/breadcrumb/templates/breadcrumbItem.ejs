@@ -1,4 +1,4 @@
-<% if(typeof route === 'undefined') { %>
+<% if(typeof route === 'undefined' || _.isNull(route)) { %>
 	<%- title %>
 <% } else { %>
 	<a class="js-link" href="<%- route %>"><%- title %></a>

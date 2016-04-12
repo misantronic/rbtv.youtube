@@ -83,6 +83,10 @@ class Video extends LayoutView {
         this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
     }
 
+    onShow() {
+        this._videoSetSize();
+    }
+
     _initVideo() {
         clearInterval(this._playerInterval);
 
@@ -109,8 +113,8 @@ class Video extends LayoutView {
 
                 var initPlayer = function () {
                     this._player = new YT.Player(containerId, {
-                        width: 200,
-                        height: 200,
+                        width: '100%',
+                        height: '100%',
                         videoId: videoId,
                         events: {
                             'onReady': this._onVideoReady.bind(this),
@@ -121,7 +125,7 @@ class Video extends LayoutView {
                     this._videoSetSize();
                 }.bind(this);
 
-                if (!YT || !YT.Player) {
+                if (typeof YT === 'undefined' || !YT.Player) {
                     window.onYouTubeIframeAPIReady = initPlayer;
                 } else {
                     initPlayer();
@@ -180,24 +184,20 @@ class Video extends LayoutView {
 
     _onVideoReady(e) {
         if (_.isNull(e.data)) {
-
-
             this._onResize();
         }
     }
 
     _videoSetSize() {
-        if (this._player) {
-            let width  = this.ui.video.width();
-            let height = width * 0.51;
+        let width  = this.ui.video.width();
+        let height = width * 0.51;
 
-            if (window.innerWidth <= 768) {
-                width  = '100%';
-                height = window.innerWidth * 0.51;
-            }
-
-            this._player.setSize(width, height);
+        if (window.innerWidth <= 768) {
+            width  = '100%';
+            height = window.innerWidth * 0.51;
         }
+
+        this.ui.video.css({ width, height });
     }
 
     _onVideoStateChange(e) {

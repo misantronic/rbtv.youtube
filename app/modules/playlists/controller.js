@@ -59,10 +59,10 @@ class PlaylistsController extends Marionette.Object {
         this._playlistItemsView       = view;
 
         // Update breadcrumb
-        channels.breadcrumb.replace('Playlists', 'playlists');
+        channels.breadcrumb.replace({ title: 'Playlists', route: 'playlists' });
 
         this._fetchPlaylistName(playlistId).done(title => {
-            channels.breadcrumb.push(title);
+            channels.breadcrumb.push({ title });
         });
     }
 
