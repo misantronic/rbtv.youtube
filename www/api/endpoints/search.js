@@ -6,6 +6,7 @@ module.exports = function (req, res) {
         part: 'snippet',
         maxResults: 30,
         type: 'video',
+        order: 'date',
         q: req.query.q,
         pageToken: req.query.pageToken,
         channelId: req.query.channelId
