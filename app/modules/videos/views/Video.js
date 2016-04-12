@@ -5,7 +5,7 @@ import app from '../../../application'
 import {localStorage} from '../../../utils'
 import {props} from '../../decorators'
 import RelatedResults from '../../search/views/RelatedResults'
-import SearchResultsCollection from '../../search/models/SearchResults'
+import RelatedResultsCollection from '../../search/models/RelatedResults'
 
 class Video extends LayoutView {
     @props({
@@ -133,7 +133,7 @@ class Video extends LayoutView {
     _initRelatedVideos() {
         const videoId    = this.model.id;
         const channelId  = this.model.get('channelId');
-        const collection = new SearchResultsCollection();
+        const collection = new RelatedResultsCollection();
 
         collection
             .setChannelId(channelId)

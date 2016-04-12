@@ -72,19 +72,11 @@ class SearchResults extends Collection {
     }
 
     url() {
-        if(this._q) {
-            return Config.endpoints.search + '?' + $.param([
-                    { name: 'channelId', value: this._channelId },
-                    { name: 'q', value: this._q },
-                    { name: 'pageToken', value: this._nextPageToken }
-                ]);   
-        } else {
-            return Config.endpoints.related + '?' + $.param([
-                    { name: 'channelId', value: this._channelId },
-                    { name: 'relatedToVideoId', value: this._relatedToVideoId },
-                    { name: 'pageToken', value: this._nextPageToken }
-                ]);
-        }
+        return Config.endpoints.search + '?' + $.param([
+                { name: 'channelId', value: this._channelId },
+                { name: 'q', value: this._q },
+                { name: 'pageToken', value: this._nextPageToken }
+            ]);
     }
 
     parse(response) {
@@ -102,4 +94,5 @@ class SearchResults extends Collection {
     }
 }
 
+export {SearchResult, SearchResults}
 export default SearchResults
