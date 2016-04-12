@@ -9,9 +9,7 @@ export default {
         activities: apiBaseUrl + '/activities',
         search: apiBaseUrl + '/search',
         related: apiBaseUrl + '/related',
-        videos: apiBaseUrl + '/videos',
-        mergePlaylist: apiBaseUrl +'/mergePlaylists',
-        mergePlaylistItems: apiBaseUrl +'/mergePlaylistItems'
+        videos: apiBaseUrl + '/videos'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',
