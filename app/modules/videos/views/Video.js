@@ -321,6 +321,7 @@ class Video extends LayoutView {
     _onRated(rating) {
         let liked      = rating === 'like';
         let disliked   = rating === 'dislike';
+        let none       = rating === 'none';
         let statistics = this.model.get('statistics');
 
         if (liked) {
@@ -339,15 +340,24 @@ class Video extends LayoutView {
             }
         }
 
+        if (none) {
+            if (this.model.get('_liked')) {
+                statistics.likeCount--;
+            }
 
-        this.model.set({
-            _liked: liked,
-            _disliked: disliked,
-            statistics: statistics
-        });
+            if (this.model.get('_disliked')) {
+                statistics.dislikeCount--;
+            }
+        }
 
-        // Manually trigger change on statistics
-        this.model.trigger('change:statistics', this.model, statistics);
+        this.model
+            .set({
+                _liked: liked,
+                _disliked: disliked,
+                statistics: statistics
+            })
+            // Manually trigger change on statistics
+            .trigger('change:statistics', this.model, statistics);
     }
 }
 
