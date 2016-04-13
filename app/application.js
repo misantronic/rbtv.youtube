@@ -58,7 +58,7 @@ class App extends Application {
         playlistsController.init(this.getRegion('main'));
         overviewController.init(this.getRegion('main'));
         videosController.init(this.getRegion('main'));
-        
+
         this._initNavigation();
         this._detectAdBlock();
 
@@ -76,11 +76,13 @@ class App extends Application {
     }
 
     _detectAdBlock() {
+        // Workaround: fuckadblock is not working in ffx -> disable
+        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) return;
+
         fuckAdBlock.on(true, () => {
             // detected
             this.getRegion('adBlock').$el.show();
         });
-        fuckAdBlock.check();
     }
 }
 
