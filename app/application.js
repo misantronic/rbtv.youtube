@@ -53,11 +53,13 @@ class App extends Application {
     }
 
     _onStart() {
+        const mainRegion = this.getRegion('main');
+
         youtubeController.init();
         breadcrumbController.init(this.getRegion('breadcrumb'));
-        playlistsController.init(this.getRegion('main'));
-        overviewController.init(this.getRegion('main'));
-        videosController.init(this.getRegion('main'));
+        playlistsController.init(mainRegion);
+        overviewController.init(mainRegion);
+        videosController.init(mainRegion);
 
         this._initNavigation();
         this._detectAdBlock();
