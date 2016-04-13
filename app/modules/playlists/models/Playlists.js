@@ -62,7 +62,7 @@ class Playlists extends Collection {
             this._allModels = this.models;
         }
 
-        let models = _.filter(this._allModels, (model) => {
+        let models = _.filter(this._allModels, model => {
             const channelId = model.get('channelId');
             const title     = model.get('title');
 

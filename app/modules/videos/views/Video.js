@@ -183,7 +183,7 @@ class Video extends LayoutView {
             collection: collection
         });
 
-        this.listenTo(view, 'childview:link:clicked', (view) => {
+        this.listenTo(view, 'childview:link:clicked', view => {
             let videoId = view.model.get('videoId');
 
             app.navigate(`video/${videoId}`);

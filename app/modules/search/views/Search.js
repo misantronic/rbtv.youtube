@@ -63,17 +63,15 @@ class Search extends LayoutView {
     onRender() {
         if(this._autocompleteEnabled) {
             // Merge beans and shows
-            let showBeans = _.map(beans, (bean) => {
-                return {
-                    title: bean,
-                    expr: new RegExp('^'+ bean.substr(0, 2), 'i'),
-                    channel: 'rbtv'
-                }
-            });
+            let showBeans = _.map(beans, bean => ({
+                title: bean,
+                expr: new RegExp('^'+ bean.substr(0, 2), 'i'),
+                channel: 'rbtv'
+            }));
 
             this._autocompleteView = new AutocompleteView({ collection: new Autocomplete(shows.concat(showBeans)) });
 
-            this.listenTo(this._autocompleteView, 'childview:link:selected', (itemView) => {
+            this.listenTo(this._autocompleteView, 'childview:link:selected', itemView => {
                 let model = itemView.model;
 
                 this.model.set({

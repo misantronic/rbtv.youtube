@@ -16,16 +16,12 @@ _.mixin({
     iintersection: function (array) {
         var rest = _.rest(arguments);
 
-        array = _.map(array, (item) => {
-            return _.isString(item) ? item.toLowerCase() : item;
-        });
+        array = _.map(array, item => _.isString(item) ? item.toLowerCase() : item);
 
         return _.filter(_.uniq(array), function (item) {
             return _.every(rest, function (other) {
 
-                other = _.map(other, (item) => {
-                    return _.isString(item) ? item.toLowerCase() : item;
-                });
+                other = _.map(other, item => _.isString(item) ? item.toLowerCase() : item);
 
                 return _.indexOf(other, item) >= 0;
             });

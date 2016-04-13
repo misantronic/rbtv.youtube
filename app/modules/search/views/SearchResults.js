@@ -172,7 +172,7 @@ class SearchResults extends CollectionView {
             .setNextPageToken(nextPageToken)
             .fetch();
 
-        xhr.then((data) => {
+        xhr.then(data => {
             this.loading = false;
 
             this._fetchVideoDetails(data);
@@ -214,7 +214,7 @@ class SearchResults extends CollectionView {
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
-                    this.collection.each((searchModel) => {
+                    this.collection.each(searchModel => {
                         let id         = searchModel.get('videoId');
                         let videoModel = videos.findWhere({ id });
 

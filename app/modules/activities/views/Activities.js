@@ -139,7 +139,7 @@ class Activities extends CompositeView {
             .setNextPageToken(nextPageToken)
             .setChannelId(this._currentChannel)
             .fetch()
-            .done((data) => {
+            .done(data => {
                 this.loading = false;
 
                 this._initScroll();
@@ -220,7 +220,7 @@ class Activities extends CompositeView {
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
-                    this.collection.each((activityModel) => {
+                    this.collection.each(activityModel => {
                         let id         = activityModel.get('videoId');
                         let videoModel = videoCollection.findWhere({ id });
 

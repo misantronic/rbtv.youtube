@@ -24,9 +24,7 @@ class Autocomplete extends Collection {
     search(val) {
         if (val) {
             this.reset(
-                _.filter(this._originalModels, (model) => {
-                    return model.get('expr').test(val)
-                })
+                _.filter(this._originalModels, model => model.get('expr').test(val))
             );
         } else {
             this.reset();

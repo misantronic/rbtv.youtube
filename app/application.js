@@ -68,7 +68,7 @@ class App extends Application {
 
         this.navigate();
 
-        $(window).on('resize.app', (e) => {
+        $(window).on('resize.app', e => {
             this.channel.trigger('resize', e);
         });
     }
