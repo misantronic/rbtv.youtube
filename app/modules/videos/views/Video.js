@@ -6,6 +6,8 @@ import {localStorage} from '../../../utils'
 import {props} from '../../decorators'
 import RelatedResults from '../../search/views/RelatedResults'
 import RelatedResultsCollection from '../../search/models/RelatedResults'
+import PlaylistItems from '../../playlists/views/PlistlistItems'
+import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
 import youtubeController from '../../youtube/controller'
 
 class Video extends LayoutView {
@@ -43,17 +45,9 @@ class Video extends LayoutView {
                 this.ui.title.text(title)
             },
 
-            'change:id': (model, videoId) => {
-                model.set('_loading', true);
+            'change:id': '_onChangedVideoId',
 
-                model.fetchLive().then(() => {
-                    this._initVideo();
-                    this._initRelatedVideos();
-                    this._initRatings();
-
-                    model.set('_loading', false);
-                });
-            },
+            'change:playlistId': '_initPlaylistItems',
 
             'change:publishedAt': (model, publishedAt) => {
                 this.ui.publishedAt.text(publishedAt.format('LLLL'))
@@ -111,6 +105,24 @@ class Video extends LayoutView {
 
     onShow() {
         this._videoSetSize();
+    }
+
+    _onChangedVideoId() {
+        if (!this.model.get('id')) return;
+
+        this.model
+            .set('_loading', true)
+            .fetchLive()
+            .then(() => {
+                this._initVideo();
+                this._initRatings();
+
+                if (!this.model.get('playlistId')) {
+                    this._initRelatedVideos();
+                }
+
+                this.model.set('_loading', false);
+            });
     }
 
     _initVideo() {
@@ -184,17 +196,51 @@ class Video extends LayoutView {
         collection.fetch();
     }
 
+    _initPlaylistItems() {
+        let playlistId = this.model.get('playlistId');
+
+        let collection = new PlaylistItemsCollection();
+        let view       = new PlaylistItems({ collection });
+
+        const selectVideo = videoId => {
+            view.videoId = videoId;
+
+            // Update own id -> load video
+            this.model.set('id', videoId);
+        };
+
+        this.getRegion('related').show(view);
+
+        this.listenTo(view, 'childview:link:clicked', playlistItemView => {
+            let videoId = playlistItemView.model.get('videoId');
+
+            selectVideo(videoId);
+        });
+
+        view.loading = true;
+
+        collection.playlistId = playlistId;
+
+        // Check cache for playlistItems
+        return collection.fetch()
+            .done(() => {
+                view.loading = false;
+
+                let videoId = this.model.id || collection.first().get('videoId');
+
+                selectVideo(videoId);
+            });
+    }
+
     _initRatings() {
         const videoId = this.model.id;
 
-        var ratingXHR = youtubeController.getRating(videoId);
-
-        ratingXHR.then((rating) => {
+        youtubeController.getRating(videoId, function (rating) {
             this.model.set({
                 _liked: rating === 'like',
                 _disliked: rating === 'dislike'
             });
-        })
+        }.bind(this));
     }
 
     _videoPlaying() {

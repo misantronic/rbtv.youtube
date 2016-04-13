@@ -71,7 +71,7 @@
 	}
 
 	&.loading {
-		.loader {
+		> .loader {
 			display: block;
 		}
 

@@ -1,8 +1,28 @@
 import * as Marionette from 'backbone.marionette'
 import $ from 'jquery'
 import {localStorage} from '../../utils'
+import Config from '../../Config'
 
 const baseURL = 'https://www.googleapis.com/youtube/v3';
+
+const endpoints = {
+    getRating: baseURL + '/videos/getRating',
+    playlists: baseURL + '/playlists',
+    rate: baseURL + '/videos/rate'
+};
+
+const authorizedEndpoints = [
+    endpoints.getRating,
+    endpoints.rate
+];
+
+const clientId = '41722713665-rmnr2sd8u0g5s2ait1el7ec36fgm50mq.apps.googleusercontent.com';
+
+const scope = [
+    'https://www.googleapis.com/auth/youtubepartner',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/youtube.force-ssl'
+];
 
 class Controller extends Marionette.Object {
     /** @returns {{state: string, access_token: string, token_type: string, expires_in: string, scope: string, client_id: string, response_type: string, issued_at: string, expires_at: string, status: {google_logged_in: boolean, signed_in: boolean, method: string}}}*/
@@ -14,50 +34,76 @@ class Controller extends Marionette.Object {
         this._data = localStorage.get('ytAccess');
     }
 
+    init() {
+        $(document).ajaxSend((e, xhr, options) => {
+            if (!this.data) return;
+
+            const url = options.url.split('?')[0];
+
+            if (authorizedEndpoints.indexOf(url) !== -1) {
+                xhr.setRequestHeader('Authorization', this.data.token_type + ' ' + this.data.access_token); // jshint ignore:line
+            }
+        });
+    }
+
     /**
      *
      * @param {'like'|'dislike'|'none'} rating
      * @param videoId
      */
     addRating(rating, videoId) {
-        return this._authorize([
-            'https://www.googleapis.com/auth/youtubepartner',
-            'https://www.googleapis.com/auth/youtube',
-            'https://www.googleapis.com/auth/youtube.force-ssl'
-        ]).then(() =>
-            $.post(baseURL + '/videos/rate', {
-                    id: videoId,
-                    rating: rating
-                })
-                .then(() => rating)
-        );
+        return this._authorize()
+            .then(() =>
+                $.post(endpoints.rate, {
+                        id: videoId,
+                        rating: rating
+                    })
+                    .then(() => rating)
+            );
     }
 
-    getRating(videoId) {
+    getRating(videoId, callback, retryOnFail = true) {
         if (this._data) {
-            return $.get(baseURL + '/videos/getRating', { id: videoId })
+            return $.get(endpoints.getRating, { id: videoId })
                 .then(result => result.items[0].rating)
+                .fail(result => {
+                    if (retryOnFail && result.status === 401) {
+                        this._reAuthorize().then(() => {
+                            this.getRating(videoId, callback, false);
+                        })
+                    }
+                })
+                .done(callback);
         }
 
         return $.Deferred().resolve(null).promise();
     }
 
+    fetchPlaylistName(playlistId) {
+        return $.get(`${endpoints.playlists}?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
+            .then(data => {
+                return data.items[0]['snippet'].title
+            });
+    }
+
     /**
-     * @param {Array} scope
      * @returns {Promise}
      * @private
      */
-    _authorize(scope) {
+    _authorize() {
         var Deferred = $.Deferred();
 
         if (this.data) {
             Deferred.resolve();
         } else {
             gapi.auth.authorize({
-                'client_id': '41722713665-rmnr2sd8u0g5s2ait1el7ec36fgm50mq.apps.googleusercontent.com',
-                'scope': scope
+                'client_id': clientId,
+                'scope': scope,
+                'immediate': true
             }, () => {
                 this._data = gapi.auth.getToken();
+
+                delete this._data['g-oauth-window'];
 
                 localStorage.set('ytAccess', this._data);
 
@@ -66,6 +112,16 @@ class Controller extends Marionette.Object {
         }
 
         return Deferred.promise();
+    }
+
+    /**
+     * @returns {Promise}
+     * @private
+     */
+    _reAuthorize() {
+        this._data = null;
+
+        return this._authorize();
     }
 }
 

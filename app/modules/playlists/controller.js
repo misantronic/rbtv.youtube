@@ -1,11 +1,11 @@
 import $ from 'jquery'
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
-import PlaylistItemsCollection from './models/PlaylistItems'
 import PlaylistsView from './views/Playlists'
-import PlaylistItemsView from './views/PlistlistItems'
-import Config from '../../Config'
+import VideoView from '../videos/views/Video'
+import {Video as VideoModel} from '../videos/models/Videos'
 import channels from '../../channels'
+import youtubeController from '../youtube/controller'
 
 class PlaylistsController extends Marionette.Object {
 
@@ -34,65 +34,21 @@ class PlaylistsController extends Marionette.Object {
     }
 
     initPlaylist(playlistId, videoId = null) {
-        if (!_.isNull(playlistId) && playlistId === this._currentPlaylistId) {
-            return this._initVideo(videoId);
-        }
-
-        let collection = new PlaylistItemsCollection();
-        let view       = new PlaylistItemsView({ collection });
-
-        this._currentPlaylistId = collection.playlistId = playlistId;
+        let view = new VideoView({ model: new VideoModel() });
 
         this._region.show(view);
 
-        view.loading = true;
-
-        // Check cache for playlistItems
-        collection.fetch()
-            .done(() => {
-                view.loading = false;
-
-                this._initVideo(videoId);
-            });
-
-        this._playlistItemsCollection = collection;
-        this._playlistItemsView       = view;
+        view.model.set({
+            id: videoId,
+            playlistId: playlistId
+        });
 
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Playlists', route: 'playlists' });
 
-        this._fetchPlaylistName(playlistId).done(title => {
-            channels.breadcrumb.push({ title });
-        });
-    }
-
-    _initVideo(videoId) {
-        if (!videoId) {
-            this._playlistItemsView.videoId = null;
-
-            const playlistItem = this._playlistItemsCollection.first();
-
-            if (playlistItem) {
-                videoId = playlistItem.get('videoId');
-
-                // Workaround: Pre-Select first item in playlist
-                // without affecting the users back-button-history
-                this._playlistItemsView.model.set('videoId', videoId, { silent: true });
-                this._playlistItemsView._highlightVideo();
-                this._playlistItemsView._routeToVideo(true);
-                this._playlistItemsView._videoInit();
-
-                return;
-            }
-        }
-
-        this._playlistItemsView.videoId = videoId;
-    }
-
-    _fetchPlaylistName(playlistId) {
-        return $.get(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
-            .then((data) => {
-                return data.items[0]['snippet'].title
+        youtubeController.fetchPlaylistName(playlistId)
+            .done(title => {
+                channels.breadcrumb.push({ title });
             });
     }
 }
