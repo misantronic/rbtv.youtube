@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
 import PlaylistsView from './views/Playlists'
@@ -22,8 +21,7 @@ class PlaylistsController extends Marionette.Object {
         this._region.show(view);
 
         view.loading = true;
-
-        // Check cache for playlists
+        
         collection.fetch({ silent: true })
             .done(() => {
                 view.renderCollection(true);

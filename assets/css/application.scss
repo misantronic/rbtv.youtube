@@ -4,31 +4,6 @@
 body {
 	background: #FCFCFC !important;
 	font-family: Raleway, Arial, sans-serif;
-
-	@media (min-width: $screen-sm-min) {
-		//&:before {
-		//	content: ' ';
-		//	position: absolute;
-		//	left: 0;
-		//	top: 70px;
-		//	background: url(../img/bg_top.png) no-repeat left top;
-		//	background-size: 100% 110px;
-		//	height: 110px;
-		//	width: 100%;
-		//	z-index: 10;
-		//}
-		//
-		//&:after {
-		//	content: ' ';
-		//	background: url(../img/bg.jpg) no-repeat left top / cover;
-		//	position: fixed;
-		//	width: 100%;
-		//	height: 100%;
-		//	top: 0;
-		//	left: 0;
-		//	z-index: -1;
-		//}
-	}
 }
 
 // OVERRIDE DEFAULTS
@@ -70,17 +45,6 @@ body {
 		@media (min-width: $screen-sm-min) {
 			min-height: 600px;
 			padding-bottom: 25px;
-
-			//&:before {
-			//	content: ' ';
-			//	position: absolute;
-			//	left: 0;
-			//	top: -94px;
-			//	background: url(../img/content_top.png) no-repeat left top;
-			//	background-size: 100% 94px;
-			//	height: 94px;
-			//	width: 100%;
-			//}
 		}
 	}
 
@@ -227,13 +191,15 @@ body {
 }
 
 .loader {
+	position: absolute;
+	top: 55px;
+	margin-left: -20px;
+	left: 50%;
+	
 	.sk-fading-circle {
 		width: 40px;
 		height: 40px;
-		position: absolute;
-		left: 50%;
-		top: 55px;
-		margin-left: -20px;
+		position: relative;
 
 		.sk-circle {
 			width: 100%;

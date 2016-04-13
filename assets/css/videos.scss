@@ -55,28 +55,26 @@
 			}
 		}
 
-		.related-items {
-			margin-top: 10px;
-			max-height: 500px;
-			height: auto;
+		.region-playlist {
+			padding-top: 10px;
 		}
 	}
 
 	.loader {
 		display: none;
-		position: absolute;
-		top: 50%;
-		margin-top: -20px;
-		left: 50%;
 	}
 
 	&.loading {
-		> .loader {
-			display: block;
-		}
+		.video-container {
+			> iframe {
+				opacity: 0.25;
+			}
 
-		.video-content {
-			opacity: 0.25;
+			> .loader {
+				display: block;
+				top: 50%;
+				margin-top: -20px;
+			}
 		}
 	}
 }

@@ -35,7 +35,7 @@ class Video extends LayoutView {
         },
 
         regions: {
-            related: '.region-related'
+            playlist: '.region-playlist'
         }
     })
 
@@ -45,7 +45,23 @@ class Video extends LayoutView {
                 this.ui.title.text(title)
             },
 
-            'change:id': '_onChangedVideoId',
+            'change:id': () => {
+                if (!this.model.get('id')) return;
+
+                this.model
+                    .set('_loading', true)
+                    .fetchLive()
+                    .then(() => {
+                        this._initVideo();
+                        this._initRatings();
+
+                        if (!this.model.get('playlistId')) {
+                            this._initRelatedVideos();
+                        }
+
+                        this.model.set('_loading', false);
+                    });
+            },
 
             'change:playlistId': '_initPlaylistItems',
 
@@ -105,24 +121,6 @@ class Video extends LayoutView {
 
     onShow() {
         this._videoSetSize();
-    }
-
-    _onChangedVideoId() {
-        if (!this.model.get('id')) return;
-
-        this.model
-            .set('_loading', true)
-            .fetchLive()
-            .then(() => {
-                this._initVideo();
-                this._initRatings();
-
-                if (!this.model.get('playlistId')) {
-                    this._initRelatedVideos();
-                }
-
-                this.model.set('_loading', false);
-            });
     }
 
     _initVideo() {
@@ -191,7 +189,7 @@ class Video extends LayoutView {
             app.navigate(`video/${videoId}`);
         });
 
-        this.getRegion('related').show(view);
+        this.getRegion('playlist').show(view);
 
         collection.fetch();
     }
@@ -209,7 +207,7 @@ class Video extends LayoutView {
             this.model.set('id', videoId);
         };
 
-        this.getRegion('related').show(view);
+        this.getRegion('playlist').show(view);
 
         this.listenTo(view, 'childview:link:clicked', playlistItemView => {
             let videoId = playlistItemView.model.get('videoId');
