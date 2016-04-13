@@ -9,7 +9,7 @@ var getVideos  = require('../../db/videos/getVideos');
 
 module.exports = function (req, res) {
     var videoIds  = req.query.id.split(',');
-    var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache;
+    var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache === 'true';
 
     getVideos(videoIds, fromCache)
         .then(videoResult => {
