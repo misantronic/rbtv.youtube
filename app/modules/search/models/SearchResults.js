@@ -43,6 +43,19 @@ class SearchResults extends Collection {
         this._relatedToVideoId = '';
     }
 
+    /** @returns {PlaylistItem} */
+    getNextPlaylistItem(videoId) {
+        const model = this.getCurrentPlaylistItem(videoId);
+        const index = this.indexOf(model) + 1;
+
+        return this.at(index);
+    }
+
+    /** @returns {PlaylistItem} */
+    getCurrentPlaylistItem(videoId) {
+        return this.findWhere({ videoId });
+    }
+
     setChannelId(val) {
         this._channelId = val;
 

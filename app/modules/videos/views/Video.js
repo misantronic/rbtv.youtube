@@ -10,6 +10,8 @@ import PlaylistItems from '../../playlists/views/PlistlistItems'
 import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
 import youtubeController from '../../youtube/controller'
 
+let autoplay = false;
+
 class Video extends LayoutView {
     @props({
         className: 'layout-video',
@@ -135,7 +137,11 @@ class Video extends LayoutView {
             const videoInfo   = localStorage.get(`${videoId}.info`) || {};
             const currentTime = videoInfo.currentTime || 0;
 
-            this._player.cueVideoById(videoId, currentTime);
+            if (autoplay) {
+                this._player.loadVideoById(videoId, currentTime);
+            } else {
+                this._player.cueVideoById(videoId, currentTime);
+            }
         } else {
             let containerId = 'yt-video-container';
             let container   = this.$('#' + containerId);
@@ -179,6 +185,8 @@ class Video extends LayoutView {
             .setChannelId(channelId)
             .setRelatedToVideoId(videoId);
 
+        this.collection = collection;
+
         var view = new RelatedResults({
             collection: collection
         });
@@ -197,37 +205,69 @@ class Video extends LayoutView {
     _initPlaylistItems() {
         let playlistId = this.model.get('playlistId');
 
-        let collection = new PlaylistItemsCollection();
-        let view       = new PlaylistItems({ collection });
+        this.collection         = new PlaylistItemsCollection();
+        this._playlistItemsView = new PlaylistItems({ collection: this.collection });
 
-        const selectVideo = videoId => {
-            view.videoId = videoId;
+        this.getRegion('playlist').show(this._playlistItemsView);
 
-            // Update own id -> load video
-            this.model.set('id', videoId);
-        };
-
-        this.getRegion('playlist').show(view);
-
-        this.listenTo(view, 'childview:link:clicked', playlistItemView => {
+        this.listenTo(this._playlistItemsView, 'childview:link:clicked', playlistItemView => {
             let videoId = playlistItemView.model.get('videoId');
 
-            selectVideo(videoId);
+            this._selectVideo(videoId);
         });
 
-        view.loading = true;
+        this._playlistItemsView.loading = true;
 
-        collection.playlistId = playlistId;
+        this.collection.playlistId = playlistId;
 
         // Check cache for playlistItems
-        return collection.fetch()
+        return this.collection.fetch()
             .done(() => {
-                view.loading = false;
+                this._playlistItemsView.loading = false;
 
-                let videoId = this.model.id || collection.first().get('videoId');
+                let videoId = this.model.id || this.collection.first().get('videoId');
 
-                selectVideo(videoId);
+                this._selectVideo(videoId);
             });
+    }
+
+    _selectVideo(videoId) {
+        if (this._playlistItemsView) {
+            this._playlistItemsView.videoId = videoId;
+        }
+
+        // Update own id -> load video
+        this.model.set('id', videoId);
+    }
+
+    _setWatched() {
+        const videoId = this.model.id;
+
+        var playlistItem = this.collection.getCurrentPlaylistItem(videoId);
+
+        if (playlistItem) {
+            playlistItem.set('_watched', true)
+        }
+
+        localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
+    }
+
+    _playNext() {
+        const videoId          = this.model.id;
+        const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
+
+        if (nextPlaylistItem) {
+            const nextVideoId = nextPlaylistItem.get('videoId');
+
+            // Reset currentTime
+            localStorage.update(`${nextVideoId}.info`, { currentTime: 0 });
+
+            // Set new videoId
+            this._selectVideo(nextVideoId);
+
+            // Start video automatically
+            autoplay = true;
+        }
     }
 
     _initRatings() {
@@ -258,11 +298,15 @@ class Video extends LayoutView {
     }
 
     _videoEnded() {
-        const videoId = this.model.get('videoId');
+        const videoId = this.model.id;
 
         // Mark as watched
-        this.collection.getCurrentPlaylistItem(videoId).set('_watched', true);
-        localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
+        this._setWatched();
+
+        // Play next when video is playlist
+        if (this.model.get('playlistId')) {
+            this._playNext();
+        }
     }
 
     _onVideoReady(e) {

@@ -7,8 +7,6 @@ import {localStorage} from '../../../utils'
 import app from '../../../application'
 import {props} from '../../decorators'
 
-let autoplay = false;
-
 class PlaylistItem extends ItemView {
 
     @props({
