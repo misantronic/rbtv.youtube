@@ -41,6 +41,10 @@ class Video extends LayoutView {
         }
     })
 
+    get isPlaylist() {
+        return !!this.model.get('playlistId');
+    }
+
     modelEvents() {
         return {
             'change:title': (model, title) => {
@@ -57,7 +61,7 @@ class Video extends LayoutView {
                         this._initVideo();
                         this._initRatings();
 
-                        if (!this.model.get('playlistId')) {
+                        if (!this.isPlaylist) {
                             this._initRelatedVideos();
                         }
 
@@ -304,7 +308,7 @@ class Video extends LayoutView {
         this._setWatched();
 
         // Play next when video is playlist
-        if (this.model.get('playlistId')) {
+        if (this.isPlaylist) {
             this._playNext();
         }
     }
