@@ -9,6 +9,8 @@ import RelatedResultsCollection from '../../search/models/RelatedResults'
 import PlaylistItems from '../../playlists/views/PlistlistItems'
 import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
 import youtubeController from '../../youtube/controller'
+import commentsController from '../../comments/controller'
+import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 
 let autoplay = false;
 
@@ -37,7 +39,14 @@ class Video extends LayoutView {
         },
 
         regions: {
-            playlist: '.region-playlist'
+            playlist: '.region-playlist',
+            comments: '.region-comments'
+        },
+
+        behaviors: {
+            BtnToTop: {
+                behaviorClass: BehaviorBtnToTop
+            }
         }
     })
 
@@ -64,6 +73,8 @@ class Video extends LayoutView {
                         if (!this.isPlaylist) {
                             this._initRelatedVideos();
                         }
+
+                        this._initComments();
 
                         this.model.set('_loading', false);
                     });
@@ -233,6 +244,12 @@ class Video extends LayoutView {
 
                 this._selectVideo(videoId);
             });
+    }
+
+    _initComments() {
+        commentsController.init(this.getRegion('comments'));
+        
+        commentsController.initComments(this.model.id);
     }
 
     _selectVideo(videoId) {

@@ -1,0 +1,24 @@
+<div class="profile-picture">
+	<img class="thumb" src="<%= topLevelComment.author.profileImageUrl %>" alt="<%= topLevelComment.author.displayName %>">
+</div>
+<div class="content-container">
+	<div class="head">
+		<div class="name">
+			<a class="link" href="<%= topLevelComment.author.channelUrl %>" target="_blank">
+				<%= topLevelComment.author.displayName %>
+			</a>
+		</div>
+		<div class="date"><%= topLevelComment.publishedAt.fromNow() %></div>
+	</div>
+	<div class="body">
+		<%= topLevelComment.textDisplay %>
+	</div>
+	<div class="foot">
+		<button class="btn-reply">Reply</button>
+		<div class="like-container">
+			<div class="count-likes"><%= topLevelComment.likeCount %></div>
+			<button class="btn-like"><span class="icon-thumbs-up"></span></button>
+			<button class="btn-dislike"><span class="icon-thumbs-down"></span></button>
+		</div>
+	</div>
+</div>

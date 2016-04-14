@@ -13,5 +13,7 @@ module.exports = {
         app.get('/api/related', require('./endpoints/related'));
 
         app.get('/api/videos', require('./endpoints/videos'));
+
+        app.get('/api/comments', require('./endpoints/comments'));
     }
 };

@@ -1,0 +1,75 @@
+.layout-comments {
+	padding-top: 50px;
+	margin-top: 50px;
+	border-top: 1px solid #CCC;
+
+	.items-comments {
+		display: flex;
+		flex-direction: column;
+
+		.item-comment {
+			display: flex;
+			flex-direction: row;
+			margin-bottom: 20px;
+
+			> .profile-picture {
+				margin-right: 10px;
+
+				> .thumb {
+
+				}
+			}
+
+			.content-container {
+				> .head {
+					display: flex;
+					flex-direction: row;
+
+					> .name {
+
+					}
+
+					> .date {
+						margin-left: 10px;
+						color: #AAA;
+					}
+				}
+
+				> .body {
+					padding: 5px 0 10px 0;
+				}
+
+				> .foot {
+					display: flex;
+					flex-direction: row;
+
+					> .btn-reply {
+						margin-right: 15px;
+					}
+
+					> .like-container {
+						display: flex;
+						flex-direction: row;
+
+						> .count-likes {
+							margin: 5px 5px 0 0;
+							color: #ff217c;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.loader {
+		position: relative;
+		left: 0;
+		top: 0;
+		margin: 0;
+
+		> .sk-fading-circle {
+			left: 50%;
+			margin-left: -20px;
+		}
+	}
+}

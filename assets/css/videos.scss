@@ -31,28 +31,6 @@
 			.count-likes {
 				margin-right: 10px;
 			}
-
-			.btn-like,
-			.btn-dislike {
-				color: #CCC;
-				background: none;
-				border: none;
-				padding: 0;
-				font-size: 20px;
-
-				&:focus {
-					outline: none;
-				}
-
-				&.active {
-					color: #ff217c;
-				}
-			}
-
-			.btn-dislike {
-				position: relative;
-				top: 5px;
-			}
 		}
 
 		.region-playlist {

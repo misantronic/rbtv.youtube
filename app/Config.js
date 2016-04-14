@@ -5,11 +5,18 @@ const apiBaseUrl = '/api';
 export default {
     endpoints: {
         playlists: apiBaseUrl + '/playlists',
+
         playlistItems: apiBaseUrl + '/playlistItems',
+
         activities: apiBaseUrl + '/activities',
+
         search: apiBaseUrl + '/search',
+
         related: apiBaseUrl + '/related',
-        videos: apiBaseUrl + '/videos'
+
+        videos: apiBaseUrl + '/videos',
+        
+        comments: apiBaseUrl + '/comments'
     },
 
     key: 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk',
