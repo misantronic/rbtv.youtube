@@ -451,6 +451,30 @@ body {
 				}
 			}
 		}
+
+		&.watched {
+			.thumbnail {
+				> .link {
+					position: relative;
+					
+					&:before {
+						content: 'watched';
+						position: absolute;
+						right: 0;
+						top: 0;
+						background: #444;
+						font-size: smaller;
+						padding: 2px;
+						color: #FFFFFF;
+						z-index: 10;
+					}
+
+					.thumb {
+						opacity: 0.65;
+					}
+				}
+			}
+		}
 	}
 }
 

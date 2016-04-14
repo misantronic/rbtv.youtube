@@ -6,6 +6,7 @@ import {Video, Videos} from '../../videos/models/Videos'
 import beans from '../../../data/beans'
 import {props} from '../../decorators'
 import app from '../../../application'
+import {localStorage} from '../../../utils'
 
 class SearchResult extends ItemView {
 
@@ -81,33 +82,50 @@ class SearchResult extends ItemView {
             '@ui.duration': {
                 observe: 'duration',
 
-                update: function ($el, val) {
+                update: ($el, val) => {
                     $el.text(Video.humanizeDuration(val));
+                }
+            },
+
+            ':el': {
+                classes: {
+                    'watched': '_watched'
                 }
             }
         }
     })
 
+    initialize() {
+        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
+
+        this._initWatched();
+    }
+
     onRender() {
-        // Remove modal-settings for mobile devices
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            this.ui.link.removeAttr('data-toggle');
-            this.ui.link.removeAttr('data-target');
-        }
+        this._initTooltip();
 
         this.stickit();
+    }
 
-        this.listenTo(app.channel, 'resize', _.debounce(() => {
-            this.model.trigger('change:tags');
-        }, 100));
+    onDestroy() {
+        this.$('[data-toggle="tooltip"]').tooltip('destroy')
+    }
 
+    _onResize() {
+        this.model.trigger('change:tags');
+    }
+
+    _initTooltip() {
         this.$('[data-toggle="tooltip"]').tooltip({
             delay: { show: 250, hide: 100 }
         });
     }
 
-    onDestroy() {
-        this.$('[data-toggle="tooltip"]').tooltip('destroy')
+    _initWatched() {
+        const videoId = this.model.get('videoId');
+        const watched = !!localStorage.get(`${videoId}.info`, 'watched');
+
+        this.model.set('_watched', watched);
     }
 }
 
@@ -122,7 +140,7 @@ class SearchItemEmpty extends ItemView {
 }
 
 class SearchResults extends CollectionView {
-    
+
     @props({
         className: 'items items-search js-search row',
 
