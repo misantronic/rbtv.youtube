@@ -1,4 +1,5 @@
 import * as Marionette from 'backbone.marionette'
+import _ from 'underscore'
 import $ from 'jquery'
 import {localStorage} from '../../utils'
 import Config from '../../Config'
@@ -63,7 +64,7 @@ class Controller extends Marionette.Object {
     }
 
     getRating(videoId, callback, retryOnFail = true) {
-        if (this._data) {
+        if (this.data) {
             return $.get(endpoints.getRating, { id: videoId })
                 .then(result => result.items[0].rating)
                 .fail(result => {
@@ -90,8 +91,10 @@ class Controller extends Marionette.Object {
      * @returns {Promise}
      * @private
      */
-    _authorize() {
+    _authorize(immediate = false) {
         var Deferred = $.Deferred();
+
+        console.log('this.data', this.data);
 
         if (this.data) {
             Deferred.resolve();
@@ -99,13 +102,13 @@ class Controller extends Marionette.Object {
             gapi.auth.authorize({
                 'client_id': clientId,
                 'scope': scope,
-                'immediate': true
+                'immediate': immediate
             }, () => {
                 this._data = gapi.auth.getToken();
 
-                delete this._data['g-oauth-window'];
+                console.log('this.data', this.data);
 
-                localStorage.set('ytAccess', this._data);
+                localStorage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
 
                 Deferred.resolve();
             });
@@ -121,7 +124,7 @@ class Controller extends Marionette.Object {
     _reAuthorize() {
         this._data = null;
 
-        return this._authorize();
+        return this._authorize(true);
     }
 }
 
