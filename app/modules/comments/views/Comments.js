@@ -32,6 +32,7 @@ class Comments extends CompositeView {
         childViewContainer: '.js-comments',
 
         model: new Model({
+            statistics: 0,
             _loading: false
         })
     })
@@ -54,6 +55,10 @@ class Comments extends CompositeView {
 
     set loading(val) {
         this.model.set('_loading', val);
+    }
+
+    initialize() {
+        this.model.set('statistics', this.getOption('statistics'));
     }
 
     onRender() {

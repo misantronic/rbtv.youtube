@@ -9,11 +9,15 @@ class Controller extends Marionette.Object {
         this._region = region;
     }
 
-    initComments(videoId, channelId) {
-        const collection = new CommentsCollection();
-        const view       = new CommentsView({ videoId, channelId, collection });
+    initComments(videoModel) {
+        const view = new CommentsView({
+            videoId: videoModel.id,
+            channelId: videoModel.get('channelId'),
+            statistics: videoModel.get('statistics'),
+            collection: new CommentsCollection()
+        });
 
-        view.collection.videoId = videoId;
+        view.collection.videoId = videoModel.id;
 
         this._region.show(view);
     }
