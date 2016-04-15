@@ -1,22 +1,25 @@
 <div class="profile-picture">
-	<img class="thumb" src="<%= snippet.topLevelComment.snippet.authorProfileImageUrl %>" alt="<%= snippet.topLevelComment.snippet.authorDisplayName %>">
+	<img class="thumb" src="<%= snippet.authorProfileImageUrl %>" alt="<%= snippet.authorDisplayName %>">
 </div>
 <div class="content-container">
 	<div class="head">
 		<div class="name">
-			<a class="link" href="<%= snippet.topLevelComment.snippet.authorChannelUrl %>" target="_blank">
-				<%= snippet.topLevelComment.snippet.authorDisplayName %>
+			<a class="link" href="<%= snippet.authorChannelUrl %>" target="_blank">
+				<%= snippet.authorDisplayName %>
 			</a>
 		</div>
-		<div class="date"><%= snippet.topLevelComment.snippet.publishedAt.fromNow() %></div>
+		<div class="date"><%= snippet.publishedAt.fromNow() %></div>
 	</div>
-	<div class="body"><%= snippet.topLevelComment.snippet.textDisplay || snippet.topLevelComment.snippet.textOriginal %></div>
+
+	<div class="body"><%= snippet.textDisplay || snippet.textOriginal %></div>
+
 	<div class="foot">
 		<button class="btn-reply">Antworten</button>
-		<div class="like-container">
-			<div class="count-likes <% if(snippet.topLevelComment.snippet.likeCount > 0) { %>has-likes<% } %>"><%= snippet.topLevelComment.snippet.likeCount %></div>
-			<button class="btn-like"><span class="icon-thumbs-up"></span></button>
-			<button class="btn-dislike"><span class="icon-thumbs-down"></span></button>
-		</div>
+		<div class="region-thumbs"></div>
 	</div>
+
+	<div class="replies <% if(!snippet.totalReplyCount) { %>hide<% } %>">
+		<a href="#" class="show-replies js-show-replies">Zeige <%- snippet.totalReplyCount %> Antworten</a>
+	</div>
+	<div class="region-replies"></div>
 </div>

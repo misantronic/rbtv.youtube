@@ -1,5 +1,5 @@
 import {LayoutView} from 'backbone.marionette'
-import {Comment as CommentModel} from '../models/Comments'
+import {CommentThread as CommentThreadModel} from '../models/CommentThreads'
 import {props} from '../../decorators'
 import youtubeController from '../../youtube/controller'
 
@@ -9,7 +9,7 @@ class CommentForm extends LayoutView {
 
         template: require('../templates/comment-form.ejs'),
 
-        model: new CommentModel(),
+        model: new CommentThreadModel(),
 
         ui: {
             text: '.js-text',
@@ -51,7 +51,7 @@ class CommentForm extends LayoutView {
         let snippet = this.model.get('snippet');
         let $text   = this.ui.text;
 
-        snippet.topLevelComment.snippet.textOriginal = $text.val();
+        snippet.textOriginal = $text.val();
 
         $text
             .css('height', '')
@@ -59,7 +59,7 @@ class CommentForm extends LayoutView {
     }
 
     _onCommentAdded(modelObj) {
-        this.trigger('comment:add', new CommentModel(modelObj));
+        this.trigger('comment:add', new CommentThreadModel(modelObj));
 
         this.model.reset();
 

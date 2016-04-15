@@ -10,33 +10,21 @@ class Comment extends Model {
             etag: null,
             id: null,
             snippet: {
-                videoId: null,
-                channelId: null,
-                topLevelComment: {
-                    kind: null,
-                    etag: null,
-                    id: null,
-                    snippet: {
-                        authorDisplayName: null,
-                        authorProfileImageUrl: null,
-                        authorChannelUrl: null,
-                        authorChannelId: {
-                            value: null
-                        },
-                        videoId: null,
-                        textDisplay: '',
-                        textOriginal: '',
-                        authorGoogleplusProfileUrl: null,
-                        canRate: null,
-                        viewerRating: null,
-                        likeCount: null,
-                        publishedAt: null,
-                        updatedAt: null
-                    }
+                authorDisplayName: null,
+                authorProfileImageUrl: null,
+                authorChannelUrl: null,
+                authorChannelId: {
+                    value: null
                 },
-                canReply: null,
-                totalReplyCount: null,
-                isPublic: null
+                videoId: null,
+                textDisplay: '',
+                textOriginal: '',
+                authorGoogleplusProfileUrl: null,
+                canRate: null,
+                viewerRating: null,
+                likeCount: null,
+                publishedAt: null,
+                updatedAt: null
             }
         }
     }
@@ -60,12 +48,12 @@ class Comment extends Model {
     }
 
     _parseDate(snippet) {
-        if (snippet.topLevelComment.snippet.publishedAt) {
-            snippet.topLevelComment.snippet.publishedAt = moment(snippet.topLevelComment.snippet.publishedAt);
+        if (snippet.publishedAt) {
+            snippet.publishedAt = moment(snippet.publishedAt);
         }
 
-        if (snippet.topLevelComment.snippet.updatedAt) {
-            snippet.topLevelComment.snippet.updatedAt = moment(snippet.topLevelComment.snippet.updatedAt);
+        if (snippet.updatedAt) {
+            snippet.updatedAt = moment(snippet.updatedAt);
         }
 
         return snippet;
@@ -77,7 +65,7 @@ class Comments extends Collection {
         model: Comment,
 
         url: function () {
-            return `${Config.endpoints.comments}?videoId=${this._videoId}&pageToken=${this._pageToken}`;
+            return `${Config.endpoints.comments}?parentId=${this._parentId}&pageToken=${this._pageToken}`;
         },
 
         _pageToken: '',
@@ -85,8 +73,8 @@ class Comments extends Collection {
         _videoId: ''
     })
 
-    set videoId(val) {
-        this._videoId = val;
+    set parentId(val) {
+        this._parentId = val;
     }
 
     get pageToken() {

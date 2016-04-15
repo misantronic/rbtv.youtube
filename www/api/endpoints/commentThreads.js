@@ -5,16 +5,17 @@ module.exports = function (req, res) {
     var query = {
         part: 'snippet',
         maxResults: 10,
-        parentId: req.query.parentId,
+        order: 'relevance',
+        videoId: req.query.videoId,
         pageToken: req.query.pageToken
     };
 
     var config = new fetch.Config({
         response: res,
-        endpoint: 'comments',
+        endpoint: 'commentThreads',
         query: query,
         cacheConfig: new cache.Config(
-            cache.rk('comments', query.parentId, query.pageToken),
+            cache.rk('commentThreads', query.videoId, query.pageToken),
             60 * 10 // 5 mins
         )
     });

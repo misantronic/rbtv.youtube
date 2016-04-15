@@ -15,5 +15,7 @@ module.exports = {
         app.get('/api/videos', require('./endpoints/videos'));
 
         app.get('/api/comments', require('./endpoints/comments'));
+        
+        app.get('/api/commentThreads', require('./endpoints/commentThreads'));
     }
 };

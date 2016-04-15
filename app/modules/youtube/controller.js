@@ -89,7 +89,7 @@ class Controller extends Marionette.Object {
     }
 
     /**
-     * @param {Comment} commentModel
+     * @param {CommentThread} commentModel
      * @param {Function} callback
      * @param {Boolean} retryOnFail
      * @returns {Promise}
@@ -105,7 +105,7 @@ class Controller extends Marionette.Object {
                         videoId: snippet.videoId,
                         topLevelComment: {
                             snippet: {
-                                textOriginal: snippet.topLevelComment.snippet.textOriginal
+                                textOriginal: snippet.textOriginal
                             }
                         }
                     }

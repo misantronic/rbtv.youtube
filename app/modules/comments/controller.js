@@ -1,6 +1,6 @@
 import * as Marionette from 'backbone.marionette'
-import CommentsCollection from './models/Comments'
-import CommentsView from './views/Comments'
+import CommentThreadsCollection from './models/CommentThreads'
+import CommentsLayout from './views/CommentsLayout'
 
 import '../../../assets/css/comments.scss';
 
@@ -10,11 +10,11 @@ class Controller extends Marionette.Object {
     }
 
     initComments(videoModel) {
-        const view = new CommentsView({
+        const view = new CommentsLayout({
             videoId: videoModel.id,
             channelId: videoModel.get('channelId'),
             statistics: videoModel.get('statistics'),
-            collection: new CommentsCollection()
+            collection: new CommentThreadsCollection()
         });
 
         view.collection.videoId = videoModel.id;

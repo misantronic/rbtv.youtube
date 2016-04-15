@@ -8,9 +8,9 @@ import RelatedResults from '../../search/views/RelatedResults'
 import RelatedResultsCollection from '../../search/models/RelatedResults'
 import PlaylistItems from '../../playlists/views/PlistlistItems'
 import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
-import youtubeController from '../../youtube/controller'
 import commentsController from '../../comments/controller'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
+import ThumbsView from '../../thumbs/views/Thumbs'
 
 let autoplay = false;
 
@@ -25,22 +25,13 @@ class Video extends LayoutView {
             video: '.js-video-container',
             publishedAt: '.js-publishedAt',
             views: '.js-views',
-            description: '.js-description',
-            likes: '.js-count-likes',
-            dislikes: '.js-count-dislikes',
-            btnLike: '.js-btn-like',
-            btnDislike: '.js-btn-dislike'
-        },
-
-        events: {
-            'click @ui.btnLike': '_onClickLike',
-
-            'click @ui.btnDislike': '_onClickDislike'
+            description: '.js-description'
         },
 
         regions: {
             playlist: '.region-playlist',
-            comments: '.region-comments'
+            comments: '.region-comments',
+            thumbs: '.region-thumbs'
         },
 
         behaviors: {
@@ -68,7 +59,7 @@ class Video extends LayoutView {
                     .fetchLive()
                     .then(() => {
                         this._initVideo();
-                        this._initRatings();
+                        this._initThumbs();
 
                         if (!this.isPlaylist) {
                             this._initRelatedVideos();
@@ -87,15 +78,9 @@ class Video extends LayoutView {
             },
 
             'change:statistics': (model, statistics) => {
-                let views    = statistics.viewCount;
-                let likes    = statistics.likeCount;
-                let dislikes = statistics.dislikeCount;
+                let views = statistics.viewCount;
 
                 this.ui.views.text(views);
-
-                this.ui.likes.text(likes);
-
-                this.ui.dislikes.text(dislikes);
             },
 
             'change:description': (model, description) => {
@@ -108,28 +93,12 @@ class Video extends LayoutView {
                 } else {
                     this.$el.removeClass('loading');
                 }
-            },
-
-            'change:_liked': (model, val) => {
-                if (val) {
-                    this.ui.btnLike.addClass('active');
-                } else {
-                    this.ui.btnLike.removeClass('active');
-                }
-            },
-
-            'change:_disliked': (model, val) => {
-                if (val) {
-                    this.ui.btnDislike.addClass('active');
-                } else {
-                    this.ui.btnDislike.removeClass('active');
-                }
             }
         }
     }
 
     initialize() {
-        _.bindAll(this, '_initVideo', '_onRated', '_onVideoReady', '_onVideoStateChange');
+        _.bindAll(this, '_initVideo', '_onVideoReady', '_onVideoStateChange');
 
         this._playerInterval = 0;
 
@@ -189,6 +158,22 @@ class Video extends LayoutView {
                 initPlayer();
             }
         }
+    }
+
+    _initThumbs() {
+        const statistics = this.model.get('statistics');
+
+        this.getRegion('thumbs').show(
+            new ThumbsView({
+                resourceId: this.model.id,
+                hideLikes: false,
+                hideDislikes: false,
+                likeCount: statistics.likeCount,
+                dislikeCount: statistics.dislikeCount,
+                checkOwnRating: true,
+                canRate: true
+            })
+        );
     }
 
     _initRelatedVideos() {
@@ -290,17 +275,6 @@ class Video extends LayoutView {
         }
     }
 
-    _initRatings() {
-        const videoId = this.model.id;
-
-        youtubeController.getRating(videoId, function (rating) {
-            this.model.set({
-                _liked: rating === 'like',
-                _disliked: rating === 'dislike'
-            });
-        }.bind(this));
-    }
-
     _videoPlaying() {
         const videoId = this.model.id;
 
@@ -362,64 +336,6 @@ class Video extends LayoutView {
 
     _onResize() {
         this._videoSetSize();
-    }
-
-    _onClickLike() {
-        let rating = this.model.get('_liked') ? 'none' : 'like';
-
-        youtubeController
-            .addRating(rating, this.model.id)
-            .done(this._onRated);
-    }
-
-    _onClickDislike() {
-        let rating = this.model.get('_disliked') ? 'none' : 'dislike';
-
-        youtubeController
-            .addRating(rating, this.model.id)
-            .done(this._onRated);
-    }
-
-    _onRated(rating) {
-        let liked      = rating === 'like';
-        let disliked   = rating === 'dislike';
-        let none       = rating === 'none';
-        let statistics = this.model.get('statistics');
-
-        if (liked) {
-            statistics.likeCount++;
-
-            if (this.model.get('_disliked')) {
-                statistics.dislikeCount--;
-            }
-        }
-
-        if (disliked) {
-            statistics.dislikeCount++;
-
-            if (this.model.get('_liked')) {
-                statistics.likeCount--;
-            }
-        }
-
-        if (none) {
-            if (this.model.get('_liked')) {
-                statistics.likeCount--;
-            }
-
-            if (this.model.get('_disliked')) {
-                statistics.dislikeCount--;
-            }
-        }
-
-        this.model
-            .set({
-                _liked: liked,
-                _disliked: disliked,
-                statistics: statistics
-            })
-            // Manually trigger change on statistics
-            .trigger('change:statistics', this.model, statistics);
     }
 }
 

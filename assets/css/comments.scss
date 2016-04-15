@@ -23,6 +23,8 @@
 			}
 
 			.content-container {
+				flex: 1;
+
 				> .head {
 					display: flex;
 					flex-direction: row;
@@ -65,16 +67,20 @@
 						}
 					}
 
-					> .like-container {
-						display: flex;
-						flex-direction: row;
 
-						> .count-likes {
-							margin: 3px 5px 0 0;
+				}
 
-							&.has-likes {
-								color: #ff217c;
-							}
+				> .replies {
+					margin-top: 5px;
+					font-size: 12px;
+				}
+
+				> .region-replies {
+					.items-comments {
+						margin-top: 20px;
+
+						.btn-reply {
+							display: none;
 						}
 					}
 				}

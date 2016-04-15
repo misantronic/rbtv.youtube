@@ -16,6 +16,8 @@ export default {
 
         videos: apiBaseUrl + '/videos',
         
+        commentThreads: apiBaseUrl + '/commentThreads',
+
         comments: apiBaseUrl + '/comments'
     },
 
