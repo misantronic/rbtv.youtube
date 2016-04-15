@@ -3,6 +3,7 @@ import _ from 'underscore'
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {props} from '../../decorators'
+import CommentFormView from './CommentForm'
 
 class Comment extends ItemView {
     @props({
@@ -56,6 +57,15 @@ class Comments extends CompositeView {
     }
 
     onRender() {
+        const channelId = this.getOption('channelId');
+        const videoId   = this.getOption('videoId');
+
+        const formView = new CommentFormView({ channelId, videoId }).render();
+
+        this.listenTo(formView, 'comment:add', this._onCommentAdded);
+
+        this.$('.region-comment-form').html(formView.$el);
+
         this._initScroll();
 
         this.stickit();
@@ -96,8 +106,12 @@ class Comments extends CompositeView {
         this._initScroll();
     }
 
+    _onCommentAdded(commentModel) {
+        this.collection.add(commentModel, { at: 0 });
+    }
+
     _onScroll() {
-        const maxY = $(document).height() - window.innerHeight - 200;
+        const maxY = $(document).height() - window.innerHeight - 100;
         const y    = window.scrollY;
 
         if (y >= maxY) {

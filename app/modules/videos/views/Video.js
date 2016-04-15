@@ -248,8 +248,7 @@ class Video extends LayoutView {
 
     _initComments() {
         commentsController.init(this.getRegion('comments'));
-        
-        commentsController.initComments(this.model.id);
+        commentsController.initComments(this.model.id, this.model.get('channelId'));
     }
 
     _selectVideo(videoId) {

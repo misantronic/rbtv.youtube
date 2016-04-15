@@ -9,12 +9,14 @@ const baseURL = 'https://www.googleapis.com/youtube/v3';
 const endpoints = {
     getRating: baseURL + '/videos/getRating',
     playlists: baseURL + '/playlists',
-    rate: baseURL + '/videos/rate'
+    rate: baseURL + '/videos/rate',
+    commentThreads: baseURL + '/commentThreads'
 };
 
 const authorizedEndpoints = [
     endpoints.getRating,
-    endpoints.rate
+    endpoints.rate,
+    endpoints.commentThreads
 ];
 
 const clientId = '41722713665-rmnr2sd8u0g5s2ait1el7ec36fgm50mq.apps.googleusercontent.com';
@@ -48,7 +50,6 @@ class Controller extends Marionette.Object {
     }
 
     /**
-     *
      * @param {'like'|'dislike'|'none'} rating
      * @param videoId
      */
@@ -88,6 +89,49 @@ class Controller extends Marionette.Object {
     }
 
     /**
+     * @param {Comment} commentModel
+     * @param {Function} callback
+     * @param {Boolean} retryOnFail
+     * @returns {Promise}
+     */
+    addComment(commentModel, callback, retryOnFail = true) {
+        return this._authorize()
+            .then(() => {
+                let snippet = commentModel.get('snippet');
+
+                let payload = {
+                    snippet: {
+                        channelId: snippet.channelId,
+                        videoId: snippet.videoId,
+                        topLevelComment: {
+                            snippet: {
+                                textOriginal: snippet.topLevelComment.snippet.textOriginal
+                            }
+                        }
+                    }
+                };
+
+                if (this.data) {
+                    return $.ajax({
+                            url: endpoints.commentThreads +'?part=snippet',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: JSON.stringify(payload),
+                            contentType: "application/json"
+                        })
+                        .fail(result => {
+                            if (retryOnFail && result.status === 401) {
+                                this._reAuthorize().then(() => {
+                                    this.addComment(commentModel, callback, false);
+                                })
+                            }
+                        })
+                        .done(callback);
+                }
+            });
+    }
+
+    /**
      * @returns {Promise}
      * @private
      */
@@ -103,8 +147,6 @@ class Controller extends Marionette.Object {
                 'immediate': immediate
             }, () => {
                 this._data = gapi.auth.getToken();
-
-                console.log('this.data', this.data);
 
                 localStorage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
 

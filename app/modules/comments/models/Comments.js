@@ -4,35 +4,71 @@ import Config from '../../../Config'
 import moment from 'moment';
 
 class Comment extends Model {
-    parse(response) {
+    defaults() {
         return {
-            id: response.id,
-            kind: response.kind,
-            etag: response.etag,
-            videoId: response.snippet.videoId,
-            canReply: response.snippet.canReply,
-            totalReplyCount: response.snippet.totalReplyCount,
-            isPublic: response.snippet.isPublic,
-            topLevelComment: {
-                id: response.snippet.topLevelComment.id,
-                kind: response.snippet.topLevelComment.kind,
-                etag: response.snippet.topLevelComment.etag,
-                author: {
-                    displayName: response.snippet.topLevelComment.snippet.authorDisplayName,
-                    profileImageUrl: response.snippet.topLevelComment.snippet.authorProfileImageUrl,
-                    channelUrl: response.snippet.topLevelComment.snippet.authorChannelUrl,
-                    channelId: response.snippet.topLevelComment.snippet.authorChannelId.value,
-                    googlePlusProfileUrl: response.snippet.topLevelComment.snippet.authorGoogleplusProfileUrl
+            kind: null,
+            etag: null,
+            id: null,
+            snippet: {
+                videoId: null,
+                channelId: null,
+                topLevelComment: {
+                    kind: null,
+                    etag: null,
+                    id: null,
+                    snippet: {
+                        authorDisplayName: null,
+                        authorProfileImageUrl: null,
+                        authorChannelUrl: null,
+                        authorChannelId: {
+                            value: null
+                        },
+                        videoId: null,
+                        textDisplay: '',
+                        textOriginal: '',
+                        authorGoogleplusProfileUrl: null,
+                        canRate: null,
+                        viewerRating: null,
+                        likeCount: null,
+                        publishedAt: null,
+                        updatedAt: null
+                    }
                 },
-                videoId: response.snippet.topLevelComment.snippet.videoId,
-                textDisplay: response.snippet.topLevelComment.snippet.textDisplay,
-                canRate: response.snippet.topLevelComment.snippet.canRate,
-                viewerRating: response.snippet.topLevelComment.snippet.viewerRating,
-                likeCount: response.snippet.topLevelComment.snippet.likeCount,
-                publishedAt: moment(response.snippet.topLevelComment.snippet.publishedAt),
-                updatedAt: moment(response.snippet.topLevelComment.snippet.updatedAt)
+                canReply: null,
+                totalReplyCount: null,
+                isPublic: null
             }
         }
+    }
+
+    initialize() {
+        let snippet = this.get('snippet');
+
+        snippet = this._parseDate(snippet);
+    }
+
+    parse(response) {
+        let snippet = response.snippet;
+
+        snippet = this._parseDate(snippet);
+
+        return response;
+    }
+
+    reset() {
+        this.set(_.result(this, 'defaults'));
+    }
+
+    _parseDate(snippet) {
+        if (snippet.topLevelComment.snippet.publishedAt) {
+            snippet.topLevelComment.snippet.publishedAt = moment(snippet.topLevelComment.snippet.publishedAt);
+        }
+
+        if (snippet.topLevelComment.snippet.updatedAt) {
+            snippet.topLevelComment.snippet.updatedAt = moment(snippet.topLevelComment.snippet.updatedAt);
+        }
+
+        return snippet;
     }
 }
 
@@ -49,7 +85,7 @@ class Comments extends Collection {
         _videoId: ''
     })
 
-    setVideoId(val) {
+    set videoId(val) {
         this._videoId = val;
     }
 

@@ -197,10 +197,15 @@ body {
 		padding: 0;
 		font-size: 20px;
 
+		&:hover {
+			color: #AAA;
+		}
+
 		&:focus {
 			outline: none;
 		}
 
+		&:hover.active,
 		&.active {
 			color: #ff217c;
 		}

@@ -1,5 +1,7 @@
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
+
 .layout-comments {
-	padding-top: 50px;
+	padding-top: 25px;
 	margin-top: 50px;
 	border-top: 1px solid #CCC;
 
@@ -37,6 +39,7 @@
 
 				> .body {
 					padding: 5px 0 10px 0;
+					white-space: pre-line;
 				}
 
 				> .foot {
@@ -45,6 +48,21 @@
 
 					> .btn-reply {
 						margin-right: 15px;
+						border: none;
+						background: none;
+						color: $brand-primary;
+						padding-left: 0;
+
+						&:hover {
+							color: #23527c;
+							text-decoration: underline;
+						}
+
+						&:active,
+						&:focus {
+							outline: none;
+							box-shadow: none;
+						}
 					}
 
 					> .like-container {
@@ -52,12 +70,34 @@
 						flex-direction: row;
 
 						> .count-likes {
-							margin: 5px 5px 0 0;
-							color: #ff217c;
+							margin: 3px 5px 0 0;
+
+							&.has-likes {
+								color: #ff217c;
+							}
 						}
 					}
 				}
 			}
+		}
+	}
+
+	.form-comments {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 25px;
+
+		> .text {
+			flex: 1;
+			margin: 0;
+			height: 35px;
+			min-height: 35px;
+			max-height: 75px;
+			resize: none;
+		}
+
+		> .btn-submit {
+			margin-left: 10px;
 		}
 	}
 
