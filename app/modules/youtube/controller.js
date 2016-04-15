@@ -94,8 +94,6 @@ class Controller extends Marionette.Object {
     _authorize(immediate = false) {
         var Deferred = $.Deferred();
 
-        console.log('this.data', this.data);
-
         if (this.data) {
             Deferred.resolve();
         } else {
