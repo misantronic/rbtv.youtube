@@ -10,13 +10,17 @@ class Comment extends Model {
             etag: null,
             id: null,
             snippet: {
+                videoId: null,
+                channelId: null,
+                canReply: null,
+                totalReplyCount: null,
+                isPublic: null,
                 authorDisplayName: null,
                 authorProfileImageUrl: null,
                 authorChannelUrl: null,
                 authorChannelId: {
                     value: null
                 },
-                videoId: null,
                 textDisplay: '',
                 textOriginal: '',
                 authorGoogleplusProfileUrl: null,
@@ -30,15 +34,13 @@ class Comment extends Model {
     }
 
     initialize() {
-        let snippet = this.get('snippet');
+        let snippet = this._parseSnippet(this.get('snippet'));
 
-        snippet = this._parseDate(snippet);
+        this.set('snippet', snippet);
     }
 
     parse(response) {
-        let snippet = response.snippet;
-
-        snippet = this._parseDate(snippet);
+        response.snippet = this._parseSnippet(response.snippet);
 
         return response;
     }
@@ -47,7 +49,13 @@ class Comment extends Model {
         this.set(_.result(this, 'defaults'));
     }
 
-    _parseDate(snippet) {
+    _parseSnippet(snippet) {
+        if(snippet.topLevelComment) {
+            _.extend(snippet, snippet.topLevelComment.snippet);
+
+            snippet = _.omit(snippet, 'topLevelComment');
+        }
+
         if (snippet.publishedAt) {
             snippet.publishedAt = moment(snippet.publishedAt);
         }
