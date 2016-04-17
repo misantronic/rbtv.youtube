@@ -15,7 +15,7 @@ class CommentsLayout extends LayoutView {
     }
 
     @props({
-        className: 'layout-comments',
+        className: 'layout-comments col-xs-12',
 
         ui: {
             loader: '.js-loader'
