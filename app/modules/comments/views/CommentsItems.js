@@ -17,7 +17,8 @@ class CommentItem extends LayoutView {
         },
 
         ui: {
-            showReplies: '.js-show-replies'
+            showReplies: '.js-show-replies',
+            loader: '.js-loader'
         },
 
         events: {
@@ -35,6 +36,12 @@ class CommentItem extends LayoutView {
                     } else {
                         $el.text('Zeige ' + this.model.get('snippet').totalReplyCount + ' Antworten');
                     }
+                }
+            },
+
+            '@ui.loader': {
+                classes: {
+                    show: '_loading'
                 }
             }
         }
@@ -68,8 +75,12 @@ class CommentItem extends LayoutView {
 
             this.getRegion('replies').show(view);
 
+            this.model.set('_loading', true);
+
             collection.parentId = this.model.id;
-            collection.fetch();
+            collection.fetch().then(() => {
+                this.model.set('_loading', false);
+            });
 
             this.model.set('_repliesVisible', true);
         }
