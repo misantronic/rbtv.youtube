@@ -47,18 +47,6 @@
 	display: none;
 }
 
-.video-container {
-	padding-bottom: 10px;
-
-	@media (min-width: $screen-sm-min) {
-		padding-bottom: 0;
-	}
-
-	> iframe {
-		max-width: 100%;
-	}
-}
-
 .layout-playlists {
 	> .loader {
 		display: none;

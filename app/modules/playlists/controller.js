@@ -1,7 +1,7 @@
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
 import PlaylistsView from './views/Playlists'
-import VideoView from '../videos/views/Video'
+import VideoView from '../videos/views/VideoLayout'
 import {Video as VideoModel} from '../videos/models/Videos'
 import channels from '../../channels'
 import youtubeController from '../youtube/controller'

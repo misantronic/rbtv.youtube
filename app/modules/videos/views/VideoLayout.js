@@ -1,5 +1,3 @@
-import _ from 'underscore'
-import $ from 'jquery'
 import {LayoutView} from 'backbone.marionette'
 import app from '../../../application'
 import {localStorage} from '../../../utils'
@@ -7,12 +5,11 @@ import {props} from '../../decorators'
 import RelatedResults from '../../search/views/RelatedResults'
 import RelatedResultsCollection from '../../search/models/RelatedResults'
 import PlaylistItems from '../../playlists/views/PlistlistItems'
-import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
 import commentsController from '../../comments/controller'
+import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import ThumbsView from '../../thumbs/views/Thumbs'
-
-let autoplay = false;
+import VideoPlayerView from './VideoPlayer'
 
 class Video extends LayoutView {
     @props({
@@ -29,6 +26,7 @@ class Video extends LayoutView {
         },
 
         regions: {
+            videoplayer: '.region-videoplayer',
             playlist: '.region-playlist',
             comments: '.region-comments',
             thumbs: '.region-thumbs'
@@ -97,66 +95,18 @@ class Video extends LayoutView {
         }
     }
 
-    initialize() {
-        _.bindAll(this, '_initVideo', '_onVideoReady', '_onVideoStateChange');
-
-        this._playerInterval = 0;
-
-        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
-    }
-
-    onShow() {
-        this._videoSetSize();
-    }
-
     _initVideo() {
-        clearInterval(this._playerInterval);
+        const videoId = this.model.get('id');
 
-        const videoId = this.model.id;
+        if (!this._videoPlayer) {
+            this._videoPlayer = new VideoPlayerView({ videoId });
 
-        if (!videoId) return;
-
-        if (this._player && this._player.cueVideoById) {
-            // currentTime
-            const videoInfo   = localStorage.get(`${videoId}.info`) || {};
-            const currentTime = videoInfo.currentTime || 0;
-
-            if (autoplay) {
-                this._player.loadVideoById(videoId, currentTime);
-            } else {
-                this._player.cueVideoById(videoId, currentTime);
-            }
+            this.listenTo(this._videoPlayer, 'video:ended', this._playNext);
+            this.listenTo(this._videoPlayer, 'video:ended', this._setWatched);
+            
+            this.getRegion('videoplayer').show(this._videoPlayer);
         } else {
-            let containerId = 'yt-video-container';
-            let container   = this.$('#' + containerId);
-            let height      = container.css('height', 'auto').height();
-            let $container  = $('<div id="' + containerId + '"></div>');
-
-            if (height) {
-                $container.css('height', height)
-            }
-
-            container.replaceWith($container);
-
-            var initPlayer = function () {
-                this._player = new YT.Player(containerId, {
-                    width: '100%',
-                    height: '100%',
-                    videoId: videoId,
-                    events: {
-                        'onReady': this._onVideoReady,
-                        'onStateChange': this._onVideoStateChange
-                    }
-                });
-
-                this._videoSetSize();
-            }.bind(this);
-
-            if (typeof YT === 'undefined' || !YT.Player) {
-                window.onYouTubeIframeAPIReady = initPlayer;
-            } else {
-                initPlayer();
-            }
+            this._videoPlayer.videoId = videoId;
         }
     }
 
@@ -236,13 +186,24 @@ class Video extends LayoutView {
         commentsController.initComments(this.model);
     }
 
-    _selectVideo(videoId) {
-        if (this._playlistItemsView) {
-            this._playlistItemsView.videoId = videoId;
-        }
+    _playNext() {
+        if (!this.isPlaylist) return;
 
-        // Update own id -> load video
-        this.model.set('id', videoId);
+        const videoId          = this.model.id;
+        const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
+
+        if (nextPlaylistItem) {
+            const nextVideoId = nextPlaylistItem.get('videoId');
+
+            // Reset currentTime
+            localStorage.update(`${nextVideoId}.info`, { currentTime: 0 });
+
+            // Start video automatically
+            this._videoPlayer.autoplay = true;
+
+            // Set new videoId
+            this._selectVideo(nextVideoId);
+        }
     }
 
     _setWatched() {
@@ -257,85 +218,15 @@ class Video extends LayoutView {
         localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
     }
 
-    _playNext() {
-        const videoId          = this.model.id;
-        const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
+    _selectVideo(videoId) {
+        this.model.set('id', videoId);
 
-        if (nextPlaylistItem) {
-            const nextVideoId = nextPlaylistItem.get('videoId');
-
-            // Reset currentTime
-            localStorage.update(`${nextVideoId}.info`, { currentTime: 0 });
-
-            // Set new videoId
-            this._selectVideo(nextVideoId);
-
-            // Start video automatically
-            autoplay = true;
-        }
-    }
-
-    _videoPlaying() {
-        const videoId = this.model.id;
-
-        // Store player-status
-        clearInterval(this._playerInterval);
-
-        const updateCurrentTime = () => {
-            const currentTime = Math.round(this._player.getCurrentTime());
-
-            localStorage.update(`${videoId}.info`, { currentTime });
-        };
-
-        updateCurrentTime();
-        this._playerInterval = setInterval(updateCurrentTime, 8000);
-    }
-
-    _videoEnded() {
-        const videoId = this.model.id;
-
-        // Mark as watched
-        this._setWatched();
-
-        // Play next when video is playlist
-        if (this.isPlaylist) {
-            this._playNext();
-        }
-    }
-
-    _onVideoReady(e) {
-        if (_.isNull(e.data)) {
-            this._onResize();
-        }
-    }
-
-    _videoSetSize() {
-        let width  = this.ui.video.width();
-        let height = width * 0.51;
-
-        if (window.innerWidth <= 768) {
-            width  = '100%';
-            height = window.innerWidth * 0.51;
+        if (this._playlistItemsView) {
+            this._playlistItemsView.videoId = videoId;
         }
 
-        this.ui.video.css({ width, height });
-    }
-
-    _onVideoStateChange(e) {
-        const videoId = this.model.id;
-
-        switch (e.data) {
-            case YT.PlayerState.PLAYING:
-                this._videoPlaying();
-                break;
-            case YT.PlayerState.ENDED:
-                this._videoEnded();
-                break;
-        }
-    }
-
-    _onResize() {
-        this._videoSetSize();
+        // Update own id -> load video
+        this._initVideo();
     }
 }
 
