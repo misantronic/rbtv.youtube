@@ -52,9 +52,10 @@ class App extends Application {
 
     _onStart() {
         const mainRegion = this.getRegion('main');
+        const bcRegion   = this.getRegion('breadcrumb');
 
         youtubeController.init();
-        breadcrumbController.init(this.getRegion('breadcrumb'));
+        breadcrumbController.init(bcRegion);
         playlistsController.init(mainRegion);
         overviewController.init(mainRegion);
         videosController.init(mainRegion);
@@ -77,7 +78,7 @@ class App extends Application {
 
     _detectAdBlock() {
         // Workaround: fuckadblock is not working in ffx -> disable
-        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) return;
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) return;
 
         fuckAdBlock.on(true, () => {
             // detected
