@@ -14,9 +14,11 @@
 	<div class="body"><%= snippet.textDisplay || snippet.textOriginal %></div>
 
 	<div class="foot">
-		<button class="btn-reply">Antworten</button>
+		<button class="btn-reply js-reply">Antworten</button>
 		<div class="region-thumbs"></div>
 	</div>
+
+	<div class="region-reply"></div>
 
 	<div class="replies <% if(!snippet.totalReplyCount) { %>hide<% } %>">
 		<a href="#" class="show-replies js-show-replies">Zeige <%- snippet.totalReplyCount %> Antworten</a>

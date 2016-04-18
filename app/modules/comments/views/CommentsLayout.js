@@ -3,6 +3,7 @@ import {LayoutView} from 'backbone.marionette'
 import {props} from '../../decorators'
 import CommentsItemsView from './CommentsItems'
 import CommentFormView from './CommentForm'
+import {CommentThread as CommentThreadModel} from '../models/CommentThreads'
 
 class CommentsLayout extends LayoutView {
     constructor(options = {}) {
@@ -52,7 +53,15 @@ class CommentsLayout extends LayoutView {
         const videoId    = this.getOption('videoId');
         const collection = this.getOption('collection');
 
-        const formView  = new CommentFormView({ channelId, videoId }).render();
+        const formView = new CommentFormView({
+            model: new CommentThreadModel({
+                snippet: {
+                    videoId,
+                    channelId
+                }
+            })
+        });
+
         const itemsView = new CommentsItemsView({ collection });
 
         this.listenTo(formView, 'comment:add', this._onCommentAdded);

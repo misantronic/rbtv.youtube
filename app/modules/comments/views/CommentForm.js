@@ -1,19 +1,25 @@
+import _ from 'underscore'
 import {LayoutView} from 'backbone.marionette'
 import {Comment as CommentModel} from '../models/Comments'
 import {props} from '../../decorators'
 import youtubeController from '../../youtube/controller'
 
 class CommentForm extends LayoutView {
+    constructor(options = {}) {
+        if (!options.model) throw new Error('Please specify a model');
+
+        super(options);
+    }
+
     @props({
         className: 'layout-comment-form',
 
         template: require('../templates/comment-form.ejs'),
 
-        model: new CommentModel(),
-
         ui: {
             text: '.js-text',
-            submit: '.js-submit'
+            submit: '.js-submit',
+            cancel: '.js-cancel'
         },
 
         events: {
@@ -21,24 +27,35 @@ class CommentForm extends LayoutView {
             'keydown @ui.text': '_onKeydownText',
             'change @ui.text': '_onChangeText',
             'click @ui.submit': '_onClickSubmit'
+        },
+
+        triggers: {
+            'click @ui.cancel': 'comment:cancel'
         }
     })
-
-    initialize() {
-        const channelId = this.getOption('channelId');
-        const videoId   = this.getOption('videoId');
-
-        let snippet = this.model.get('snippet');
-
-        snippet.channelId = channelId;
-        snippet.videoId   = videoId;
+    
+    onRender() {
+        const canCancel = _.isUndefined(this.getOption('canCancel')) ? false : this.getOption('canCancel');
+        
+        if(canCancel) {
+            this.ui.cancel.removeClass('hide');
+        }
     }
 
     _addComment() {
         this.ui.text.prop('disabled', true);
         this.ui.submit.prop('disabled', true);
 
-        youtubeController.addComment(this.model, this._onCommentAdded.bind(this));
+        youtubeController.addComment(this.model, modelObj => {
+            this.trigger('comment:add', new CommentModel(modelObj));
+
+            this.model.reset();
+
+            this.ui.text.prop('disabled', false).val('');
+            this.ui.submit.prop('disabled', false);
+
+            this._onChangeText();
+        });
     }
 
     _onClickSubmit() {
@@ -56,17 +73,6 @@ class CommentForm extends LayoutView {
         $text
             .css('height', '')
             .css('height', $text[0].scrollHeight + 3);
-    }
-
-    _onCommentAdded(modelObj) {
-        this.trigger('comment:add', new CommentModel(modelObj));
-
-        this.model.reset();
-
-        this.ui.text.prop('disabled', false).val('');
-        this.ui.submit.prop('disabled', false);
-
-        this._onChangeText();
     }
 
     /** @param {KeyboardEvent} event */

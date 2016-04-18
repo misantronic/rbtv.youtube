@@ -85,6 +85,12 @@
 					}
 				}
 
+				> .region-reply {
+					.layout-comment-form {
+						margin: 15px 0;
+					}
+				}
+
 				> .loader {
 					display: none;
 				}
@@ -107,6 +113,10 @@
 		}
 
 		> .btn-submit {
+			margin-left: 10px;
+		}
+
+		> .btn-cancel {
 			margin-left: 10px;
 		}
 	}

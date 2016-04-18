@@ -1,9 +1,14 @@
+import moment from 'moment';
 import {Model, Collection} from 'backbone'
 import {props} from '../../decorators'
 import Config from '../../../Config'
-import moment from 'moment';
+import youtubeController from '../../youtube/controller'
 
 class Comment extends Model {
+    @props({
+        urlRoot: youtubeController.endpoints.comments
+    })
+
     defaults() {
         return {
             kind: null,
@@ -49,8 +54,20 @@ class Comment extends Model {
         this.set(_.result(this, 'defaults'));
     }
 
+    /** @returns {{snippet: {parentId: *, textOriginal: (string|*)}}} */
+    getPayload() {
+        let snippet = this.get('snippet');
+
+        return {
+            snippet: {
+                parentId: snippet.parentId,
+                textOriginal: snippet.textOriginal
+            }
+        };
+    }
+
     _parseSnippet(snippet) {
-        if(snippet.topLevelComment) {
+        if (snippet.topLevelComment) {
             _.extend(snippet, snippet.topLevelComment.snippet);
 
             snippet = _.omit(snippet, 'topLevelComment');

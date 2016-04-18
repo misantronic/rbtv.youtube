@@ -10,13 +10,15 @@ const endpoints = {
     getRating: baseURL + '/videos/getRating',
     playlists: baseURL + '/playlists',
     rate: baseURL + '/videos/rate',
+    comments: baseURL + '/comments',
     commentThreads: baseURL + '/commentThreads'
 };
 
 const authorizedEndpoints = [
     endpoints.getRating,
     endpoints.rate,
-    endpoints.commentThreads
+    endpoints.commentThreads,
+    endpoints.comments
 ];
 
 const clientId = '41722713665-rmnr2sd8u0g5s2ait1el7ec36fgm50mq.apps.googleusercontent.com';
@@ -31,6 +33,11 @@ class Controller extends Marionette.Object {
     /** @returns {{state: string, access_token: string, token_type: string, expires_in: string, scope: string, client_id: string, response_type: string, issued_at: string, expires_at: string, status: {google_logged_in: boolean, signed_in: boolean, method: string}}}*/
     get data() {
         return this._data;
+    }
+
+    /** @returns {{getRating: string, playlists: string, rate: string, comments: string, commentThreads: string}} */
+    get endpoints() {
+        return endpoints
     }
 
     initialize() {
@@ -89,7 +96,7 @@ class Controller extends Marionette.Object {
     }
 
     /**
-     * @param {CommentThread} commentModel
+     * @param {Comment|CommentThread} commentModel
      * @param {Function} callback
      * @param {Boolean} retryOnFail
      * @returns {Promise}
@@ -97,23 +104,11 @@ class Controller extends Marionette.Object {
     addComment(commentModel, callback, retryOnFail = true) {
         return this._authorize()
             .then(() => {
-                let snippet = commentModel.get('snippet');
-
-                let payload = {
-                    snippet: {
-                        channelId: snippet.channelId,
-                        videoId: snippet.videoId,
-                        topLevelComment: {
-                            snippet: {
-                                textOriginal: snippet.textOriginal
-                            }
-                        }
-                    }
-                };
+                let payload = commentModel.getPayload();
 
                 if (this.data) {
                     return $.ajax({
-                            url: endpoints.commentThreads +'?part=snippet',
+                            url: commentModel.urlRoot +'?part=snippet',
                             type: 'POST',
                             dataType: 'json',
                             data: JSON.stringify(payload),

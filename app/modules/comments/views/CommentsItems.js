@@ -4,7 +4,8 @@ import {CollectionView, LayoutView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {props} from '../../decorators'
 import ThumbsView from '../../thumbs/views/Thumbs'
-import {Comments as CommentsCollection} from '../models/Comments'
+import {Comments as CommentsCollection, Comment as CommentModel} from '../models/Comments'
+import CommentForm from './CommentForm'
 
 class CommentItem extends LayoutView {
     @props({
@@ -13,16 +14,19 @@ class CommentItem extends LayoutView {
         className: 'item-comment col-xs-12',
 
         regions: {
-            replies: '.region-replies'
+            replies: '.region-replies',
+            replyForm: '.region-reply'
         },
 
         ui: {
             showReplies: '.js-show-replies',
-            loader: '.js-loader'
+            loader: '.js-loader',
+            btnReply: '.js-reply'
         },
 
         events: {
-            'click @ui.showReplies': '_onToggleReplies'
+            'click @ui.showReplies': '_onToggleReplies',
+            'click @ui.btnReply': '_onClickReply'
         }
     })
 
@@ -83,9 +87,37 @@ class CommentItem extends LayoutView {
             });
 
             this.model.set('_repliesVisible', true);
+
+            this._repliesCollection = collection;
         }
 
         e.preventDefault();
+    }
+
+    _onClickReply() {
+        var formView = new CommentForm({
+            canCancel: true,
+            model: new CommentModel({
+                snippet: {
+                    parentId: this.model.id
+                }
+            })
+        });
+
+        this.listenTo(formView, 'comment:add', this._onCommentAdded);
+        this.listenTo(formView, 'comment:cancel', this._onCommentCanceled);
+
+        this.getRegion('replyForm').show(formView);
+    }
+
+    _onCommentAdded(commentModel) {
+        if(this._repliesCollection) {
+            this._repliesCollection.add(commentModel);
+        }
+    }
+
+    _onCommentCanceled() {
+        this.getRegion('replyForm').empty();
     }
 }
 
