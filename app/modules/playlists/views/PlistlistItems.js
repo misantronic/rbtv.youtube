@@ -61,7 +61,6 @@ class PlaylistItems extends CompositeView {
 
         ui: {
             search: '.js-search',
-            datepicker: '.js-datepicker',
             loader: '.js-loader'
         },
 
@@ -101,13 +100,6 @@ class PlaylistItems extends CompositeView {
     bindings() {
         return {
             '@ui.search': '_search',
-
-            '@ui.datepicker': {
-                observe: '_searchDate',
-                onSet: (val) => {
-                    return val ? moment(val, 'DD.MM.YYYY') : null;
-                }
-            },
 
             '@ui.loader': {
                 classes: {

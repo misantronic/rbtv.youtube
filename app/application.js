@@ -4,13 +4,11 @@ import $ from 'jquery'
 
 // CSS
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css'
 import '../assets/css/application.scss'
 import '../assets/css/playlists.scss';
 
 // Modules & overrides
 import '../node_modules/moment/locale/de'
-import 'bootstrap-datepicker'
 import './overrides/marionette.stickit'
 import './overrides/marionette.js'
 import './overrides/underscore'
