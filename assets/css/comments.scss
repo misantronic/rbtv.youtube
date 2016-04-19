@@ -16,10 +16,6 @@
 
 			> .profile-picture {
 				margin-right: 10px;
-
-				> .thumb {
-
-				}
 			}
 
 			.content-container {
@@ -110,14 +106,15 @@
 			min-height: 35px;
 			max-height: 75px;
 			resize: none;
+			border-right: none;
 		}
 
 		> .btn-submit {
-			margin-left: 10px;
+
 		}
 
 		> .btn-cancel {
-			margin-left: 10px;
+			border-left: none;
 		}
 	}
 
