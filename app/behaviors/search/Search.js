@@ -27,8 +27,14 @@ class Search extends Behavior {
         // Render view
         const view = new SearchView(options).render();
 
+        this.listenTo(view, 'search', this._onSearch);
+
         // Attach
         $container.html(view.$el);
+    }
+
+    _onSearch() {
+        this.view.trigger('search');
     }
 }
 

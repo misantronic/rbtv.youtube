@@ -1,12 +1,13 @@
 <div class="search-label-container">
 	<label class="search-label">
+		<span class="region-autocomplete-selection"></span>
 		<input type="text" class="form-control search js-search" placeholder="Suchen...">
 		<button class="btn-reset js-reset"><span class="glyphicon glyphicon-remove-circle"></span></button>
 	</label>
 	<div class="region-autocomplete hidden-xs"></div>
 </div>
 <div class="btn-group filter-buttons" role="group">
-	<button type="button" class="btn btn-default js-filter-rbtv">
+	<button type="button" data-filterby="rbtv" class="btn btn-default js-filter-rbtv">
 		<span class="hidden-xs">
 			Rocket Beans TV
 		</span>
@@ -14,7 +15,7 @@
 			RBTV
 		</span>
 	</button>
-	<button type="button" class="btn btn-default js-filter-lp">
+	<button type="button" data-filterby="lp" class="btn btn-default js-filter-lp">
 		<span class="hidden-xs">
 			Let`s Play
 		</span>

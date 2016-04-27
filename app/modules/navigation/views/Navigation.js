@@ -11,7 +11,7 @@ class NavigationItem extends ItemView {
 
         className: 'navigation-item',
 
-        template: require('../templates/navigationItem.ejs'),
+        template: require('../templates/navigation-item.ejs'),
 
         bindings: {
             ':el': {

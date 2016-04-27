@@ -30,6 +30,11 @@ body {
 	}
 }
 
+.label {
+	padding-top: .2em;
+	padding-bottom: .2em;
+}
+
 .app {
 	padding: 0;
 	position: relative;
@@ -87,28 +92,37 @@ body {
 			position: relative;
 
 			> .search-label {
+				display: flex;
 				margin: 0;
 				font-weight: normal;
 				position: relative;
 				width: 100%;
+				padding-left: 40px;
+				border: 1px solid #CCC;
+				border-right: none;
+				height: 34px;
+				align-items: center;
 
 				&:before {
 					content: "\e003";
 					position: absolute;
-					top: 10px;
+					top: 50%;
 					left: 14px;
 					display: inline-block;
 					font-family: 'Glyphicons Halflings';
 					font-style: normal;
 					font-weight: 400;
 					line-height: 1;
+					margin-top: -7px;
 					-webkit-font-smoothing: antialiased;
 					-moz-osx-font-smoothing: grayscale;
 				}
 
 				> .search {
-					padding: 0 0 0 40px;
-					border-right: none;
+					padding: 0;
+					border: none;
+					height: 100%;
+					box-shadow: none;
 
 					&.has-value + .btn-reset {
 						@media (max-width: $screen-xs) {
@@ -139,8 +153,9 @@ body {
 				margin: 0;
 
 				> .item-autocomplete {
-					margin: 0 10px 0 0;
+					margin: 0 5px 0 0;
 					font-size: 12px;
+					color: #FFF;
 
 					&:hover,
 					&.selected {
@@ -151,13 +166,29 @@ body {
 						}
 					}
 
-					> .autocomplete-item-link {
-						color: #FFF;
+					&:focus {
+						outline: none;
+						text-decoration: none;
+					}
+				}
+			}
 
-						&:focus {
-							outline: none;
-							text-decoration: none;
-						}
+			.region-autocomplete-selection .items-autocomplete {
+				position: static;
+				line-height: 0;
+
+				.item-autocomplete {
+					&:after {
+						content: 'x';
+						margin-left: 5px;
+						font-size: smaller;
+						position: relative;
+						top: -1px;
+						color: #24748C;
+					}
+
+					&:hover:after {
+						color: #FFF;
 					}
 				}
 			}

@@ -39,21 +39,6 @@ class Activities extends CompositeView {
             }
         },
 
-        modelEvents: {
-            'change:_filterByRBTV change:_filterByLP change:_search': _.debounce(function () {
-                if (this.model.get('_filterByRBTV')) {
-                    this._currentChannel = Config.channelRBTV;
-                } else if (this.model.get('_filterByLP')) {
-                    this._currentChannel = Config.channelLP;
-                }
-
-                if (!this._search()) {
-                    // Re-init activities
-                    this.renderActivities();
-                }
-            }, 350)
-        },
-
         ui: {
             link: '.js-link',
             loader: '.js-loader',
@@ -103,12 +88,20 @@ class Activities extends CompositeView {
         _currentSearchXHR: null
     })
 
+    modelEvents() {
+        return {
+            'change:_filterByRBTV change:_filterByLP change:_tags': _.debounce(this._updateSearch, 350)
+        }
+    }
+
     set loading(val) {
         this.model.set('_loading', val);
     }
 
     initialize() {
         this._currentChannel = Config.channelRBTV;
+
+        this.listenTo(this, 'search', this._updateSearch);
     }
 
     onRender() {
@@ -147,12 +140,28 @@ class Activities extends CompositeView {
             })
     }
 
+    _updateSearch() {
+        if (this.model.get('_filterByRBTV')) {
+            this._currentChannel = Config.channelRBTV;
+        } else if (this.model.get('_filterByLP')) {
+            this._currentChannel = Config.channelLP;
+        }
+
+        if (!this._search()) {
+            // Re-init activities
+            this.renderActivities();
+        }
+    }
+
     /**
      * @returns {String}
      * @private
      */
     _search() {
         let searchVal = this.model.get('_search');
+        let tagsVal   = this.model.get('_tags');
+
+        searchVal = (searchVal + ' ' + _.map(tagsVal, tagModel => tagModel.get('title')).join(' ')).trim();
 
         if (searchVal) {
             // Init search
@@ -188,26 +197,6 @@ class Activities extends CompositeView {
         return searchVal;
     }
 
-    _initScroll() {
-        this._killScroll();
-
-        $(window).on('scroll.activities', this._onScroll.bind(this));
-    }
-
-    _killScroll() {
-        $(window).off('scroll.activities');
-    }
-
-    _fetchNext() {
-        const nextPageToken = this.collection.nextPageToken;
-
-        if (nextPageToken) {
-            this._killScroll();
-
-            this.renderActivities(nextPageToken);
-        }
-    }
-
     _fetchVideoDetails(collectionData) {
         let videoIds = _.map(collectionData.items, modelData => {
             return modelData.contentDetails.upload.videoId;
@@ -233,6 +222,26 @@ class Activities extends CompositeView {
                         }
                     });
                 });
+        }
+    }
+
+    _initScroll() {
+        this._killScroll();
+
+        $(window).on('scroll.activities', this._onScroll.bind(this));
+    }
+
+    _killScroll() {
+        $(window).off('scroll.activities');
+    }
+
+    _fetchNext() {
+        const nextPageToken = this.collection.nextPageToken;
+
+        if (nextPageToken) {
+            this._killScroll();
+
+            this.renderActivities(nextPageToken);
         }
     }
 

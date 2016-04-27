@@ -13,7 +13,7 @@ class SearchResult extends ItemView {
     @props({
         className: 'item col-xs-12 col-sm-4',
 
-        template: require('../templates/videoItem.ejs'),
+        template: require('../templates/video-item.ejs'),
 
         ui: {
             link: '.js-link',

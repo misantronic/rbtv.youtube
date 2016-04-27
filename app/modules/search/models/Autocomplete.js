@@ -4,8 +4,11 @@ class AutocompleteItem extends Model {
     defaults() {
         return {
             title: null,
-            search: new RegExp(),
-            playlistId: null
+            channel: null,
+            expr: new RegExp(),
+            playlistId: null,
+
+            _selected: false
         }
     }
 }
@@ -21,13 +24,14 @@ class Autocomplete extends Collection {
         this.search();
     }
 
-    search(val) {
+    search(val, exclude = []) {
         if (val) {
             this.reset(
-                _.filter(this._originalModels, model => model.get('expr').test(val))
+                _.filter(
+                    _.difference(this._originalModels, exclude),
+                    model => model.get('expr').test(val)
+                )
             );
-        } else {
-            this.reset();
         }
     }
 }

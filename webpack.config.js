@@ -11,7 +11,7 @@ module.exports = {
 			'backbone.stickit',
 			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
-			'bootstrap',
+			__dirname + '/node_modules/bootstrap/js/tooltip',
 			'fuckadblock'
 		],
 		application: __dirname + '/app/entry'

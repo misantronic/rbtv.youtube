@@ -12,7 +12,7 @@ class PlaylistItem extends ItemView {
     @props({
         className: 'playlist-item js-playlist-item',
 
-        template: require('../templates/playlistItem.ejs'),
+        template: require('../templates/playlist-item.ejs'),
 
         ui: {
             link: '.js-link'
@@ -72,7 +72,7 @@ class PlaylistItems extends CompositeView {
             'link:clicked': '_onClickLink'
         },
 
-        template: require('../templates/playlistItems.ejs')
+        template: require('../templates/playlist-items.ejs')
     })
 
     set videoId(val) {

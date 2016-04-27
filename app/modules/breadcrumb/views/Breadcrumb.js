@@ -10,7 +10,7 @@ class BreadcrumbItem extends ItemView {
 
         className: 'breadcrumb-item',
 
-        template: require('../templates/breadcrumbItem.ejs'),
+        template: require('../templates/breadcrumb-item.ejs'),
 
         ui: {
             link: '.js-link'

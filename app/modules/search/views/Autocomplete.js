@@ -1,17 +1,14 @@
 import {CollectionView, ItemView} from 'backbone.marionette'
+import {props} from '../../decorators'
 
 class AutocompleteItem extends ItemView {
-    get template() {
-        return require('../templates/autocompleteItem.ejs')
-    }
+    @props({
+        template: require('../templates/autocomplete-item.ejs'),
 
-    get tagName() {
-        return 'span'
-    }
+        tagName: 'a',
 
-    get className() {
-        return 'item-autocomplete label label-info'
-    }
+        className: 'item-autocomplete js-item label label-info'
+    })
 
     bindings() {
         return {
@@ -23,11 +20,17 @@ class AutocompleteItem extends ItemView {
         }
     }
 
+    attributes() {
+        return {
+            href: typeof playlistId !== 'undefined' ? '#playlists/playlist/' + this.model.get('playlistId') : ''
+        }
+    }
+
     events() {
         return {
-            'click .js-item': '_onClicked',
-            'focus .js-item': '_onFocus',
-            'blur .js-item': '_onBlur'
+            click: '_onClicked',
+            focus: '_onFocus',
+            blur: '_onBlur'
         }
     }
 
@@ -53,13 +56,11 @@ class AutocompleteItem extends ItemView {
 }
 
 class Autocomplete extends CollectionView {
-    get className() {
-        return 'items-autocomplete'
-    }
+    @props({
+        className: 'items-autocomplete',
 
-    get childView() {
-        return AutocompleteItem
-    }
+        childView: AutocompleteItem
+    })
 
     collectionEvents() {
         return {
