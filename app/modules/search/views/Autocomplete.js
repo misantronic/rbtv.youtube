@@ -72,16 +72,16 @@ class Autocomplete extends CollectionView {
         }
     }
 
-    onShow() {
-        this.hide();
-    }
-
     show() {
         this.$el.show();
+
+        return this;
     }
 
     hide() {
         this.$el.hide();
+
+        return this;
     }
 }
 

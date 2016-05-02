@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import {Behavior} from 'backbone.marionette'
-import SearchView from '../../modules/search/views/Search'
+import SearchFormView from '../../modules/search/views/SearchForm'
 
 class Search extends Behavior {
     onRender() {
@@ -25,7 +25,7 @@ class Search extends Behavior {
         });
 
         // Render view
-        const view = new SearchView(options).render();
+        const view = new SearchFormView(options).render();
 
         this.listenTo(view, 'search', this._onSearch);
 

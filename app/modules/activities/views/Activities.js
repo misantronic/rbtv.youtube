@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import _ from 'underscore'
-import {CompositeView, ItemView} from 'backbone.marionette'
+import {CompositeView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import Config from '../../../Config'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
@@ -158,10 +158,10 @@ class Activities extends CompositeView {
      * @private
      */
     _search() {
-        let searchVal = this.model.get('_search');
-        let tagsVal   = this.model.get('_tags');
+        let searchVal     = this.model.get('_search');
+        let tagCollection = this.model.get('_tags');
 
-        searchVal = (searchVal + ' ' + _.map(tagsVal, tagModel => tagModel.get('title')).join(' ')).trim();
+        searchVal = (searchVal + ' ' + tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim();
 
         if (searchVal) {
             // Init search

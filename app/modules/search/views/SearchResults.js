@@ -1,14 +1,17 @@
 import $ from 'jquery'
 import _ from 'underscore'
-import {CollectionView, ItemView} from 'backbone.marionette'
+import {CollectionView, LayoutView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {Video, Videos} from '../../videos/models/Videos'
 import beans from '../../../data/beans'
 import {props} from '../../decorators'
 import app from '../../../application'
 import {localStorage} from '../../../utils'
+import AutocompleteView from './Autocomplete'
+import AutocompleteCollection from '../models/Autocomplete'
+import channels from '../../../channels'
 
-class SearchResult extends ItemView {
+class SearchResult extends LayoutView {
 
     @props({
         className: 'item col-xs-12 col-sm-4',
@@ -17,8 +20,12 @@ class SearchResult extends ItemView {
 
         ui: {
             link: '.js-link',
-            team: '.js-team',
+            team: '.region-team',
             duration: '.js-duration'
+        },
+
+        regions: {
+            team: '.region-team'
         },
 
         bindings: {
@@ -42,38 +49,20 @@ class SearchResult extends ItemView {
                         });
 
                         // Match names
-                        let names    = _.iintersection(beans, tags);
-                        let maxItems = 4;
-
-                        if (window.innerWidth >= 1200) {
-                            maxItems = 5;
-                        } else if (window.innerWidth >= 992) {
-                            maxItems = 4;
-                        } else if (window.innerWidth >= 768) {
-                            maxItems = 3;
-                        }
+                        let names = _.iintersection(beans, tags);
 
                         if (names.length) {
-                            let htmlStr = '';
-                            for (var i = 0; i < names.length; i++) {
-                                let name = names[i].substr(0, 1).toUpperCase() + names[i].substr(1);
-                                let Name = name.substr(0, 1).toUpperCase() + name.substr(1);
+                            var autocompleteView = new AutocompleteView({
+                                collection: new AutocompleteCollection(
+                                    _.map(names, name => ({
+                                        title: name.substr(0, 1).toUpperCase() + name.substr(1)
+                                    }))
+                                )
+                            });
 
-                                if (i < maxItems) {
-                                    htmlStr += `<span class="label label-info js-name" data-name="${Name}">${Name}</span>`;
-                                }
+                            this.getRegion('team').show(autocompleteView);
 
-                                names[i] = name;
-                            }
-
-                            $el.html(htmlStr);
-
-                            if (names.length > maxItems) {
-                                let additionalNames = names.slice(maxItems, names.length);
-
-                                $el.append(`<span class="label label-default" data-toggle="tooltip" data-placement="top" title="${additionalNames.join(' ')}">+${additionalNames.length}</span>`)
-                                $el.find('[data-toggle="tooltip"]').tooltip();
-                            }
+                            this.listenTo(autocompleteView, 'childview:link:selected', view => channels.app.trigger('tag:selected', view));
                         }
                     }
                 }

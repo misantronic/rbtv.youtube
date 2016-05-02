@@ -1,25 +1,31 @@
 import _ from 'underscore'
 import $ from 'jquery'
-import {Model} from 'backbone'
 import {LayoutView} from 'backbone.marionette'
 import AutocompleteView from './Autocomplete'
 import {Autocomplete as AutocompleteCollection} from '../models/Autocomplete'
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
 import {props} from '../../decorators'
+import channels from '../../../channels'
 
-class Search extends LayoutView {
+class SearchForm extends LayoutView {
+    constructor(options = {}) {
+        if (options.model) {
+            options.model.attributes = _.defaults(options.model.attributes, {
+                _filterByRBTV: true,
+                _filterByLP: false,
+                _search: '',
+                _tags: new AutocompleteCollection()
+            });
+        }
+
+        super(options);
+    }
+
     @props({
-        model: new Model({
-            _filterByRBTV: true,
-            _filterByLP: false,
-            _search: '',
-            _tags: []
-        }),
-
         className: 'layout-search search-container',
 
-        template: require('../templates/search.ejs'),
+        template: require('../templates/search-form.ejs'),
 
         regions: {
             autocomplete: '.region-autocomplete',
@@ -60,44 +66,26 @@ class Search extends LayoutView {
                     'has-value': '_search'
                 }
             }
-        },
-
-        /** @type {AutocompleteView} */
-        _autocompleteView: null
+        }
     })
 
-    modelEvents() {
-        return {
-            'change:_tags': (model, tags) => {
-                let collection = new AutocompleteCollection(
-                    _.map(tags, tagModel => _.omit(tagModel.attributes, '_selected'))
-                );
-
-                const view = new AutocompleteView({ collection });
-
-                view.listenTo(view, 'childview:link:selected', itemView => {
-                    collection.remove(itemView.model);
-
-                    this.model.set('_tags', collection.models);
-                });
-
-                this.getRegion('autocompleteSelection').show(view);
-
-                view.show();
-            },
-
-            'change:_search': (model, val) => {
-                const tags = this.model.get('_tags');
-
-                this._autocompleteView.collection.search(val, tags);
-            }
-        }
-    }
-
     initialize() {
-        const autocompleteEnabled = this.getOption('autocomplete');
+        this._autocompleteEnabled = _.isUndefined(this.getOption('autocomplete')) ? true : this.getOption('autocomplete');
 
-        this._autocompleteEnabled = _.isUndefined(autocompleteEnabled) ? true : autocompleteEnabled;
+        let tagCollection = this.model.get('_tags');
+
+        // Listen to tag-events in search-results/activities
+        this.listenTo(channels.app, 'tag:selected', this._onAutocompleteLinkSelected);
+
+        this.listenTo(tagCollection, 'add remove', tagModel => {
+            const view = new AutocompleteView({ collection: tagCollection });
+
+            view.listenTo(view, 'childview:link:selected', itemView => tagCollection.remove(itemView.model));
+
+            this.getRegion('autocompleteSelection').show(view);
+
+            _.defer(() => this.trigger('search'));
+        });
     }
 
     onRender() {
@@ -120,10 +108,11 @@ class Search extends LayoutView {
         let view       = new AutocompleteView({ collection });
 
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
+        this.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model.get('title')));
 
-        this.getRegion('autocomplete').show(view);
+        this.listenTo(this.model, 'change:_search', (model, val) => collection.search(val, this.model.get('_tags').models));
 
-        this._autocompleteView = view;
+        this.getRegion('autocomplete').show(view.hide());
     }
 
     _onSelectFilterButton(e) {
@@ -172,13 +161,10 @@ class Search extends LayoutView {
             case 8: // BACKSPACE
                 if (this.ui.search.val() !== '') break;
 
-                let tags = this.model.get('_tags');
+                let tagCollection = this.model.get('_tags');
 
-                if (tags) {
-                    tags = tags.slice(0);
-                    tags.pop();
-
-                    this.model.set('_tags', tags);
+                if (tagCollection.length > 0) {
+                    tagCollection.remove(tagCollection.last());
                 }
                 break;
         }
@@ -186,22 +172,23 @@ class Search extends LayoutView {
 
     _onAutocompleteLinkSelected(itemView) {
         let model = itemView.model;
-        let tags  = this.model.get('_tags') || [];
 
-        // Clone array and push new value
-        tags = tags.slice(0);
-        tags.push(model);
+        this.model.get('_tags').add(model);
 
-        this.model.set({
+        let modelAttrs = {
             _filterByRBTV: model.get('channel') === 'rbtv',
             _filterByLP: model.get('channel') === 'lp',
-            _tags: tags,
             _search: ''
-        });
+        };
 
-        this._autocompleteView.collection.remove(model);
+        // Kill filter attributes if none was chosen by tag
+        if (modelAttrs._filterByLP === false && modelAttrs._filterByRBTV === false) {
+            modelAttrs = _.omit(modelAttrs, '_filterByLP', '_filterByRBTV');
+        }
+
+        this.model.set(modelAttrs);
 
         this.ui.search.focus();
     }
 }
-export default Search
+export default SearchForm

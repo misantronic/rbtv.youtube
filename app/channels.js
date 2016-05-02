@@ -11,5 +11,6 @@ breadcrumbChannel.push = function ({ title, route = null, type = null }) {
 };
 
 export default {
+    app: Radio.channel('application'),
     breadcrumb: breadcrumbChannel
 }
