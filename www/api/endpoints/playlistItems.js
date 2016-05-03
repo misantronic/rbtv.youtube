@@ -47,10 +47,10 @@ module.exports = function (req, res) {
                         return item.snippet.title !== 'Private video';
                     });
 
-                    if(playlistId === 'PLsksxTH4pR3I6-7OYZ0GigNnc7KI5S0OK') {
-                        // Special case: Almost Daily -> reverse playlist
-                        output.items.reverse();
-                    }
+                    // if(playlistId === 'PLsksxTH4pR3I6-7OYZ0GigNnc7KI5S0OK') {
+                    //     // Special case: Almost Daily -> reverse playlist
+                    //     output.items.reverse();
+                    // }
 
                     var outputStr = JSON.stringify(output);
 
