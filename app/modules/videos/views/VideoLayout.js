@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import {LayoutView} from 'backbone.marionette'
 import app from '../../../application'
 import {localStorage} from '../../../utils'
@@ -101,9 +102,9 @@ class Video extends LayoutView {
         if (!this._videoPlayer) {
             this._videoPlayer = new VideoPlayerView({ videoId });
 
-            this.listenTo(this._videoPlayer, 'video:ended', this._playNext);
             this.listenTo(this._videoPlayer, 'video:ended', this._setWatched);
-            
+            this.listenTo(this._videoPlayer, 'video:ended', _.debounce(this._playNext, 0));
+
             this.getRegion('videoplayer').show(this._videoPlayer);
         } else {
             this._videoPlayer.videoId = videoId;
