@@ -68,11 +68,6 @@ class PlaylistItems extends Collection {
     }
 
     parse(response) {
-        if(this._playlistId === 'PLsksxTH4pR3I6-7OYZ0GigNnc7KI5S0OK') {
-            // Special case: Almost Daily -> reverse playlist
-            response.items.reverse();
-        }
-
         return response.items;
     }
 
