@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import _ from 'underscore'
 import {CompositeView} from 'backbone.marionette'
-import {Model} from 'backbone'
+import SearchFormModel from '../../search/models/SearchForm'
 import Config from '../../../Config'
 import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from '../../../behaviors/search/Search'
@@ -22,13 +22,6 @@ class Activities extends CompositeView {
 
         template: require('../templates/activities.ejs'),
 
-        model: new Model({
-            _filterByRBTV: true,
-            _filterByLP: false,
-            _loading: false,
-            _search: ''
-        }),
-
         behaviors: {
             BtnToTop: {
                 behaviorClass: BehaviorBtnToTop
@@ -48,20 +41,20 @@ class Activities extends CompositeView {
         bindings: {
             '@ui.loader': {
                 classes: {
-                    show: '_loading'
+                    show: 'loading'
                 }
             },
 
             ':el': {
                 classes: {
-                    loading: '_loading'
+                    loading: 'loading'
                 }
             },
 
             '@ui.btnPlaylist': {
                 classes: {
                     show: {
-                        observe: '_search',
+                        observe: 'search',
                         onGet: function (title) {
                             let autocompleteObj = _.findWhere(shows, { title });
 
@@ -90,12 +83,24 @@ class Activities extends CompositeView {
 
     modelEvents() {
         return {
-            'change:_filterByRBTV change:_filterByLP change:_tags': _.debounce(this._updateSearch, 350)
+            'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350)
         }
     }
 
     set loading(val) {
-        this.model.set('_loading', val);
+        this.model.set('loading', val);
+    }
+
+    isLoading(val) {
+        this.loading = val;
+    }
+
+    constructor(options = {}) {
+        super(
+            _.extend({
+                model: new SearchFormModel()
+            }, options)
+        );
     }
 
     initialize() {
@@ -141,11 +146,14 @@ class Activities extends CompositeView {
     }
 
     _updateSearch() {
-        if (this.model.get('_filterByRBTV')) {
+        if (this.model.get('filterByRBTV')) {
             this._currentChannel = Config.channelRBTV;
-        } else if (this.model.get('_filterByLP')) {
+        } else if (this.model.get('filterByLP')) {
             this._currentChannel = Config.channelLP;
         }
+
+        // Store model-data to localStorage
+        this.model.cache();
 
         if (!this._search()) {
             // Re-init activities
@@ -158,15 +166,14 @@ class Activities extends CompositeView {
      * @private
      */
     _search() {
-        let searchVal     = this.model.get('_search');
-        let tagCollection = this.model.get('_tags');
+        let searchVal     = this.model.get('search');
+        let tagCollection = this.model.get('tags');
 
         searchVal = (searchVal + ' ' + tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim();
 
         if (searchVal) {
-            // Init search
-
             this._killScroll();
+
             if (this.$childViewContainer) {
                 this.$childViewContainer.hide();
             }
@@ -174,13 +181,8 @@ class Activities extends CompositeView {
             /** @type {SearchResults} */
             let view = searchController.prepareSearch(searchVal);
 
-            this.listenTo(view, 'loading:start', () => {
-                this.loading = true;
-            });
-
-            this.listenTo(view, 'loading:stop', () => {
-                this.loading = false;
-            });
+            this.listenTo(view, 'loading:start', () => this.isLoading(true));
+            this.listenTo(view, 'loading:stop', () => this.isLoading(false));
 
             // Attach html
             this.$('.js-search-items').html(view.render().$el);

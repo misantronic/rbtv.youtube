@@ -59,8 +59,9 @@ class Controller extends Marionette.Object {
     /**
      * @param {'like'|'dislike'|'none'} rating
      * @param videoId
+     * @param {Boolean} retryOnFail
      */
-    addRating(rating, videoId) {
+    addRating(rating, videoId, retryOnFail = true) {
         return this._authorize()
             .then(() =>
                 $.post(endpoints.rate, {
@@ -68,6 +69,13 @@ class Controller extends Marionette.Object {
                         rating: rating
                     })
                     .then(() => rating)
+                    .fail(result => {
+                        if (retryOnFail && result.status === 401) {
+                            this._reAuthorize().then(() => {
+                                this.addRating(rating, videoId, false);
+                            })
+                        }
+                    })
             );
     }
 

@@ -42,6 +42,11 @@ module.exports = function (req, res) {
             } else {
                 // Fetch all playlists
                 performRequest(null, function () {
+                    // Filter out private items
+                    output.items = _.filter(output.items, function(item) {
+                        return item.snippet.title !== 'Private video';
+                    });
+
                     var outputStr = JSON.stringify(output);
 
                     // Done

@@ -23,7 +23,7 @@ class BtnToTop extends Behavior {
         // Bind stickit
         this.view.addBinding(null, '.js-btn-to-top', {
             classes: {
-                show: '_showBtnToTop'
+                show: 'showBtnToTop'
             }
         });
 
@@ -43,7 +43,7 @@ class BtnToTop extends Behavior {
     _onScroll() {
         const y = window.scrollY;
 
-        this.view.model.set('_showBtnToTop', y >= window.innerHeight)
+        this.view.model.set('showBtnToTop', y >= window.innerHeight)
     }
 }
 

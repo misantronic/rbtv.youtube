@@ -9,8 +9,8 @@ import app from '../../../application'
 class VideoPlayer extends LayoutView {
     constructor(options = {}) {
         options.model = new Model({
-            _loading: false,
-            _autoplay: false
+            loading: false,
+            autoplay: false
         });
 
         super(options);
@@ -36,7 +36,7 @@ class VideoPlayer extends LayoutView {
     }
 
     set autoplay(val) {
-        this.model.set('_autoplay', val)
+        this.model.set('autoplay', val)
     }
 
     initialize() {
@@ -82,13 +82,19 @@ class VideoPlayer extends LayoutView {
         $container.replaceWith($videoContainer);
 
         var setupPlayer = function() {
+            const videoInfo   = localStorage.get(`${videoId}.info`) || {};
+            const currentTime = videoInfo.currentTime || 0;
+
             this._YTPlayer = new YT.Player(containerId, {
                 width: '100%',
                 height: '100%',
                 videoId,
                 events: {
-                    'onReady': this._onReady,
-                    'onStateChange': this._onStateChange
+                    onReady: this._onReady,
+                    onStateChange: this._onStateChange
+                },
+                playerVars: {
+                    start: currentTime
                 }
             });
 
@@ -111,13 +117,13 @@ class VideoPlayer extends LayoutView {
         const videoInfo   = localStorage.get(`${videoId}.info`) || {};
         const currentTime = videoInfo.currentTime || 0;
 
-        if (this.model.get('_autoplay')) {
+        if (this.model.get('autoplay')) {
             this._YTPlayer.loadVideoById(videoId, currentTime);
         } else {
             this._YTPlayer.cueVideoById(videoId, currentTime);
         }
 
-        this.model.set('_autoplay', false);
+        this.model.set('autoplay', false);
     }
 
     _onPlaying() {

@@ -522,7 +522,7 @@ body {
 				> .team {
 					min-height: 20px;
 					margin: auto 0 0 0;
-					overflow: hidden;
+
 
 					> .label {
 						margin-right: 5px;
@@ -568,11 +568,6 @@ body {
 	background: #FFFFFF;
 	border: 1px solid #CCC;
 	height: 395px;
-
-	@media (max-width: $screen-sm) {
-		height: 0;
-		border-bottom: 0;
-	}
 
 	> .playlist-item {
 		display: flex;

@@ -138,13 +138,13 @@ class SearchResults extends CollectionView {
         emptyView: SearchItemEmpty,
 
         model: new Model({
-            _loading: false
+            loading: false
         })
     })
 
     modelEvents() {
         return {
-            'change:_loading': (model, val) => {
+            'change:loading': (model, val) => {
                 if (val) {
                     this.trigger('loading:start');
                 } else {
@@ -155,7 +155,7 @@ class SearchResults extends CollectionView {
     }
 
     set loading(val) {
-        this.model.set('_loading', val);
+        this.model.set('loading', val);
     }
 
     onDestroy() {

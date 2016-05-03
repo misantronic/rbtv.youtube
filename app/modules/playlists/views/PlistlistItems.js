@@ -53,10 +53,9 @@ class PlaylistItems extends CompositeView {
         className: 'layout-playlists-items',
 
         model: new Model({
-            _search: '',
-            _searchDate: null,
+            search: '',
             videoId: null,
-            _loading: false
+            loading: false
         }),
 
         ui: {
@@ -84,7 +83,7 @@ class PlaylistItems extends CompositeView {
     }
 
     set loading(val) {
-        this.model.set('_loading', val);
+        this.model.set('loading', val);
     }
 
     /**
@@ -92,18 +91,17 @@ class PlaylistItems extends CompositeView {
      */
     get playlistFilter() {
         return {
-            search: this.model.get('_search'),
-            date: this.model.get('_searchDate')
+            search: this.model.get('search')
         }
     }
 
     bindings() {
         return {
-            '@ui.search': '_search',
+            '@ui.search': 'search',
 
             '@ui.loader': {
                 classes: {
-                    show: '_loading'
+                    show: 'loading'
                 }
             }
         }
@@ -116,7 +114,7 @@ class PlaylistItems extends CompositeView {
                 this._routeToVideo();
             },
 
-            'change:_search change:_searchDate': _.debounce(() => {
+            'change:search': _.debounce(() => {
                 this._searchCollection();
                 this._highlightVideo();
             }, 500)
@@ -128,8 +126,6 @@ class PlaylistItems extends CompositeView {
     }
 
     onRender() {
-        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
-
         this.stickit();
 
         scrollTo(0, window.innerWidth > 768 ? 300 : 0);
@@ -180,19 +176,6 @@ class PlaylistItems extends CompositeView {
             { replace: replaceState }
         );
     }
-
-    _onResize() {
-        var playlistItems = this.$('.js-playlist-items');
-
-        if (window.innerWidth <= 768) {
-            var top = playlistItems.offset().top;
-
-            playlistItems.css('height', window.innerHeight - top);
-        } else {
-            playlistItems.removeAttr('style');
-        }
-    }
-
 }
 
 export {PlaylistItem, PlaylistItems}

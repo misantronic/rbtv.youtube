@@ -26,7 +26,7 @@ class Playlist extends ItemView {
         bindings: {
             ':el': {
                 classes: {
-                    loading: '_loadingItems'
+                    loading: 'loadingItems'
                 }
             }
         }
@@ -37,7 +37,7 @@ class Playlist extends ItemView {
     }
 
     _onClickLink() {
-        this.model.set('_loadingItems', true)
+        this.model.set('loadingItems', true)
     }
 }
 
@@ -94,48 +94,48 @@ class Playlists extends CompositeView {
         bindings: {
             '@ui.loader': {
                 classes: {
-                    show: '_loading'
+                    show: 'loading'
                 }
             },
 
             ':el': {
                 classes: {
-                    loading: '_loading'
+                    loading: 'loading'
                 }
             }
         },
 
         model: new Model({
-            _search: '',
-            _filterByRBTV: true,
-            _filterByLP: true,
-            _loading: false,
-            _loadingItems: false
+            search: '',
+            filterByRBTV: true,
+            filterByLP: true,
+            loading: false,
+            loadingItems: false
         })
     })
 
     /** @returns {{search: String, rbtv: String|null, lp: String|null}} */
     get channelFilter() {
         return {
-            search: this.model.get('_search'),
-            rbtv: this.model.get('_filterByRBTV'),
-            lp: this.model.get('_filterByLP')
+            search: this.model.get('search'),
+            rbtv: this.model.get('filterByRBTV'),
+            lp: this.model.get('filterByLP')
         }
     }
 
     set loading(val) {
-        this.model.set('_loading', val);
+        this.model.set('loading', val);
     }
 
     modelEvents() {
         return {
-            'change:_search': _.debounce(() => {
+            'change:search': _.debounce(() => {
                 this.renderCollection(
                     _.extend(this.channelFilter, { resetResults: true })
                 );
             }, 700),
 
-            'change:_filterByRBTV change:_filterByLP': () => {
+            'change:filterByRBTV change:filterByLP': () => {
                 this.renderCollection(
                     _.extend(this.channelFilter, { resetResults: true })
                 );
@@ -161,9 +161,9 @@ class Playlists extends CompositeView {
 
             if (filter) {
                 this.model.set({
-                    _search: filter.search,
-                    _filterByRBTV: filter.rbtv,
-                    _filterByLP: filter.lp
+                    search: filter.search,
+                    filterByRBTV: filter.rbtv,
+                    filterByLP: filter.lp
                 });
             }
         }

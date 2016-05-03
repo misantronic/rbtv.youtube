@@ -9,19 +9,6 @@ import {props} from '../../decorators'
 import channels from '../../../channels'
 
 class SearchForm extends LayoutView {
-    constructor(options = {}) {
-        if (options.model) {
-            options.model.attributes = _.defaults(options.model.attributes, {
-                _filterByRBTV: true,
-                _filterByLP: false,
-                _search: '',
-                _tags: new AutocompleteCollection()
-            });
-        }
-
-        super(options);
-    }
-
     @props({
         className: 'layout-search search-container',
 
@@ -50,20 +37,20 @@ class SearchForm extends LayoutView {
         bindings: {
             '@ui.btnFilterRBTV': {
                 classes: {
-                    active: '_filterByRBTV'
+                    active: 'filterByRBTV'
                 }
             },
 
             '@ui.btnFilterLP': {
                 classes: {
-                    active: '_filterByLP'
+                    active: 'filterByLP'
                 }
             },
 
             '@ui.search': {
-                observe: '_search',
+                observe: 'search',
                 classes: {
-                    'has-value': '_search'
+                    'has-value': 'search'
                 }
             }
         }
@@ -72,7 +59,7 @@ class SearchForm extends LayoutView {
     initialize() {
         this._autocompleteEnabled = _.isUndefined(this.getOption('autocomplete')) ? true : this.getOption('autocomplete');
 
-        let tagCollection = this.model.get('_tags');
+        let tagCollection = this.model.get('tags');
 
         // Listen to tag-events in search-results/activities
         this.listenTo(channels.app, 'tag:selected', this._onAutocompleteLinkSelected);
@@ -110,7 +97,7 @@ class SearchForm extends LayoutView {
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
         this.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model.get('title')));
 
-        this.listenTo(this.model, 'change:_search', (model, val) => collection.search(val, this.model.get('_tags').models));
+        this.listenTo(this.model, 'change:search', (model, val) => collection.search(val, this.model.get('tags').models));
 
         this.getRegion('autocomplete').show(view.hide());
     }
@@ -121,11 +108,11 @@ class SearchForm extends LayoutView {
         let modelAttr, otherModelAttr;
 
         if (filterBy === 'rbtv') {
-            modelAttr      = '_filterByRBTV';
-            otherModelAttr = '_filterByLP';
+            modelAttr      = 'filterByRBTV';
+            otherModelAttr = 'filterByLP';
         } else if (filterBy === 'lp') {
-            modelAttr      = '_filterByLP';
-            otherModelAttr = '_filterByRBTV';
+            modelAttr      = 'filterByLP';
+            otherModelAttr = 'filterByRBTV';
         }
 
         const filterCheckboxBehavior = this.getOption('filterCheckboxBehavior');
@@ -145,7 +132,7 @@ class SearchForm extends LayoutView {
     }
 
     _onReset() {
-        this.model.set('_search', '');
+        this.model.set('search', '');
     }
 
     _onSearchKeyup(e) {
@@ -161,7 +148,7 @@ class SearchForm extends LayoutView {
             case 8: // BACKSPACE
                 if (this.ui.search.val() !== '') break;
 
-                let tagCollection = this.model.get('_tags');
+                let tagCollection = this.model.get('tags');
 
                 if (tagCollection.length > 0) {
                     tagCollection.remove(tagCollection.last());
@@ -173,17 +160,17 @@ class SearchForm extends LayoutView {
     _onAutocompleteLinkSelected(itemView) {
         let model = itemView.model;
 
-        this.model.get('_tags').add(model);
+        this.model.get('tags').add(model);
 
         let modelAttrs = {
-            _filterByRBTV: model.get('channel') === 'rbtv',
-            _filterByLP: model.get('channel') === 'lp',
-            _search: ''
+            filterByRBTV: model.get('channel') === 'rbtv',
+            filterByLP: model.get('channel') === 'lp',
+            search: ''
         };
 
         // Kill filter attributes if none was chosen by tag
-        if (modelAttrs._filterByLP === false && modelAttrs._filterByRBTV === false) {
-            modelAttrs = _.omit(modelAttrs, '_filterByLP', '_filterByRBTV');
+        if (modelAttrs.filterByLP === false && modelAttrs.filterByRBTV === false) {
+            modelAttrs = _.omit(modelAttrs, 'filterByLP', 'filterByRBTV');
         }
 
         this.model.set(modelAttrs);

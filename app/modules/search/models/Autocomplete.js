@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import {Model, Collection} from 'backbone'
 import {props} from '../../decorators'
 
@@ -38,6 +39,12 @@ class Autocomplete extends Collection {
                 model => model.get('expr').test(val)
             )
         );
+    }
+
+    toJSON() {
+        return _.map(this.models, autocompleteModel => {
+            return autocompleteModel.id;
+        });
     }
 }
 
