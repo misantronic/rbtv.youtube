@@ -61,22 +61,15 @@ class SearchForm extends LayoutView {
 
         let tagCollection = this.model.get('tags');
 
+        this.listenTo(tagCollection, 'add remove', this._updateTags);
+
         // Listen to tag-events in search-results/activities
         this.listenTo(channels.app, 'tag:selected', this._onAutocompleteLinkSelected);
-
-        this.listenTo(tagCollection, 'add remove', tagModel => {
-            const view = new AutocompleteView({ collection: tagCollection });
-
-            view.listenTo(view, 'childview:link:selected', itemView => tagCollection.remove(itemView.model));
-
-            this.getRegion('autocompleteSelection').show(view);
-
-            _.defer(() => this.trigger('search'));
-        });
     }
 
     onRender() {
         this._initAutocomplete();
+        this._updateTags();
 
         this.stickit();
     }
@@ -100,6 +93,20 @@ class SearchForm extends LayoutView {
         this.listenTo(this.model, 'change:search', (model, val) => collection.search(val, this.model.get('tags').models));
 
         this.getRegion('autocomplete').show(view.hide());
+    }
+
+    _updateTags() {
+        let collection = this.model.get('tags');
+
+        const view = new AutocompleteView({ collection });
+
+        view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
+
+        this.getRegion('autocompleteSelection').show(view);
+
+        if(collection.length) {
+            _.defer(() => this.trigger('search'));
+        }
     }
 
     _onSelectFilterButton(e) {

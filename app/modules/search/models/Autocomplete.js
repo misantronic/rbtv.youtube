@@ -17,6 +17,15 @@ class AutocompleteItem extends Model {
             _selected: false
         }
     }
+
+    initialize() {
+        let expr = this.get('expr');
+
+        // Parse expression
+        if (_.isString(expr)) {
+            this.set('expr', new RegExp(expr));
+        }
+    }
 }
 
 class Autocomplete extends Collection {
@@ -39,12 +48,6 @@ class Autocomplete extends Collection {
                 model => model.get('expr').test(val)
             )
         );
-    }
-
-    toJSON() {
-        return _.map(this.models, autocompleteModel => {
-            return autocompleteModel.id;
-        });
     }
 }
 

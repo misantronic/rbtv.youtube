@@ -77,6 +77,9 @@ class Activities extends CompositeView {
             }
         },
 
+        /** @type {SearchFormModel} */
+        model: null,
+
         /** @type {xhr} */
         _currentSearchXHR: null
     })
@@ -96,11 +99,9 @@ class Activities extends CompositeView {
     }
 
     constructor(options = {}) {
-        super(
-            _.extend({
-                model: new SearchFormModel()
-            }, options)
-        );
+        const model = new SearchFormModel({ cacheKey: 'activities.filter' });
+
+        super(_.extend({ model }, options));
     }
 
     initialize() {
