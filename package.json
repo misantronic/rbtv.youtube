@@ -47,9 +47,8 @@
     "promise": "^7.1.1",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
-    "tether": "^1.2.0",
     "underscore": "^1.8.3",
-    "webpack": "^1.12.14"
+    "webpack": "^1.13.0"
   },
   "repository": {
     "type": "git",
