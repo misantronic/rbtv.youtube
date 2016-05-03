@@ -11,10 +11,15 @@ module.exports = function (req, res) {
     var videoIds  = req.query.id.split(',');
     var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache === 'true';
 
+    console.time('Mongo: getVideos()');
+
     getVideos(videoIds, fromCache)
         .then(videoResult => {
             var itemsFromDB   = videoResult.itemsFromDB;
             var itemsNotFound = videoResult.itemsNotFound;
+
+            console.timeEnd('Mongo: getVideos()');
+            console.log('-> Found:', itemsFromDB.length +', Not found:', itemsNotFound.length);
 
             var config = new fetch.Config({
                 endpoint: 'videos',
