@@ -97,14 +97,14 @@ class SearchForm extends LayoutView {
 
     _updateTags() {
         let collection = this.model.get('tags');
-        
+
         const view = new AutocompleteView({ collection });
 
         view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
         this.getRegion('autocompleteSelection').show(view);
 
-        _.defer(() => this.trigger('search'));
+        _.defer(this.triggerSearch.bind(this));
     }
 
     _onSelectFilterButton(e) {
@@ -138,12 +138,13 @@ class SearchForm extends LayoutView {
 
     _onReset() {
         this.model.set('search', '');
+        this.triggerSearch();
     }
 
     _onSearchKeyup(e) {
         switch (e.keyCode) {
             case 13: // ENTER
-                this.trigger('search');
+                this.triggerSearch();
                 break;
         }
     }
@@ -181,6 +182,10 @@ class SearchForm extends LayoutView {
         this.model.set(modelAttrs);
 
         this.ui.search.focus();
+    }
+
+    triggerSearch() {
+        this.trigger('search');
     }
 }
 export default SearchForm
