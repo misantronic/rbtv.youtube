@@ -104,8 +104,7 @@ class SearchForm extends LayoutView {
             view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
             this.getRegion('autocompleteSelection').show(view);
-
-
+            
             _.defer(() => this.trigger('search'));
         }
     }
