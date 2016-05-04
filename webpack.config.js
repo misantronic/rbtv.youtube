@@ -22,6 +22,12 @@ module.exports = {
 		filename: '[name].js'
 	},
 
+	resolve: {
+        alias: {
+            backbone: 'backbone/backbone.js'
+        }
+    },
+
 	module: {
 		loaders: [
 			{ test: /\.ejs$/, loader: 'ejs-loader' },
