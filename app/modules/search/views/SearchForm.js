@@ -97,16 +97,14 @@ class SearchForm extends LayoutView {
 
     _updateTags() {
         let collection = this.model.get('tags');
+        
+        const view = new AutocompleteView({ collection });
 
-        if (collection.length) {
-            const view = new AutocompleteView({ collection });
+        view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
-            view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
+        this.getRegion('autocompleteSelection').show(view);
 
-            this.getRegion('autocompleteSelection').show(view);
-            
-            _.defer(() => this.trigger('search'));
-        }
+        _.defer(() => this.trigger('search'));
     }
 
     _onSelectFilterButton(e) {
