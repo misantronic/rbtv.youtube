@@ -12,6 +12,8 @@ module.exports = {
 			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
 			__dirname + '/node_modules/bootstrap/js/tooltip',
+			__dirname + '/node_modules/bootstrap/js/collapse',
+			__dirname + '/node_modules/bootstrap/js/transition',
 			'fuckadblock'
 		],
 		application: __dirname + '/app/entry'
