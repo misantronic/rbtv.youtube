@@ -5,7 +5,6 @@ import {Model} from 'backbone'
 import {Video, Videos} from '../../videos/models/Videos'
 import beans from '../../../data/beans'
 import {props} from '../../decorators'
-import app from '../../../application'
 import {localStorage} from '../../../utils'
 import AutocompleteView from './Autocomplete'
 import AutocompleteCollection from '../models/Autocomplete'
@@ -85,7 +84,7 @@ class SearchResult extends LayoutView {
     })
 
     initialize() {
-        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
+        this.listenTo(channels.app, 'resize', _.debounce(this._onResize, 100));
 
         this._initWatched();
     }

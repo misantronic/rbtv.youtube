@@ -4,7 +4,7 @@ import {LayoutView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {props} from '../../decorators'
 import {localStorage} from '../../../utils'
-import app from '../../../application'
+import channels from '../../../channels'
 
 class VideoPlayer extends LayoutView {
     constructor(options = {}) {
@@ -42,7 +42,8 @@ class VideoPlayer extends LayoutView {
     initialize() {
         _.bindAll(this, '_onReady', '_onStateChange');
 
-        this.listenTo(app.channel, 'resize', _.debounce(this._onResize, 100));
+        this.listenTo(channels.app, 'resize', _.debounce(this._onResize, 100));
+        this.listenTo(channels.comments, 'video:seek', this._onSeek);
     }
 
     onRender() {
@@ -81,7 +82,7 @@ class VideoPlayer extends LayoutView {
 
         $container.replaceWith($videoContainer);
 
-        var setupPlayer = function() {
+        var setupPlayer = function () {
             const videoInfo   = localStorage.get(`${videoId}.info`) || {};
             const currentTime = videoInfo.currentTime || 0;
 
@@ -164,6 +165,19 @@ class VideoPlayer extends LayoutView {
             case YT.PlayerState.ENDED:
                 this._onEnded();
                 break;
+        }
+    }
+
+    /**
+     * @param {Number} seconds
+     * @private
+     */
+    _onSeek(seconds) {
+        if (this._YTPlayer) {
+            // Focus video player
+            $('html, body').animate({
+                scrollTop: this.$el.offset().top
+            }, 500, () => this._YTPlayer.seekTo(seconds, true));
         }
     }
 

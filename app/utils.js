@@ -59,3 +59,20 @@ export const sessionStorage = {
         storageUpdate('sessionStorage', key, properties);
     }
 };
+
+export const timeUtil = {
+    /**
+     *
+     * @param {String} position
+     * @returns {Number}
+     */
+    videoPositionToSeconds: function (position) {
+        return position.replace(/(?:(\d+)h){0,1}(?:(\d+)m){0,1}(?:(\d+)s){0,1}/, (str, hour, min, sec) => {
+            hour = parseInt(hour) || 0;
+            min  = parseInt(min) || 0;
+            sec  = parseInt(sec) || 0;
+
+            return hour * 60 * 60 + min * 60 + sec;
+        });
+    }
+};

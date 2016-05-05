@@ -6,6 +6,8 @@ import {props} from '../../decorators'
 import ThumbsView from '../../thumbs/views/Thumbs'
 import {Comments as CommentsCollection, Comment as CommentModel} from '../models/Comments'
 import CommentForm from './CommentForm'
+import {timeUtil} from '../../../utils'
+import channels from '../../../channels'
 
 class CommentItem extends LayoutView {
     @props({
@@ -15,7 +17,7 @@ class CommentItem extends LayoutView {
 
         regions: {
             replies: '.region-replies',
-            replyForm: '.region-reply'
+            replyForm: '.region-form'
         },
 
         ui: {
@@ -26,7 +28,8 @@ class CommentItem extends LayoutView {
 
         events: {
             'click @ui.showReplies': '_onToggleReplies',
-            'click @ui.btnReply': '_onClickReply'
+            'click @ui.btnReply': '_onClickReply',
+            'click .body a': '_onClickLink'
         }
     })
 
@@ -69,29 +72,44 @@ class CommentItem extends LayoutView {
     }
 
     _onToggleReplies(e) {
-        if (this.model.get('_repliesVisible')) {
-            this.getRegion('replies').empty();
+        const repliesVisible = this.model.get('_repliesVisible');
 
-            this.model.set('_repliesVisible', false);
+        if (repliesVisible) {
+            this._hideReplies();
         } else {
-            let collection = new CommentsCollection();
-            let view       = new CommentsItems({ collection, disableScrollEvent: true });
-
-            this.getRegion('replies').show(view);
-
-            this.model.set('loading', true);
-
-            collection.parentId = this.model.id;
-            collection.fetch().then(() => {
-                this.model.set('loading', false);
-            });
-
-            this.model.set('_repliesVisible', true);
-
-            this._repliesCollection = collection;
+            this._showReplies();
         }
 
         e.preventDefault();
+    }
+
+    _hideReplies() {
+        if (!this.model.get('_repliesVisible')) return;
+
+        this.getRegion('replies').empty();
+
+        this.model.set('_repliesVisible', false);
+    }
+
+    _showReplies() {
+        if (this.model.get('_repliesVisible')) return;
+
+        let collection = new CommentsCollection();
+        let view       = new CommentsItems({ collection, disableScrollEvent: true });
+
+        this.getRegion('replies').show(view);
+
+        this.model.set('loading', true);
+
+        collection.parentId = this.model.id;
+
+        let promise = collection.fetch().then(() => this.model.set('loading', false));
+
+        this.model.set('_repliesVisible', true);
+
+        this._repliesCollection = collection;
+
+        return promise;
     }
 
     _onClickReply() {
@@ -110,8 +128,24 @@ class CommentItem extends LayoutView {
         this.getRegion('replyForm').show(formView);
     }
 
+    _onClickLink(e) {
+        let href = $(e.currentTarget).attr('href');
+
+        if (href.indexOf('t=') !== -1) {
+            var timeStr = href.split('t=')[1];
+
+            if (timeStr) {
+                const seconds = timeUtil.videoPositionToSeconds(timeStr);
+
+                channels.comments.trigger('video:seek', seconds);
+            }
+        }
+
+        e.preventDefault();
+    }
+
     _onCommentAdded(commentModel) {
-        if(this._repliesCollection) {
+        if (this._repliesCollection) {
             this._repliesCollection.add(commentModel);
         }
     }
@@ -187,13 +221,13 @@ class CommentsItems extends CollectionView {
 
         this._killScroll();
 
-        $(window).on('scroll.comments.'+ this.cid, this._onScroll.bind(this));
+        $(window).on('scroll.comments.' + this.cid, this._onScroll.bind(this));
     }
 
     _killScroll() {
         if (this.getOption('disableScrollEvent')) return;
 
-        $(window).off('scroll.comments.'+ this.cid);
+        $(window).off('scroll.comments.' + this.cid);
     }
 
     /**

@@ -1,6 +1,7 @@
 import {Application} from 'backbone.marionette'
 import {history} from 'backbone'
 import $ from 'jquery'
+import channels from './channels'
 
 // CSS
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -68,7 +69,7 @@ class App extends Application {
         this.navigate();
 
         $(window).on('resize.app', e => {
-            this.channel.trigger('resize', e);
+            channels.app.trigger('resize', e);
         });
     }
 
