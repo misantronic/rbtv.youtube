@@ -36,7 +36,7 @@ class CommentItem extends LayoutView {
     bindings() {
         return {
             '@ui.showReplies': {
-                observe: '_repliesVisible',
+                observe: 'repliesVisible',
                 update: function ($el, val) {
                     if (val) {
                         $el.text('Verberge Antworten');
@@ -72,7 +72,7 @@ class CommentItem extends LayoutView {
     }
 
     _onToggleReplies(e) {
-        const repliesVisible = this.model.get('_repliesVisible');
+        const repliesVisible = this.model.get('repliesVisible');
 
         if (repliesVisible) {
             this._hideReplies();
@@ -84,32 +84,27 @@ class CommentItem extends LayoutView {
     }
 
     _hideReplies() {
-        if (!this.model.get('_repliesVisible')) return;
-
         this.getRegion('replies').empty();
 
-        this.model.set('_repliesVisible', false);
+        this.model.set('repliesVisible', false);
     }
 
     _showReplies() {
-        if (this.model.get('_repliesVisible')) return;
-
         let collection = new CommentsCollection();
         let view       = new CommentsItems({ collection, disableScrollEvent: true });
 
         this.getRegion('replies').show(view);
 
-        this.model.set('loading', true);
+        this.model.set({
+            loading: true,
+            repliesVisible: true
+        });
 
         collection.parentId = this.model.id;
 
-        let promise = collection.fetch().then(() => this.model.set('loading', false));
-
-        this.model.set('_repliesVisible', true);
-
         this._repliesCollection = collection;
 
-        return promise;
+        return collection.fetch().then(() => this.model.set('loading', false));
     }
 
     _onClickReply() {
@@ -145,9 +140,9 @@ class CommentItem extends LayoutView {
     }
 
     _onCommentAdded(commentModel) {
-        if (this._repliesCollection) {
+        this._showReplies().then(() => {
             this._repliesCollection.add(commentModel);
-        }
+        });
     }
 
     _onCommentCanceled() {
