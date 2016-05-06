@@ -1,7 +1,7 @@
 import _ from 'underscore'
 import {LayoutView} from 'backbone.marionette'
 import app from '../../../application'
-import {localStorage} from '../../../utils'
+import {localStorage, stringUtil} from '../../../utils'
 import {props} from '../../decorators'
 import RelatedResults from '../../search/views/RelatedResults'
 import RelatedResultsCollection from '../../search/models/RelatedResults'
@@ -79,7 +79,7 @@ class Video extends LayoutView {
             'change:statistics': (model, statistics) => {
                 let views = statistics.viewCount;
 
-                this.ui.views.text(views);
+                this.ui.views.text(stringUtil.formatNumber(views));
             },
 
             'change:description': (model, description) => {

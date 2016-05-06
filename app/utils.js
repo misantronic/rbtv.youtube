@@ -76,3 +76,9 @@ export const timeUtil = {
         });
     }
 };
+
+export const stringUtil = {
+    formatNumber: function (number) {
+        return parseInt(number).toLocaleString('de-DE');
+    }
+};
