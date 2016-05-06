@@ -78,11 +78,7 @@ class SearchForm extends LayoutView {
         if (!this._autocompleteEnabled) return;
 
         // Merge beans and shows
-        const items = _.map(beans, bean => ({
-            title: bean,
-            expr: new RegExp('^' + bean.substr(0, 2), 'i'),
-            channel: 'rbtv'
-        })).concat(shows);
+        const items = beans.concat(shows);
 
         let collection = new AutocompleteCollection(items);
         let view       = new AutocompleteView({ collection });

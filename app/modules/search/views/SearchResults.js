@@ -48,7 +48,7 @@ class SearchResult extends LayoutView {
                         });
 
                         // Match names
-                        let names = _.iintersection(beans, tags);
+                        let names = _.iintersection(_.map(beans, bean => bean.title), tags);
 
                         if (names.length) {
                             var autocompleteView = new AutocompleteView({
