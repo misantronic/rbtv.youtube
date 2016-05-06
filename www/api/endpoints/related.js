@@ -5,7 +5,7 @@ var cache = require('../cache');
 module.exports = function (req, res) {
     var query = {
         part: 'snippet',
-        maxResults: 20,
+        maxResults: 6,
         type: 'video',
         order: 'relevance',
         regionCode: 'DE',
