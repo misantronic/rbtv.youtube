@@ -10,6 +10,7 @@ class Radio extends Behavior {
                 }
 
                 this.view.listenTo(channel, event, handler);
+                console.log(this.view, channel, event, handler);
             });
         });
     }
