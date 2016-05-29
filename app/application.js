@@ -1,4 +1,4 @@
-import {Application} from 'backbone.marionette'
+import {Application, Behaviors} from 'backbone.marionette'
 import {history} from 'backbone'
 import $ from 'jquery'
 import channels from './channels'
@@ -13,6 +13,11 @@ import '../node_modules/moment/locale/de'
 import './overrides/marionette.stickit'
 import './overrides/marionette.js'
 import './overrides/underscore'
+
+// Behaviors
+import BehaviorBtnToTop from './behaviors/btnToTop/BtnToTop'
+import BehaviorRadio from './behaviors/radio/Radio'
+import BehaviorSearch from './behaviors/search/Search'
 
 // Controller
 import playlistsController from './modules/playlists/controller'
@@ -42,6 +47,14 @@ class App extends Application {
     }
 
     initialize() {
+        Behaviors.behaviorsLookup = function() {
+            return {
+                Search: BehaviorSearch,
+                BtnToTop: BehaviorBtnToTop,
+                Radio: BehaviorRadio
+            };
+        };
+
         this.listenTo(this, 'start', this._onStart);
     }
 

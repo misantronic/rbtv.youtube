@@ -2,14 +2,22 @@ import * as Marionette from 'backbone.marionette'
 import _ from 'underscore'
 import {Collection} from 'backbone'
 import BreadcrumbView from './views/Breadcrumb'
-import channels from '../../channels'
+import {props} from '../decorators'
 
 class BreadcrumbController extends Marionette.Object {
+    @props({
+        behaviors: {
+            Radio: {
+                breadcrumb: {
+                    replace: '_onReplace',
+                    push: '_onPush'
+                }
+            }
+        }
+    })
+
     init(region) {
         this._region = region;
-
-        this.listenTo(channels.breadcrumb, 'replace', this._onReplace);
-        this.listenTo(channels.breadcrumb, 'push', this._onPush);
     }
 
     _initColletion() {

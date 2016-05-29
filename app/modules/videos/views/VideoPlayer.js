@@ -22,7 +22,20 @@ class VideoPlayer extends LayoutView {
     @props({
         className: 'video-container',
 
-        template: require('../templates/video-player.ejs')
+        template: require('../templates/video-player.ejs'),
+
+        behaviors: function () {
+            return {
+                Radio: {
+                    app: {
+                        resize: _.debounce(this._onResize, 100)
+                    },
+                    comments: {
+                        'video:seek': '_onSeek'
+                    }
+                }
+            }
+        }
     })
 
     modelEvents() {
@@ -41,9 +54,6 @@ class VideoPlayer extends LayoutView {
 
     initialize() {
         _.bindAll(this, '_onReady', '_onStateChange');
-
-        this.listenTo(channels.app, 'resize', _.debounce(this._onResize, 100));
-        this.listenTo(channels.comments, 'video:seek', this._onSeek);
     }
 
     onRender() {

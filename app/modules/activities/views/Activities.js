@@ -3,8 +3,6 @@ import _ from 'underscore'
 import {CompositeView} from 'backbone.marionette'
 import SearchFormModel from '../../search/models/SearchForm'
 import Config from '../../../Config'
-import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
-import BehaviorSearch from '../../../behaviors/search/Search'
 import searchController from '../../search/controller'
 import shows from '../../../data/shows';
 import VideoCollection from '../../videos/models/Videos'
@@ -23,11 +21,8 @@ class Activities extends CompositeView {
         template: require('../templates/activities.ejs'),
 
         behaviors: {
-            BtnToTop: {
-                behaviorClass: BehaviorBtnToTop
-            },
+            BtnToTop: {},
             Search: {
-                behaviorClass: BehaviorSearch,
                 container: '.js-search-container'
             }
         },

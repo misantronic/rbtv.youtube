@@ -6,7 +6,6 @@ import {Autocomplete as AutocompleteCollection} from '../models/Autocomplete'
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
 import {props} from '../../decorators'
-import channels from '../../../channels'
 
 class SearchForm extends LayoutView {
     @props({
@@ -53,6 +52,16 @@ class SearchForm extends LayoutView {
                     'has-value': 'search'
                 }
             }
+        },
+
+        behaviors: function () {
+            return {
+                Radio: {
+                    app: {
+                        'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
+                    }
+                }
+            }
         }
     })
 
@@ -62,9 +71,6 @@ class SearchForm extends LayoutView {
         let tagCollection = this.model.get('tags');
 
         this.listenTo(tagCollection, 'add remove', this._updateTags);
-
-        // Listen to tag-events in search-results/activities
-        this.listenTo(channels.app, 'tag:selected', this._onAutocompleteLinkSelected);
     }
 
     onRender() {

@@ -8,7 +8,6 @@ import RelatedResultsCollection from '../../search/models/RelatedResults'
 import PlaylistItems from '../../playlists/views/PlistlistItems'
 import commentsController from '../../comments/controller'
 import PlaylistItemsCollection from '../../playlists/models/PlaylistItems'
-import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
 import ThumbsView from '../../thumbs/views/Thumbs'
 import VideoPlayerView from './VideoPlayer'
 
@@ -34,9 +33,7 @@ class Video extends LayoutView {
         },
 
         behaviors: {
-            BtnToTop: {
-                behaviorClass: BehaviorBtnToTop
-            }
+            BtnToTop: {}
         }
     })
 

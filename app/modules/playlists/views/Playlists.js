@@ -1,11 +1,9 @@
-import _ from 'underscore';
-import $ from 'jquery';
-import {CompositeView, ItemView} from 'backbone.marionette';
-import {Model} from 'backbone';
-import {localStorage} from '../../../utils';
-import app from '../../../application';
-import BehaviorBtnToTop from '../../../behaviors/btnToTop/BtnToTop'
-import BehaviorSearch from '../../../behaviors/search/Search'
+import _ from 'underscore'
+import $ from 'jquery'
+import {CompositeView, ItemView} from 'backbone.marionette'
+import {Model} from 'backbone'
+import {localStorage} from '../../../utils'
+import app from '../../../application'
 import {props} from '../../decorators'
 
 class Playlist extends ItemView {
@@ -71,11 +69,8 @@ class Playlists extends CompositeView {
         childViewContainer: '.js-playlists',
 
         behaviors: {
-            BtnToTop: {
-                behaviorClass: BehaviorBtnToTop
-            },
+            BtnToTop: {},
             Search: {
-                behaviorClass: BehaviorSearch,
                 container: '.js-search-container',
                 filterCheckboxBehavior: true,
                 autocomplete: false

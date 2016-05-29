@@ -80,12 +80,20 @@ class SearchResult extends LayoutView {
                     'watched': '_watched'
                 }
             }
+        },
+
+        behaviors: function () {
+            return {
+                Radio: {
+                    app: {
+                        resize: _.debounce(this._onResize, 100)
+                    }
+                }
+            }
         }
     })
 
     initialize() {
-        this.listenTo(channels.app, 'resize', _.debounce(this._onResize, 100));
-
         this._initWatched();
     }
 
