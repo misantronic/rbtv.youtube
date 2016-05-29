@@ -7,6 +7,10 @@ class Radio extends Behavior {
         _.each(this.options, (events, channelStr) => {
             const channel = channels[channelStr];
 
+            if (!channel) {
+                throw new Error(channelStr + ' does not exist.');
+            }
+
             _.each(events, (handler, event) => {
                 if (_.isString(handler)) {
                     handler = this.view[handler];
