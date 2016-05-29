@@ -1,18 +1,12 @@
 import * as Marionette from 'backbone.marionette';
 import {history} from 'backbone'
 import Config from '../../Config'
-import {props} from '../decorators'
+import channels from '../../channels'
 
 class Controller extends Marionette.Object {
-    @props({
-        behaviors: {
-            Radio: {
-                breadcrumb: {
-                    replace: '_onRoute'
-                }
-            }
-        }
-    })
+    initialize() {
+        this.listenTo(channels.breadcrumb, 'replace', this._onRoute);
+    }
 
     _onRoute() {
         const route = history.getFragment().split('/')[0];
