@@ -54,13 +54,10 @@ class SearchForm extends LayoutView {
             }
         },
 
-        behaviors: function () {
-            return {
-                Radio: {
-                    app: {
-                        'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
-                    }
-                }
+
+        Radio: {
+            app: {
+                'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
             }
         }
     })
@@ -87,7 +84,7 @@ class SearchForm extends LayoutView {
         const items = beans.concat(shows);
 
         let collection = new AutocompleteCollection(items);
-        let view       = new AutocompleteView({ collection });
+        let view = new AutocompleteView({collection});
 
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
         this.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model.get('title')));
@@ -100,7 +97,7 @@ class SearchForm extends LayoutView {
     _updateTags() {
         let collection = this.model.get('tags');
 
-        const view = new AutocompleteView({ collection });
+        const view = new AutocompleteView({collection});
 
         view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
@@ -110,15 +107,15 @@ class SearchForm extends LayoutView {
     }
 
     _onSelectFilterButton(e) {
-        const $button  = $(e.currentTarget);
+        const $button = $(e.currentTarget);
         const filterBy = $button.data('filterby');
         let modelAttr, otherModelAttr;
 
         if (filterBy === 'rbtv') {
-            modelAttr      = 'filterByRBTV';
+            modelAttr = 'filterByRBTV';
             otherModelAttr = 'filterByLP';
         } else if (filterBy === 'lp') {
-            modelAttr      = 'filterByLP';
+            modelAttr = 'filterByLP';
             otherModelAttr = 'filterByRBTV';
         }
 

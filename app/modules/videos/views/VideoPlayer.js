@@ -16,7 +16,7 @@ class VideoPlayer extends LayoutView {
         super(options);
 
         this._YTPlayerInterval = 0;
-        this._YTPlayer         = null;
+        this._YTPlayer = null;
     }
 
     @props({
@@ -24,15 +24,13 @@ class VideoPlayer extends LayoutView {
 
         template: require('../templates/video-player.ejs'),
 
-        behaviors: function () {
+        Radio: function () {
             return {
-                Radio: {
-                    app: {
-                        resize: _.debounce(this._onResize, 100)
-                    },
-                    comments: {
-                        'video:seek': '_onSeek'
-                    }
+                app: {
+                    resize: _.debounce(this._onResize, 100)
+                },
+                comments: {
+                    'video:seek': '_onSeek'
                 }
             }
         }
@@ -81,9 +79,9 @@ class VideoPlayer extends LayoutView {
 
         if (!videoId) return;
 
-        let containerId     = 'yt-video-container';
-        let $container      = this.$('#' + containerId);
-        let height          = $container.css('height', 'auto').height();
+        let containerId = 'yt-video-container';
+        let $container = this.$('#' + containerId);
+        let height = $container.css('height', 'auto').height();
         let $videoContainer = $('<div id="' + containerId + '"></div>');
 
         if (height) {
@@ -93,7 +91,7 @@ class VideoPlayer extends LayoutView {
         $container.replaceWith($videoContainer);
 
         var setupPlayer = function () {
-            const videoInfo   = localStorage.get(`${videoId}.info`) || {};
+            const videoInfo = localStorage.get(`${videoId}.info`) || {};
             const currentTime = videoInfo.currentTime || 0;
 
             this._YTPlayer = new YT.Player(containerId, {
@@ -125,7 +123,7 @@ class VideoPlayer extends LayoutView {
         if (!videoId) return;
 
         // currentTime
-        const videoInfo   = localStorage.get(`${videoId}.info`) || {};
+        const videoInfo = localStorage.get(`${videoId}.info`) || {};
         const currentTime = videoInfo.currentTime || 0;
 
         if (this.model.get('autoplay')) {
@@ -146,7 +144,7 @@ class VideoPlayer extends LayoutView {
         const updateTime = () => {
             const currentTime = Math.round(this._YTPlayer.getCurrentTime());
 
-            localStorage.update(`${videoId}.info`, { currentTime });
+            localStorage.update(`${videoId}.info`, {currentTime});
         };
 
         updateTime();
@@ -196,15 +194,15 @@ class VideoPlayer extends LayoutView {
     }
 
     _setSize() {
-        let width  = this.$el.css('width', '100%').width();
+        let width = this.$el.css('width', '100%').width();
         let height = width * 0.51;
 
         if (window.innerWidth <= 768) {
-            width  = '100%';
+            width = '100%';
             height = window.innerWidth * 0.51;
         }
 
-        this.$el.css({ width, height });
+        this.$el.css({width, height});
     }
 }
 

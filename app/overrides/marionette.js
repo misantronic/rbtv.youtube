@@ -1,8 +1,14 @@
 import _ from 'underscore';
 import {CollectionView, CompositeView} from 'backbone.marionette'
+import {View} from 'backbone'
+import {radioMixin} from './radio'
 
-let _insertAfterFn1 = CollectionView.prototype._insertAfter;
-let _insertAfterFn2 = CompositeView.prototype._insertAfter;
+/**
+ * Animated CollectionView inserts
+ */
+
+const _insertAfterFn1 = CollectionView.prototype._insertAfter;
+const _insertAfterFn2 = CompositeView.prototype._insertAfter;
 
 function _insertAfter(method, childView) {
     // Ensure delay
@@ -25,7 +31,7 @@ function _insertAfter(method, childView) {
     this._animateDelay = Math.min(1200, this._animateDelay + 100);
 
     // FadeIn
-    childView.$el.delay(this._animateDelay).animate({ opacity: 1 }, 150);
+    childView.$el.delay(this._animateDelay).animate({opacity: 1}, 150);
 }
 
 _.extend(CollectionView.prototype, {
@@ -39,3 +45,42 @@ _.extend(CompositeView.prototype, {
         _insertAfter.call(this, _insertAfterFn2, childView);
     }
 });
+
+/**
+ * RADIO
+ */
+
+const Marionette = require('backbone.marionette');
+
+// Get Marionette.Object prototype
+const MarionetteObject = Marionette.Object;
+const MarionetteObjectPrototype = MarionetteObject.prototype;
+
+// GEt Marionette.View prototype
+const MarionetteViewPrototype = Marionette.View.prototype;
+const MarionetteViewPrototypeConstructor = MarionetteViewPrototype.constructor;
+
+/**
+ * RADIO - Marionette.View
+ */
+
+MarionetteViewPrototype.constructor = function() {
+    MarionetteViewPrototypeConstructor.apply(this, arguments);
+
+    radioMixin.call(this);
+};
+
+Marionette.View = View.extend(MarionetteViewPrototype);
+
+/**
+ * RADIO - Marionette.Object
+ */
+
+Marionette.Object = function () {
+    MarionetteObject.apply(this, arguments);
+
+    radioMixin.call(this);
+};
+
+Marionette.Object.extend = Marionette.extend;
+Marionette.Object.prototype = MarionetteObjectPrototype;

@@ -82,12 +82,10 @@ class SearchResult extends LayoutView {
             }
         },
 
-        behaviors: function () {
+        Radio: function () {
             return {
-                Radio: {
-                    app: {
-                        resize: _.debounce(this._onResize, 100)
-                    }
+                app: {
+                    resize: _.debounce(this._onResize, 100)
                 }
             }
         }
@@ -113,7 +111,7 @@ class SearchResult extends LayoutView {
 
     _initTooltip() {
         this.$('[data-toggle="tooltip"]').tooltip({
-            delay: { show: 250, hide: 100 }
+            delay: {show: 250, hide: 100}
         });
     }
 
@@ -229,8 +227,8 @@ class SearchResults extends CollectionView {
                 .fetch()
                 .done(() => {
                     this.collection.each(searchModel => {
-                        let id         = searchModel.get('videoId');
-                        let videoModel = videos.findWhere({ id });
+                        let id = searchModel.get('videoId');
+                        let videoModel = videos.findWhere({id});
 
                         if (videoModel) {
                             // Set tags on activitiy-model
@@ -246,7 +244,7 @@ class SearchResults extends CollectionView {
 
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 800;
-        const y    = window.scrollY;
+        const y = window.scrollY;
 
         if (y >= maxY) {
             this._fetchNext();

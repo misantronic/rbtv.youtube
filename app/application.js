@@ -11,12 +11,11 @@ import '../assets/css/playlists.scss';
 // Modules & overrides
 import '../node_modules/moment/locale/de'
 import './overrides/marionette.stickit'
-import './overrides/marionette.js'
+import './overrides/marionette'
 import './overrides/underscore'
 
 // Behaviors
 import BehaviorBtnToTop from './behaviors/btnToTop/BtnToTop'
-import BehaviorRadio from './behaviors/radio/Radio'
 import BehaviorSearch from './behaviors/search/Search'
 
 // Controller
@@ -50,8 +49,7 @@ class App extends Application {
         Behaviors.behaviorsLookup = function() {
             return {
                 Search: BehaviorSearch,
-                BtnToTop: BehaviorBtnToTop,
-                Radio: BehaviorRadio
+                BtnToTop: BehaviorBtnToTop
             };
         };
 
