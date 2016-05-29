@@ -14,29 +14,6 @@
 .playlist-items-form {
 	position: relative;
 
-	.datepicker-label {
-		margin: 0;
-		font-weight: normal;
-		display: inline;
-		cursor: pointer;
-
-		> .datepicker {
-			position: absolute;
-			top: 5px;
-			right: 1px;
-			width: 110px;
-			border: none;
-			color: #BBB;
-		}
-
-		> .glyphicon-calendar {
-			position: absolute;
-			top: 11px;
-			right: 11px;
-			color: #BBB;
-		}
-	}
-
 	.search {
 		border-bottom: none;
 		padding-right: 115px;
