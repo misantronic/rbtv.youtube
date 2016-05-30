@@ -30,10 +30,16 @@ export default [
         playlistId: 'PLsksxTH4pR3Ly_8f3RTw6MU_2Eg-2xMNA'
     },
     {
-        title: 'Game Plus',
+        title: 'Game+',
         expr: /^game/i,
         channel: 'rbtv',
         playlistId: 'PLsksxTH4pR3K4w-99v-cmC5NSqPbAGjTz'
+    },
+    {
+        title: 'Game+ Daily',
+        expr: /^game/i,
+        channel: 'rbtv',
+        playlistId: 'PLsksxTH4pR3Lrl-mQWnuIiffBAg1fCxwz'
     },
     {
         title: 'Pen & Paper: T.E.A.R.S.',
