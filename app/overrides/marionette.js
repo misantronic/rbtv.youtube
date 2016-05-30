@@ -22,7 +22,7 @@ function _insertAfter(method, childView) {
     }, 1300);
 
     // Initial hide element
-    childView.$el.css('opacity', 0);
+    childView.$el.addClass('collection-item is-transparent');
 
     // Call original _insertAfter method
     method.call(this, childView);
@@ -31,7 +31,9 @@ function _insertAfter(method, childView) {
     this._animateDelay = Math.min(1200, this._animateDelay + 100);
 
     // FadeIn
-    childView.$el.delay(this._animateDelay).animate({opacity: 1}, 150);
+    _.delay(() => {
+        childView.$el.removeClass('is-transparent');
+    }, this._animateDelay);
 }
 
 _.extend(CollectionView.prototype, {

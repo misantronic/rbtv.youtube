@@ -17,12 +17,12 @@ class SearchForm extends Model {
     }
 
     initialize() {
-        const modelAttrs = this._parseCache();
+        const modelAttrs = this.getCache();
 
         this.set(modelAttrs);
     }
 
-    cache() {
+    setCache() {
         const cacheKey = this.get('cacheKey');
 
         if (!cacheKey) return;
@@ -41,7 +41,11 @@ class SearchForm extends Model {
         localStorage.update(cacheKey, data);
     }
 
-    _parseCache() {
+    /**
+     *
+     * @returns {{filterByLP: Boolean, filterByRBTV: Boolean, search: String, tags: Autocomplete}}
+     */
+    getCache() {
         let attrs = {};
 
         const cacheKey = this.get('cacheKey');

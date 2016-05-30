@@ -100,7 +100,14 @@ class Activities extends CompositeView {
     }
 
     initialize() {
-        this._currentChannel = Config.channelRBTV;
+        var cacheObj = this.model.getCache();
+
+        if(_.isEmpty(cacheObj)) {
+            this._currentChannel = Config.channelRBTV;
+        } else {
+            if(cacheObj.filterByLP) this._currentChannel = Config.channelLP;
+            if(cacheObj.filterByRBTV) this._currentChannel = Config.channelRBTV;
+        }
 
         this.listenTo(this, 'search', this._updateSearch);
     }
@@ -149,7 +156,7 @@ class Activities extends CompositeView {
         }
 
         // Store model-data to localStorage
-        this.model.cache();
+        this.model.setCache();
 
         if (!this._search()) {
             // Re-init activities
