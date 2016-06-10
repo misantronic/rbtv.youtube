@@ -1,6 +1,6 @@
 import * as Marionette from 'backbone.marionette'
 import ActivitiesColection from './models/Activities'
-import ActivitiesView from './views/Activities'
+import ActivitiesLayout from './views/ActivitiesLayout'
 import channels from '../../channels'
 
 import '../../../assets/css/activities.scss';
@@ -11,9 +11,9 @@ class ActivitiesController extends Marionette.Object {
     }
 
     initOverview() {
-        let view = new ActivitiesView({ collection: new ActivitiesColection() });
-
-        this._region.show(view);
+        this._region.show(
+            new ActivitiesLayout({ collection: new ActivitiesColection() })
+        );
 
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Übersicht', route: 'overview' });

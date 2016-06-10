@@ -1,22 +1,22 @@
 import $ from 'jquery'
 import _ from 'underscore'
-import {CompositeView} from 'backbone.marionette'
+import {LayoutView} from 'backbone.marionette'
+import ActivitiesList from './ActivitiesList'
 import SearchFormModel from '../../search/models/SearchForm'
 import Config from '../../../Config'
 import searchController from '../../search/controller'
 import shows from '../../../data/shows';
 import VideoCollection from '../../videos/models/Videos'
-import {SearchResult} from '../../search/views/SearchResults'
 import {props} from '../../decorators'
 
-class Activities extends CompositeView {
+class Activities extends LayoutView {
 
     @props({
         className: 'layout-activities',
 
-        childView: SearchResult,
-
-        childViewContainer: '.js-activities',
+        regions: {
+            items: '.js-items'
+        },
 
         template: require('../templates/activities.ejs'),
 
@@ -121,10 +121,6 @@ class Activities extends CompositeView {
     }
 
     renderActivities(nextPageToken = null) {
-        if (this.$childViewContainer) {
-            this.$childViewContainer.show();
-        }
-
         this.loading = true;
 
         if (!nextPageToken) {
@@ -135,6 +131,12 @@ class Activities extends CompositeView {
         if (this._search()) {
             return;
         }
+
+        this.getRegion('items').show(
+            new ActivitiesList({
+                collection: this.collection
+            })
+        );
 
         this.collection
             .setNextPageToken(nextPageToken)
@@ -177,10 +179,6 @@ class Activities extends CompositeView {
         if (searchVal) {
             this._killScroll();
 
-            if (this.$childViewContainer) {
-                this.$childViewContainer.hide();
-            }
-
             /** @type {SearchResults} */
             let view = searchController.prepareSearch(searchVal);
 
@@ -188,15 +186,13 @@ class Activities extends CompositeView {
             this.listenTo(view, 'loading:stop', () => this.isLoading(false));
 
             // Attach html
-            this.$('.js-search-items').html(view.render().$el);
+            this.getRegion('items').show(view);
 
             if (this.$currentSearchXHR) {
                 this.$currentSearchXHR.abort();
             }
 
             this.$currentSearchXHR = view.renderSearchResults(this._currentChannel);
-        } else {
-            this.$('.js-search-items').empty();
         }
 
         return searchVal;
