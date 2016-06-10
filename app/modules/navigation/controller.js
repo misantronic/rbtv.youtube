@@ -5,7 +5,7 @@ import {props} from '../decorators'
 
 class Controller extends Marionette.Object {
     @props({
-        Radio: {
+        channels: {
             breadcrumb: {
                 replace: '_onRoute'
             }

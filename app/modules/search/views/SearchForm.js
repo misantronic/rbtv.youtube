@@ -55,7 +55,7 @@ class SearchForm extends LayoutView {
         },
 
 
-        Radio: {
+        channels: {
             app: {
                 'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
             }
@@ -70,7 +70,7 @@ class SearchForm extends LayoutView {
         this.listenTo(tagCollection, 'add remove', this._updateTags);
     }
 
-    onRender() {
+    onBeforeShow() {
         this._initAutocomplete();
         this._updateTags();
 

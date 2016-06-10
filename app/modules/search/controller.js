@@ -13,7 +13,7 @@ class SearchController extends Marionette.Object {
         if (!this._searchResultsView) {
             const collection = new SearchResults();
 
-            this._searchResultsView = new SearchResultsView({ collection: collection });
+            this._searchResultsView = new SearchResultsView({ collection });
         }
 
         this._searchResultsView.collection

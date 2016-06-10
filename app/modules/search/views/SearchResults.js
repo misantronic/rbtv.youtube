@@ -82,7 +82,7 @@ class SearchResult extends LayoutView {
             }
         },
 
-        Radio: function () {
+        channels: function () {
             return {
                 app: {
                     resize: _.debounce(this._onResize, 100)

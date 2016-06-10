@@ -24,7 +24,7 @@ class VideoPlayer extends LayoutView {
 
         template: require('../templates/video-player.ejs'),
 
-        Radio: function () {
+        channels: function () {
             return {
                 app: {
                     resize: _.debounce(this._onResize, 100)

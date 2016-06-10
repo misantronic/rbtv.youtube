@@ -48,7 +48,7 @@ class CommentsLayout extends LayoutView {
         this.model.set('statistics', this.getOption('statistics'));
     }
 
-    onRender() {
+    onBeforeShow() {
         const channelId  = this.getOption('channelId');
         const videoId    = this.getOption('videoId');
         const collection = this.getOption('collection');
