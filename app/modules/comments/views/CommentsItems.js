@@ -17,7 +17,8 @@ class CommentItem extends LayoutView {
 
         regions: {
             replies: '.region-replies',
-            replyForm: '.region-form'
+            replyForm: '.region-form',
+            thumbs: '.region-thumbs'
         },
 
         ui: {
@@ -57,16 +58,16 @@ class CommentItem extends LayoutView {
     onRender() {
         const snippet = this.model.get('snippet');
 
-        let thumbsView = new ThumbsView({
-            resourceId: this.model.id,
-            hideLikes: false,
-            hideDislikes: true,
-            likeCount: snippet.likeCount,
-            checkOwnRating: false,
-            canRate: false
-        }).render();
-
-        this.$('.region-thumbs').html(thumbsView.$el);
+        this.getRegion('thumbs').show(
+            new ThumbsView({
+                resourceId: this.model.id,
+                hideLikes: false,
+                hideDislikes: true,
+                likeCount: snippet.likeCount,
+                checkOwnRating: false,
+                canRate: false
+            })
+        );
 
         this.stickit();
     }
@@ -133,6 +134,8 @@ class CommentItem extends LayoutView {
                 const seconds = timeUtil.videoPositionToSeconds(timeStr);
 
                 channels.comments.trigger('video:seek', seconds);
+
+                // this.triggerChannel('comments', 'video:seek', seconds);
             }
         }
 
