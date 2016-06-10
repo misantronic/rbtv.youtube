@@ -178,8 +178,6 @@ class SearchResults extends CollectionView {
             this.collection.setChannelId(channelId);
         }
 
-        this._animateDelay = 0;
-
         let xhr = this.collection
             .setNextPageToken(nextPageToken)
             .fetch();
