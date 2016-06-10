@@ -11,29 +11,26 @@ const _insertAfterFn1 = CollectionView.prototype._insertAfter;
 const _insertAfterFn2 = CompositeView.prototype._insertAfter;
 
 function _insertAfter(method, childView) {
-    // Ensure delay
-    if (_.isUndefined(this._insertAfterAnimateDelay)) {
-        this._insertAfterAnimateDelay = 16;
+    if (!this._insertAfterAnimateCnt) {
+        // Reset counter
+        _.delay(() => {
+            this._insertAfterAnimateCnt = null
+        }, 800);
     }
 
-    // Reset delay
-    _.delay(() => {
-        this._insertAfterAnimateDelay = 16;
-    }, 1400);
+    // Ensure animation-counter
+    this._insertAfterAnimateCnt = this._insertAfterAnimateCnt || 1;
 
     // Initial hide element
-    childView.$el.addClass('collection-item is-transparent');
+    childView.$el.addClass('collection-item is-transparent collection-item-t-' + this._insertAfterAnimateCnt);
 
     // Call original _insertAfter method
     method.call(this, childView);
 
-    // Calculate delay
-    this._insertAfterAnimateDelay = Math.min(1200, this._insertAfterAnimateDelay + 200);
-
     // FadeIn
-    _.delay(() => {
-        childView.$el.removeClass('is-transparent');
-    }, this._insertAfterAnimateDelay);
+    _.delay(() => childView.$el.removeClass('is-transparent'), 0);
+
+    this._insertAfterAnimateCnt++;
 }
 
 _.extend(CollectionView.prototype, {
@@ -66,7 +63,7 @@ const MarionetteViewPrototypeConstructor = MarionetteViewPrototype.constructor;
  * RADIO - Marionette.View
  */
 
-MarionetteViewPrototype.constructor = function() {
+MarionetteViewPrototype.constructor = function () {
     MarionetteViewPrototypeConstructor.apply(this, arguments);
 
     radioMixin.call(this);
@@ -92,7 +89,7 @@ Marionette.Object.prototype = MarionetteObjectPrototype;
  */
 
 function attachElContent(html) {
-    if(_.isString(html)) {
+    if (_.isString(html)) {
         this.$el[0].innerHTML = html;
     } else {
         this.$el.html(html);

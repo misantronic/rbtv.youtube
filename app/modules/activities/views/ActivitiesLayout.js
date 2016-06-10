@@ -121,11 +121,13 @@ class Activities extends LayoutView {
             return;
         }
 
-        this.getRegion('items').show(
-            new ActivitiesList({
-                collection: this.collection
-            })
-        );
+        if (!nextPageToken) {
+            this.getRegion('items').show(
+                new ActivitiesList({
+                    collection: this.collection
+                })
+            );
+        }
 
         this.collection
             .setNextPageToken(nextPageToken)

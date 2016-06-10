@@ -290,7 +290,32 @@ body {
 	.collection-item {
 		opacity: 1;
 
-		transition: opacity 150ms linear;
+		transition: opacity 150ms linear 700ms;
+
+		&.collection-item-t-1 {
+			transition-delay: 16ms;
+		}
+		&.collection-item-t-2 {
+			transition-delay: 100ms;
+		}
+		&.collection-item-t-3 {
+			transition-delay: 200ms;
+		}
+		&.collection-item-t-4 {
+			transition-delay: 300ms;
+		}
+		&.collection-item-t-5 {
+			transition-delay: 400ms;
+		}
+		&.collection-item-t-6 {
+			transition-delay: 500ms;
+		}
+		&.collection-item-t-7 {
+			transition-delay: 600ms;
+		}
+		&.collection-item-t-8 {
+			transition-delay: 700ms;
+		}
 
 		&.is-transparent {
 			opacity: 0;
