@@ -15,7 +15,7 @@ class Activities extends LayoutView {
         className: 'layout-activities',
 
         regions: {
-            items: '.js-items'
+            items: '.js-region-items'
         },
 
         template: require('../templates/activities.ejs'),
@@ -24,28 +24,16 @@ class Activities extends LayoutView {
             BtnToTop: {},
             Search: {
                 container: '.js-search-container'
-            }
+            },
+            Loader: {}
         },
 
         ui: {
             link: '.js-link',
-            loader: '.js-loader',
             btnPlaylist: '.js-playlist'
         },
 
         bindings: {
-            '@ui.loader': {
-                classes: {
-                    show: 'loading'
-                }
-            },
-
-            ':el': {
-                classes: {
-                    loading: 'loading'
-                }
-            },
-
             '@ui.btnPlaylist': {
                 classes: {
                     show: {
@@ -81,16 +69,17 @@ class Activities extends LayoutView {
 
     modelEvents() {
         return {
-            'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350)
+            'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350),
+            'change:loading': '_onLoading'
         }
     }
 
-    set loading(val) {
-        this.model.set('loading', val);
+    startLoading() {
+        this.model.set('loading', true);
     }
 
-    isLoading(val) {
-        this.loading = val;
+    stopLoading() {
+        this.model.set('loading', false);
     }
 
     constructor(options = {}) {
@@ -120,8 +109,8 @@ class Activities extends LayoutView {
         this._killScroll();
     }
 
-    renderActivities(nextPageToken = null) {
-        this.loading = true;
+    _render(nextPageToken = null) {
+        this.startLoading();
 
         if (!nextPageToken) {
             this.collection.reset();
@@ -143,8 +132,7 @@ class Activities extends LayoutView {
             .setChannelId(this._currentChannel)
             .fetch()
             .done(data => {
-                this.loading = false;
-
+                this.stopLoading();
                 this._initScroll();
                 this._fetchVideoDetails(data);
             })
@@ -162,7 +150,7 @@ class Activities extends LayoutView {
 
         if (!this._search()) {
             // Re-init activities
-            this.renderActivities();
+            this._render();
         }
     }
 
@@ -182,8 +170,8 @@ class Activities extends LayoutView {
             /** @type {SearchResults} */
             let view = searchController.prepareSearch(searchVal);
 
-            this.listenTo(view, 'loading:start', () => this.isLoading(true));
-            this.listenTo(view, 'loading:stop', () => this.isLoading(false));
+            this.listenTo(view, 'loading:start', this.startLoading);
+            this.listenTo(view, 'loading:stop', this.stopLoading);
 
             // Attach html
             this.getRegion('items').show(view);
@@ -242,7 +230,7 @@ class Activities extends LayoutView {
         if (nextPageToken) {
             this._killScroll();
 
-            this.renderActivities(nextPageToken);
+            this._render(nextPageToken);
         }
     }
 
@@ -252,6 +240,16 @@ class Activities extends LayoutView {
 
         if (y >= maxY) {
             this._fetchNext();
+        }
+    }
+
+    _onLoading() {
+        var isLoading = this.model.get('loading');
+
+        if(isLoading) {
+            this.triggerMethod('show:loader');
+        } else {
+            this.triggerMethod('hide:loader');
         }
     }
 }

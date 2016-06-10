@@ -17,6 +17,7 @@ import './overrides/underscore'
 // Behaviors
 import BehaviorBtnToTop from './behaviors/btnToTop/BtnToTop'
 import BehaviorSearch from './behaviors/search/Search'
+import BehaviorLoader from './behaviors/loader/Loader'
 
 // Controller
 import playlistsController from './modules/playlists/controller'
@@ -49,7 +50,8 @@ class App extends Application {
         Behaviors.behaviorsLookup = function() {
             return {
                 Search: BehaviorSearch,
-                BtnToTop: BehaviorBtnToTop
+                BtnToTop: BehaviorBtnToTop,
+                Loader: BehaviorLoader
             };
         };
 

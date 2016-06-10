@@ -221,7 +221,7 @@ body {
 		}
 	}
 
-	.loading .item-empty {
+	.is-loading .item-empty {
 		display: none !important;
 	}
 
@@ -476,7 +476,7 @@ body {
 			background: rgba(255, 255, 255, 0.85);
 		}
 
-		&.loading .loader {
+		&.is-loading .loader {
 			display: block;
 		}
 
