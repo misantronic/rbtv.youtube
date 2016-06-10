@@ -1,11 +1,11 @@
 import channels from '../channels'
 
 function radioMixin() {
-    var channels = _.result(this, 'channels');
+    var radioChannels = _.result(this, 'channels');
 
-    if (channels) {
+    if (radioChannels) {
         // Iterate over options which are the individual channels
-        _.each(channels, (events, channelStr) => {
+        _.each(radioChannels, (events, channelStr) => {
             // Get the actual Radio.channel-object
             const channel = channels[channelStr];
 
