@@ -1,6 +1,6 @@
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
-import PlaylistsView from './views/Playlists'
+import PlaylistsLayout from './views/PlaylistsLayout'
 import VideoView from '../videos/views/VideoLayout'
 import {Video as VideoModel} from '../videos/models/Videos'
 import channels from '../../channels'
@@ -18,7 +18,7 @@ class PlaylistsController extends Marionette.Object {
         this._currentPlaylistId = null;
 
         const collection = new PlaylistsCollection();
-        const view       = new PlaylistsView({ collection });
+        const view       = new PlaylistsLayout({ collection });
 
         this._region.show(view);
 

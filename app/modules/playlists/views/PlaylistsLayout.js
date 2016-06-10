@@ -1,72 +1,22 @@
 import _ from 'underscore'
 import $ from 'jquery'
-import {CompositeView, ItemView} from 'backbone.marionette'
+import {LayoutView} from 'backbone.marionette'
 import {Model} from 'backbone'
+import PlaylistsList from './PlaylistsList'
 import {localStorage} from '../../../utils'
 import app from '../../../application'
 import {props} from '../../decorators'
 
-class Playlist extends ItemView {
-
-    @props({
-        ui: {
-            link: '.js-link'
-        },
-
-        events: {
-            'click @ui.link': '_onClickLink'
-        },
-
-        className: 'item col-xs-12 col-sm-3',
-
-        template: require('../templates/playlist.ejs'),
-
-        bindings: {
-            ':el': {
-                classes: {
-                    'is-loading': 'loadingItems'
-                }
-            }
-        }
-    })
-
-    onRender() {
-        this.stickit();
-    }
-
-    _onClickLink() {
-        this.model.set('loadingItems', true)
-    }
-}
-
-class PlaylistEmpty extends ItemView {
-    @props({
-        className: 'item item-empty text-center col-xs-12',
-
-        template: require('../../search/templates/empty.ejs')
-    })
-
-    initialize() {
-
-    }
-}
-
-class Playlists extends CompositeView {
-
-    constructor(options = {}) {
-        super(options);
-    }
+class Playlists extends LayoutView {
 
     @props({
         className: 'layout-playlists',
 
-        childView: Playlist,
-
-        emptyView: PlaylistEmpty,
-
         template: require('../templates/playlists.ejs'),
 
-        childViewContainer: '.js-playlists',
+        regions: {
+            list: '.js-playlists'
+        },
 
         behaviors: {
             BtnToTop: {},
@@ -130,6 +80,12 @@ class Playlists extends CompositeView {
     }
 
     onRender() {
+        this.getRegion('list').show(
+            new PlaylistsList({
+                collection: this.collection
+            })
+        );
+
         this.stickit();
     }
 
