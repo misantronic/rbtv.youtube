@@ -85,9 +85,9 @@ class Video extends LayoutView {
 
             'change:loading': (model, val) => {
                 if (val) {
-                    this.$el.addClass('loading');
+                    this.$el.addClass('is-loading');
                 } else {
-                    this.$el.removeClass('loading');
+                    this.$el.removeClass('is-loading');
                 }
             }
         }

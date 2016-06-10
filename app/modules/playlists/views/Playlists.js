@@ -24,7 +24,7 @@ class Playlist extends ItemView {
         bindings: {
             ':el': {
                 classes: {
-                    loading: 'loadingItems'
+                    'is-loading': 'loadingItems'
                 }
             }
         }
@@ -95,7 +95,7 @@ class Playlists extends CompositeView {
 
             ':el': {
                 classes: {
-                    loading: 'loading'
+                    'is-loading': 'loading'
                 }
             }
         },

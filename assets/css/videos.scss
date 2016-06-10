@@ -36,7 +36,7 @@
 		display: none;
 	}
 
-	&.loading {
+	&.is-loading {
 		.video-container {
 			> iframe {
 				opacity: 0.15;
