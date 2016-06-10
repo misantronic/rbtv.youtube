@@ -3,6 +3,9 @@ import {Model} from 'backbone'
 import AutocompleteCollection from '../../search/models/Autocomplete'
 import {localStorage} from '../../../utils'
 
+/**
+ * @class SearchFormModel
+ */
 class SearchForm extends Model {
     defaults() {
         return {

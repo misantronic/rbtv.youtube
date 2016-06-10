@@ -16,7 +16,7 @@ class PlaylistsController extends Marionette.Object {
         this._currentPlaylistId = null;
 
         const collection = new PlaylistsCollection();
-        const view       = new PlaylistsView({ collection: collection });
+        const view       = new PlaylistsView({ collection });
 
         this._region.show(view);
 
