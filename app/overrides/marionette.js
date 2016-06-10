@@ -12,14 +12,14 @@ const _insertAfterFn2 = CompositeView.prototype._insertAfter;
 
 function _insertAfter(method, childView) {
     // Ensure delay
-    if (_.isUndefined(this._animateDelay)) {
-        this._animateDelay = 0;
+    if (_.isUndefined(this._insertAfterAnimateDelay)) {
+        this._insertAfterAnimateDelay = 16;
     }
 
     // Reset delay
     _.delay(() => {
-        this._animateDelay = 0;
-    }, 1300);
+        this._insertAfterAnimateDelay = 16;
+    }, 1400);
 
     // Initial hide element
     childView.$el.addClass('collection-item is-transparent');
@@ -28,12 +28,12 @@ function _insertAfter(method, childView) {
     method.call(this, childView);
 
     // Calculate delay
-    this._animateDelay = Math.min(1200, this._animateDelay + 100);
+    this._insertAfterAnimateDelay = Math.min(1200, this._insertAfterAnimateDelay + 200);
 
     // FadeIn
     _.delay(() => {
         childView.$el.removeClass('is-transparent');
-    }, this._animateDelay);
+    }, this._insertAfterAnimateDelay);
 }
 
 _.extend(CollectionView.prototype, {
