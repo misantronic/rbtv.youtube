@@ -1,10 +1,10 @@
 import _ from 'underscore'
-import {Behavior} from 'backbone.marionette'
+import {Behavior, Region} from 'backbone.marionette'
 import SearchFormView from '../../modules/search/views/SearchForm'
 
 class Search extends Behavior {
     onRender() {
-        const container  = this.options.container;
+        const container = this.options.container;
         const $container = this.view.$(container);
 
         // Handle errors
@@ -25,12 +25,17 @@ class Search extends Behavior {
         });
 
         // Render view
-        const view = new SearchFormView(options).render();
+        const view = new SearchFormView(options);
 
         this.listenTo(view, 'search', this._onSearch);
 
         // Attach
-        $container.html(view.$el);
+        this._region = new Region({ el: $container });
+        this._region.show(view);
+    }
+
+    onDestroy() {
+        this._region.empty();
     }
 
     _onSearch() {
