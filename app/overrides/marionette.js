@@ -86,3 +86,20 @@ Marionette.Object = function () {
 
 Marionette.Object.extend = Marionette.extend;
 Marionette.Object.prototype = MarionetteObjectPrototype;
+
+/**
+ *
+ */
+
+function attachElContent(html) {
+    if(_.isString(html)) {
+        this.$el[0].innerHTML = html;
+    } else {
+        this.$el.html(html);
+    }
+
+    return this;
+}
+
+Marionette.ItemView.prototype.attachElContent = attachElContent;
+Marionette.CompositeView.prototype.attachElContent = attachElContent;
