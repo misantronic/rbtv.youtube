@@ -6,6 +6,8 @@ import {Video as VideoModel} from '../videos/models/Videos'
 import channels from '../../channels'
 import youtubeController from '../youtube/controller'
 
+import '../../../assets/css/modules/playlists.scss';
+
 class PlaylistsController extends Marionette.Object {
 
     init(region) {
@@ -20,7 +22,7 @@ class PlaylistsController extends Marionette.Object {
 
         this._region.show(view);
 
-        view.loading = true;
+        view.startLoading();
         
         collection.fetch({ silent: true })
             .done(() => {

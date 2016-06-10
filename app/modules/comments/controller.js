@@ -2,7 +2,7 @@ import * as Marionette from 'backbone.marionette'
 import CommentThreadsCollection from './models/CommentThreads'
 import CommentsLayout from './views/CommentsLayout'
 
-import '../../../assets/css/comments.scss';
+import '../../../assets/css/modules/comments.scss';
 
 class Controller extends Marionette.Object {
     init(region) {

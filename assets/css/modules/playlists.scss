@@ -1,0 +1,94 @@
+@import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.items-playlists {
+	> .item > .thumbnail > .link {
+		min-height: 142px;
+
+		> .thumb {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+}
+
+.playlist-items-form {
+	position: relative;
+
+	.search {
+		border-bottom: none;
+		padding-right: 115px;
+	}
+}
+
+.layout-playlists {
+	position: relative;
+}
+
+.playlist-items {
+	overflow: auto;
+	background: #FFFFFF;
+	border: 1px solid #CCC;
+	height: 395px;
+
+	> .playlist-item {
+		display: flex;
+		margin-bottom: 5px;
+		padding: 5px;
+		height: 60px;
+
+		&.active {
+			background: #EEE;
+
+			.link {
+				color: #000;
+			}
+		}
+
+		&.watched {
+			.thumb-container {
+				position: relative;
+
+				&:before {
+					content: 'watched';
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					background: #444;
+					font-size: smaller;
+					padding: 2px;
+					color: #FFFFFF;
+					z-index: 10;
+				}
+
+				.thumb {
+					opacity: 0.65;
+				}
+			}
+		}
+
+		.thumb-container .thumb {
+			max-height: 50px;
+		}
+
+		.title {
+			padding: 2px 0 0 10px;
+			line-height: 120%;
+			width: 100%;
+			height: 100%;
+
+			> .link {
+				overflow: hidden;
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+
+			> .link:hover,
+			> .link:active,
+			> .link:focus {
+				text-decoration: none;
+				outline: none;
+			}
+		}
+	}
+}

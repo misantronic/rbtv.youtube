@@ -69,8 +69,7 @@ class Activities extends LayoutView {
 
     modelEvents() {
         return {
-            'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350),
-            'change:loading': '_onLoading'
+            'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350)
         }
     }
 
@@ -242,16 +241,6 @@ class Activities extends LayoutView {
 
         if (y >= maxY) {
             this._fetchNext();
-        }
-    }
-
-    _onLoading() {
-        var isLoading = this.model.get('loading');
-
-        if(isLoading) {
-            this.triggerMethod('show:loader');
-        } else {
-            this.triggerMethod('hide:loader');
         }
     }
 }

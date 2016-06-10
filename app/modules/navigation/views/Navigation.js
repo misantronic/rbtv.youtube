@@ -2,7 +2,7 @@ import {CollectionView, ItemView} from 'backbone.marionette'
 import Config from '../../../Config'
 import {props} from '../../decorators'
 
-import '../../../../assets/css/navigation.scss'
+import '../../../../assets/css/modules/navigation.scss'
 
 class NavigationItem extends ItemView {
 

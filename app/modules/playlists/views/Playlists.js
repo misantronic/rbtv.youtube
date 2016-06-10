@@ -74,7 +74,8 @@ class Playlists extends CompositeView {
                 container: '.js-search-container',
                 filterCheckboxBehavior: true,
                 autocomplete: false
-            }
+            },
+            Loader: {}
         },
 
         events: {
@@ -84,20 +85,6 @@ class Playlists extends CompositeView {
         ui: {
             link: '.js-link',
             loader: '.js-loader'
-        },
-
-        bindings: {
-            '@ui.loader': {
-                classes: {
-                    show: 'loading'
-                }
-            },
-
-            ':el': {
-                classes: {
-                    'is-loading': 'loading'
-                }
-            }
         },
 
         model: new Model({
@@ -117,9 +104,13 @@ class Playlists extends CompositeView {
             lp: this.model.get('filterByLP')
         }
     }
-
-    set loading(val) {
-        this.model.set('loading', val);
+    
+    startLoading() {
+        this.model.set('loading', true);
+    }
+    
+    stopLoading() {
+        this.model.set('loading', false);
     }
 
     modelEvents() {
@@ -170,7 +161,7 @@ class Playlists extends CompositeView {
         // Cache filter
         localStorage.set('playlists.filter', _.omit(filter, 'increaseResults', 'resetResults'));
 
-        this.loading = false;
+        this.stopLoading();
 
         // Search collection
         this.collection.search(filter);

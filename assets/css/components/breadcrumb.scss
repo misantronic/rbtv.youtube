@@ -1,0 +1,13 @@
+.breadcrumb {
+	margin-bottom: 20px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	white-space: nowrap;
+	overflow: hidden;
+
+	@media (max-width: $screen-sm-max) {
+		margin-bottom: 10px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}

@@ -1,0 +1,131 @@
+.items {
+	display: flex;
+	flex-wrap: wrap;
+
+	.item {
+		display: flex;
+
+		&.item-empty {
+			display: block;
+		}
+
+		.loader {
+			display: none;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255, 255, 255, 0.85);
+		}
+
+		&.is-loading .loader {
+			display: block;
+		}
+
+		.thumbnail {
+			margin-bottom: 30px;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+
+			> .link {
+				display: block;
+				position: relative;
+				overflow: hidden;
+
+				> .thumb {
+					max-width: 100%;
+					margin-top: -33px;
+					margin-bottom: -33px;
+				}
+
+				> .publishedAt {
+					position: absolute;
+					right: 10px;
+					bottom: 10px;
+					font-size: 90%;
+				}
+
+				> .duration {
+					position: absolute;
+					left: 10px;
+					bottom: 10px;
+					font-size: 90%;
+				}
+			}
+
+			> .caption {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				flex-grow: 2;
+
+				> .title {
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+					position: relative;
+					padding-right: 40px;
+					margin-top: 10px;
+					font-size: 17px;
+
+					> .badge {
+						position: absolute;
+						right: 0;
+						top: 0;
+					}
+				}
+
+				> .description {
+					max-height: 58px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-line-clamp: 3;
+					-webkit-box-orient: vertical;
+					display: -webkit-box;
+				}
+
+				> .team {
+					min-height: 20px;
+					margin: auto 0 0 0;
+					overflow: hidden;
+
+					> .label {
+						margin-right: 5px;
+						cursor: pointer;
+						font-size: 12px;
+
+						&:last-of-type {
+							margin-right: 0;
+						}
+					}
+				}
+			}
+		}
+
+		&.watched {
+			.thumbnail {
+				> .link {
+					position: relative;
+
+					&:before {
+						content: 'watched';
+						position: absolute;
+						right: 0;
+						top: 0;
+						background: #444;
+						font-size: smaller;
+						padding: 2px;
+						color: #FFFFFF;
+						z-index: 10;
+					}
+
+					.thumb {
+						opacity: 0.65;
+					}
+				}
+			}
+		}
+	}
+}

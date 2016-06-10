@@ -3,7 +3,7 @@ import {Video as VideoModel} from './models/Videos'
 import VideoLayout from './views/VideoLayout'
 import channels from '../../channels'
 
-import '../../../assets/css/videos.scss';
+import '../../../assets/css/modules/videos.scss';
 
 class VideosController extends Marionette.Object {
     init(region) {

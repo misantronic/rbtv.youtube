@@ -6,7 +6,7 @@ import channels from './channels'
 // CSS
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../assets/css/application.scss'
-import '../assets/css/playlists.scss';
+import '../assets/css/components.scss';
 
 // Modules & overrides
 import '../node_modules/moment/locale/de'
