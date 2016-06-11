@@ -20,7 +20,14 @@ class PlaylistItem extends ItemView {
             ':el': {
                 classes: {
                     'watched': '_watched'
-                }
+                },
+
+                attributes: [
+                    {
+                        name: 'data-videoId',
+                        observe: 'videoId'
+                    }
+                ]
             }
         },
 
@@ -39,8 +46,6 @@ class PlaylistItem extends ItemView {
     }
 
     onRender() {
-        this.$el.attr('data-videoid', this.model.get('videoId'));
-
         this.stickit();
     }
 }

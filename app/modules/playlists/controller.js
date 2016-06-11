@@ -1,7 +1,7 @@
 import * as Marionette from 'backbone.marionette'
 import PlaylistsCollection from './models/Playlists'
 import PlaylistsLayout from './views/PlaylistsLayout'
-import VideoView from '../videos/views/VideoLayout'
+import VideoLayout from '../videos/views/VideoLayout'
 import {Video as VideoModel} from '../videos/models/Videos'
 import channels from '../../channels'
 import youtubeController from '../youtube/controller'
@@ -34,11 +34,13 @@ class PlaylistsController extends Marionette.Object {
     }
 
     initPlaylist(playlistId, videoId = null) {
-        let view = new VideoView({ model: new VideoModel() });
+        const model = new VideoModel();
 
-        this._region.show(view);
+        this._region.show(
+            new VideoLayout({ model })
+        );
 
-        view.model.set({
+        model.set({
             id: videoId,
             playlistId: playlistId
         });
