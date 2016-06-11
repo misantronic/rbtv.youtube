@@ -4,7 +4,8 @@ import {LayoutView} from 'backbone.marionette'
 import ActivitiesList from './ActivitiesList'
 import SearchFormModel from '../../search/models/SearchForm'
 import Config from '../../../Config'
-import searchController from '../../search/controller'
+import {SearchResults} from '../../search/models/SearchResults'
+import SearchResultsView from '../../search/views/SearchResults'
 import shows from '../../../data/shows';
 import VideoCollection from '../../videos/models/Videos'
 import {props} from '../../decorators'
@@ -15,7 +16,7 @@ class Activities extends LayoutView {
         className: 'layout-activities',
 
         regions: {
-            items: '.js-region-items'
+            items: '.region-items'
         },
 
         template: require('../templates/activities.ejs'),
@@ -167,21 +168,24 @@ class Activities extends LayoutView {
 
         if (searchVal) {
             this._killScroll();
+            
+            const collection = new SearchResults()
+                .setNextPageToken(null)
+                .setQ(searchVal);
 
-            /** @type {SearchResults} */
-            let view = searchController.prepareSearch(searchVal);
+            const searchResultsView = new SearchResultsView({ collection });
 
-            this.listenTo(view, 'loading:start', this.startLoading);
-            this.listenTo(view, 'loading:stop', this.stopLoading);
+            this.listenTo(searchResultsView, 'loading:start', this.startLoading);
+            this.listenTo(searchResultsView, 'loading:stop', this.stopLoading);
 
             // Attach html
-            this.getRegion('items').show(view);
+            this.getRegion('items').show(searchResultsView);
 
             if (this.$currentSearchXHR) {
                 this.$currentSearchXHR.abort();
             }
 
-            this.$currentSearchXHR = view.renderSearchResults(this._currentChannel);
+            this.$currentSearchXHR = searchResultsView.renderSearchResults(this._currentChannel);
         }
 
         return searchVal;
