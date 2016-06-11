@@ -4,8 +4,8 @@
   "description": "A YouTube-Alternative for Rocket Beans TV.",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack && node www/index.js",
-    "webpack": "./node_modules/.bin/webpack --watch",
+    "start": "webpack --config webpack.production.js && node www/index.js",
+    "webpack": "webpack --watch",
     "www": "node $NODE_DEBUG_OPTION www/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
