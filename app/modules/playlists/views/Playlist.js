@@ -6,29 +6,9 @@ const Playlist = ItemView.extend({
         link: '.js-link'
     },
 
-    events: {
-        'click @ui.link': '_onClickLink'
-    },
-
     className: 'item col-xs-12 col-sm-3',
 
-    template: require('../templates/playlist.ejs'),
-
-    bindings: {
-        ':el': {
-            classes: {
-                'is-loading': 'loadingItems'
-            }
-        }
-    },
-
-    onRender() {
-        this.stickit();
-    },
-
-    _onClickLink() {
-        this.model.set('loadingItems', true)
-    }
+    template: require('../templates/playlist.ejs')
 });
 
 const PlaylistEmpty = ItemView.extend({
