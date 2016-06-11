@@ -31,6 +31,12 @@ class CommentItem extends LayoutView {
             'click @ui.showReplies': '_onToggleReplies',
             'click @ui.btnReply': '_onClickReply',
             'click .body a': '_onClickLink'
+        },
+
+        behaviors: {
+            Loader: {
+                container: '.loader-container'
+            }
         }
     })
 
@@ -44,12 +50,6 @@ class CommentItem extends LayoutView {
                     } else {
                         $el.text('Zeige ' + this.model.get('snippet').totalReplyCount + ' Antworten');
                     }
-                }
-            },
-
-            '@ui.loader': {
-                classes: {
-                    show: 'loading'
                 }
             }
         }
@@ -185,8 +185,12 @@ class CommentsItems extends CollectionView {
 
     }
 
-    set loading(val) {
-        this.model.set('loading', val);
+    startLoading() {
+        this.model.set('loading', true);
+    }
+
+    stopLoading() {
+        this.model.set('loading', false);
     }
 
     initialize(options) {
@@ -206,12 +210,10 @@ class CommentsItems extends CollectionView {
 
         if (_.isNull(this.collection.pageToken)) return;
 
-        this.loading = true;
+        this.startLoading();
 
         this.collection.fetch()
-            .then(() => {
-                this.loading = false;
-            });
+            .then(() => this.stopLoading());
     }
 
     _initScroll() {

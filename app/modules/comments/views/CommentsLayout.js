@@ -27,22 +27,12 @@ class CommentsLayout extends LayoutView {
         regions: {
             items: '.region-items',
             form: '.region-form'
+        },
+
+        behaviors: {
+            Loader: {}
         }
     })
-
-    bindings() {
-        return {
-            '@ui.loader': {
-                classes: {
-                    show: 'loading'
-                }
-            }
-        }
-    }
-
-    set loading(val) {
-        this.model.set('loading', val);
-    }
 
     initialize() {
         this.model.set('statistics', this.getOption('statistics'));
