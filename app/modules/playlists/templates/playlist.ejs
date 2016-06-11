@@ -1,10 +1,11 @@
 <div class="thumbnail">
-	<a class="link js-link" href="#playlists/playlist/<%- id %>">
+	<a class="link js-link" href="#playlists/playlist/<%- id %>" data-playlistid="<%- id %>">
 		<img class="thumb" src="<%- thumbnails.medium.url %>">
+		<div class="loader-container"></div>
 	</a>
 	<div class="caption">
 		<h3 class="title" title="<%- title %>">
-			<a class="link js-link" href="#playlists/playlist/<%- id %>"><%- title %></a>
+			<a class="link js-link" href="#playlists/playlist/<%- id %>" data-playlistid="<%- id %>"><%- title %></a>
 			<span class="badge"><%- itemCount %></span>
 		</h3>
 		<% if(description) { %>

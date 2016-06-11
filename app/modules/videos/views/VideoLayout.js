@@ -120,8 +120,8 @@ class Video extends LayoutView {
     }
 
     _initRelatedVideos() {
-        const videoId    = this.model.id;
-        const channelId  = this.model.get('channelId');
+        const videoId = this.model.id;
+        const channelId = this.model.get('channelId');
         const collection = new RelatedResultsCollection();
 
         collection
@@ -146,10 +146,10 @@ class Video extends LayoutView {
     }
 
     _initPlaylistItems() {
-        let playlistId = this.model.get('playlistId');
+        const playlistId = this.model.get('playlistId');
+        const collection = this.getOption('collection') || new PlaylistItemsCollection();
 
-        this.collection         = new PlaylistItemsCollection();
-        this._playlistItemsView = new PlaylistItems({ collection: this.collection });
+        this._playlistItemsView = new PlaylistItems({ collection });
 
         this.getRegion('playlist').show(this._playlistItemsView);
 
@@ -159,19 +159,23 @@ class Video extends LayoutView {
             this._selectVideo(videoId);
         });
 
-        this._playlistItemsView.loading = true;
+        this.collection = collection;
 
-        this.collection.playlistId = playlistId;
+        if (collection.length === 0) {
+            this._playlistItemsView.loading = true;
 
-        // Check cache for playlistItems
-        return this.collection.fetch()
-            .done(() => {
-                this._playlistItemsView.loading = false;
+            collection.playlistId = playlistId;
 
-                let videoId = this.model.id || this.collection.first().get('videoId');
+            // Check cache for playlistItems
+            return this.collection.fetch()
+                .done(() => {
+                    this._playlistItemsView.loading = false;
 
-                this._selectVideo(videoId);
-            });
+                    this._autoselectVideo();
+                });
+        } else {
+            this._autoselectVideo();
+        }
     }
 
     _initComments() {
@@ -182,7 +186,7 @@ class Video extends LayoutView {
     _playNext() {
         if (!this.isPlaylist) return;
 
-        const videoId          = this.model.id;
+        const videoId = this.model.id;
         const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
 
         if (nextPlaylistItem) {
@@ -220,6 +224,12 @@ class Video extends LayoutView {
 
         // Update own id -> load video
         this._initVideo();
+    }
+
+    _autoselectVideo() {
+        const videoId = this.model.id || this.collection.first().get('videoId');
+
+        this._selectVideo(videoId);
     }
 }
 

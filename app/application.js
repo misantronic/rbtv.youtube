@@ -10,6 +10,7 @@ import '../assets/css/components.scss';
 
 // Modules & overrides
 import '../node_modules/moment/locale/de'
+import './overrides/backbone'
 import './overrides/marionette.stickit'
 import './overrides/marionette'
 import './overrides/underscore'

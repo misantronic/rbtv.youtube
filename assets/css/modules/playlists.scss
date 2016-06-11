@@ -1,18 +1,30 @@
 @import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
 
 .items-playlists {
-	> .item > .thumbnail {
-		> .link {
-			min-height: 142px;
+	> .item {
+		> .thumbnail {
+			> .link {
+				min-height: 142px;
 
-			> .thumb {
-				margin-top: 0;
-				margin-bottom: 0;
+				> .thumb {
+					margin-top: 0;
+					margin-bottom: 0;
+				}
+			}
+
+			.caption .title {
+				padding-right: 40px;
 			}
 		}
 
-		.caption .title {
-			padding-right: 40px;
+		.loader {
+			margin: 0;
+			justify-content: center;
+			align-items: center;
+		}
+
+		&.is-loading .loader {
+			display: flex !important;
 		}
 	}
 }
