@@ -2,7 +2,7 @@ import _ from 'underscore';
 import {Behavior, Region} from 'backbone.marionette';
 import SearchFormView from '../../modules/search/views/SearchForm';
 
-class Search extends Behavior {
+const Search = Behavior.extend({
     onRender() {
         const container = this.options.container;
         const $container = this.view.$(container);
@@ -32,15 +32,15 @@ class Search extends Behavior {
         // Attach
         this._region = new Region({ el: $container });
         this._region.show(view);
-    }
+    },
 
     onDestroy() {
         this._region.empty();
-    }
+    },
 
     _onSearch() {
         this.view.trigger('search');
     }
-}
+});
 
 export default Search;

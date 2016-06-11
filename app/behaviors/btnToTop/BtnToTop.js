@@ -2,13 +2,11 @@ import $ from 'jquery';
 import {Behavior} from 'backbone.marionette';
 import template from './BtnToTop.ejs';
 
-class BtnToTop extends Behavior {
+const BtnToTop = Behavior.extend({
 
-    events() {
-        return {
-            'click .js-btn-to-top': '_onBtnToTop'
-        };
-    }
+    events: {
+        'click .js-btn-to-top': '_onBtnToTop'
+    },
 
     onRender() {
         // Add template
@@ -28,23 +26,23 @@ class BtnToTop extends Behavior {
         });
 
         this.view.stickit(this.view.model);
-    }
+    },
 
     onDestroy() {
         $(window).off('scroll.behavior.btnToTop');
-    }
+    },
 
     _onBtnToTop(e) {
         $('html, body').animate({ scrollTop: 0 }, 500);
 
         e.preventDefault();
-    }
+    },
 
     _onScroll() {
         const y = window.scrollY;
 
         this.view.model.set('showBtnToTop', y >= window.innerHeight);
     }
-}
+});
 
 export default BtnToTop;
