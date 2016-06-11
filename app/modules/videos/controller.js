@@ -1,7 +1,7 @@
-import * as Marionette from 'backbone.marionette'
-import {Video as VideoModel} from './models/Videos'
-import VideoLayout from './views/VideoLayout'
-import channels from '../../channels'
+import * as Marionette from 'backbone.marionette';
+import {Video as VideoModel} from './models/Videos';
+import VideoLayout from './views/VideoLayout';
+import channels from '../../channels';
 
 import '../../../assets/css/modules/videos.scss';
 
@@ -15,14 +15,14 @@ class VideosController extends Marionette.Object {
 
     initVideo(videoId) {
         if (this._region.$el.find('.layout-video').length === 0) {
-            let model = new VideoModel();
+            const model = new VideoModel();
 
-            this._videoLayout = new VideoLayout({ model: model });
+            this._videoLayout = new VideoLayout({ model });
 
             this._region.show(this._videoLayout);
 
             // Update breadcrumb
-            this.listenTo(model, 'change:title', (model, title) => {
+            this.listenTo(model, 'change:title', (videoModel, title) => {
                 channels.breadcrumb.push({ title, type: 'video' });
             });
         }

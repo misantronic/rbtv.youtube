@@ -1,6 +1,6 @@
-import {Radio} from 'backbone'
+import {Radio} from 'backbone';
 
-let channel = Radio.channel('breadcrumb');
+const channel = Radio.channel('breadcrumb');
 
 channel.replace = function ({ title, route = null, index = null }) {
     channel.trigger('replace', { title, route, index });

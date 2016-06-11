@@ -1,8 +1,8 @@
-import _ from 'underscore'
-import {ItemView} from 'backbone.marionette'
-import {props} from '../../decorators'
-import {Model} from 'backbone'
-import youtubeController from '../../youtube/controller'
+import _ from 'underscore';
+import {ItemView} from 'backbone.marionette';
+import {props} from '../../decorators';
+import {Model} from 'backbone';
+import youtubeController from '../../youtube/controller';
 
 class Thumbs extends ItemView {
     @props({
@@ -56,7 +56,7 @@ class Thumbs extends ItemView {
             },
 
             '@ui.dislikes': 'dislikeCount'
-        }
+        };
     }
 
     initialize(options) {
@@ -106,7 +106,7 @@ class Thumbs extends ItemView {
     }
 
     _onClickLike() {
-        let rating = this.model.get('_liked') ? 'none' : 'like';
+        const rating = this.model.get('_liked') ? 'none' : 'like';
 
         youtubeController
             .addRating(rating, this.model.get('resourceId'))
@@ -114,7 +114,7 @@ class Thumbs extends ItemView {
     }
 
     _onClickDislike() {
-        let rating = this.model.get('_disliked') ? 'none' : 'dislike';
+        const rating = this.model.get('_disliked') ? 'none' : 'dislike';
 
         youtubeController
             .addRating(rating, this.model.get('resourceId'))
@@ -122,9 +122,10 @@ class Thumbs extends ItemView {
     }
 
     _onRated(rating) {
-        let _liked       = rating === 'like';
-        let _disliked    = rating === 'dislike';
-        let _none        = rating === 'none';
+        const _liked       = rating === 'like';
+        const _disliked    = rating === 'dislike';
+        const _none        = rating === 'none';
+
         let likeCount    = this.model.get('likeCount');
         let dislikeCount = this.model.get('dislikeCount');
 
@@ -159,8 +160,8 @@ class Thumbs extends ItemView {
             _disliked,
             likeCount,
             dislikeCount
-        })
+        });
     }
 }
 
-export default Thumbs
+export default Thumbs;

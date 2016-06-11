@@ -1,8 +1,8 @@
-import * as Marionette from 'backbone.marionette'
-import _ from 'underscore'
-import $ from 'jquery'
-import {localStorage} from '../../utils'
-import Config from '../../Config'
+import * as Marionette from 'backbone.marionette';
+import _ from 'underscore';
+import $ from 'jquery';
+import {localStorage} from '../../utils';
+import Config from '../../Config';
 
 const baseURL = 'https://www.googleapis.com/youtube/v3';
 
@@ -37,7 +37,7 @@ class Controller extends Marionette.Object {
 
     /** @returns {{getRating: string, playlists: string, rate: string, comments: string, commentThreads: string}} */
     get endpoints() {
-        return endpoints
+        return endpoints;
     }
 
     initialize() {
@@ -66,14 +66,14 @@ class Controller extends Marionette.Object {
             .then(() =>
                 $.post(endpoints.rate, {
                         id: videoId,
-                        rating: rating
+                        rating
                     })
                     .then(() => rating)
                     .fail(result => {
                         if (retryOnFail && result.status === 401) {
                             this._reAuthorize().then(() => {
                                 this.addRating(rating, videoId, false);
-                            })
+                            });
                         }
                     })
             );
@@ -87,7 +87,7 @@ class Controller extends Marionette.Object {
                     if (retryOnFail && result.status === 401) {
                         this._reAuthorize().then(() => {
                             this.getRating(videoId, callback, false);
-                        })
+                        });
                     }
                 })
                 .done(callback);
@@ -98,9 +98,7 @@ class Controller extends Marionette.Object {
 
     fetchPlaylistName(playlistId) {
         return $.get(`${endpoints.playlists}?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
-            .then(data => {
-                return data.items[0]['snippet'].title
-            });
+            .then(data => data.items[0]['snippet'].title);
     }
 
     /**
@@ -112,7 +110,7 @@ class Controller extends Marionette.Object {
     addComment(commentModel, callback, retryOnFail = true) {
         return this._authorize()
             .then(() => {
-                let payload = commentModel.getPayload();
+                const payload = commentModel.getPayload();
 
                 if (this.data) {
                     return $.ajax({
@@ -120,13 +118,13 @@ class Controller extends Marionette.Object {
                             type: 'POST',
                             dataType: 'json',
                             data: JSON.stringify(payload),
-                            contentType: "application/json"
+                            contentType: 'application/json'
                         })
                         .fail(result => {
                             if (retryOnFail && result.status === 401) {
                                 this._reAuthorize().then(() => {
                                     this.addComment(commentModel, callback, false);
-                                })
+                                });
                             }
                         })
                         .done(callback);
@@ -139,15 +137,15 @@ class Controller extends Marionette.Object {
      * @private
      */
     _authorize(immediate = false) {
-        var Deferred = $.Deferred();
+        const Deferred = $.Deferred();
 
         if (this.data) {
             Deferred.resolve();
         } else {
             gapi.auth.authorize({
                 'client_id': clientId,
-                'scope': scope,
-                'immediate': immediate
+                scope,
+                immediate
             }, () => {
                 this._data = gapi.auth.getToken();
 

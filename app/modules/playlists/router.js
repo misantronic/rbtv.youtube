@@ -7,11 +7,11 @@ class Router extends AppRouter {
             'playlists': 'initPlaylists',
             'playlists/playlist/:id': 'initPlaylist',
             'playlists/playlist/:id/video/:videoId': 'initPlaylist'
-        }
+        };
     }
 
     get controller() {
-        return controller
+        return controller;
     }
 }
 

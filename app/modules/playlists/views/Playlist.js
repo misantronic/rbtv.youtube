@@ -1,4 +1,4 @@
-import {ItemView} from 'backbone.marionette'
+import {ItemView} from 'backbone.marionette';
 
 /**
  * @class PlaylistItem
@@ -34,4 +34,4 @@ const PlaylistEmpty = ItemView.extend({
     template: require('../../search/templates/empty.ejs')
 });
 
-export {Playlist, PlaylistEmpty}
+export {Playlist, PlaylistEmpty};

@@ -1,7 +1,7 @@
 import * as Marionette from 'backbone.marionette';
-import {history} from 'backbone'
-import Config from '../../Config'
-import {props} from '../decorators'
+import {history} from 'backbone';
+import Config from '../../Config';
+import {props} from '../decorators';
 
 class Controller extends Marionette.Object {
     @props({

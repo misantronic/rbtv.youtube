@@ -1,5 +1,5 @@
-import {CollectionView} from 'backbone.marionette'
-import {SearchResult} from '../../search/views/SearchResults'
+import {CollectionView} from 'backbone.marionette';
+import {SearchResult} from '../../search/views/SearchResults';
 
 const ActivitiesCollection = CollectionView.extend({
     childView: SearchResult,
@@ -7,4 +7,4 @@ const ActivitiesCollection = CollectionView.extend({
     className: 'activities-items items row'
 });
 
-export default ActivitiesCollection
+export default ActivitiesCollection;

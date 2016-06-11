@@ -1,14 +1,14 @@
-import $ from 'jquery'
-import _ from 'underscore'
-import {LayoutView} from 'backbone.marionette'
-import ActivitiesList from './ActivitiesList'
-import SearchFormModel from '../../search/models/SearchForm'
-import Config from '../../../Config'
-import {SearchResults} from '../../search/models/SearchResults'
-import SearchResultsView from '../../search/views/SearchResults'
+import $ from 'jquery';
+import _ from 'underscore';
+import {LayoutView} from 'backbone.marionette';
+import ActivitiesList from './ActivitiesList';
+import SearchFormModel from '../../search/models/SearchForm';
+import Config from '../../../Config';
+import {SearchResults} from '../../search/models/SearchResults';
+import SearchResultsView from '../../search/views/SearchResults';
 import shows from '../../../data/shows';
-import VideoCollection from '../../videos/models/Videos'
-import {props} from '../../decorators'
+import VideoCollection from '../../videos/models/Videos';
+import {props} from '../../decorators';
 
 class Activities extends LayoutView {
 
@@ -39,8 +39,8 @@ class Activities extends LayoutView {
                 classes: {
                     show: {
                         observe: 'search',
-                        onGet: function (title) {
-                            let autocompleteObj = _.findWhere(shows, { title });
+                        onGet(title) {
+                            const autocompleteObj = _.findWhere(shows, { title });
 
                             if (autocompleteObj && autocompleteObj.playlistId) {
                                 this.ui.btnPlaylist
@@ -71,7 +71,7 @@ class Activities extends LayoutView {
     modelEvents() {
         return {
             'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350)
-        }
+        };
     }
 
     startLoading() {
@@ -89,13 +89,13 @@ class Activities extends LayoutView {
     }
 
     initialize() {
-        var cacheObj = this.model.getCache();
+        const cacheObj = this.model.getCache();
 
-        if(_.isEmpty(cacheObj)) {
+        if (_.isEmpty(cacheObj)) {
             this._currentChannel = Config.channelRBTV;
         } else {
-            if(cacheObj.filterByLP) this._currentChannel = Config.channelLP;
-            if(cacheObj.filterByRBTV) this._currentChannel = Config.channelRBTV;
+            if (cacheObj.filterByLP) this._currentChannel = Config.channelLP;
+            if (cacheObj.filterByRBTV) this._currentChannel = Config.channelRBTV;
         }
 
         this.listenTo(this, 'search', this._updateSearch);
@@ -137,7 +137,7 @@ class Activities extends LayoutView {
                 this.stopLoading();
                 this._initScroll();
                 this._fetchVideoDetails(data);
-            })
+            });
     }
 
     _updateSearch() {
@@ -161,14 +161,15 @@ class Activities extends LayoutView {
      * @private
      */
     _search() {
-        let searchVal     = this.model.get('search');
-        let tagCollection = this.model.get('tags');
+        let searchVal = this.model.get('search');
+
+        const tagCollection = this.model.get('tags');
 
         searchVal = (searchVal + ' ' + tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim();
 
         if (searchVal) {
             this._killScroll();
-            
+
             const collection = new SearchResults()
                 .setNextPageToken(null)
                 .setQ(searchVal);
@@ -192,20 +193,20 @@ class Activities extends LayoutView {
     }
 
     _fetchVideoDetails(collectionData) {
-        let videoIds = _.map(collectionData.items, modelData => {
+        const videoIds = _.map(collectionData.items, modelData => {
             return modelData.contentDetails.upload.videoId;
         });
 
         if (videoIds.length) {
-            let videoCollection = new VideoCollection();
+            const videoCollection = new VideoCollection();
 
             videoCollection
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
                     this.collection.each(activityModel => {
-                        let id         = activityModel.get('videoId');
-                        let videoModel = videoCollection.findWhere({ id });
+                        const id = activityModel.get('videoId');
+                        const videoModel = videoCollection.findWhere({ id });
 
                         if (videoModel) {
                             // Set tags on activitiy-model
@@ -241,7 +242,7 @@ class Activities extends LayoutView {
 
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 800;
-        const y    = window.scrollY;
+        const y = window.scrollY;
 
         if (y >= maxY) {
             this._fetchNext();
@@ -249,4 +250,4 @@ class Activities extends LayoutView {
     }
 }
 
-export default Activities
+export default Activities;

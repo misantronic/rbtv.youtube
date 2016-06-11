@@ -1,8 +1,8 @@
-import {CollectionView, ItemView} from 'backbone.marionette'
-import Config from '../../../Config'
-import {props} from '../../decorators'
+import {CollectionView, ItemView} from 'backbone.marionette';
+import Config from '../../../Config';
+import {props} from '../../decorators';
 
-import '../../../../assets/css/modules/navigation.scss'
+import '../../../../assets/css/modules/navigation.scss';
 
 class NavigationItem extends ItemView {
 
@@ -50,5 +50,5 @@ class Navigation extends CollectionView {
     }
 }
 
-export {Navigation, NavigationItem}
-export default Navigation
+export {Navigation, NavigationItem};
+export default Navigation;

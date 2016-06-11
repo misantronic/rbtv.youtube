@@ -1,7 +1,7 @@
-import {ItemView, CollectionView} from 'backbone.marionette'
-import $ from 'jquery'
-import app from '../../../application'
-import {props} from '../../decorators'
+import {ItemView, CollectionView} from 'backbone.marionette';
+import $ from 'jquery';
+import app from '../../../application';
+import {props} from '../../decorators';
 
 class BreadcrumbItem extends ItemView {
 
@@ -23,7 +23,7 @@ class BreadcrumbItem extends ItemView {
 
     _onClick(e) {
         const $link = $(e.currentTarget);
-        let route   = $link.attr('href');
+        const route = $link.attr('href');
 
         app.navigate(route);
 
@@ -42,8 +42,8 @@ class Breadcrumb extends CollectionView {
     })
 
     initialize() {
-        
+
     }
 }
 
-export default Breadcrumb
+export default Breadcrumb;

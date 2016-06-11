@@ -1,9 +1,9 @@
-import _ from 'underscore'
-import $ from 'jquery'
-import {LayoutView} from 'backbone.marionette'
-import {Model} from 'backbone'
-import {props} from '../../decorators'
-import {localStorage} from '../../../utils'
+import _ from 'underscore';
+import $ from 'jquery';
+import {LayoutView} from 'backbone.marionette';
+import {Model} from 'backbone';
+import {props} from '../../decorators';
+import {localStorage} from '../../../utils';
 
 class VideoPlayer extends LayoutView {
     constructor(options = {}) {
@@ -23,7 +23,7 @@ class VideoPlayer extends LayoutView {
 
         template: require('../templates/video-player.ejs'),
 
-        channels: function () {
+        channels() {
             return {
                 app: {
                     resize: _.debounce(this._onResize, 100)
@@ -31,14 +31,14 @@ class VideoPlayer extends LayoutView {
                 comments: {
                     'video:seek': '_onSeek'
                 }
-            }
+            };
         }
     })
 
     modelEvents() {
         return {
             'change:id': '_initVideo'
-        }
+        };
     }
 
     set videoId(val) {
@@ -46,7 +46,7 @@ class VideoPlayer extends LayoutView {
     }
 
     set autoplay(val) {
-        this.model.set('autoplay', val)
+        this.model.set('autoplay', val);
     }
 
     initialize() {
@@ -78,18 +78,18 @@ class VideoPlayer extends LayoutView {
 
         if (!videoId) return;
 
-        let containerId = 'yt-video-container';
-        let $container = this.$('#' + containerId);
-        let height = $container.css('height', 'auto').height();
-        let $videoContainer = $('<div id="' + containerId + '"></div>');
+        const containerId = 'yt-video-container';
+        const $container = this.$('#' + containerId);
+        const height = $container.css('height', 'auto').height();
+        const $videoContainer = $('<div id="' + containerId + '"></div>');
 
         if (height) {
-            $videoContainer.css('height', height)
+            $videoContainer.css('height', height);
         }
 
         $container.replaceWith($videoContainer);
 
-        var setupPlayer = function () {
+        const setupPlayer = function () {
             const videoInfo = localStorage.get(`${videoId}.info`) || {};
             const currentTime = videoInfo.currentTime || 0;
 
@@ -163,8 +163,6 @@ class VideoPlayer extends LayoutView {
     }
 
     _onStateChange(e) {
-        const videoId = this.model.id;
-
         switch (e.data) {
             case YT.PlayerState.PLAYING:
                 this._onPlaying();
@@ -205,4 +203,4 @@ class VideoPlayer extends LayoutView {
     }
 }
 
-export default VideoPlayer
+export default VideoPlayer;

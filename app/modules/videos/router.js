@@ -5,11 +5,11 @@ class Router extends AppRouter {
     get appRoutes() {
         return {
             'video/:videoId': 'initVideo'
-        }
+        };
     }
 
     get controller() {
-        return controller
+        return controller;
     }
 }
 

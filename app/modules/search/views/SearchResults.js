@@ -1,14 +1,14 @@
-import $ from 'jquery'
-import _ from 'underscore'
-import {CollectionView, LayoutView, ItemView} from 'backbone.marionette'
-import {Model} from 'backbone'
-import {Video, Videos} from '../../videos/models/Videos'
-import beans from '../../../data/beans'
-import {props} from '../../decorators'
-import {localStorage} from '../../../utils'
-import AutocompleteView from './Autocomplete'
-import AutocompleteCollection from '../models/Autocomplete'
-import channels from '../../../channels'
+import $ from 'jquery';
+import _ from 'underscore';
+import {CollectionView, LayoutView, ItemView} from 'backbone.marionette';
+import {Model} from 'backbone';
+import {Video, Videos} from '../../videos/models/Videos';
+import beans from '../../../data/beans';
+import {props} from '../../decorators';
+import {localStorage} from '../../../utils';
+import AutocompleteView from './Autocomplete';
+import AutocompleteCollection from '../models/Autocomplete';
+import channels from '../../../channels';
 
 class SearchResult extends LayoutView {
 
@@ -30,7 +30,7 @@ class SearchResult extends LayoutView {
         bindings: {
             '@ui.team': {
                 observe: 'tags',
-                update: function ($el, tags) {
+                update($el, tags) {
                     if (tags) {
                         // Map only first names
                         tags = _.map(tags, (tag) => {
@@ -44,14 +44,14 @@ class SearchResult extends LayoutView {
                                 return 'etienne';
                             }
 
-                            return tag.split(' ')[0]
+                            return tag.split(' ')[0];
                         });
 
                         // Match names
-                        let names = _.iintersection(_.map(beans, bean => bean.title), tags);
+                        const names = _.iintersection(_.map(beans, bean => bean.title), tags);
 
                         if (names.length) {
-                            var autocompleteView = new AutocompleteView({
+                            const autocompleteView = new AutocompleteView({
                                 collection: new AutocompleteCollection(
                                     _.map(names, name => ({
                                         title: name.substr(0, 1).toUpperCase() + name.substr(1)
@@ -94,7 +94,7 @@ class SearchResult extends LayoutView {
     }
 
     onDestroy() {
-        this.$('[data-toggle="tooltip"]').tooltip('destroy')
+        this.$('[data-toggle="tooltip"]').tooltip('destroy');
     }
 
     _initTooltip() {
@@ -144,7 +144,7 @@ class SearchResults extends CollectionView {
                     this.trigger('loading:stop');
                 }
             }
-        }
+        };
     }
 
     set loading(val) {
@@ -166,7 +166,7 @@ class SearchResults extends CollectionView {
             this.collection.setChannelId(channelId);
         }
 
-        let xhr = this.collection
+        const xhr = this.collection
             .setNextPageToken(nextPageToken)
             .fetch();
 
@@ -201,20 +201,20 @@ class SearchResults extends CollectionView {
     }
 
     _fetchVideoDetails(searchData) {
-        let videoIds = _.map(searchData.items, modelData => {
+        const videoIds = _.map(searchData.items, modelData => {
             return modelData.id.videoId;
         });
 
         if (videoIds.length) {
-            let videos = new Videos();
+            const videos = new Videos();
 
             videos
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
                     this.collection.each(searchModel => {
-                        let id = searchModel.get('videoId');
-                        let videoModel = videos.findWhere({id});
+                        const id = searchModel.get('videoId');
+                        const videoModel = videos.findWhere({id});
 
                         if (videoModel) {
                             // Set tags on activitiy-model
@@ -238,5 +238,5 @@ class SearchResults extends CollectionView {
     }
 }
 
-export {SearchResult}
-export default SearchResults
+export {SearchResult};
+export default SearchResults;

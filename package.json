@@ -11,7 +11,10 @@
   },
   "author": "David Schkalee",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.12.0"
+  },
   "dependencies": {
     "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",
@@ -32,6 +35,7 @@
     "css-loader": "^0.23.1",
     "ejs": "2.3.3",
     "ejs-loader": "^0.2.1",
+    "eslint-loader": "^1.3.0",
     "express": "4.13.3",
     "file-loader": "^0.8.5",
     "flat": "^2.0.0",

@@ -1,9 +1,9 @@
-import {Behavior} from 'backbone.marionette'
-import $ from 'jquery'
+import {Behavior} from 'backbone.marionette';
+import $ from 'jquery';
 
 const Loader = Behavior.extend({
     modelEvents: {
-        "change:loading": "_onLoading"
+        'change:loading': '_onLoading'
     },
 
     onShow() {
@@ -33,9 +33,9 @@ const Loader = Behavior.extend({
     },
 
     _onLoading() {
-        var isLoading = this.view.model.get('loading');
+        const isLoading = this.view.model.get('loading');
 
-        if(isLoading) {
+        if (isLoading) {
             this.triggerMethod('show:loader');
         } else {
             this.triggerMethod('hide:loader');
@@ -43,4 +43,4 @@ const Loader = Behavior.extend({
     }
 });
 
-export default Loader
+export default Loader;

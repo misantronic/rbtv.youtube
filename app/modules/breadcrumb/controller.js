@@ -1,8 +1,8 @@
-import * as Marionette from 'backbone.marionette'
-import _ from 'underscore'
-import {Collection} from 'backbone'
-import BreadcrumbView from './views/Breadcrumb'
-import {props} from '../decorators'
+import * as Marionette from 'backbone.marionette';
+import _ from 'underscore';
+import {Collection} from 'backbone';
+import BreadcrumbView from './views/Breadcrumb';
+import {props} from '../decorators';
 
 class BreadcrumbController extends Marionette.Object {
     @props({
@@ -43,7 +43,7 @@ class BreadcrumbController extends Marionette.Object {
 
         _.each(routes, route => {
             if (route.type) {
-                var model = this.collection.findWhere({type: route.type});
+                const model = this.collection.findWhere({type: route.type});
 
                 this.collection.remove(model);
             }

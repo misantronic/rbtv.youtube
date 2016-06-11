@@ -1,8 +1,8 @@
 import moment from 'moment';
-import {Model, Collection} from 'backbone'
-import {props} from '../../decorators'
-import Config from '../../../Config'
-import youtubeController from '../../youtube/controller'
+import {Model, Collection} from 'backbone';
+import {props} from '../../decorators';
+import Config from '../../../Config';
+import youtubeController from '../../youtube/controller';
 
 class Comment extends Model {
     @props({
@@ -35,11 +35,11 @@ class Comment extends Model {
                 publishedAt: null,
                 updatedAt: null
             }
-        }
+        };
     }
 
     initialize() {
-        let snippet = this._parseSnippet(this.get('snippet'));
+        const snippet = this._parseSnippet(this.get('snippet'));
 
         this.set('snippet', snippet);
     }
@@ -56,7 +56,7 @@ class Comment extends Model {
 
     /** @returns {{snippet: {parentId: *, textOriginal: (string|*)}}} */
     getPayload() {
-        let snippet = this.get('snippet');
+        const snippet = this.get('snippet');
 
         return {
             snippet: {
@@ -89,7 +89,7 @@ class Comments extends Collection {
     @props({
         model: Comment,
 
-        url: function () {
+        url() {
             return `${Config.endpoints.comments}?parentId=${this._parentId}&pageToken=${this._pageToken}`;
         },
 
@@ -103,7 +103,7 @@ class Comments extends Collection {
     }
 
     get pageToken() {
-        return this._pageToken
+        return this._pageToken;
     }
 
     parse(response) {
@@ -113,5 +113,5 @@ class Comments extends Collection {
     }
 }
 
-export {Comment, Comments}
-export default Comments
+export {Comment, Comments};
+export default Comments;

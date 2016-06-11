@@ -1,6 +1,6 @@
-import {SearchResults} from './SearchResults'
-import Config from '../../../Config'
-import $ from 'jquery'
+import {SearchResults} from './SearchResults';
+import Config from '../../../Config';
+import $ from 'jquery';
 
 class RelatedResults extends SearchResults {
 
@@ -13,4 +13,4 @@ class RelatedResults extends SearchResults {
     }
 }
 
-export default RelatedResults
+export default RelatedResults;

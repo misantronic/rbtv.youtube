@@ -1,11 +1,11 @@
-import _ from 'underscore'
-import $ from 'jquery'
-import {LayoutView} from 'backbone.marionette'
-import {Model} from 'backbone'
-import PlaylistsList from './Playlists'
-import {localStorage} from '../../../utils'
-import app from '../../../application'
-import {props} from '../../decorators'
+import _ from 'underscore';
+import $ from 'jquery';
+import {LayoutView} from 'backbone.marionette';
+import {Model} from 'backbone';
+import PlaylistsList from './Playlists';
+import {localStorage} from '../../../utils';
+import app from '../../../application';
+import {props} from '../../decorators';
 
 class Playlists extends LayoutView {
 
@@ -52,7 +52,7 @@ class Playlists extends LayoutView {
             search: this.model.get('search'),
             rbtv: this.model.get('filterByRBTV'),
             lp: this.model.get('filterByLP')
-        }
+        };
     }
     
     startLoading() {
@@ -76,7 +76,7 @@ class Playlists extends LayoutView {
                     _.extend(this.channelFilter, { resetResults: true })
                 );
             }
-        }
+        };
     }
 
     onRender() {
@@ -127,7 +127,7 @@ class Playlists extends LayoutView {
 
     _onClickLink(e) {
         const $link = $(e.currentTarget);
-        let route   = $link.attr('href').substr(1);
+        const route   = $link.attr('href').substr(1);
 
         app.navigate(route);
 
@@ -158,4 +158,4 @@ class Playlists extends LayoutView {
     }
 }
 
-export default Playlists
+export default Playlists;

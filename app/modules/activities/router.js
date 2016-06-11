@@ -5,14 +5,12 @@ class Router extends AppRouter {
     get appRoutes() {
         return {
             'overview': 'initOverview'
-        }
+        };
     }
 
     get controller() {
-        return controller
+        return controller;
     }
 }
 
-const router = new Router();
-
-export default router;
+export default new Router();

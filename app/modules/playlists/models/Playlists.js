@@ -1,9 +1,8 @@
-import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
 import Config from '../../../Config';
-import {props} from '../../decorators'
+import {props} from '../../decorators';
 
 const defaultResults = 24;
 
@@ -19,7 +18,7 @@ class Playlist extends Model {
             publishedAt: null,
             thumbnails: null,
             title: ''
-        }
+        };
     }
 
     /** @param {{kind: string, etag: string, id: string, snippet: {publishedAt: string, channelId: string, title: string, description: string, thumbnails: {default: {url: string, width: number, height: number}, medium: {url: string, width: number, height: number}, high: {url: string, width: number, height: number}, standard: {url: string, width: number, height: number}, maxres: {url: string, width: number, height: number}}, channelTitle: string, localized: {title: string, description: string}}, contentDetails: {itemCount: number}}} response      */
@@ -58,13 +57,13 @@ class Playlists extends Collection {
     }
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {
-        if(!this._allModels) {
+        if (!this._allModels) {
             this._allModels = this.models;
         }
 
         let models = _.filter(this._allModels, model => {
             const channelId = model.get('channelId');
-            const title     = model.get('title');
+            const title = model.get('title');
 
             if (!rbtv && !lp) {
                 return false;
@@ -89,19 +88,19 @@ class Playlists extends Collection {
             this._displayResults = defaultResults;
         }
 
-        let prevNumModels = this.models.length;
+        const prevNumModels = this.models.length;
 
         models = _.offset(models, 0, this._displayResults);
 
         // Reset collection only if:
         // 1. collection is normally filtered
         // 2. number of models is increased while scrolling
-        if (!increaseResults || (increaseResults && models.length !== prevNumModels)) {
+        if (!increaseResults || increaseResults && models.length !== prevNumModels) {
             this.reset(models);
         }
     }
 
 }
 
-export {Playlist, Playlists}
-export default Playlists
+export {Playlist, Playlists};
+export default Playlists;

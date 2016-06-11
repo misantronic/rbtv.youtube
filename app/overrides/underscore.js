@@ -1,10 +1,10 @@
-var _ = require('underscore');
+const _ = require('underscore');
 
 _.mixin({
-    offset: function (arr, offset, length) {
-        var newArr = [];
+    offset(arr, offset, length) {
+        const newArr = [];
 
-        for (var i = offset; i < offset + length; i++) {
+        for (let i = offset; i < offset + length; i++) {
             if (!arr[i]) break;
 
             newArr.push(arr[i]);
@@ -13,15 +13,15 @@ _.mixin({
         return newArr;
     },
 
-    iintersection: function (array) {
-        var rest = _.rest(arguments);
+    iintersection(array) {
+        const rest = _.rest(arguments);
 
         array = _.map(array, item => _.isString(item) ? item.toLowerCase() : item);
 
         return _.filter(_.uniq(array), function (item) {
             return _.every(rest, function (other) {
 
-                other = _.map(other, item => _.isString(item) ? item.toLowerCase() : item);
+                other = _.map(other, otherItem => _.isString(otherItem) ? otherItem.toLowerCase() : otherItem);
 
                 return _.indexOf(other, item) >= 0;
             });

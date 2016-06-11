@@ -1,6 +1,6 @@
-import {CollectionView} from 'backbone.marionette'
-import {PlaylistItem} from '../../playlistsDetails/views/PlistlistItems'
-import {props} from '../../decorators'
+import {CollectionView} from 'backbone.marionette';
+import {PlaylistItem} from '../../playlistsDetails/views/PlistlistItems';
+import {props} from '../../decorators';
 
 class RelatedResults extends CollectionView {
     @props({
@@ -14,4 +14,4 @@ class RelatedResults extends CollectionView {
     }
 }
 
-export default RelatedResults
+export default RelatedResults;

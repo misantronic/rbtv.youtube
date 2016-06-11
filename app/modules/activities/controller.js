@@ -1,7 +1,7 @@
-import * as Marionette from 'backbone.marionette'
-import ActivitiesColection from './models/Activities'
-import ActivitiesLayout from './views/ActivitiesLayout'
-import channels from '../../channels'
+import * as Marionette from 'backbone.marionette';
+import ActivitiesColection from './models/Activities';
+import ActivitiesLayout from './views/ActivitiesLayout';
+import channels from '../../channels';
 
 import '../../../assets/css/modules/activities.scss';
 

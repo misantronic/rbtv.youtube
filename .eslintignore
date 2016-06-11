@@ -1,0 +1,3 @@
+webpack.*.js
+app/vendor/**/*.js
+test/**/*.js

@@ -1,7 +1,7 @@
-import _ from 'underscore'
-import {Model} from 'backbone'
-import AutocompleteCollection from '../../search/models/Autocomplete'
-import {localStorage} from '../../../utils'
+import _ from 'underscore';
+import {Model} from 'backbone';
+import AutocompleteCollection from '../../search/models/Autocomplete';
+import {localStorage} from '../../../utils';
 
 /**
  * @class SearchFormModel
@@ -16,7 +16,7 @@ class SearchForm extends Model {
             search: '',
             tags: new AutocompleteCollection(),
             cacheKey: ''
-        }
+        };
     }
 
     initialize() {
@@ -30,7 +30,7 @@ class SearchForm extends Model {
 
         if (!cacheKey) return;
 
-        let data = _.omit(this.toJSON(), 'loading', 'showBtnToTop', 'cacheKey');
+        const data = _.omit(this.toJSON(), 'loading', 'showBtnToTop', 'cacheKey');
 
         // Map tags
         data.tags = _.map(data.tags.toJSON(), tag => {
@@ -57,7 +57,7 @@ class SearchForm extends Model {
             attrs = localStorage.get(cacheKey) || {};
 
             if (attrs.tags) {
-                attrs.tags = new AutocompleteCollection(attrs.tags)
+                attrs.tags = new AutocompleteCollection(attrs.tags);
             }
         }
 
@@ -65,4 +65,4 @@ class SearchForm extends Model {
     }
 }
 
-export default SearchForm
+export default SearchForm;

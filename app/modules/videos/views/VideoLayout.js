@@ -1,15 +1,15 @@
-import _ from 'underscore'
-import {LayoutView} from 'backbone.marionette'
-import app from '../../../application'
-import {localStorage, stringUtil} from '../../../utils'
-import {props} from '../../decorators'
-import RelatedResults from '../../search/views/RelatedResults'
-import RelatedResultsCollection from '../../search/models/RelatedResults'
-import PlaylistItems from '../../playlistsDetails/views/PlistlistItems'
-import commentsController from '../../comments/controller'
-import PlaylistItemsCollection from '../../playlistsDetails/models/PlaylistItems'
-import ThumbsView from '../../thumbs/views/Thumbs'
-import VideoPlayerView from './VideoPlayer'
+import _ from 'underscore';
+import {LayoutView} from 'backbone.marionette';
+import app from '../../../application';
+import {localStorage, stringUtil} from '../../../utils';
+import {props} from '../../decorators';
+import RelatedResults from '../../search/views/RelatedResults';
+import RelatedResultsCollection from '../../search/models/RelatedResults';
+import PlaylistItems from '../../playlistsDetails/views/PlistlistItems';
+import commentsController from '../../comments/controller';
+import PlaylistItemsCollection from '../../playlistsDetails/models/PlaylistItems';
+import ThumbsView from '../../thumbs/views/Thumbs';
+import VideoPlayerView from './VideoPlayer';
 
 class Video extends LayoutView {
     @props({
@@ -46,9 +46,7 @@ class Video extends LayoutView {
 
     modelEvents() {
         return {
-            'change:title': (model, title) => {
-                this.ui.title.text(title)
-            },
+            'change:title': (model, title) => this.ui.title.text(title),
 
             'change:id': () => {
                 if (!this.model.get('id')) return;
@@ -73,11 +71,11 @@ class Video extends LayoutView {
             'change:playlistId': '_initPlaylistItems',
 
             'change:publishedAt': (model, publishedAt) => {
-                this.ui.publishedAt.text(publishedAt.format('LLLL'))
+                this.ui.publishedAt.text(publishedAt.format('LLLL'));
             },
 
             'change:statistics': (model, statistics) => {
-                let views = statistics.viewCount;
+                const views = statistics.viewCount;
 
                 this.ui.views.text(stringUtil.formatNumber(views));
             },
@@ -85,7 +83,7 @@ class Video extends LayoutView {
             'change:description': (model, description) => {
                 this.ui.description.html(description);
             }
-        }
+        };
     }
 
     _initVideo() {
@@ -130,14 +128,12 @@ class Video extends LayoutView {
 
         this.collection = collection;
 
-        var view = new RelatedResults({
-            collection: collection
-        });
+        const view = new RelatedResults({ collection });
 
-        this.listenTo(view, 'childview:link:clicked', view => {
-            let videoId = view.model.get('videoId');
+        this.listenTo(view, 'childview:link:clicked', itemView => {
+            const itemViewVideoId = itemView.model.get('videoId');
 
-            app.navigate(`video/${videoId}`);
+            app.navigate(`video/${itemViewVideoId}`);
         });
 
         this.getRegion('playlist').show(view);
@@ -154,7 +150,7 @@ class Video extends LayoutView {
         this.getRegion('playlist').show(this._playlistItemsView);
 
         this.listenTo(this._playlistItemsView, 'childview:link:clicked', playlistItemView => {
-            let videoId = playlistItemView.model.get('videoId');
+            const videoId = playlistItemView.model.get('videoId');
 
             this._selectVideo(videoId);
         });
@@ -206,10 +202,10 @@ class Video extends LayoutView {
     _setWatched() {
         const videoId = this.model.id;
 
-        var playlistItem = this.collection.getCurrentPlaylistItem(videoId);
+        const playlistItem = this.collection.getCurrentPlaylistItem(videoId);
 
         if (playlistItem) {
-            playlistItem.set('_watched', true)
+            playlistItem.set('_watched', true);
         }
 
         localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
@@ -233,4 +229,4 @@ class Video extends LayoutView {
     }
 }
 
-export default Video
+export default Video;

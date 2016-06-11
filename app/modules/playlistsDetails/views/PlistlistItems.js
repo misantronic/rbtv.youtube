@@ -1,9 +1,9 @@
-import _ from 'underscore'
-import {CompositeView, ItemView} from 'backbone.marionette'
-import {Model} from 'backbone'
-import {localStorage} from '../../../utils'
-import app from '../../../application'
-import {props} from '../../decorators'
+import _ from 'underscore';
+import {CompositeView, ItemView} from 'backbone.marionette';
+import {Model} from 'backbone';
+import {localStorage} from '../../../utils';
+import app from '../../../application';
+import {props} from '../../decorators';
 
 class PlaylistItem extends ItemView {
 
@@ -95,7 +95,7 @@ class PlaylistItems extends CompositeView {
     get playlistFilter() {
         return {
             search: this.model.get('search')
-        }
+        };
     }
 
     bindings() {
@@ -107,7 +107,7 @@ class PlaylistItems extends CompositeView {
                     show: 'loading'
                 }
             }
-        }
+        };
     }
 
     modelEvents() {
@@ -121,7 +121,7 @@ class PlaylistItems extends CompositeView {
                 this._searchCollection();
                 this._highlightVideo();
             }, 500)
-        }
+        };
     }
 
     initialize() {
@@ -168,7 +168,7 @@ class PlaylistItems extends CompositeView {
      * @private
      */
     _routeToVideo(replaceState) {
-        var videoId = this.model.get('videoId');
+        const videoId = this.model.get('videoId');
 
         if (!videoId) return;
 
@@ -181,5 +181,5 @@ class PlaylistItems extends CompositeView {
     }
 }
 
-export {PlaylistItem, PlaylistItems}
-export default PlaylistItems
+export {PlaylistItem, PlaylistItems};
+export default PlaylistItems;

@@ -1,0 +1,151 @@
+{
+    "failOnWarning": false,
+    "failOnError": true,
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "rules": {
+        "comma-dangle": [
+            2,
+            "never"
+        ],
+        "semi": [
+            2,
+            "always"
+        ],
+        "comma-style": [
+            2,
+            "last"
+        ],
+        "camelcase": [
+            2,
+            {
+                "properties": "always"
+            }
+        ],
+        "max-depth": [
+            2,
+            3
+        ],
+        "no-mixed-spaces-and-tabs": [
+            2,
+            "smart-tabs"
+        ],
+        "eol-last": 2,
+        "no-array-constructor": 2,
+        "no-new-object": 2,
+        "no-alert": 2,
+        "guard-for-in": 2,
+        "no-eval": 2,
+        "no-cond-assign": 2,
+        "no-dupe-args": 2,
+        "no-dupe-keys": 2,
+        "no-duplicate-case": 2,
+        "no-empty": 2,
+        "no-extra-boolean-cast": 2,
+        "no-extra-parens": 2,
+        "no-extra-semi": 2,
+        "no-inner-declarations": [
+            2,
+            "functions"
+        ],
+        "no-sparse-arrays": 2,
+        "array-bracket-spacing": [
+            2,
+            "never"
+        ],
+        "block-spacing": [
+            2,
+            "always"
+        ],
+        "brace-style": 2,
+        "quotes": [
+            2,
+            "single"
+        ],
+        "valid-typeof": 2,
+        "eqeqeq": 2,
+        "no-extend-native": [
+            2,
+            {
+                "exceptions": [
+                    "Object"
+                ]
+            }
+        ],
+        "no-with": 2,
+        "no-delete-var": 2,
+        "no-shadow": [
+            2,
+            {
+                "builtinGlobals": false,
+                "hoist": "functions",
+                "allow": [
+                    "require"
+                ]
+            }
+        ],
+        "no-undef-init": 2,
+        "no-unused-vars": 2,
+        "comma-spacing": [
+            2,
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "consistent-this": [
+            2,
+            "self"
+        ],
+        "computed-property-spacing": [
+            2,
+            "never"
+        ],
+        "key-spacing": [
+            2,
+            {
+                "beforeColon": false,
+                "afterColon": true
+            }
+        ],
+        "linebreak-style": 2,
+        "max-params": [
+            2,
+            4
+        ],
+        "new-cap": [
+            2,
+            {
+                "capIsNewExceptions": [
+                    "$.Deferred"
+                ]
+            }
+        ],
+        "new-parens": 2,
+        "newline-after-var": [
+            2,
+            "always"
+        ],
+        "space-before-blocks": 2,
+        "keyword-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true,
+                "overrides": {}
+            }
+        ],
+        "prefer-const": [
+            "error",
+            {
+                "destructuring": "any",
+                "ignoreReadBeforeAssign": false
+            }
+        ],
+        "no-var": 2,
+        "object-shorthand": ["error", "always"]
+    }
+}

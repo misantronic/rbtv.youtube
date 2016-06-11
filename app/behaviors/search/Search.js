@@ -1,6 +1,6 @@
-import _ from 'underscore'
-import {Behavior, Region} from 'backbone.marionette'
-import SearchFormView from '../../modules/search/views/SearchForm'
+import _ from 'underscore';
+import {Behavior, Region} from 'backbone.marionette';
+import SearchFormView from '../../modules/search/views/SearchForm';
 
 class Search extends Behavior {
     onRender() {
@@ -18,7 +18,7 @@ class Search extends Behavior {
         this.options = _.omit(this.options, 'container');
 
         // Set-up options for view
-        let options = _.defaults(this.options, {
+        const options = _.defaults(this.options, {
             filterCheckboxBehavior: false,
             autocomplete: true,
             model: this.view.model
@@ -43,4 +43,4 @@ class Search extends Behavior {
     }
 }
 
-export default Search
+export default Search;

@@ -1,13 +1,13 @@
-import $ from 'jquery'
-import _ from 'underscore'
-import {CollectionView, LayoutView} from 'backbone.marionette'
-import {Model} from 'backbone'
-import {props} from '../../decorators'
-import ThumbsView from '../../thumbs/views/Thumbs'
-import {Comments as CommentsCollection, Comment as CommentModel} from '../models/Comments'
-import CommentForm from './CommentForm'
-import {timeUtil} from '../../../utils'
-import channels from '../../../channels'
+import $ from 'jquery';
+import _ from 'underscore';
+import {CollectionView, LayoutView} from 'backbone.marionette';
+import {Model} from 'backbone';
+import {props} from '../../decorators';
+import ThumbsView from '../../thumbs/views/Thumbs';
+import {Comments as CommentsCollection, Comment as CommentModel} from '../models/Comments';
+import CommentForm from './CommentForm';
+import {timeUtil} from '../../../utils';
+import channels from '../../../channels';
 
 class CommentItem extends LayoutView {
     @props({
@@ -44,7 +44,7 @@ class CommentItem extends LayoutView {
         return {
             '@ui.showReplies': {
                 observe: 'repliesVisible',
-                update: function ($el, val) {
+                update($el, val) {
                     if (val) {
                         $el.text('Verberge Antworten');
                     } else {
@@ -52,7 +52,7 @@ class CommentItem extends LayoutView {
                     }
                 }
             }
-        }
+        };
     }
 
     onRender() {
@@ -91,8 +91,8 @@ class CommentItem extends LayoutView {
     }
 
     _showReplies() {
-        let collection = new CommentsCollection();
-        let view       = new CommentsItems({ collection, disableScrollEvent: true });
+        const collection = new CommentsCollection();
+        const view       = new CommentsItems({ collection, disableScrollEvent: true });
 
         this.getRegion('replies').show(view);
 
@@ -109,7 +109,7 @@ class CommentItem extends LayoutView {
     }
 
     _onClickReply() {
-        var formView = new CommentForm({
+        const formView = new CommentForm({
             canCancel: true,
             model: new CommentModel({
                 snippet: {
@@ -125,10 +125,10 @@ class CommentItem extends LayoutView {
     }
 
     _onClickLink(e) {
-        let href = $(e.currentTarget).attr('href');
+        const href = $(e.currentTarget).attr('href');
 
         if (href.indexOf('t=') !== -1) {
-            var timeStr = href.split('t=')[1];
+            const timeStr = href.split('t=')[1];
 
             if (timeStr) {
                 const seconds = timeUtil.videoPositionToSeconds(timeStr);
@@ -173,7 +173,7 @@ class CommentsItems extends CollectionView {
     collectionEvents() {
         return {
             sync: '_onCollectionSync'
-        }
+        };
     }
 
     modelEvents() {
@@ -181,7 +181,7 @@ class CommentsItems extends CollectionView {
             'change:loading': (model, val) => {
                 this.trigger('loading', val);
             }
-        }
+        };
 
     }
 
@@ -248,4 +248,4 @@ class CommentsItems extends CollectionView {
     }
 }
 
-export default CommentsItems
+export default CommentsItems;

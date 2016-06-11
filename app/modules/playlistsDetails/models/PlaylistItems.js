@@ -2,7 +2,7 @@ import _ from 'underscore';
 import moment from 'moment';
 import {Model, Collection} from 'backbone';
 import Config from '../../../Config';
-import {props} from '../../decorators'
+import {props} from '../../decorators';
 
 /**
  * @class PlaylistItemModel
@@ -21,7 +21,7 @@ class PlaylistItem extends Model {
             publishedAt: null,
             thumbnails: null,
             title: ''
-        }
+        };
     }
 
     /** @param {{kind: string, etag: string, id: string, snippet: {publishedAt: string, channelId: string, title: string, description: string, thumbnails: {default: {url: string, width: number, height: number}, medium: {url: string, width: number, height: number}, high: {url: string, width: number, height: number}, standard: {url: string, width: number, height: number}, maxres: {url: string, width: number, height: number}}, channelTitle: string, playlistId: string, position: number, resourceId: {kind: string, videoId: string}}, contentDetails: {videoId: string}}} response */
@@ -37,7 +37,7 @@ class PlaylistItem extends Model {
             publishedAt: moment(response.snippet.publishedAt),
             thumbnails: response.snippet.thumbnails,
             title: response.snippet.title
-        }
+        };
     }
 }
 
@@ -45,8 +45,8 @@ class PlaylistItems extends Collection {
     @props({
         model: PlaylistItem,
 
-        url: function () {
-            return Config.endpoints.playlistItems +'?playlistId='+ this._playlistId;
+        url() {
+            return Config.endpoints.playlistItems + '?playlistId=' + this._playlistId;
         }
     })
 
@@ -72,7 +72,7 @@ class PlaylistItems extends Collection {
     }
 
     search({ search, date }) {
-        if(!this._allModels) {
+        if (!this._allModels) {
             this._allModels = this.models;
         }
 
@@ -91,9 +91,9 @@ class PlaylistItems extends Collection {
 
                 return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
             })
-        )
+        );
     }
 }
 
-export {PlaylistItem, PlaylistItems}
-export default PlaylistItems
+export {PlaylistItem, PlaylistItems};
+export default PlaylistItems;

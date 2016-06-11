@@ -1,8 +1,8 @@
-import _ from 'underscore'
-import {LayoutView} from 'backbone.marionette'
-import {Comment as CommentModel} from '../models/Comments'
-import {props} from '../../decorators'
-import youtubeController from '../../youtube/controller'
+import _ from 'underscore';
+import {LayoutView} from 'backbone.marionette';
+import {Comment as CommentModel} from '../models/Comments';
+import {props} from '../../decorators';
+import youtubeController from '../../youtube/controller';
 
 class CommentForm extends LayoutView {
     constructor(options = {}) {
@@ -33,11 +33,11 @@ class CommentForm extends LayoutView {
             'click @ui.cancel': 'comment:cancel'
         }
     })
-    
+
     onRender() {
         const canCancel = _.isUndefined(this.getOption('canCancel')) ? false : this.getOption('canCancel');
-        
-        if(canCancel) {
+
+        if (canCancel) {
             this.ui.cancel.removeClass('hide');
         }
     }
@@ -65,8 +65,8 @@ class CommentForm extends LayoutView {
     }
 
     _onChangeText() {
-        let snippet = this.model.get('snippet');
-        let $text   = this.ui.text;
+        const snippet = this.model.get('snippet');
+        const $text = this.ui.text;
 
         snippet.textOriginal = $text.val();
 
@@ -94,4 +94,4 @@ class CommentForm extends LayoutView {
     }
 }
 
-export default CommentForm
+export default CommentForm;

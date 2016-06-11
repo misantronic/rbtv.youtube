@@ -1,13 +1,13 @@
-import $ from 'jquery'
-import {Behavior} from 'backbone.marionette'
-import template from './BtnToTop.ejs'
+import $ from 'jquery';
+import {Behavior} from 'backbone.marionette';
+import template from './BtnToTop.ejs';
 
 class BtnToTop extends Behavior {
 
     events() {
         return {
             'click .js-btn-to-top': '_onBtnToTop'
-        }
+        };
     }
 
     onRender() {
@@ -43,8 +43,8 @@ class BtnToTop extends Behavior {
     _onScroll() {
         const y = window.scrollY;
 
-        this.view.model.set('showBtnToTop', y >= window.innerHeight)
+        this.view.model.set('showBtnToTop', y >= window.innerHeight);
     }
 }
 
-export default BtnToTop
+export default BtnToTop;

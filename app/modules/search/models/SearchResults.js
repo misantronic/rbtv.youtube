@@ -1,7 +1,7 @@
-import {Model, Collection} from 'backbone'
-import Config from '../../../Config'
-import $ from 'jquery'
-import moment from 'moment'
+import {Model, Collection} from 'backbone';
+import Config from '../../../Config';
+import $ from 'jquery';
+import moment from 'moment';
 
 class SearchResult extends Model {
     defaults() {
@@ -15,7 +15,7 @@ class SearchResult extends Model {
             publishedAt: null,
             thumbnails: null,
             title: ''
-        }
+        };
     }
 
     parse(response) {
@@ -59,13 +59,13 @@ class SearchResults extends Collection {
     setChannelId(val) {
         this._channelId = val;
 
-        return this
+        return this;
     }
 
     setNextPageToken(val) {
         this._nextPageToken = val;
 
-        return this
+        return this;
     }
 
     setQ(val) {
@@ -81,7 +81,7 @@ class SearchResults extends Collection {
     }
 
     get nextPageToken() {
-        return this._nextPageToken
+        return this._nextPageToken;
     }
 
     url() {
@@ -100,12 +100,12 @@ class SearchResults extends Collection {
                 this._nextPageToken = null;
             }
 
-            return this.models.concat(response.items)
+            return this.models.concat(response.items);
         }
 
         this._nextPageToken = null;
     }
 }
 
-export {SearchResult, SearchResults}
-export default SearchResults
+export {SearchResult, SearchResults};
+export default SearchResults;

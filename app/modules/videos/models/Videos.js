@@ -1,12 +1,9 @@
-import $ from 'jquery'
-import _ from 'underscore'
-import moment from 'moment'
-import {Model, Collection} from 'backbone'
-import Config from '../../../Config'
-import {props} from '../../decorators'
-
-const parts = 'snippet';
-const maxResults = 50;
+import $ from 'jquery';
+import _ from 'underscore';
+import moment from 'moment';
+import {Model, Collection} from 'backbone';
+import Config from '../../../Config';
+import {props} from '../../decorators';
 
 class Video extends Model {
     defaults() {
@@ -53,7 +50,7 @@ class Video extends Model {
                 favoriteCount: 0,
                 commentCount: 0
             }
-        }
+        };
     }
 
     url() {
@@ -61,7 +58,7 @@ class Video extends Model {
             throw new Error('Please specify an id for this model');
         }
 
-        var fromCache = _.isUndefined(this._fromCache) ? true : this._fromCache;
+        const fromCache = _.isUndefined(this._fromCache) ? true : this._fromCache;
 
         return Config.endpoints.videos + '?' + $.param([
                 { name: 'id', value: this.id },
@@ -106,12 +103,12 @@ class Video extends Model {
             return '';
         }
 
-        let hours = ('0' + duration.hours()).slice(-2);
-        let mins  = ('0' + duration.minutes()).slice(-2);
-        let secs  = ('0' + duration.seconds()).slice(-2);
+        const hours = ('0' + duration.hours()).slice(-2);
+        const mins  = ('0' + duration.minutes()).slice(-2);
+        const secs  = ('0' + duration.seconds()).slice(-2);
 
         // Add minutes + seconds
-        var arr = [
+        const arr = [
             mins,
             secs
         ];
@@ -149,5 +146,5 @@ class Videos extends Collection {
     }
 }
 
-export {Video, Videos}
-export default Videos
+export {Video, Videos};
+export default Videos;

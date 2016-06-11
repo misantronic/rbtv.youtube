@@ -1,4 +1,4 @@
-import {Collection} from 'backbone'
+import {Collection} from 'backbone';
 
 const apiBaseUrl = '/api';
 
@@ -31,4 +31,4 @@ export default {
         { title: 'Übersicht', route: 'overview' },
         { title: 'Playlists', route: 'playlists' }
     ])
-}
+};

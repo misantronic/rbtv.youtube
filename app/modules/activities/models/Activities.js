@@ -3,9 +3,6 @@ import moment from 'moment';
 import {Model, Collection} from 'backbone';
 import Config from '../../../Config';
 
-const parts      = 'snippet, contentDetails';
-const maxResults = 30;
-
 class Activity extends Model {
     defaults() {
         return {
@@ -20,7 +17,7 @@ class Activity extends Model {
             title: '',
             tags: null,
             duration: null
-        }
+        };
     }
 
     parse(response) {
@@ -48,17 +45,17 @@ class Activities extends Collection {
     setChannelId(val) {
         this._channelId = val;
 
-        return this
+        return this;
     }
 
     setNextPageToken(val) {
         this._nextPageToken = val;
 
-        return this
+        return this;
     }
 
     get nextPageToken() {
-        return this._nextPageToken
+        return this._nextPageToken;
     }
 
     url() {
@@ -71,9 +68,9 @@ class Activities extends Collection {
     parse(response) {
         this._nextPageToken = response.nextPageToken;
 
-        return this.models.concat(response.items)
+        return this.models.concat(response.items);
     }
 }
 
-export {Activities, Activity}
-export default Activities
+export {Activities, Activity};
+export default Activities;

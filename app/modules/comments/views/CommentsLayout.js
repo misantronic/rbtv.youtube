@@ -1,9 +1,9 @@
-import {Model} from 'backbone'
-import {LayoutView} from 'backbone.marionette'
-import {props} from '../../decorators'
-import CommentsItemsView from './CommentsItems'
-import CommentFormView from './CommentForm'
-import {CommentThread as CommentThreadModel} from '../models/CommentThreads'
+import {Model} from 'backbone';
+import {LayoutView} from 'backbone.marionette';
+import {props} from '../../decorators';
+import CommentsItemsView from './CommentsItems';
+import CommentFormView from './CommentForm';
+import {CommentThread as CommentThreadModel} from '../models/CommentThreads';
 
 class CommentsLayout extends LayoutView {
     constructor(options = {}) {
@@ -68,7 +68,7 @@ class CommentsLayout extends LayoutView {
      */
 
     _onLoading(isLoading) {
-        this.model.set('loading', isLoading)
+        this.model.set('loading', isLoading);
     }
 
     _onCommentAdded(commentModel) {
@@ -76,4 +76,4 @@ class CommentsLayout extends LayoutView {
     }
 }
 
-export default CommentsLayout
+export default CommentsLayout;

@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import _ from 'underscore';
 
 // props decorator
 export function props(obj) {
@@ -6,5 +6,5 @@ export function props(obj) {
         _.each(obj, (val, key) => {
             target[key] = val;
         });
-    }
+    };
 }

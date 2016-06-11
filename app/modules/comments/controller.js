@@ -1,6 +1,6 @@
-import * as Marionette from 'backbone.marionette'
-import CommentThreadsCollection from './models/CommentThreads'
-import CommentsLayout from './views/CommentsLayout'
+import * as Marionette from 'backbone.marionette';
+import CommentThreadsCollection from './models/CommentThreads';
+import CommentsLayout from './views/CommentsLayout';
 
 import '../../../assets/css/modules/comments.scss';
 

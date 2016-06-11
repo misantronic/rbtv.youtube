@@ -1,7 +1,7 @@
-import channels from '../channels'
+import channels from '../channels';
 
 function radioMixin() {
-    var radioChannels = _.result(this, 'channels');
+    const radioChannels = _.result(this, 'channels');
 
     if (radioChannels) {
         // Iterate over options which are the individual channels
@@ -26,4 +26,4 @@ function radioMixin() {
     }
 }
 
-export {radioMixin}
+export {radioMixin};

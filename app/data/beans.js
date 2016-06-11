@@ -45,4 +45,4 @@ export default [
     { title: 'Florentin', expr: /^fl/i },
     { title: 'Wolf', expr: /^wo/i },
     { title: 'Anne', expr: /^an/i }
-]
+];

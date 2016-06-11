@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import {CollectionView, CompositeView} from 'backbone.marionette'
-import {View} from 'backbone'
-import {radioMixin} from './radio'
+import {CollectionView, CompositeView} from 'backbone.marionette';
+import {View} from 'backbone';
+import {radioMixin} from './radio';
 
 /**
  * Animated CollectionView inserts
@@ -14,7 +14,7 @@ function _insertAfter(method, childView) {
     if (!this._insertAfterAnimateCnt) {
         // Reset counter
         _.delay(() => {
-            this._insertAfterAnimateCnt = null
+            this._insertAfterAnimateCnt = null;
         }, 800);
     }
 
@@ -34,13 +34,13 @@ function _insertAfter(method, childView) {
 }
 
 _.extend(CollectionView.prototype, {
-    _insertAfter: function (childView) {
+    _insertAfter(childView) {
         _insertAfter.call(this, _insertAfterFn1, childView);
     }
 });
 
 _.extend(CompositeView.prototype, {
-    _insertAfter: function (childView) {
+    _insertAfter(childView) {
         _insertAfter.call(this, _insertAfterFn2, childView);
     }
 });

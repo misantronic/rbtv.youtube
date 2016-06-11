@@ -1,11 +1,11 @@
-import _ from 'underscore'
-import $ from 'jquery'
-import {LayoutView} from 'backbone.marionette'
-import AutocompleteView from './Autocomplete'
-import {Autocomplete as AutocompleteCollection} from '../models/Autocomplete'
+import _ from 'underscore';
+import $ from 'jquery';
+import {LayoutView} from 'backbone.marionette';
+import AutocompleteView from './Autocomplete';
+import {Autocomplete as AutocompleteCollection} from '../models/Autocomplete';
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
-import {props} from '../../decorators'
+import {props} from '../../decorators';
 
 class SearchForm extends LayoutView {
     @props({
@@ -65,7 +65,7 @@ class SearchForm extends LayoutView {
     initialize() {
         this._autocompleteEnabled = _.isUndefined(this.getOption('autocomplete')) ? true : this.getOption('autocomplete');
 
-        let tagCollection = this.model.get('tags');
+        const tagCollection = this.model.get('tags');
 
         this.listenTo(tagCollection, 'add remove', this._updateTags);
     }
@@ -83,8 +83,8 @@ class SearchForm extends LayoutView {
         // Merge beans and shows
         const items = beans.concat(shows);
 
-        let collection = new AutocompleteCollection(items);
-        let view = new AutocompleteView({collection});
+        const collection = new AutocompleteCollection(items);
+        const view = new AutocompleteView({collection});
 
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
         this.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model.get('title')));
@@ -95,8 +95,7 @@ class SearchForm extends LayoutView {
     }
 
     _updateTags() {
-        let collection = this.model.get('tags');
-
+        const collection = this.model.get('tags');
         const view = new AutocompleteView({collection});
 
         view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
@@ -153,7 +152,7 @@ class SearchForm extends LayoutView {
             case 8: // BACKSPACE
                 if (this.ui.search.val() !== '') break;
 
-                let tagCollection = this.model.get('tags');
+                const tagCollection = this.model.get('tags');
 
                 if (tagCollection.length > 0) {
                     tagCollection.remove(tagCollection.last());
@@ -163,7 +162,7 @@ class SearchForm extends LayoutView {
     }
 
     _onAutocompleteLinkSelected(itemView) {
-        let model = itemView.model;
+        const model = itemView.model;
 
         this.model.get('tags').add(model);
 
@@ -187,4 +186,4 @@ class SearchForm extends LayoutView {
         this.trigger('search');
     }
 }
-export default SearchForm
+export default SearchForm;

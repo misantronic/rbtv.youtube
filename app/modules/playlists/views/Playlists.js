@@ -1,5 +1,5 @@
-import {CollectionView} from 'backbone.marionette'
-import {Playlist, PlaylistEmpty} from './Playlist'
+import {CollectionView} from 'backbone.marionette';
+import {Playlist, PlaylistEmpty} from './Playlist';
 
 const PlaylistsList = CollectionView.extend({
     className: 'items items-playlists row',
@@ -9,4 +9,4 @@ const PlaylistsList = CollectionView.extend({
     emptyView: PlaylistEmpty
 });
 
-export default PlaylistsList
+export default PlaylistsList;
