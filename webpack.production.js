@@ -9,4 +9,8 @@ webpackConfig.plugins.push(
     })
 );
 
+webpackConfig.debug = false;
+
+webpackConfig.devtool = null;
+
 module.exports = webpackConfig;
