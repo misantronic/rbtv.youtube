@@ -182,11 +182,11 @@ class Activities extends LayoutView {
             // Attach html
             this.getRegion('items').show(searchResultsView);
 
-            if (this.$currentSearchXHR) {
-                this.$currentSearchXHR.abort();
+            if (this._currentSearchXHR) {
+                this._currentSearchXHR.abort();
             }
 
-            this.$currentSearchXHR = searchResultsView.renderSearchResults(this._currentChannel);
+            this._currentSearchXHR = searchResultsView.renderSearchResults(this._currentChannel);
         }
 
         return searchVal;

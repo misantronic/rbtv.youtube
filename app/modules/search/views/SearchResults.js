@@ -170,10 +170,10 @@ class SearchResults extends CollectionView {
             .setNextPageToken(nextPageToken)
             .fetch();
 
-        xhr.then(data => {
+        xhr.then(collection => {
             this.loading = false;
 
-            this._fetchVideoDetails(data);
+            this._fetchVideoDetails(collection);
             this._initScroll();
         });
 
@@ -200,8 +200,8 @@ class SearchResults extends CollectionView {
         }
     }
 
-    _fetchVideoDetails(searchData) {
-        const videoIds = _.map(searchData.items, modelData => {
+    _fetchVideoDetails(searchCollection) {
+        const videoIds = _.map(searchCollection.items, modelData => {
             return modelData.id.videoId;
         });
 

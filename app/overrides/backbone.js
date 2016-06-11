@@ -10,7 +10,7 @@ Collection.prototype.fetch = function (options) {
     const self  = this;
     const defer = $.Deferred();
 
-    fetchFn.call(this, _.extend(options, {
+    const xhr = fetchFn.call(this, _.extend(options, {
         success(/* data */) {
             defer.resolve(self);
         },
@@ -20,5 +20,10 @@ Collection.prototype.fetch = function (options) {
         }
     }));
 
-    return defer.promise();
+    const promise = defer.promise();
+
+    // Add abort-method from xhr
+    promise.abort = xhr.abort;
+
+    return promise;
 };
