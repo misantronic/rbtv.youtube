@@ -1,6 +1,10 @@
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
 @import '../fonts/thumbs.css';
 
+html {
+	margin-left: calc(100vw - 100%);
+}
+
 body {
 	background: #FCFCFC !important;
 	font-family: Raleway, Arial, sans-serif;
