@@ -7,8 +7,8 @@ It's meant to be a YouTube-Alternative fully written in JavaScript ES6 with [BAC
 Feel free to contribute!<br>
 http://rbtv-youtube.herokuapp.com/<br>
 <br>
-![overview](http://imgur.com/q1wl8dq)
+![Overview](http://i.imgur.com/q1wl8dq.jpg)
 <br><br>
-![playlists](http://imgur.com/g48dleh)
+![Playlists](http://i.imgur.com/g48dleh.jpg)
 <br><br>
-![videos](http://imgur.com/UKUcums)
+![Videos](http://i.imgur.com/UKUcums.jpg)
