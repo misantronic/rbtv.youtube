@@ -80,14 +80,6 @@ class SearchResult extends LayoutView {
                     'watched': '_watched'
                 }
             }
-        },
-
-        channels: function () {
-            return {
-                app: {
-                    resize: _.debounce(this._onResize, 100)
-                }
-            }
         }
     })
 
@@ -103,10 +95,6 @@ class SearchResult extends LayoutView {
 
     onDestroy() {
         this.$('[data-toggle="tooltip"]').tooltip('destroy')
-    }
-
-    _onResize() {
-        this.model.trigger('change:tags');
     }
 
     _initTooltip() {
