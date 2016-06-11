@@ -9,7 +9,6 @@ module.exports = {
 			'backbone.radio',
 			'backbone.marionette',
 			'backbone.stickit',
-			__dirname + '/app/vendor/marionette.radio.shim/radio.shim',
 			'moment',
 			__dirname + '/node_modules/bootstrap/js/tooltip',
 			__dirname + '/node_modules/bootstrap/js/collapse',
