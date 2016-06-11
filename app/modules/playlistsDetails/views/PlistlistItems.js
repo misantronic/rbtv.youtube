@@ -1,6 +1,4 @@
 import _ from 'underscore'
-import $ from 'jquery'
-import moment from 'moment';
 import {CompositeView, ItemView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {localStorage} from '../../../utils'

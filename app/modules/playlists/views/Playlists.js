@@ -1,5 +1,5 @@
 import {CollectionView} from 'backbone.marionette'
-import {Playlist, PlaylistEmpty} from './PlaylistItem'
+import {Playlist, PlaylistEmpty} from './Playlist'
 
 const PlaylistsList = CollectionView.extend({
     className: 'items items-playlists row',

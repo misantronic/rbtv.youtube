@@ -1,5 +1,5 @@
 import {CollectionView} from 'backbone.marionette'
-import {PlaylistItem} from '../../playlists/views/PlistlistItems'
+import {PlaylistItem} from '../../playlistsDetails/views/PlistlistItems'
 import {props} from '../../decorators'
 
 class RelatedResults extends CollectionView {
