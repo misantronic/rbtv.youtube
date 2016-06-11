@@ -69,12 +69,6 @@ module.exports = {
 		// exclude moment locales
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-		// new webpack.optimize.UglifyJsPlugin({
-		// 	compress: {
-		// 		warnings: false
-		// 	}
-		// }),
-
 		new HtmlWebpackPlugin({
 			template: __dirname + '/templates/index.ejs',
 			filename: 'index.html',
