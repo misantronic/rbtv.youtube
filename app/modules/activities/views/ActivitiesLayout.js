@@ -133,10 +133,10 @@ class Activities extends LayoutView {
             .setNextPageToken(nextPageToken)
             .setChannelId(this._currentChannel)
             .fetch()
-            .done(data => {
+            .done(collection => {
                 this.stopLoading();
                 this._initScroll();
-                this._fetchVideoDetails(data);
+                this._fetchVideoDetails(collection);
             });
     }
 
@@ -192,9 +192,9 @@ class Activities extends LayoutView {
         return searchVal;
     }
 
-    _fetchVideoDetails(collectionData) {
-        const videoIds = _.map(collectionData.items, modelData => {
-            return modelData.contentDetails.upload.videoId;
+    _fetchVideoDetails(collection) {
+        const videoIds = collection.map(model => {
+            return model.get('videoId');
         });
 
         if (videoIds.length) {
