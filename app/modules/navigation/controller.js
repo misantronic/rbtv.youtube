@@ -3,6 +3,8 @@ import {history} from 'backbone';
 import Config from '../../Config';
 import {props} from '../decorators';
 
+import './styles/navigation.scss'
+
 class Controller extends Marionette.Object {
     @props({
         channels: {

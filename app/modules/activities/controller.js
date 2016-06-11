@@ -3,7 +3,7 @@ import ActivitiesColection from './models/Activities';
 import ActivitiesLayout from './views/ActivitiesLayout';
 import channels from '../../channels';
 
-import '../../../assets/css/modules/activities.scss';
+import './styles/activities.scss';
 
 class ActivitiesController extends Marionette.Object {
     init(region) {

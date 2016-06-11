@@ -7,7 +7,7 @@ import channels from '../../channels';
 import youtubeController from '../youtube/controller';
 import PlaylistItemsCollection from '../playlistsDetails/models/PlaylistItems';
 
-import '../../../assets/css/modules/playlists.scss';
+import './styles/playlists.scss';
 
 class PlaylistsController extends Marionette.Object {
 

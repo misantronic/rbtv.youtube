@@ -4,6 +4,8 @@ import {Collection} from 'backbone';
 import BreadcrumbView from './views/Breadcrumb';
 import {props} from '../decorators';
 
+import './styles/breadcrumb.scss';
+
 class BreadcrumbController extends Marionette.Object {
     @props({
         channels: {
