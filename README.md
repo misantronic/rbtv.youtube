@@ -1,6 +1,6 @@
 # rbtv.youtube
 
-> rbtv.youtube is an open-source project for the german tv-channel `Rocket Beans TV`.<br><br>
+> rbtv.youtube is an open-source project for the german tv-channel `Rocket Beans TV`.
 
 It's meant to be a YouTube-Alternative fully written in JavaScript ES6 with [BACKBONE.JS](http://backbonejs.org/) and [Marionette.js](http://marionettejs.com/).<br>
 <br>
