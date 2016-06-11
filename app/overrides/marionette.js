@@ -85,7 +85,7 @@ Marionette.Object.extend = Marionette.extend;
 Marionette.Object.prototype = MarionetteObjectPrototype;
 
 /**
- *
+ * Optimize attachElContent
  */
 
 function attachElContent(html) {
@@ -100,3 +100,20 @@ function attachElContent(html) {
 
 Marionette.ItemView.prototype.attachElContent = attachElContent;
 Marionette.CompositeView.prototype.attachElContent = attachElContent;
+
+/**
+ * Fade-in regions attachHtml
+ */
+
+function attachHtml(view) {
+    this.$el.contents().detach();
+
+    view.$el.addClass('region-item is-transparent');
+
+    this.el.appendChild(view.el);
+
+    // FadeIn
+    _.delay(() => view.$el.removeClass('is-transparent'), 0);
+}
+
+Marionette.Region.prototype.attachHtml = attachHtml;

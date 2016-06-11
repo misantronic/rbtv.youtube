@@ -1,0 +1,9 @@
+.region-item {
+	opacity: 1;
+
+	transition: opacity 150ms linear;
+
+	&.is-transparent {
+		opacity: 0;
+	}
+}
