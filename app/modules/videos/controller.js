@@ -5,13 +5,13 @@ import channels from '../../channels';
 
 import './styles/videos.scss';
 
-class VideosController extends Marionette.Object {
+const VideosController = Marionette.Object.extend({
     init(region) {
         this._region = region;
 
         /** @type {VideoLayout} */
         this._videoLayout = null;
-    }
+    },
 
     initVideo(videoId) {
         if (this._region.$el.find('.layout-video').length === 0) {
@@ -29,6 +29,6 @@ class VideosController extends Marionette.Object {
 
         this._videoLayout.model.set('id', videoId);
     }
-}
+});
 
 export default new VideosController();

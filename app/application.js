@@ -23,7 +23,7 @@ import BehaviorLoader from './behaviors/loader/Loader';
 // Controller
 import playlistsController from './modules/playlists/controller';
 import breadcrumbController from './modules/breadcrumb/controller';
-import overviewController from './modules/activities/controller';
+import activitiesController from './modules/activities/controller';
 import videosController from './modules/videos/controller';
 import youtubeController from './modules/youtube/controller';
 
@@ -70,7 +70,7 @@ const App = Application.extend({
         youtubeController.init();
         breadcrumbController.init(bcRegion);
         playlistsController.init(mainRegion);
-        overviewController.init(mainRegion);
+        activitiesController.init(mainRegion);
         videosController.init(mainRegion);
 
         this._initNavigation();

@@ -9,11 +9,11 @@ import PlaylistItemsCollection from '../playlistsDetails/models/PlaylistItems';
 
 import './styles/playlists.scss';
 
-class PlaylistsController extends Marionette.Object {
+const PlaylistsController = Marionette.Object.extend({
 
     init(region) {
         this._region = region;
-    }
+    },
 
     initPlaylists() {
         this._currentPlaylistId = null;
@@ -32,7 +32,7 @@ class PlaylistsController extends Marionette.Object {
 
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Playlists', route: 'playlists' });
-    }
+    },
 
     initPlaylist(playlistId, videoId = null) {
         this._fetchPlaylistItems(playlistId)
@@ -59,7 +59,7 @@ class PlaylistsController extends Marionette.Object {
                         channels.breadcrumb.push({ title });
                     });
             });
-    }
+    },
 
     _fetchPlaylistItems(playlistId) {
         const collection = new PlaylistItemsCollection();
@@ -68,6 +68,6 @@ class PlaylistsController extends Marionette.Object {
 
         return collection.fetch();
     }
-}
+});
 
 export default new PlaylistsController();

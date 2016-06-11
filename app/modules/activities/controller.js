@@ -5,10 +5,10 @@ import channels from '../../channels';
 
 import './styles/activities.scss';
 
-class ActivitiesController extends Marionette.Object {
+const ActivitiesController = Marionette.Object.extend({
     init(region) {
         this._region = region;
-    }
+    },
 
     initOverview() {
         this._region.show(
@@ -18,6 +18,6 @@ class ActivitiesController extends Marionette.Object {
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Übersicht', route: 'overview' });
     }
-}
+});
 
 export default new ActivitiesController();

@@ -2,23 +2,20 @@ import * as Marionette from 'backbone.marionette';
 import _ from 'underscore';
 import {Collection} from 'backbone';
 import BreadcrumbView from './views/Breadcrumb';
-import {props} from '../decorators';
 
 import './styles/breadcrumb.scss';
 
-class BreadcrumbController extends Marionette.Object {
-    @props({
-        channels: {
-            breadcrumb: {
-                replace: '_onReplace',
-                push: '_onPush'
-            }
+const BreadcrumbController = Marionette.Object.extend({
+    channels: {
+        breadcrumb: {
+            replace: '_onReplace',
+            push: '_onPush'
         }
-    })
+    },
 
     init(region) {
         this._region = region;
-    }
+    },
 
     _initColletion() {
         this.collection = new Collection();
@@ -28,7 +25,7 @@ class BreadcrumbController extends Marionette.Object {
                 collection: this.collection
             })
         );
-    }
+    },
 
     _onReplace(...routes) {
         if (!this.collection) {
@@ -36,7 +33,7 @@ class BreadcrumbController extends Marionette.Object {
         }
 
         this.collection.reset(routes);
-    }
+    },
 
     _onPush(...routes) {
         if (!this.collection) {
@@ -53,6 +50,6 @@ class BreadcrumbController extends Marionette.Object {
             this.collection.add(route);
         });
     }
-}
+});
 
 export default new BreadcrumbController();
