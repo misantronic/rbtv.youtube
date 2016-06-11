@@ -58,7 +58,7 @@ class PlaylistItems extends CompositeView {
         model: new Model({
             search: '',
             videoId: null,
-            loading: false
+            _loading: false
         }),
 
         ui: {
@@ -86,7 +86,7 @@ class PlaylistItems extends CompositeView {
     }
 
     set loading(val) {
-        this.model.set('loading', val);
+        this.model.set('_loading', val);
     }
 
     /**
@@ -104,7 +104,7 @@ class PlaylistItems extends CompositeView {
 
             '@ui.loader': {
                 classes: {
-                    show: 'loading'
+                    show: '_loading'
                 }
             }
         };

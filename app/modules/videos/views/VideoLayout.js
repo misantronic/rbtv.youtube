@@ -52,7 +52,7 @@ class Video extends LayoutView {
                 if (!this.model.get('id')) return;
 
                 this.model
-                    .set('loading', true)
+                    .set('_loading', true)
                     .fetchLive()
                     .then(() => {
                         this._initVideo();
@@ -64,7 +64,7 @@ class Video extends LayoutView {
 
                         this._initComments();
 
-                        this.model.set('loading', false);
+                        this.model.set('_loading', false);
                     });
             },
 

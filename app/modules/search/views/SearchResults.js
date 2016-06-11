@@ -10,98 +10,96 @@ import AutocompleteView from './Autocomplete';
 import AutocompleteCollection from '../models/Autocomplete';
 import channels from '../../../channels';
 
-class SearchResult extends LayoutView {
+const SearchResult = LayoutView.extend({
 
-    @props({
-        className: 'item col-xs-12 col-sm-4',
+    className: 'item col-xs-12 col-sm-4',
 
-        template: require('../templates/video-item.ejs'),
+    template: require('../templates/video-item.ejs'),
 
-        ui: {
-            link: '.js-link',
-            team: '.region-team',
-            duration: '.js-duration'
-        },
+    ui: {
+        link: '.js-link',
+        team: '.region-team',
+        duration: '.js-duration'
+    },
 
-        regions: {
-            team: '.region-team'
-        },
+    regions: {
+        team: '.region-team'
+    },
 
-        bindings: {
-            '@ui.team': {
-                observe: 'tags',
-                update($el, tags) {
-                    if (tags) {
-                        // Map only first names
-                        tags = _.map(tags, (tag) => {
-                            // Special cases
-                            if (tag.toLowerCase() === 'daniel budiman') {
-                                return 'budi';
-                            }
+    bindings: {
+        '@ui.team': {
+            observe: 'tags',
+            update($el, tags) {
+                if (tags) {
+                    // Map only first names
+                    tags = _.map(tags, (tag) => {
+                        // Special cases
+                        if (tag.toLowerCase() === 'daniel budiman') {
+                            return 'budi';
+                        }
 
-                            // Special cases
-                            if (tag.toLowerCase() === 'eddy') {
-                                return 'etienne';
-                            }
+                        // Special cases
+                        if (tag.toLowerCase() === 'eddy') {
+                            return 'etienne';
+                        }
 
-                            return tag.split(' ')[0];
+                        return tag.split(' ')[0];
+                    });
+
+                    // Match names
+                    const names = _.iintersection(_.map(beans, bean => bean.title), tags);
+
+                    if (names.length) {
+                        const autocompleteView = new AutocompleteView({
+                            collection: new AutocompleteCollection(
+                                _.map(names, name => ({
+                                    title: name.substr(0, 1).toUpperCase() + name.substr(1)
+                                }))
+                            )
                         });
 
-                        // Match names
-                        const names = _.iintersection(_.map(beans, bean => bean.title), tags);
+                        this.getRegion('team').show(autocompleteView);
 
-                        if (names.length) {
-                            const autocompleteView = new AutocompleteView({
-                                collection: new AutocompleteCollection(
-                                    _.map(names, name => ({
-                                        title: name.substr(0, 1).toUpperCase() + name.substr(1)
-                                    }))
-                                )
-                            });
-
-                            this.getRegion('team').show(autocompleteView);
-
-                            this.listenTo(autocompleteView, 'childview:link:selected', view => channels.app.trigger('tag:selected', view));
-                        }
+                        this.listenTo(autocompleteView, 'childview:link:selected', view => channels.app.trigger('tag:selected', view));
                     }
                 }
-            },
+            }
+        },
 
-            '@ui.duration': {
-                observe: 'duration',
+        '@ui.duration': {
+            observe: 'duration',
 
-                update: ($el, val) => {
-                    $el.text(Video.humanizeDuration(val));
-                }
-            },
+            update: ($el, val) => {
+                $el.text(Video.humanizeDuration(val));
+            }
+        },
 
-            ':el': {
-                classes: {
-                    'watched': '_watched'
-                }
+        ':el': {
+            classes: {
+                'watched': '_watched'
             }
         }
-    })
+    },
 
     initialize() {
         this._initWatched();
-    }
+    },
 
     onRender() {
         this._initTooltip();
 
         this.stickit();
-    }
+    },
 
     onDestroy() {
         this.$('[data-toggle="tooltip"]').tooltip('destroy');
-    }
+    },
 
     _initTooltip() {
         this.$('[data-toggle="tooltip"]').tooltip({
-            delay: {show: 250, hide: 100}
+            delay: { show: 250, hide: 100 }
         });
-    }
+    },
 
     _initWatched() {
         const videoId = this.model.get('videoId');
@@ -109,54 +107,50 @@ class SearchResult extends LayoutView {
 
         this.model.set('_watched', watched);
     }
-}
+});
 
-class SearchItemEmpty extends ItemView {
-    get className() {
-        return 'item item-empty text-center col-xs-12';
-    }
+const SearchItemEmpty = ItemView.extend({
+    className: 'item item-empty text-center col-xs-12',
 
-    get template() {
-        return require('../templates/empty.ejs');
-    }
-}
+    template: require('../templates/empty.ejs')
+});
 
-class SearchResults extends CollectionView {
+const SearchResults = CollectionView.extend({
 
-    @props({
-        className: 'items items-search js-search row',
+    className: 'items items-search js-search row',
 
-        childView: SearchResult,
+    childView: SearchResult,
 
-        emptyView: SearchItemEmpty,
+    emptyView: SearchItemEmpty,
 
-        model: new Model({
-            loading: false
-        })
-    })
+    initialize() {
+        this.model = new Model({
+            _loading: false
+        });
 
-    modelEvents() {
-        return {
-            'change:loading': (model, val) => {
-                if (val) {
-                    this.trigger('loading:start');
-                } else {
-                    this.trigger('loading:stop');
-                }
+        this.listenTo(this.model, 'change:_loading', (model, val) => {
+            if (val) {
+                this.trigger('loading:start');
+            } else {
+                this.trigger('loading:stop');
             }
-        };
-    }
+        });
+    },
 
-    set loading(val) {
-        this.model.set('loading', val);
-    }
+    startLoading() {
+        this.model.set('_loading', true);
+    },
+
+    stopLoading() {
+        this.model.set('_loading', false);
+    },
 
     onDestroy() {
         this._killScroll();
-    }
+    },
 
     renderSearchResults(channelId = null, nextPageToken = null) {
-        this.loading = true;
+        this.startLoading();
 
         if (!nextPageToken) {
             this.collection.reset();
@@ -171,24 +165,24 @@ class SearchResults extends CollectionView {
             .fetch();
 
         xhr.then(collection => {
-            this.loading = false;
+            this.stopLoading();
 
             this._fetchVideoDetails(collection);
             this._initScroll();
         });
 
         return xhr;
-    }
+    },
 
     _initScroll() {
         this._killScroll();
 
         $(window).on('scroll.search', this._onScroll.bind(this));
-    }
+    },
 
     _killScroll() {
         $(window).off('scroll.search');
-    }
+    },
 
     _fetchNext() {
         const nextPageToken = this.collection.nextPageToken;
@@ -198,7 +192,7 @@ class SearchResults extends CollectionView {
 
             this.renderSearchResults(null, nextPageToken);
         }
-    }
+    },
 
     _fetchVideoDetails(searchCollection) {
         const videoIds = searchCollection.map(model => {
@@ -214,7 +208,7 @@ class SearchResults extends CollectionView {
                 .done(() => {
                     this.collection.each(searchModel => {
                         const id = searchModel.get('videoId');
-                        const videoModel = videos.findWhere({id});
+                        const videoModel = videos.findWhere({ id });
 
                         if (videoModel) {
                             // Set tags on activitiy-model
@@ -226,7 +220,7 @@ class SearchResults extends CollectionView {
                     });
                 });
         }
-    }
+    },
 
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 800;
@@ -236,7 +230,7 @@ class SearchResults extends CollectionView {
             this._fetchNext();
         }
     }
-}
+});
 
 export {SearchResult};
 export default SearchResults;

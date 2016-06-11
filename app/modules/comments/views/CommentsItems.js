@@ -97,7 +97,7 @@ class CommentItem extends LayoutView {
         this.getRegion('replies').show(view);
 
         this.model.set({
-            loading: true,
+            _loading: true,
             repliesVisible: true
         });
 
@@ -105,7 +105,7 @@ class CommentItem extends LayoutView {
 
         this._repliesCollection = collection;
 
-        return collection.fetch().then(() => this.model.set('loading', false));
+        return collection.fetch().then(() => this.model.set('_loading', false));
     }
 
     _onClickReply() {
@@ -156,7 +156,7 @@ class CommentItem extends LayoutView {
 class CommentsItems extends CollectionView {
     constructor(options = {}) {
         options.model = new Model({
-            loading: false
+            _loading: false
         });
 
         super(options);
@@ -178,7 +178,7 @@ class CommentsItems extends CollectionView {
 
     modelEvents() {
         return {
-            'change:loading': (model, val) => {
+            'change:_loading': (model, val) => {
                 this.trigger('loading', val);
             }
         };
@@ -186,11 +186,11 @@ class CommentsItems extends CollectionView {
     }
 
     startLoading() {
-        this.model.set('loading', true);
+        this.model.set('_loading', true);
     }
 
     stopLoading() {
-        this.model.set('loading', false);
+        this.model.set('_loading', false);
     }
 
     initialize(options) {

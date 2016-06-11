@@ -8,7 +8,7 @@ import {localStorage} from '../../../utils';
 class VideoPlayer extends LayoutView {
     constructor(options = {}) {
         options.model = new Model({
-            loading: false,
+            _loading: false,
             autoplay: false
         });
 

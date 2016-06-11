@@ -11,7 +11,7 @@ class SearchForm extends Model {
         return {
             filterByRBTV: true,
             filterByLP: false,
-            loading: false,
+            _loading: false,
             showBtnToTop: false,
             search: '',
             tags: new AutocompleteCollection(),
@@ -30,7 +30,7 @@ class SearchForm extends Model {
 
         if (!cacheKey) return;
 
-        const data = _.omit(this.toJSON(), 'loading', 'showBtnToTop', 'cacheKey');
+        const data = _.omit(this.toJSON(), '_loading', 'showBtnToTop', 'cacheKey');
 
         // Map tags
         data.tags = _.map(data.tags.toJSON(), tag => {

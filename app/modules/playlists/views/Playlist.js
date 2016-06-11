@@ -24,7 +24,7 @@ const Playlist = ItemView.extend({
     template: require('../templates/playlist.ejs'),
 
     _onClick() {
-        this.model.set('loading', true);
+        this.model.set('_loading', true);
     }
 });
 

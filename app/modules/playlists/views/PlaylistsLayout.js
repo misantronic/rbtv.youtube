@@ -41,7 +41,7 @@ class Playlists extends LayoutView {
             search: '',
             filterByRBTV: true,
             filterByLP: true,
-            loading: false,
+            _loading: false,
             loadingItems: false
         })
     })
@@ -56,11 +56,11 @@ class Playlists extends LayoutView {
     }
     
     startLoading() {
-        this.model.set('loading', true);
+        this.model.set('_loading', true);
     }
     
     stopLoading() {
-        this.model.set('loading', false);
+        this.model.set('_loading', false);
     }
 
     modelEvents() {

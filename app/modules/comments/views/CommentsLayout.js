@@ -9,7 +9,7 @@ class CommentsLayout extends LayoutView {
     constructor(options = {}) {
         options.model = new Model({
             statistics: 0,
-            loading: false
+            _loading: false
         });
 
         super(options);
@@ -68,7 +68,7 @@ class CommentsLayout extends LayoutView {
      */
 
     _onLoading(isLoading) {
-        this.model.set('loading', isLoading);
+        this.model.set('_loading', isLoading);
     }
 
     _onCommentAdded(commentModel) {

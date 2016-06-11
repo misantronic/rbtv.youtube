@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 const Loader = Behavior.extend({
     modelEvents: {
-        'change:loading': '_onLoading'
+        'change:_loading': '_onLoading'
     },
 
     onShow() {
@@ -33,7 +33,7 @@ const Loader = Behavior.extend({
     },
 
     _onLoading() {
-        const isLoading = this.view.model.get('loading');
+        const isLoading = this.view.model.get('_loading');
 
         if (isLoading) {
             this.triggerMethod('show:loader');

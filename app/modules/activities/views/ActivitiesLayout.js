@@ -75,11 +75,11 @@ class Activities extends LayoutView {
     }
 
     startLoading() {
-        this.model.set('loading', true);
+        this.model.set('_loading', true);
     }
 
     stopLoading() {
-        this.model.set('loading', false);
+        this.model.set('_loading', false);
     }
 
     constructor(options = {}) {
