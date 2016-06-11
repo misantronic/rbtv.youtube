@@ -33,19 +33,15 @@
 	}
 
 	.loader {
-		display: none;
+		top: 50%;
+		margin-top: -20px;
+
 	}
 
 	&.is-loading {
 		.video-container {
 			> iframe {
 				opacity: 0.15;
-			}
-
-			> .loader {
-				display: block;
-				top: 50%;
-				margin-top: -20px;
 			}
 		}
 	}

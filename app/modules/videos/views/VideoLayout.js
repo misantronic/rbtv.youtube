@@ -33,7 +33,10 @@ class Video extends LayoutView {
         },
 
         behaviors: {
-            BtnToTop: {}
+            BtnToTop: {},
+            Loader: {
+                container: '.loader-container'
+            }
         }
     })
 
@@ -81,14 +84,6 @@ class Video extends LayoutView {
 
             'change:description': (model, description) => {
                 this.ui.description.html(description);
-            },
-
-            'change:loading': (model, val) => {
-                if (val) {
-                    this.$el.addClass('is-loading');
-                } else {
-                    this.$el.removeClass('is-loading');
-                }
             }
         }
     }

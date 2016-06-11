@@ -4,7 +4,6 @@ import {LayoutView} from 'backbone.marionette'
 import {Model} from 'backbone'
 import {props} from '../../decorators'
 import {localStorage} from '../../../utils'
-import channels from '../../../channels'
 
 class VideoPlayer extends LayoutView {
     constructor(options = {}) {

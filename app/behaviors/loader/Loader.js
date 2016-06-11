@@ -11,7 +11,11 @@ const Loader = Behavior.extend({
 
         this.$loader = $(loaderHTML);
 
-        this.view.$el.append(this.$loader);
+        // Check option: container
+        const container = this.getOption('container');
+        const $container = container ? this.view.$(container) : this.view.$el;
+
+        $container.append(this.$loader);
     },
 
     onDestroy() {
