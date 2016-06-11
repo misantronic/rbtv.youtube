@@ -36,16 +36,14 @@ import './modules/navigation/controller';
 // Views
 import NavigationView from './modules/navigation/views/Navigation';
 
-class App extends Application {
+const App = Application.extend({
 
-    get regions() {
-        return {
-            main: '#region-main',
-            breadcrumb: '#region-breadcrumb',
-            navigation: '#region-navigation',
-            adBlock: '#region-adblock'
-        };
-    }
+    regions: {
+        main: '#region-main',
+        breadcrumb: '#region-breadcrumb',
+        navigation: '#region-navigation',
+        adBlock: '#region-adblock'
+    },
 
     initialize() {
         Behaviors.behaviorsLookup = function() {
@@ -57,13 +55,13 @@ class App extends Application {
         };
 
         this.listenTo(this, 'start', this._onStart);
-    }
+    },
 
     navigate(route, options = { trigger: true }) {
         route = route || history.getFragment() || 'overview';
 
         history.navigate(route, options);
-    }
+    },
 
     _onStart() {
         const mainRegion = this.getRegion('main');
@@ -85,11 +83,11 @@ class App extends Application {
         $(window).on('resize.app', e => {
             channels.app.trigger('resize', e);
         });
-    }
+    },
 
     _initNavigation() {
         this.getRegion('navigation').show(new NavigationView());
-    }
+    },
 
     _detectAdBlock() {
         // Workaround: fuckadblock is not working in ffx -> disable
@@ -100,8 +98,6 @@ class App extends Application {
             this.getRegion('adBlock').$el.show();
         });
     }
-}
+});
 
-const app = new App();
-
-export default app;
+export default new App();
