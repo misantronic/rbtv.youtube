@@ -1,53 +1,7 @@
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss';
 @import '../fonts/thumbs.css';
-
-html {
-	margin-left: calc(100vw - 100%);
-}
-
-body {
-	background: #FCFCFC !important;
-	font-family: Raleway, Arial, sans-serif;
-}
-
-a {
-	cursor: pointer;
-}
-
-// OVERRIDE DEFAULTS
-
-.thumbnail, .form-control, .btn, .breadcrumb {
-	border-radius: 0 !important;
-}
-
-.breadcrumb > li + li:before {
-	padding: 0 5px 0 10px;
-}
-
-.btn-primary {
-	color: #fff;
-	background-image: -webkit-linear-gradient(left, color-stop(#ff217c 0), color-stop(#ff9186 100%));
-	background-image: linear-gradient(to right, #ff217c 0, #ff9186 100%);
-	background-repeat: repeat-x;
-	border: none;
-}
-
-.form-control {
-	&:focus {
-		box-shadow: none;
-	}
-}
-
-.label {
-	padding-top: .2em;
-	padding-bottom: .2em;
-}
-
-.navbar-default {
-	border: none;
-	background: none;
-	margin: 0;
-}
+@import "base";
+@import "bootstrap";
 
 .app {
 	padding: 0;

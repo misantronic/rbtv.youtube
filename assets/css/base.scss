@@ -1,0 +1,19 @@
+html {
+	margin-left: calc(100vw - 100%);
+}
+
+body {
+	background: #FCFCFC !important;
+	font-family: Raleway, Arial, sans-serif;
+}
+
+a {
+	&:focus {
+		text-decoration: none;
+	}
+
+	&:hover {
+		text-decoration: none;
+		cursor: pointer;
+	}
+}
