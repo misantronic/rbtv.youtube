@@ -83,6 +83,11 @@ const App = Application.extend({
         $(window).on('resize.app', e => {
             channels.app.trigger('resize', e);
         });
+
+        console.log('<developer>');
+        console.log('\tIf you want to support this project, please go to');
+        console.log('\thttps://github.com/misantronic/rbtv.youtube :)');
+        console.log('</developer>');
     },
 
     _initNavigation() {
