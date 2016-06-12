@@ -90,13 +90,18 @@ class Playlists extends Collection {
 
         const prevNumModels = this.models.length;
 
-        models = _.offset(models, 0, this._displayResults);
+        // Reset collection when not increasing
+        if(!increaseResults) {
+            this.reset();
+        }
 
-        // Reset collection only if:
+        // Add models to collection if:
         // 1. collection is normally filtered
         // 2. number of models is increased while scrolling
         if (!increaseResults || increaseResults && models.length !== prevNumModels) {
-            this.reset(models);
+            models = _.offset(models, 0, this._displayResults);
+
+            this.add(models);
         }
     }
 

@@ -64,11 +64,11 @@ class Playlists extends LayoutView {
 
     modelEvents() {
         return {
-            'change:search': _.debounce(() => {
+            'change:search': () => {
                 this.renderCollection(
                     _.extend(this.channelFilter, { resetResults: true })
                 );
-            }, 700),
+            },
 
             'change:filterByRBTV change:filterByLP': () => {
                 this.renderCollection(
@@ -76,6 +76,14 @@ class Playlists extends LayoutView {
                 );
             }
         };
+    }
+
+    /**
+     * Lifecycle methods
+     */
+
+    initialize() {
+        this.renderCollection = _.debounce(this.renderCollection, 150, {leading: false});
     }
 
     onRender() {
@@ -93,10 +101,15 @@ class Playlists extends LayoutView {
     }
 
     /**
-     *
+     * Public methods
+     */
+
+    /**
      * @param {Boolean|Object} filter
      */
     renderCollection(filter = false) {
+        console.log('renderCollection()');
+
         if (filter === true) {
             filter = localStorage.get('playlists.filter');
 
@@ -124,14 +137,9 @@ class Playlists extends LayoutView {
         this._initScroll();
     }
 
-    _onClickLink(e) {
-        const $link = $(e.currentTarget);
-        const route   = $link.attr('href').substr(1);
-
-        app.navigate(route);
-
-        e.preventDefault();
-    }
+    /**
+     * Private methods
+     */
 
     _initScroll() {
         this._killScroll();
@@ -141,6 +149,19 @@ class Playlists extends LayoutView {
 
     _killScroll() {
         $(window).off('scroll.playlists');
+    }
+
+    /**
+     * Event handler
+     */
+
+    _onClickLink(e) {
+        const $link = $(e.currentTarget);
+        const route   = $link.attr('href').substr(1);
+
+        app.navigate(route);
+
+        e.preventDefault();
     }
 
     _onScroll() {

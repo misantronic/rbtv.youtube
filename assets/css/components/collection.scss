@@ -1,10 +1,10 @@
 .collection-item {
 	opacity: 1;
 
-	transition: opacity 150ms linear 700ms;
+	transition: opacity 150ms linear 850ms;
 
 	// Generate transition-step delays
-	@for $i from 0 through 7 {
+	@for $i from 0 through 8 {
 		&.collection-item-t-#{$i} {
 			transition-delay: $i * 100ms;
 		}
