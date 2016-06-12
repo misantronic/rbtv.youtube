@@ -8,85 +8,79 @@ import {SearchResults} from '../../search/models/SearchResults';
 import SearchResultsView from '../../search/views/SearchResults';
 import shows from '../../../data/shows';
 import {VideoCollection} from '../../videos/models/Videos';
-import {props} from '../../decorators';
 
-class Activities extends LayoutView {
+const Activities = LayoutView.extend({
 
-    @props({
-        className: 'layout-activities',
 
-        regions: {
-            items: '.region-items'
+    className: 'layout-activities',
+
+    regions: {
+        items: '.region-items'
+    },
+
+    template: require('../templates/activities.ejs'),
+
+    behaviors: {
+        BtnToTop: {},
+        Search: {
+            container: '.js-search-container'
         },
+        Loader: {}
+    },
 
-        template: require('../templates/activities.ejs'),
+    ui: {
+        link: '.js-link',
+        btnPlaylist: '.js-playlist'
+    },
 
-        behaviors: {
-            BtnToTop: {},
-            Search: {
-                container: '.js-search-container'
-            },
-            Loader: {}
-        },
+    bindings: {
+        '@ui.btnPlaylist': {
+            classes: {
+                show: {
+                    observe: 'search',
+                    onGet(title) {
+                        const autocompleteObj = _.findWhere(shows, { title });
 
-        ui: {
-            link: '.js-link',
-            btnPlaylist: '.js-playlist'
-        },
-
-        bindings: {
-            '@ui.btnPlaylist': {
-                classes: {
-                    show: {
-                        observe: 'search',
-                        onGet(title) {
-                            const autocompleteObj = _.findWhere(shows, { title });
-
-                            if (autocompleteObj && autocompleteObj.playlistId) {
-                                this.ui.btnPlaylist
-                                    .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
-                                    .text(`Zur '${autocompleteObj.title}' Playlist`);
-
-                                return true;
-                            }
-
+                        if (autocompleteObj && autocompleteObj.playlistId) {
                             this.ui.btnPlaylist
-                                .attr('href', 'javascript:void(0)')
-                                .text('');
+                                .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
+                                .text(`Zur '${autocompleteObj.title}' Playlist`);
 
-                            return false;
+                            return true;
                         }
+
+                        this.ui.btnPlaylist
+                            .attr('href', 'javascript:void(0)')
+                            .text('');
+
+                        return false;
                     }
                 }
             }
-        },
+        }
+    },
 
-        /** @type {SearchFormModel} */
-        model: null,
+    /** @type {SearchFormModel} */
+    model: null,
 
-        /** @type {xhr} */
-        _currentSearchXHR: null
-    })
+    /** @type {xhr} */
+    _currentSearchXHR: null,
 
     modelEvents() {
         return {
             'change:filterByRBTV change:filterByLP change:tags': _.debounce(this._updateSearch, 350)
         };
-    }
+    },
 
-    startLoading() {
-        this.model.set('_loading', true);
-    }
-
-    stopLoading() {
-        this.model.set('_loading', false);
-    }
+    /**
+     * Lifecycle methods
+     */
 
     constructor(options = {}) {
         const model = new SearchFormModel({ cacheKey: 'activities.filter' });
 
-        super(_.extend({ model }, options));
-    }
+        LayoutView.call(this, _.extend({ model }, options));
+    },
 
     initialize() {
         const cacheObj = this.model.getCache();
@@ -99,17 +93,33 @@ class Activities extends LayoutView {
         }
 
         this.listenTo(this, 'search', this._updateSearch);
-    }
+    },
 
     onRender() {
         this.stickit();
-    }
+    },
 
     onDestroy() {
         this._killScroll();
-    }
+    },
 
-    _render(nextPageToken = null) {
+    /**
+     * Public methods
+     */
+
+    startLoading() {
+        this.model.set('_loading', true);
+    },
+
+    stopLoading() {
+        this.model.set('_loading', false);
+    },
+
+    /**
+     * Private methods
+     */
+
+    _fetch(nextPageToken = null) {
         this.startLoading();
 
         if (!nextPageToken) {
@@ -138,7 +148,17 @@ class Activities extends LayoutView {
                 this._initScroll();
                 this._fetchVideoDetails(collection);
             });
-    }
+    },
+
+    _fetchNext() {
+        const nextPageToken = this.collection.nextPageToken;
+
+        if (nextPageToken) {
+            this._killScroll();
+
+            this._fetch(nextPageToken);
+        }
+    },
 
     _updateSearch() {
         if (this.model.get('filterByRBTV')) {
@@ -152,9 +172,9 @@ class Activities extends LayoutView {
 
         if (!this._search()) {
             // Re-init activities
-            this._render();
+            this._fetch();
         }
-    }
+    },
 
     /**
      * @returns {String}
@@ -165,7 +185,7 @@ class Activities extends LayoutView {
 
         const tagCollection = this.model.get('tags');
 
-        searchVal = (searchVal + ' ' + tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim();
+        searchVal = (tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim() + ' ' + searchVal;
 
         if (searchVal) {
             this._killScroll();
@@ -190,7 +210,7 @@ class Activities extends LayoutView {
         }
 
         return searchVal;
-    }
+    },
 
     _fetchVideoDetails(collection) {
         const videoIds = collection.map(model => model.get('videoId'));
@@ -216,27 +236,21 @@ class Activities extends LayoutView {
                     });
                 });
         }
-    }
+    },
 
     _initScroll() {
         this._killScroll();
 
         $(window).on('scroll.activities', this._onScroll.bind(this));
-    }
+    },
 
     _killScroll() {
         $(window).off('scroll.activities');
-    }
+    },
 
-    _fetchNext() {
-        const nextPageToken = this.collection.nextPageToken;
-
-        if (nextPageToken) {
-            this._killScroll();
-
-            this._render(nextPageToken);
-        }
-    }
+    /**
+     * Event handler
+     */
 
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 800;
@@ -246,6 +260,6 @@ class Activities extends LayoutView {
             this._fetchNext();
         }
     }
-}
+});
 
 export default Activities;
