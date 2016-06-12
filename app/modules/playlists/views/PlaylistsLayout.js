@@ -41,8 +41,7 @@ class Playlists extends LayoutView {
             search: '',
             filterByRBTV: true,
             filterByLP: true,
-            _loading: false,
-            loadingItems: false
+            _loading: false
         })
     })
 
