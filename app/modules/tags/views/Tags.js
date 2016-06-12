@@ -1,11 +1,11 @@
 import {CollectionView, ItemView} from 'backbone.marionette';
 
-const AutocompleteItem = ItemView.extend({
-    template: require('../templates/autocomplete-item.ejs'),
+const Tag = ItemView.extend({
+    template: require('../templates/tag.ejs'),
 
     tagName: 'a',
 
-    className: 'item-autocomplete js-item label label-info',
+    className: 'item-tag js-item label label-info',
 
     bindings: {
         ':el': {
@@ -46,10 +46,10 @@ const AutocompleteItem = ItemView.extend({
     }
 });
 
-const Autocomplete = CollectionView.extend({
-    className: 'items-autocomplete',
+const Tags = CollectionView.extend({
+    className: 'items-tags',
 
-    childView: AutocompleteItem,
+    childView: Tag,
 
     collectionEvents() {
         return {
@@ -74,4 +74,4 @@ const Autocomplete = CollectionView.extend({
     }
 });
 
-export default Autocomplete;
+export default Tags;

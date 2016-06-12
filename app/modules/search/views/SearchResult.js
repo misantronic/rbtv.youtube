@@ -3,8 +3,8 @@ import {LayoutView, ItemView} from 'backbone.marionette';
 import {VideoModel} from '../../videos/models/Videos';
 import beans from '../../../data/beans';
 import {localStorage} from '../../../utils';
-import AutocompleteView from './Autocomplete';
-import AutocompleteCollection from '../models/Autocomplete';
+import TagsView from '../../tags/views/Tags';
+import TagCollection from '../../tags/models/Tags';
 import channels from '../../../channels';
 
 const SearchResult = LayoutView.extend({
@@ -47,17 +47,17 @@ const SearchResult = LayoutView.extend({
                     const names = _.iintersection(_.map(beans, bean => bean.title), tags);
 
                     if (names.length) {
-                        const autocompleteView = new AutocompleteView({
-                            collection: new AutocompleteCollection(
+                        const tagsView = new TagsView({
+                            collection: new TagCollection(
                                 _.map(names, name => ({
                                     title: name.substr(0, 1).toUpperCase() + name.substr(1)
                                 }))
                             )
                         });
 
-                        this.getRegion('team').show(autocompleteView);
+                        this.getRegion('team').show(tagsView);
 
-                        this.listenTo(autocompleteView, 'childview:link:selected', view => channels.app.trigger('tag:selected', view));
+                        this.listenTo(tagsView, 'childview:link:selected', view => channels.app.trigger('tag:selected', view));
                     }
                 }
             }

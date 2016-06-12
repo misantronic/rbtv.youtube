@@ -23,7 +23,7 @@ class Playlists extends LayoutView {
             Search: {
                 container: '.js-search-container',
                 filterCheckboxBehavior: true,
-                autocomplete: false
+                tags: false
             },
             Loader: {}
         },

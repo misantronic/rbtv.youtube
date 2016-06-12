@@ -20,7 +20,7 @@ const Search = Behavior.extend({
         // Set-up options for view
         const options = _.defaults(this.options, {
             filterCheckboxBehavior: false,
-            autocomplete: true,
+            tags: true,
             model: this.view.model
         });
 

@@ -1,8 +1,8 @@
 import _ from 'underscore';
 import $ from 'jquery';
 import {LayoutView} from 'backbone.marionette';
-import AutocompleteView from './Autocomplete';
-import {Autocomplete as AutocompleteCollection} from '../models/Autocomplete';
+import AutocompleteView from '../../tags/views/Tags';
+import {Tags as TagCollection} from '../../tags/models/Tags';
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
 import {props} from '../../decorators';
@@ -14,8 +14,8 @@ class SearchForm extends LayoutView {
         template: require('../templates/search-form.ejs'),
 
         regions: {
-            autocomplete: '.region-autocomplete',
-            autocompleteSelection: '.region-autocomplete-selection'
+            tags: '.region-tags',
+            tagsSelection: '.region-tags-selection'
         },
 
         ui: {
@@ -63,7 +63,7 @@ class SearchForm extends LayoutView {
     })
 
     initialize() {
-        this._autocompleteEnabled = _.isUndefined(this.getOption('autocomplete')) ? true : this.getOption('autocomplete');
+        this._tagsEnabled = _.isUndefined(this.getOption('tags')) ? true : this.getOption('tags');
 
         const tagCollection = this.model.get('tags');
 
@@ -78,12 +78,12 @@ class SearchForm extends LayoutView {
     }
 
     _initAutocomplete() {
-        if (!this._autocompleteEnabled) return;
+        if (!this._tagsEnabled) return;
 
         // Merge beans and shows
         const items = beans.concat(shows);
 
-        const collection = new AutocompleteCollection(items);
+        const collection = new TagCollection(items);
         const view = new AutocompleteView({collection});
 
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
@@ -91,7 +91,7 @@ class SearchForm extends LayoutView {
 
         this.listenTo(this.model, 'change:search', (model, val) => collection.search(val, this.model.get('tags').models));
 
-        this.getRegion('autocomplete').show(view.hide());
+        this.getRegion('tags').show(view.hide());
     }
 
     _updateTags() {
@@ -100,7 +100,7 @@ class SearchForm extends LayoutView {
 
         view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
-        this.getRegion('autocompleteSelection').show(view);
+        this.getRegion('tagsSelection').show(view);
 
         _.defer(this.triggerSearch.bind(this));
     }

@@ -65,25 +65,25 @@
 			}
 		}
 
-		.items-autocomplete {
+		.items-tags {
 			position: absolute;
 			top: 6px;
 			right: 0;
 			z-index: 100;
 		}
 
-		.region-autocomplete-selection {
+		.region-tags-selection {
 			@media (max-width: $screen-xs-max) {
 				position: absolute;
 				left: 10px;
 				bottom: -26px;
 			}
 
-			.items-autocomplete {
+			.items-tags {
 				position: static;
 				line-height: 0;
 
-				.item-autocomplete {
+				.item-tag {
 					&:after {
 						content: 'x';
 						margin-left: 5px;

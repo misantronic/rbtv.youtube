@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import {Model} from 'backbone';
-import AutocompleteCollection from '../../search/models/Autocomplete';
+import AutocompleteCollection from '../../tags/models/Tags';
 import {localStorage} from '../../../utils';
 
 /**
@@ -46,7 +46,7 @@ class SearchForm extends Model {
 
     /**
      *
-     * @returns {{filterByLP: Boolean, filterByRBTV: Boolean, search: String, tags: Autocomplete}}
+     * @returns {{filterByLP: Boolean, filterByRBTV: Boolean, search: String, tags: Tags}}
      */
     getCache() {
         let attrs = {};

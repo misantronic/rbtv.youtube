@@ -39,12 +39,12 @@ const Activities = LayoutView.extend({
                 show: {
                     observe: 'search',
                     onGet(title) {
-                        const autocompleteObj = _.findWhere(shows, { title });
+                        const tagObj = _.findWhere(shows, { title });
 
-                        if (autocompleteObj && autocompleteObj.playlistId) {
+                        if (tagObj && tagObj.playlistId) {
                             this.ui.btnPlaylist
-                                .attr('href', `#playlists/playlist/${autocompleteObj.playlistId}`)
-                                .text(`Zur '${autocompleteObj.title}' Playlist`);
+                                .attr('href', `#playlists/playlist/${tagObj.playlistId}`)
+                                .text(`Zur '${tagObj.title}' Playlist`);
 
                             return true;
                         }

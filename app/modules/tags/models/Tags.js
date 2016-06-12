@@ -2,7 +2,7 @@ import _ from 'underscore';
 import {Model, Collection} from 'backbone';
 import {props} from '../../decorators';
 
-class AutocompleteItem extends Model {
+class Tag extends Model {
     @props({
         idAttribute: 'title'
     })
@@ -28,7 +28,7 @@ class AutocompleteItem extends Model {
     }
 }
 
-class Autocomplete extends Collection {
+class Tags extends Collection {
     constructor(...args) {
         super(...args);
 
@@ -36,7 +36,7 @@ class Autocomplete extends Collection {
     }
 
     @props({
-        model: AutocompleteItem
+        model: Tag
     })
 
     search(val, exclude = []) {
@@ -51,5 +51,5 @@ class Autocomplete extends Collection {
     }
 }
 
-export {AutocompleteItem, Autocomplete};
-export default Autocomplete;
+export {Tag, Tags};
+export default Tags;
