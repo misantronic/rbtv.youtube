@@ -1,9 +1,8 @@
-import {SearchResults} from './SearchResults';
+import SearchResults from './SearchResults';
 import Config from '../../../Config';
 import $ from 'jquery';
 
-class RelatedResults extends SearchResults {
-
+const RelatedResults = SearchResults.extend({
     url() {
         return Config.endpoints.related + '?' + $.param([
                 { name: 'channelId', value: this._channelId },
@@ -11,6 +10,6 @@ class RelatedResults extends SearchResults {
                 { name: 'pageToken', value: this._nextPageToken }
             ]);
     }
-}
+});
 
 export default RelatedResults;

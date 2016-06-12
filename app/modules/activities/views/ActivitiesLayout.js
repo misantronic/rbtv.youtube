@@ -4,7 +4,7 @@ import {LayoutView} from 'backbone.marionette';
 import ActivitiesList from './ActivitiesList';
 import SearchFormModel from '../../search/models/SearchForm';
 import Config from '../../../Config';
-import {SearchResults} from '../../search/models/SearchResults';
+import SearchResultsCollection from '../../search/models/SearchResults';
 import SearchResultsView from '../../search/views/SearchResults';
 import shows from '../../../data/shows';
 import {VideoCollection} from '../../videos/models/Videos';
@@ -149,7 +149,7 @@ const Activities = LayoutView.extend({
     },
 
     _fetchNext() {
-        const nextPageToken = this.collection.nextPageToken;
+        const nextPageToken = this.collection.getNextPageToken();
 
         if (nextPageToken) {
             this._killScroll();
@@ -188,7 +188,7 @@ const Activities = LayoutView.extend({
         if (searchVal) {
             this._killScroll();
 
-            const collection = new SearchResults()
+            const collection = new SearchResultsCollection()
                 .setNextPageToken(null)
                 .setQ(searchVal);
 
