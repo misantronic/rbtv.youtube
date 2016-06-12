@@ -108,8 +108,6 @@ class Playlists extends LayoutView {
      * @param {Boolean|Object} filter
      */
     renderCollection(filter = false) {
-        console.log('renderCollection()');
-
         if (filter === true) {
             filter = localStorage.get('playlists.filter');
 
