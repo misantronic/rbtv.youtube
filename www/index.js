@@ -1,3 +1,5 @@
+require('newrelic');
+
 var express     = require('express');
 var timeout     = require('connect-timeout');
 var compression = require('compression');
