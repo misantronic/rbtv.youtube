@@ -122,16 +122,14 @@ const Activities = LayoutView.extend({
     _fetch(nextPageToken = null) {
         this.startLoading();
 
-        if (!nextPageToken) {
-            this.collection.reset();
-        }
-
         // Check search
         if (this._search()) {
             return;
         }
 
         if (!nextPageToken) {
+            this.collection.reset();
+
             this.getRegion('items').show(
                 new ActivitiesList({
                     collection: this.collection
