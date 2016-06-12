@@ -2,7 +2,7 @@ import _ from 'underscore';
 import $ from 'jquery';
 import {LayoutView} from 'backbone.marionette';
 import AutocompleteView from '../../tags/views/Tags';
-import {Tags as TagCollection} from '../../tags/models/Tags';
+import TagCollection from '../../tags/models/Tags';
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
 import {props} from '../../decorators';
