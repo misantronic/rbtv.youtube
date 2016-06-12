@@ -104,6 +104,8 @@ class SearchResults extends Collection {
         }
 
         this._nextPageToken = null;
+
+        return this.models;
     }
 }
 
