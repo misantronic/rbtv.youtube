@@ -2,9 +2,8 @@ import $ from 'jquery';
 import _ from 'underscore';
 import {CollectionView, LayoutView, ItemView} from 'backbone.marionette';
 import {Model} from 'backbone';
-import {Video, Videos} from '../../videos/models/Videos';
+import {VideoModel, VideoCollection} from '../../videos/models/Videos';
 import beans from '../../../data/beans';
-import {props} from '../../decorators';
 import {localStorage} from '../../../utils';
 import AutocompleteView from './Autocomplete';
 import AutocompleteCollection from '../models/Autocomplete';
@@ -70,7 +69,7 @@ const SearchResult = LayoutView.extend({
             observe: 'duration',
 
             update: ($el, val) => {
-                $el.text(Video.humanizeDuration(val));
+                $el.text(VideoModel.humanizeDuration(val));
             }
         },
 
@@ -123,6 +122,10 @@ const SearchResults = CollectionView.extend({
 
     emptyView: SearchItemEmpty,
 
+    /**
+     * Lifecycle methods
+     */
+
     initialize() {
         this.model = new Model({
             _loading: false
@@ -137,6 +140,14 @@ const SearchResults = CollectionView.extend({
         });
     },
 
+    onDestroy() {
+        this._killScroll();
+    },
+
+    /**
+     * Public methods
+     */
+
     startLoading() {
         this.model.set('_loading', true);
     },
@@ -145,11 +156,7 @@ const SearchResults = CollectionView.extend({
         this.model.set('_loading', false);
     },
 
-    onDestroy() {
-        this._killScroll();
-    },
-
-    renderSearchResults(channelId = null, nextPageToken = null) {
+    fetch(channelId = null, nextPageToken = null) {
         this.startLoading();
 
         if (!nextPageToken) {
@@ -174,6 +181,20 @@ const SearchResults = CollectionView.extend({
         return xhr;
     },
 
+    fetchNext() {
+        const nextPageToken = this.collection.nextPageToken;
+
+        if (nextPageToken) {
+            this._killScroll();
+
+            this.fetch(null, nextPageToken);
+        }
+    },
+
+    /**
+     * Private methods
+     */
+
     _initScroll() {
         this._killScroll();
 
@@ -184,31 +205,19 @@ const SearchResults = CollectionView.extend({
         $(window).off('scroll.search');
     },
 
-    _fetchNext() {
-        const nextPageToken = this.collection.nextPageToken;
-
-        if (nextPageToken) {
-            this._killScroll();
-
-            this.renderSearchResults(null, nextPageToken);
-        }
-    },
-
-    _fetchVideoDetails(searchCollection) {
-        const videoIds = searchCollection.map(model => {
-            return model.get('videoId');
-        });
+    _fetchVideoDetails(collection) {
+        const videoIds = collection.map(model => model.get('videoId'));
 
         if (videoIds.length) {
-            const videos = new Videos();
+            const videoCollection = new VideoCollection();
 
-            videos
+            videoCollection
                 .setVideoIds(videoIds)
                 .fetch()
                 .done(() => {
                     this.collection.each(searchModel => {
                         const id = searchModel.get('videoId');
-                        const videoModel = videos.findWhere({ id });
+                        const videoModel = videoCollection.findWhere({ id });
 
                         if (videoModel) {
                             // Set tags on activitiy-model
@@ -227,7 +236,7 @@ const SearchResults = CollectionView.extend({
         const y = window.scrollY;
 
         if (y >= maxY) {
-            this._fetchNext();
+            this.fetchNext();
         }
     }
 });

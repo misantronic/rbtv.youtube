@@ -7,7 +7,7 @@ import Config from '../../../Config';
 import {SearchResults} from '../../search/models/SearchResults';
 import SearchResultsView from '../../search/views/SearchResults';
 import shows from '../../../data/shows';
-import VideoCollection from '../../videos/models/Videos';
+import {VideoCollection} from '../../videos/models/Videos';
 import {props} from '../../decorators';
 
 class Activities extends LayoutView {
@@ -186,16 +186,14 @@ class Activities extends LayoutView {
                 this._currentSearchXHR.abort();
             }
 
-            this._currentSearchXHR = searchResultsView.renderSearchResults(this._currentChannel);
+            this._currentSearchXHR = searchResultsView.fetch(this._currentChannel);
         }
 
         return searchVal;
     }
 
     _fetchVideoDetails(collection) {
-        const videoIds = collection.map(model => {
-            return model.get('videoId');
-        });
+        const videoIds = collection.map(model => model.get('videoId'));
 
         if (videoIds.length) {
             const videoCollection = new VideoCollection();

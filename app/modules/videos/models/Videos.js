@@ -146,5 +146,4 @@ class Videos extends Collection {
     }
 }
 
-export {Video, Videos};
-export default Videos;
+export {Video as VideoModel, Videos as VideoCollection};
