@@ -1,4 +1,4 @@
 webpack.*.js
 app/vendor/**/*.js
 test/**/*.js
-www/newrelic.js
+www/**/*.js

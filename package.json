@@ -4,7 +4,7 @@
   "description": "A YouTube-Alternative for Rocket Beans TV.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --config webpack.production.js && node www/index.js",
+    "start": "webpack --config webpack.production.js && node www/index.js & node www/keepalive.js",
     "webpack": "webpack --watch",
     "www": "node $NODE_DEBUG_OPTION www/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -47,7 +47,6 @@
     "jquery": "^2.2.2",
     "moment": "^2.12.0",
     "mongoose": "^4.4.11",
-    "newrelic": "^1.28.0",
     "node-jquery-param": "0.0.2",
     "node-sass": "^3.4.2",
     "promise": "^7.1.1",
