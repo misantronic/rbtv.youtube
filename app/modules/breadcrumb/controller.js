@@ -52,4 +52,4 @@ const BreadcrumbController = Marionette.Object.extend({
     }
 });
 
-export default new BreadcrumbController();
+module.exports = new BreadcrumbController();

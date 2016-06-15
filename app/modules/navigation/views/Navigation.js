@@ -25,28 +25,21 @@ class NavigationItem extends ItemView {
     }
 }
 
-class Navigation extends CollectionView {
+const Navigation = CollectionView.extend({
+    tagName: 'ul',
 
-    @props({
-        tagName: 'ul',
+    className: 'navigation container nav nav-pills',
 
-        className: 'navigation container nav nav-pills',
+    childView: NavigationItem,
 
-        childView: NavigationItem,
-
-        bindings: {
-            ':el': {
-                classes: {
-                    'active': '_active'
-                }
+    bindings: {
+        ':el': {
+            classes: {
+                'active': '_active'
             }
         }
-    })
-
-    initialize() {
-        this.collection = Config.navigation;
     }
-}
+});
 
 export {Navigation, NavigationItem};
 export default Navigation;

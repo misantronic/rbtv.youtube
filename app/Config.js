@@ -28,7 +28,7 @@ export default {
     channelLP: 'UCtSP1OA6jO4quIGLae7Fb4g',
 
     navigation: new Collection([
-        { title: 'Übersicht', route: 'overview' },
+        { title: 'Übersicht', route: 'activities' },
         { title: 'Playlists', route: 'playlists' }
     ])
 };

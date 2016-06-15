@@ -10,13 +10,22 @@ const ActivitiesController = Marionette.Object.extend({
         this._region = region;
     },
 
-    initOverview() {
+    initActivities() {
         this._region.show(
             new ActivitiesLayout({ collection: new ActivitiesColection() })
         );
 
         // Update breadcrumb
-        channels.breadcrumb.replace({ title: 'Übersicht', route: 'overview' });
+        channels.breadcrumb.replace({ title: 'Übersicht', route: 'activities' });
+    },
+
+    initStandaloneActivities() {
+        this._region.show(
+            new ActivitiesLayout({ 
+                collection: new ActivitiesColection(),
+                disableSearch: true
+            })
+        );
     }
 });
 

@@ -21,20 +21,10 @@ import BehaviorSearch from './behaviors/search/Search';
 import BehaviorLoader from './behaviors/loader/Loader';
 
 // Controller
-import playlistsController from './modules/playlists/controller';
-import breadcrumbController from './modules/breadcrumb/controller';
-import activitiesController from './modules/activities/controller';
-import videosController from './modules/videos/controller';
-import youtubeController from './modules/youtube/controller';
-
-// Router
-import './modules/playlists/router';
-import './modules/activities/router';
-import './modules/videos/router';
 import './modules/navigation/controller';
 
 // Views
-import NavigationView from './modules/navigation/views/Navigation';
+import NavigationLayout from './modules/navigation/views/NavigationLayout';
 
 const App = Application.extend({
 
@@ -46,7 +36,7 @@ const App = Application.extend({
     },
 
     initialize() {
-        Behaviors.behaviorsLookup = function() {
+        Behaviors.behaviorsLookup = function () {
             return {
                 Search: BehaviorSearch,
                 BtnToTop: BehaviorBtnToTop,
@@ -57,32 +47,15 @@ const App = Application.extend({
         this.listenTo(this, 'start', this._onStart);
     },
 
-    navigate(route, options = { trigger: true }) {
-        route = route || history.getFragment() || 'overview';
-
+    navigate(route, options = {}) {
+        route = route || history.getFragment() || 'activities';
+        options = _.extend({ trigger: true }, options);
+        
         history.navigate(route, options);
     },
 
     _onStart() {
-        const mainRegion = this.getRegion('main');
-        const bcRegion   = this.getRegion('breadcrumb');
-
-        youtubeController.init();
-        breadcrumbController.init(bcRegion);
-        playlistsController.init(mainRegion);
-        activitiesController.init(mainRegion);
-        videosController.init(mainRegion);
-
-        this._initNavigation();
-        this._detectAdBlock();
-
-        history.start();
-
-        this.navigate();
-
-        $(window).on('resize.app', e => {
-            channels.app.trigger('resize', e);
-        });
+        $(window).on('resize.app', e => channels.app.trigger('resize', e));
 
         console.log('<developer>');
         console.log('\tIf you want to support this project, please go to');
@@ -90,11 +63,18 @@ const App = Application.extend({
         console.log('</developer>');
     },
 
-    _initNavigation() {
-        this.getRegion('navigation').show(new NavigationView());
+    initNavigation() {
+        this.getRegion('navigation').show(new NavigationLayout());
     },
 
-    _detectAdBlock() {
+    initBreadcrumb() {
+        const breadcrumbConroller = require('./modules/breadcrumb/controller');
+        const breadcrumbRegion = this.getRegion('breadcrumb');
+
+        breadcrumbConroller.init(breadcrumbRegion);
+    },
+
+    detectAdBlock() {
         // Workaround: fuckadblock is not working in ffx -> disable
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) return;
 

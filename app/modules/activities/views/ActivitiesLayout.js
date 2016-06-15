@@ -11,7 +11,6 @@ import {VideoCollection} from '../../videos/models/Videos';
 
 const Activities = LayoutView.extend({
 
-
     className: 'layout-activities',
 
     regions: {
@@ -79,7 +78,13 @@ const Activities = LayoutView.extend({
     constructor(options = {}) {
         const model = new SearchFormModel({ cacheKey: 'activities.filter' });
 
-        LayoutView.call(this, _.extend({ model }, options));
+        options = _.extend({ model }, options);
+
+        if (options.disableSearch) {
+            this.behaviors = _.omit(this.behaviors, 'Search');
+        }
+
+        LayoutView.call(this, options);
     },
 
     initialize() {
@@ -97,6 +102,10 @@ const Activities = LayoutView.extend({
 
     onRender() {
         this.stickit();
+    },
+
+    onShow() {
+        this._updateSearch();
     },
 
     onDestroy() {

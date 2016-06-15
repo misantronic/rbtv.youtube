@@ -5,77 +5,81 @@ import AutocompleteView from '../../tags/views/Tags';
 import TagCollection from '../../tags/models/Tags';
 import shows from '../../../data/shows';
 import beans from '../../../data/beans';
-import {props} from '../../decorators';
 
-class SearchForm extends LayoutView {
-    @props({
-        className: 'layout-search search-container',
+const SearchForm = LayoutView.extend({
 
-        template: require('../templates/search-form.ejs'),
+    className: 'layout-search search-container',
 
-        regions: {
-            tags: '.region-tags',
-            tagsSelection: '.region-tags-selection'
-        },
+    template: require('../templates/search-form.ejs'),
 
-        ui: {
-            search: '.js-search',
-            btnFilterRBTV: '.js-filter-rbtv',
-            btnFilterLP: '.js-filter-lp',
-            btnReset: '.js-reset'
-        },
+    regions: {
+        tags: '.region-tags',
+        tagsSelection: '.region-tags-selection'
+    },
 
-        events: {
-            'click @ui.btnFilterRBTV': '_onSelectFilterButton',
-            'click @ui.btnFilterLP': '_onSelectFilterButton',
-            'click @ui.btnReset': '_onReset',
-            'keyup @ui.search': '_onSearchKeyup',
-            'keydown @ui.search': '_onSearchKeydown'
-        },
+    ui: {
+        search: '.js-search',
+        btnFilterRBTV: '.js-filter-rbtv',
+        btnFilterLP: '.js-filter-lp',
+        btnReset: '.js-reset'
+    },
 
-        bindings: {
-            '@ui.btnFilterRBTV': {
-                classes: {
-                    active: 'filterByRBTV'
-                }
-            },
+    events: {
+        'click @ui.btnFilterRBTV': '_onSelectFilterButton',
+        'click @ui.btnFilterLP': '_onSelectFilterButton',
+        'click @ui.btnReset': '_onReset',
+        'keyup @ui.search': '_onSearchKeyup',
+        'keydown @ui.search': '_onSearchKeydown'
+    },
 
-            '@ui.btnFilterLP': {
-                classes: {
-                    active: 'filterByLP'
-                }
-            },
-
-            '@ui.search': {
-                observe: 'search',
-                classes: {
-                    'has-value': 'search'
-                }
+    bindings: {
+        '@ui.btnFilterRBTV': {
+            classes: {
+                active: 'filterByRBTV'
             }
         },
 
+        '@ui.btnFilterLP': {
+            classes: {
+                active: 'filterByLP'
+            }
+        },
 
-        channels: {
-            app: {
-                'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
+        '@ui.search': {
+            observe: 'search',
+            classes: {
+                'has-value': 'search'
             }
         }
-    })
+    },
+
+
+    channels: {
+        app: {
+            'tag:selected': '_onAutocompleteLinkSelected' // Listen to tag-events in search-results/activities
+        }
+    },
 
     initialize() {
+        _.bindAll(this, 'triggerSearch');
+
         this._tagsEnabled = _.isUndefined(this.getOption('tags')) ? true : this.getOption('tags');
 
         const tagCollection = this.model.get('tags');
 
-        this.listenTo(tagCollection, 'add remove', this._updateTags);
-    }
+        this.listenTo(tagCollection, 'add remove', () => {
+            this._updateTags();
+
+            _.defer(this.triggerSearch);
+        });
+    },
 
     onBeforeShow() {
         this._initAutocomplete();
         this._updateTags();
 
         this.stickit();
-    }
+    },
 
     _initAutocomplete() {
         if (!this._tagsEnabled) return;
@@ -84,7 +88,7 @@ class SearchForm extends LayoutView {
         const items = beans.concat(shows);
 
         const collection = new TagCollection(items);
-        const view = new AutocompleteView({collection});
+        const view = new AutocompleteView({ collection });
 
         this.listenTo(view, 'childview:link:selected', this._onAutocompleteLinkSelected);
         this.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model.get('title')));
@@ -92,18 +96,16 @@ class SearchForm extends LayoutView {
         this.listenTo(this.model, 'change:search', (model, val) => collection.search(val, this.model.get('tags').models));
 
         this.getRegion('tags').show(view.hide());
-    }
+    },
 
     _updateTags() {
         const collection = this.model.get('tags');
-        const view = new AutocompleteView({collection});
+        const view = new AutocompleteView({ collection });
 
         view.listenTo(view, 'childview:link:selected', itemView => collection.remove(itemView.model));
 
         this.getRegion('tagsSelection').show(view);
-
-        _.defer(this.triggerSearch.bind(this));
-    }
+    },
 
     _onSelectFilterButton(e) {
         const $button = $(e.currentTarget);
@@ -132,12 +134,12 @@ class SearchForm extends LayoutView {
         }
 
         $button.blur();
-    }
+    },
 
     _onReset() {
         this.model.set('search', '');
         this.triggerSearch();
-    }
+    },
 
     _onSearchKeyup(e) {
         switch (e.keyCode) {
@@ -145,7 +147,7 @@ class SearchForm extends LayoutView {
                 this.triggerSearch();
                 break;
         }
-    }
+    },
 
     _onSearchKeydown(e) {
         switch (e.keyCode) {
@@ -159,7 +161,7 @@ class SearchForm extends LayoutView {
                 }
                 break;
         }
-    }
+    },
 
     _onAutocompleteLinkSelected(itemView) {
         const model = itemView.model;
@@ -180,10 +182,11 @@ class SearchForm extends LayoutView {
         this.model.set(modelAttrs);
 
         this.ui.search.focus();
-    }
+    },
 
     triggerSearch() {
         this.trigger('search');
     }
-}
+});
+
 export default SearchForm;
