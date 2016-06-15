@@ -1,4 +1,5 @@
-import _ from 'underscore'
+import _ from 'underscore';
+import $ from 'jquery';
 import {history} from 'backbone';
 
 import app from './application';
@@ -33,10 +34,12 @@ app.listenTo(app, 'start', function () {
 
     app.navigate();
 
-    var fragments = getFragments();
-    var rootFragment = _.first(fragments);
+    const fragments = getFragments();
+    const rootFragment = _.first(fragments);
 
     if (rootFragment === 'standalone') {
+        $('html').addClass('is-'+ rootFragment);
+
         return;
     }
 

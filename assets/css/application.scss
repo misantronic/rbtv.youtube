@@ -7,34 +7,35 @@
 	padding: 0;
 	position: relative;
 
-	> .bg {
-		background: #FFF;
-		position: relative;
-
-		@media (min-width: $screen-sm-min) {
-			min-height: 600px;
-			padding-bottom: 25px;
-		}
-	}
-
 	.is-loading .item-empty {
 		display: none !important;
-	}
-
-	#region-adblock {
-		position: fixed;
-		left: 50%;
-		bottom: 0;
-		transform: translateX(-50%);
-		z-index: 100;
-		width: 100%;
-		max-width: 590px;
-		text-align: center;
-		font-size: 16px;
 	}
 
 	.btn-dislike {
 		position: relative;
 		top: 5px;
 	}
+}
+
+.is-standalone {
+	body {
+		background: transparent;
+	}
+
+	.container {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+#region-adblock {
+	position: fixed;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
+	z-index: 100;
+	width: 100%;
+	max-width: 590px;
+	text-align: center;
+	font-size: 16px;
 }
