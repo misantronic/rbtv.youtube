@@ -6,7 +6,7 @@ const Loader = Behavior.extend({
         'change:_loading': '_onLoading'
     },
 
-    onShow() {
+    onBeforeShow() {
         const loaderHTML = require('./loader.ejs')();
 
         this.$loader = $(loaderHTML);
