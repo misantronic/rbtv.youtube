@@ -84,6 +84,10 @@ const Activities = LayoutView.extend({
             this.behaviors = _.omit(this.behaviors, 'Search');
         }
 
+        if (options.disableBtnToTop) {
+            this.behaviors = _.omit(this.behaviors, 'BtnToTop');
+        }
+
         LayoutView.call(this, options);
     },
 

@@ -11,20 +11,24 @@ const ActivitiesController = Marionette.Object.extend({
     },
 
     initActivities() {
-        this._region.show(
-            new ActivitiesLayout({ collection: new ActivitiesColection() })
-        );
+        this._showActivities();
 
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Übersicht', route: 'activities' });
     },
 
     initStandaloneActivities() {
+        this._showActivities({
+            disableSearch: true,
+            disableBtnToTop: true
+        });
+    },
+
+    _showActivities(viewOptions = {}) {
+        viewOptions = _.extend({ collection: new ActivitiesColection() }, viewOptions);
+
         this._region.show(
-            new ActivitiesLayout({ 
-                collection: new ActivitiesColection(),
-                disableSearch: true
-            })
+            new ActivitiesLayout(viewOptions)
         );
     }
 });
