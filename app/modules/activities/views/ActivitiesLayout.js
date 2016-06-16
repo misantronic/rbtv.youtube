@@ -196,7 +196,7 @@ const Activities = LayoutView.extend({
 
         const tagCollection = this.model.get('tags');
 
-        searchVal = (tagCollection.map(tagModel => tagModel.get('title')).join(' ')).trim() + ' ' + searchVal;
+        searchVal = ((tagCollection.map(tagModel => tagModel.get('title')).join(' ')) + ' ' + searchVal).trim();
 
         if (searchVal) {
             this._killScroll();
