@@ -1,45 +1,13 @@
 import $ from 'jquery';
-import moment from 'moment';
-import {Model, Collection} from 'backbone';
+import {Collection} from 'backbone';
 import Config from '../../../Config';
-
-class Activity extends Model {
-    defaults() {
-        return {
-            id: 0,
-            etag: null,
-            kind: null,
-            videoId: null,
-            channelId: null,
-            description: '',
-            publishedAt: null,
-            thumbnails: null,
-            title: '',
-            tags: null,
-            duration: null
-        };
-    }
-
-    parse(response) {
-        return {
-            id: response.id,
-            etag: response.etag,
-            kind: response.kind,
-            videoId: response.contentDetails.upload.videoId,
-            channelId: response.snippet.channelId,
-            description: response.snippet.description,
-            publishedAt: moment(response.snippet.publishedAt),
-            thumbnails: response.snippet.thumbnails,
-            title: response.snippet.title
-        };
-    }
-}
+import ActivityModel from './Activity';
 
 class Activities extends Collection {
     constructor(...args) {
         super(...args);
 
-        this.model = Activity;
+        this.model = ActivityModel;
     }
 
     setChannelId(val) {
@@ -54,7 +22,7 @@ class Activities extends Collection {
         return this;
     }
 
-    get nextPageToken() {
+    getNextPageToken() {
         return this._nextPageToken;
     }
 
@@ -72,5 +40,4 @@ class Activities extends Collection {
     }
 }
 
-export {Activities, Activity};
 export default Activities;
