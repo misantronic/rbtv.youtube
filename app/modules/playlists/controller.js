@@ -16,22 +16,17 @@ const PlaylistsController = Marionette.Object.extend({
     },
 
     initPlaylists() {
-        this._currentPlaylistId = null;
-
-        const collection = new PlaylistsCollection();
-        const view = new PlaylistsLayout({ collection });
-
-        this._region.show(view);
-
-        view.startLoading();
-
-        collection.fetch({ silent: true })
-            .done(() => {
-                view.renderCollection(true);
-            });
+        this._showPlaylists();
 
         // Update breadcrumb
         channels.breadcrumb.replace({ title: 'Playlists', route: 'playlists' });
+    },
+
+    initStandalonePlaylists() {
+        this._showPlaylists({
+            disableSearch: true,
+            disableBtnToTop: true
+        });
     },
 
     initPlaylist(playlistId, videoId = null) {
@@ -58,6 +53,25 @@ const PlaylistsController = Marionette.Object.extend({
                     .done(title => {
                         channels.breadcrumb.push({ title });
                     });
+            });
+    },
+
+    _showPlaylists(viewOptions = {}) {
+        const collection = new PlaylistsCollection();
+
+        viewOptions = _.extend({ collection }, viewOptions);
+
+        this._currentPlaylistId = null;
+
+        const view = new PlaylistsLayout(viewOptions);
+
+        this._region.show(view);
+
+        view.startLoading();
+
+        collection.fetch({ silent: true })
+            .done(() => {
+                view.renderCollection(true);
             });
     },
 

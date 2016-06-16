@@ -79,6 +79,18 @@ const Playlists = LayoutView.extend({
      * Lifecycle methods
      */
 
+    constructor(options = {}) {
+        if (options.disableSearch) {
+            this.behaviors = _.omit(this.behaviors, 'Search');
+        }
+
+        if (options.disableBtnToTop) {
+            this.behaviors = _.omit(this.behaviors, 'BtnToTop');
+        }
+
+        LayoutView.call(this, options);
+    },
+
     initialize() {
         this.renderCollection = _.debounce(this.renderCollection, 150, { leading: false });
     },

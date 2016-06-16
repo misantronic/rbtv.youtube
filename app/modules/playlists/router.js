@@ -6,7 +6,9 @@ class Router extends AppRouter {
         return {
             'playlists': 'initPlaylists',
             'playlists/playlist/:id': 'initPlaylist',
-            'playlists/playlist/:id/video/:videoId': 'initPlaylist'
+            'playlists/playlist/:id/video/:videoId': 'initPlaylist',
+
+            'standalone/playlists': 'initStandalonePlaylists'
         };
     }
 
