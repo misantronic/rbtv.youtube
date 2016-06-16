@@ -1,7 +1,8 @@
 import * as Marionette from 'backbone.marionette';
-import {VideoModel} from './models/Videos';
-import VideoLayout from './views/VideoLayout';
 import channels from '../../channels';
+
+import VideoLayout from './views/VideoLayout';
+import VideoModel from './models/Video';
 
 import './styles/videos.scss';
 

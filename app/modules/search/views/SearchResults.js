@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import {CollectionView} from 'backbone.marionette';
 import {Model} from 'backbone';
-import {VideoCollection} from '../../videos/models/Videos';
 import {SearchResult, SearchItemEmpty} from './SearchResult';
+import VideoCollection from '../../videos/models/Videos';
 
 const SearchResults = CollectionView.extend({
 

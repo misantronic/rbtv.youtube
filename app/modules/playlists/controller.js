@@ -2,7 +2,7 @@ import * as Marionette from 'backbone.marionette';
 import PlaylistsCollection from './models/Playlists';
 import PlaylistsLayout from './views/PlaylistsLayout';
 import VideoLayout from '../videos/views/VideoLayout';
-import {VideoModel} from '../videos/models/Videos';
+import VideoModel from '../videos/models/Video';
 import channels from '../../channels';
 import youtubeController from '../youtube/controller';
 import PlaylistItemsCollection from '../playlistsDetails/models/PlaylistItems';

@@ -1,60 +1,26 @@
 import _ from 'underscore';
-import moment from 'moment';
-import {Model, Collection} from 'backbone';
+import {Collection} from 'backbone';
 import Config from '../../../Config';
-import {props} from '../../decorators';
+import PlaylistModel from './Playlist';
 
 const defaultResults = 24;
-
-class Playlist extends Model {
-    defaults() {
-        return {
-            id: 0,
-            etag: null,
-            kind: null,
-            itemCount: 0,
-            channelId: null,
-            description: '',
-            publishedAt: null,
-            thumbnails: null,
-            title: ''
-        };
-    }
-
-    /** @param {{kind: string, etag: string, id: string, snippet: {publishedAt: string, channelId: string, title: string, description: string, thumbnails: {default: {url: string, width: number, height: number}, medium: {url: string, width: number, height: number}, high: {url: string, width: number, height: number}, standard: {url: string, width: number, height: number}, maxres: {url: string, width: number, height: number}}, channelTitle: string, localized: {title: string, description: string}}, contentDetails: {itemCount: number}}} response      */
-    parse(response) {
-        return {
-            id: response.id,
-            etag: response.etag,
-            kind: response.kind,
-            itemCount: response.contentDetails.itemCount,
-            channelId: response.snippet.channelId,
-            description: response.snippet.description,
-            publishedAt: moment(response.snippet.publishedAt),
-            thumbnails: response.snippet.thumbnails,
-            title: response.snippet.title
-        };
-    }
-}
 
 /**
  * @class PlaylistsCollection
  */
-class Playlists extends Collection {
+const Playlists = Collection.extend({
 
-    @props({
-        model: Playlist,
+    model: PlaylistModel,
 
-        comparator: 'title',
+    comparator: 'title',
 
-        _displayResults: defaultResults,
+    _displayResults: defaultResults,
 
-        url: Config.endpoints.playlists
-    })
+    url: Config.endpoints.playlists,
 
     parse(response) {
         return response.items;
-    }
+    },
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {
         if (!this._allModels) {
@@ -91,7 +57,7 @@ class Playlists extends Collection {
         const prevNumModels = this.models.length;
 
         // Reset collection when not increasing
-        if(!increaseResults) {
+        if (!increaseResults) {
             this.reset();
         }
 
@@ -104,8 +70,6 @@ class Playlists extends Collection {
             this.add(models);
         }
     }
+});
 
-}
-
-export {Playlist, Playlists};
 export default Playlists;

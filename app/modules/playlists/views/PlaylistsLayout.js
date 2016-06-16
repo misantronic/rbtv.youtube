@@ -5,86 +5,83 @@ import {Model} from 'backbone';
 import PlaylistsList from './Playlists';
 import {localStorage} from '../../../utils';
 import app from '../../../application';
-import {props} from '../../decorators';
 
-class Playlists extends LayoutView {
+const Playlists = LayoutView.extend({
 
-    @props({
-        className: 'layout-playlists',
+    className: 'layout-playlists',
 
-        template: require('../templates/playlists.ejs'),
+    template: require('../templates/playlists.ejs'),
 
-        regions: {
-            list: '.js-playlists'
+    regions: {
+        list: '.js-playlists'
+    },
+
+    behaviors: {
+        BtnToTop: {},
+        Search: {
+            container: '.js-search-container',
+            filterCheckboxBehavior: true,
+            tags: false
         },
+        Loader: {}
+    },
 
-        behaviors: {
-            BtnToTop: {},
-            Search: {
-                container: '.js-search-container',
-                filterCheckboxBehavior: true,
-                tags: false
-            },
-            Loader: {}
-        },
+    events: {
+        'click @ui.link': '_onClickLink'
+    },
 
-        events: {
-            'click @ui.link': '_onClickLink'
-        },
+    ui: {
+        link: '.js-link',
+        loader: '.js-loader'
+    },
 
-        ui: {
-            link: '.js-link',
-            loader: '.js-loader'
-        },
-
-        model: new Model({
-            search: '',
-            filterByRBTV: true,
-            filterByLP: true,
-            _loading: false
-        })
-    })
+    model: new Model({
+        search: '',
+        filterByRBTV: true,
+        filterByLP: true,
+        _loading: false
+    }),
 
     /** @returns {{search: String, rbtv: String|null, lp: String|null}} */
-    get channelFilter() {
+    getChannelFilter() {
         return {
             search: this.model.get('search'),
             rbtv: this.model.get('filterByRBTV'),
             lp: this.model.get('filterByLP')
         };
-    }
-    
+    },
+
     startLoading() {
         this.model.set('_loading', true);
-    }
-    
+    },
+
     stopLoading() {
         this.model.set('_loading', false);
-    }
+    },
 
     modelEvents() {
         return {
             'change:search': () => {
                 this.renderCollection(
-                    _.extend(this.channelFilter, { resetResults: true })
+                    _.extend(this.getChannelFilter(), { resetResults: true })
                 );
             },
 
             'change:filterByRBTV change:filterByLP': () => {
                 this.renderCollection(
-                    _.extend(this.channelFilter, { resetResults: true })
+                    _.extend(this.getChannelFilter(), { resetResults: true })
                 );
             }
         };
-    }
+    },
 
     /**
      * Lifecycle methods
      */
 
     initialize() {
-        this.renderCollection = _.debounce(this.renderCollection, 150, {leading: false});
-    }
+        this.renderCollection = _.debounce(this.renderCollection, 150, { leading: false });
+    },
 
     onRender() {
         this.getRegion('list').show(
@@ -94,11 +91,11 @@ class Playlists extends LayoutView {
         );
 
         this.stickit();
-    }
+    },
 
     onDestroy() {
         this._killScroll();
-    }
+    },
 
     /**
      * Public methods
@@ -121,7 +118,7 @@ class Playlists extends LayoutView {
         }
 
         if (!filter) {
-            filter = this.channelFilter;
+            filter = this.getChannelFilter();
         }
 
         // Cache filter
@@ -133,7 +130,7 @@ class Playlists extends LayoutView {
         this.collection.search(filter);
 
         this._initScroll();
-    }
+    },
 
     /**
      * Private methods
@@ -143,11 +140,11 @@ class Playlists extends LayoutView {
         this._killScroll();
 
         $(window).on('scroll.playlists', this._onScroll.bind(this));
-    }
+    },
 
     _killScroll() {
         $(window).off('scroll.playlists');
-    }
+    },
 
     /**
      * Event handler
@@ -155,25 +152,25 @@ class Playlists extends LayoutView {
 
     _onClickLink(e) {
         const $link = $(e.currentTarget);
-        const route   = $link.attr('href').substr(1);
+        const route = $link.attr('href').substr(1);
 
         app.navigate(route);
 
         e.preventDefault();
-    }
+    },
 
     _onScroll() {
         const maxY = $(document).height() - window.innerHeight - 600;
-        const y    = window.scrollY;
+        const y = window.scrollY;
 
         if (y >= maxY) {
             this._killScroll();
 
             this.renderCollection(
-                _.extend(this.channelFilter, { increaseResults: true })
+                _.extend(this.getChannelFilter(), { increaseResults: true })
             );
         }
     }
-}
+});
 
 export default Playlists;

@@ -7,7 +7,7 @@ import Config from '../../../Config';
 import SearchResultsCollection from '../../search/models/SearchResults';
 import SearchResultsView from '../../search/views/SearchResults';
 import shows from '../../../data/shows';
-import {VideoCollection} from '../../videos/models/Videos';
+import VideoCollection from '../../videos/models/Videos';
 
 const Activities = LayoutView.extend({
 

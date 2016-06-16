@@ -1,17 +1,11 @@
 import {CollectionView} from 'backbone.marionette';
 import {PlaylistItem} from '../../playlistsDetails/views/PlistlistItems';
-import {props} from '../../decorators';
 
-class RelatedResults extends CollectionView {
-    @props({
-        className: 'playlist-items related-items',
+const RelatedResults = CollectionView.extend({
+    className: 'playlist-items related-items',
 
-        childView: PlaylistItem
-    })
+    childView: PlaylistItem
 
-    initialize() {
-
-    }
-}
+});
 
 export default RelatedResults;

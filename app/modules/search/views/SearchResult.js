@@ -1,11 +1,11 @@
 import _ from 'underscore';
 import {LayoutView, ItemView} from 'backbone.marionette';
-import {VideoModel} from '../../videos/models/Videos';
 import beans from '../../../data/beans';
 import {localStorage} from '../../../utils';
 import TagsView from '../../tags/views/Tags';
 import TagCollection from '../../tags/models/Tags';
 import channels from '../../../channels';
+import  VideoModel from '../../videos/models/Video';
 
 const SearchResult = LayoutView.extend({
 
