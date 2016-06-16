@@ -14,7 +14,7 @@ import './modules/playlists/router';
 import './modules/activities/router';
 import './modules/videos/router';
 
-var initControllers = function () {
+const initControllers = function () {
     const mainRegion = app.getRegion('main');
     
     playlistsController.init(mainRegion);
@@ -23,8 +23,14 @@ var initControllers = function () {
     youtubeController.init();
 };
 
-var getFragments = function () {
+const getFragments = function () {
     return history.fragment.split('/');
+};
+
+const getRootFragment = function () {
+    const fragments = getFragments();
+
+    return _.first(fragments);
 };
 
 app.listenTo(app, 'start', function () {
@@ -34,8 +40,7 @@ app.listenTo(app, 'start', function () {
 
     app.navigate();
 
-    const fragments = getFragments();
-    const rootFragment = _.first(fragments);
+    const rootFragment = getRootFragment();
 
     if (rootFragment === 'standalone') {
         $('html').addClass('is-'+ rootFragment);
