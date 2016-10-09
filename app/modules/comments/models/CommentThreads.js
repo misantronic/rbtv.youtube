@@ -4,10 +4,8 @@ import {props} from '../../decorators';
 import Config from '../../../Config';
 import youtubeController from '../../youtube/controller';
 
-class CommentThread extends Comment {
-    @props({
-        urlRoot: youtubeController.endpoints.commentThreads
-    })
+const CommentThread = Comment.extend({
+    urlRoot: youtubeController.endpoints.commentThreads,
 
     /** @returns {{snippet: {channelId: (*|null), videoId: (*|null), topLevelComment: {snippet: {textOriginal: (string|*)}}}}} */
     getPayload() {
@@ -25,7 +23,7 @@ class CommentThread extends Comment {
             }
         };
     }
-}
+});
 
 class CommentThreads extends Collection {
     @props({

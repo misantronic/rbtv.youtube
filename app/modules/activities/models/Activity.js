@@ -1,22 +1,20 @@
 import moment from 'moment';
 import {Model} from 'backbone';
 
-class Activity extends Model {
-    defaults() {
-        return {
-            id: 0,
-            etag: null,
-            kind: null,
-            videoId: null,
-            channelId: null,
-            description: '',
-            publishedAt: null,
-            thumbnails: null,
-            title: '',
-            tags: null,
-            duration: null
-        };
-    }
+const Activity = Model.extend({
+    defaults: {
+        id: 0,
+        etag: null,
+        kind: null,
+        videoId: null,
+        channelId: null,
+        description: '',
+        publishedAt: null,
+        thumbnails: null,
+        title: '',
+        tags: null,
+        duration: null
+    },
 
     parse(response) {
         return {
@@ -31,6 +29,6 @@ class Activity extends Model {
             title: response.snippet.title
         };
     }
-}
+});
 
 export default Activity;

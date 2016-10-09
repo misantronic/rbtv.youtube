@@ -9,8 +9,8 @@ import CommentForm from './CommentForm';
 import {timeUtil} from '../../../utils';
 import channels from '../../../channels';
 
-class CommentItem extends LayoutView {
-    @props({
+const CommentItem = LayoutView.extend({
+
         template: require('../templates/comment.ejs'),
 
         className: 'item-comment col-xs-12',
@@ -37,23 +37,20 @@ class CommentItem extends LayoutView {
             Loader: {
                 container: '.loader-container'
             }
-        }
-    })
+        },
 
-    bindings() {
-        return {
-            '@ui.showReplies': {
-                observe: 'repliesVisible',
-                update($el, val) {
-                    if (val) {
-                        $el.text('Verberge Antworten');
-                    } else {
-                        $el.text('Zeige ' + this.model.get('snippet').totalReplyCount + ' Antworten');
-                    }
+    bindings: {
+        '@ui.showReplies': {
+            observe: 'repliesVisible',
+            update($el, val) {
+                if (val) {
+                    $el.text('Verberge Antworten');
+                } else {
+                    $el.text('Zeige ' + this.model.get('snippet').totalReplyCount + ' Antworten');
                 }
             }
-        };
-    }
+        }
+    },
 
     onRender() {
         const snippet = this.model.get('snippet');
@@ -70,7 +67,7 @@ class CommentItem extends LayoutView {
         );
 
         this.stickit();
-    }
+    },
 
     _onToggleReplies(e) {
         const repliesVisible = this.model.get('repliesVisible');
@@ -82,13 +79,13 @@ class CommentItem extends LayoutView {
         }
 
         e.preventDefault();
-    }
+    },
 
     _hideReplies() {
         this.getRegion('replies').empty();
 
         this.model.set('repliesVisible', false);
-    }
+    },
 
     _showReplies() {
         const collection = new CommentsCollection();
@@ -106,7 +103,7 @@ class CommentItem extends LayoutView {
         this._repliesCollection = collection;
 
         return collection.fetch().then(() => this.model.set('_loading', false));
-    }
+    },
 
     _onClickReply() {
         const formView = new CommentForm({
@@ -122,7 +119,7 @@ class CommentItem extends LayoutView {
         this.listenTo(formView, 'comment:cancel', this._onCommentCanceled);
 
         this.getRegion('replyForm').show(formView);
-    }
+    },
 
     _onClickLink(e) {
         const href = $(e.currentTarget).attr('href');
@@ -140,18 +137,18 @@ class CommentItem extends LayoutView {
         }
 
         e.preventDefault();
-    }
+    },
 
     _onCommentAdded(commentModel) {
         this._showReplies().then(() => {
             this._repliesCollection.add(commentModel);
         });
-    }
+    },
 
     _onCommentCanceled() {
         this.getRegion('replyForm').empty();
     }
-}
+});
 
 class CommentsItems extends CollectionView {
     constructor(options = {}) {

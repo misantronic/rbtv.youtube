@@ -1,29 +1,25 @@
 import {CollectionView, ItemView} from 'backbone.marionette';
-import Config from '../../../Config';
-import {props} from '../../decorators';
 
-class NavigationItem extends ItemView {
+const NavigationItem = ItemView.extend({
 
-    @props({
-        tagName: 'li',
+    tagName: 'li',
 
-        className: 'navigation-item',
+    className: 'navigation-item',
 
-        template: require('../templates/navigation-item.ejs'),
+    template: require('../templates/navigation-item.ejs'),
 
-        bindings: {
-            ':el': {
-                classes: {
-                    'active': '_active'
-                }
+    bindings: {
+        ':el': {
+            classes: {
+                'active': '_active'
             }
         }
-    })
+    },
 
     onRender() {
         this.stickit();
     }
-}
+});
 
 const Navigation = CollectionView.extend({
     tagName: 'ul',

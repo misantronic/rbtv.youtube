@@ -2,7 +2,6 @@ import _ from 'underscore';
 import {LayoutView} from 'backbone.marionette';
 import app from '../../../application';
 import {localStorage, stringUtil} from '../../../utils';
-import {props} from '../../decorators';
 import RelatedResults from '../../search/views/RelatedResults';
 import RelatedResultsCollection from '../../search/models/RelatedResults';
 import PlaylistItems from '../../playlistsDetails/views/PlistlistItems';
@@ -11,38 +10,37 @@ import PlaylistItemsCollection from '../../playlistsDetails/models/PlaylistItems
 import ThumbsView from '../../thumbs/views/Thumbs';
 import VideoPlayerView from './VideoPlayer';
 
-class Video extends LayoutView {
-    @props({
-        className: 'layout-video',
+const VideoLayout = LayoutView.extend({
 
-        template: require('../templates/video.ejs'),
+    className: 'layout-video',
 
-        ui: {
-            title: '.js-title',
-            video: '.js-video-container',
-            publishedAt: '.js-publishedAt',
-            views: '.js-views',
-            description: '.js-description'
-        },
+    template: require('../templates/video.ejs'),
 
-        regions: {
-            videoplayer: '.region-videoplayer',
-            playlist: '.region-playlist',
-            comments: '.region-comments',
-            thumbs: '.region-thumbs'
-        },
+    ui: {
+        title: '.js-title',
+        video: '.js-video-container',
+        publishedAt: '.js-publishedAt',
+        views: '.js-views',
+        description: '.js-description'
+    },
 
-        behaviors: {
-            BtnToTop: {},
-            Loader: {
-                container: '.loader-container'
-            }
+    regions: {
+        videoplayer: '.region-videoplayer',
+        playlist: '.region-playlist',
+        comments: '.region-comments',
+        thumbs: '.region-thumbs'
+    },
+
+    behaviors: {
+        BtnToTop: {},
+        Loader: {
+            container: '.loader-container'
         }
-    })
+    },
 
-    get isPlaylist() {
+    isPlaylist() {
         return !!this.model.get('playlistId');
-    }
+    },
 
     modelEvents() {
         return {
@@ -58,7 +56,7 @@ class Video extends LayoutView {
                         this._initVideo();
                         this._initThumbs();
 
-                        if (!this.isPlaylist) {
+                        if (!this.isPlaylist()) {
                             this._initRelatedVideos();
                         }
 
@@ -84,7 +82,7 @@ class Video extends LayoutView {
                 this.ui.description.html(description);
             }
         };
-    }
+    },
 
     _initVideo() {
         const videoId = this.model.get('id');
@@ -99,7 +97,7 @@ class Video extends LayoutView {
         } else {
             this._videoPlayer.videoId = videoId;
         }
-    }
+    },
 
     _initThumbs() {
         const statistics = this.model.get('statistics');
@@ -115,7 +113,7 @@ class Video extends LayoutView {
                 canRate: true
             })
         );
-    }
+    },
 
     _initRelatedVideos() {
         const videoId = this.model.id;
@@ -139,7 +137,7 @@ class Video extends LayoutView {
         this.getRegion('playlist').show(view);
 
         collection.fetch();
-    }
+    },
 
     _initPlaylistItems() {
         const playlistId = this.model.get('playlistId');
@@ -172,15 +170,15 @@ class Video extends LayoutView {
         } else {
             this._autoselectVideo();
         }
-    }
+    },
 
     _initComments() {
         commentsController.init(this.getRegion('comments'));
         commentsController.initComments(this.model);
-    }
+    },
 
     _playNext() {
-        if (!this.isPlaylist) return;
+        if (!this.isPlaylist()) return;
 
         const videoId = this.model.id;
         const nextPlaylistItem = this.collection.getNextPlaylistItem(videoId);
@@ -197,7 +195,7 @@ class Video extends LayoutView {
             // Set new videoId
             this._selectVideo(nextVideoId);
         }
-    }
+    },
 
     _setWatched() {
         const videoId = this.model.id;
@@ -209,7 +207,7 @@ class Video extends LayoutView {
         }
 
         localStorage.update(`${videoId}.info`, { watched: true, currentTime: 0 });
-    }
+    },
 
     _selectVideo(videoId) {
         this.model.set('id', videoId);
@@ -220,13 +218,13 @@ class Video extends LayoutView {
 
         // Update own id -> load video
         this._initVideo();
-    }
+    },
 
     _autoselectVideo() {
         const videoId = this.model.id || this.collection.first().get('videoId');
 
         this._selectVideo(videoId);
     }
-}
+});
 
-export default Video;
+export default VideoLayout;

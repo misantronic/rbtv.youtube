@@ -4,10 +4,10 @@ import CommentsLayout from './views/CommentsLayout';
 
 import './styles/comments.scss';
 
-class Controller extends Marionette.Object {
+const Controller = Marionette.Object.extend({
     init(region) {
         this._region = region;
-    }
+    },
 
     initComments(videoModel) {
         const view = new CommentsLayout({
@@ -21,6 +21,6 @@ class Controller extends Marionette.Object {
 
         this._region.show(view);
     }
-}
+});
 
 export default new Controller();

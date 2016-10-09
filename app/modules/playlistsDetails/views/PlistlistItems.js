@@ -5,36 +5,34 @@ import {localStorage} from '../../../utils';
 import app from '../../../application';
 import {props} from '../../decorators';
 
-class PlaylistItem extends ItemView {
+const PlaylistItem = ItemView.extend({
 
-    @props({
-        className: 'playlist-item js-playlist-item',
+    className: 'playlist-item js-playlist-item',
 
-        template: require('../templates/playlist-item.ejs'),
+    template: require('../templates/playlist-item.ejs'),
 
-        ui: {
-            link: '.js-link'
-        },
+    ui: {
+        link: '.js-link'
+    },
 
-        bindings: {
-            ':el': {
-                classes: {
-                    'watched': '_watched'
-                },
+    bindings: {
+        ':el': {
+            classes: {
+                'watched': '_watched'
+            },
 
-                attributes: [
-                    {
-                        name: 'data-videoId',
-                        observe: 'videoId'
-                    }
-                ]
-            }
-        },
-
-        triggers: {
-            'click @ui.link': 'link:clicked'
+            attributes: [
+                {
+                    name: 'data-videoId',
+                    observe: 'videoId'
+                }
+            ]
         }
-    })
+    },
+
+    triggers: {
+        'click @ui.link': 'link:clicked'
+    },
 
     initialize() {
         const videoId = this.model.get('videoId');
@@ -43,12 +41,12 @@ class PlaylistItem extends ItemView {
         if (watched) {
             this.model.set('_watched', true);
         }
-    }
+    },
 
     onRender() {
         this.stickit();
     }
-}
+});
 
 class PlaylistItems extends CompositeView {
 

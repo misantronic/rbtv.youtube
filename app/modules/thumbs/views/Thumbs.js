@@ -1,63 +1,59 @@
 import _ from 'underscore';
 import {ItemView} from 'backbone.marionette';
-import {props} from '../../decorators';
 import {Model} from 'backbone';
 import youtubeController from '../../youtube/controller';
 
-class Thumbs extends ItemView {
-    @props({
-        className: 'layout-thumbs',
+const Thumbs = ItemView.extend({
 
-        template: require('../templates/thumbs.ejs'),
+    className: 'layout-thumbs',
+
+    template: require('../templates/thumbs.ejs'),
 
 
-        viewOptions: [
-            'resourceId',
-            'hideLikes',
-            'hideDislikes',
-            'checkOwnRating',
-            'canRate'
-        ],
+    viewOptions: [
+        'resourceId',
+        'hideLikes',
+        'hideDislikes',
+        'checkOwnRating',
+        'canRate'
+    ],
 
-        ui: {
-            likes: '.js-count-likes',
-            dislikes: '.js-count-dislikes',
-            btnLike: '.js-btn-like',
-            btnDislike: '.js-btn-dislike'
+    ui: {
+        likes: '.js-count-likes',
+        dislikes: '.js-count-dislikes',
+        btnLike: '.js-btn-like',
+        btnDislike: '.js-btn-dislike'
+    },
+
+    events: {
+        'click @ui.btnLike': '_onClickLike',
+        'click @ui.btnDislike': '_onClickDislike'
+    },
+
+    bindings: {
+        '@ui.btnLike': {
+            classes: {
+                active: '_liked',
+                canRate: '_canRate'
+            }
         },
 
-        events: {
-            'click @ui.btnLike': '_onClickLike',
-            'click @ui.btnDislike': '_onClickDislike'
-        }
-    })
+        '@ui.btnDislike': {
+            classes: {
+                active: '_disliked',
+                canRate: '_canRate'
+            }
+        },
 
-    bindings() {
-        return {
-            '@ui.btnLike': {
-                classes: {
-                    active: '_liked',
-                    canRate: '_canRate'
-                }
-            },
+        '@ui.likes': {
+            observe: 'likeCount',
+            classes: {
+                'has-likes': 'likeCount'
+            }
+        },
 
-            '@ui.btnDislike': {
-                classes: {
-                    active: '_disliked',
-                    canRate: '_canRate'
-                }
-            },
-
-            '@ui.likes': {
-                observe: 'likeCount',
-                classes: {
-                    'has-likes': 'likeCount'
-                }
-            },
-
-            '@ui.dislikes': 'dislikeCount'
-        };
-    }
+        '@ui.dislikes': 'dislikeCount'
+    },
 
     initialize(options) {
         _.bindAll(this, '_onRated');
@@ -89,7 +85,7 @@ class Thumbs extends ItemView {
                 });
             });
         }
-    }
+    },
 
     onRender() {
         if (this.getOption('hideLikes')) {
@@ -103,7 +99,7 @@ class Thumbs extends ItemView {
         }
 
         this.stickit();
-    }
+    },
 
     _onClickLike() {
         const rating = this.model.get('_liked') ? 'none' : 'like';
@@ -111,7 +107,7 @@ class Thumbs extends ItemView {
         youtubeController
             .addRating(rating, this.model.get('resourceId'))
             .done(this._onRated);
-    }
+    },
 
     _onClickDislike() {
         const rating = this.model.get('_disliked') ? 'none' : 'dislike';
@@ -119,14 +115,14 @@ class Thumbs extends ItemView {
         youtubeController
             .addRating(rating, this.model.get('resourceId'))
             .done(this._onRated);
-    }
+    },
 
     _onRated(rating) {
-        const _liked       = rating === 'like';
-        const _disliked    = rating === 'dislike';
-        const _none        = rating === 'none';
+        const _liked = rating === 'like';
+        const _disliked = rating === 'dislike';
+        const _none = rating === 'none';
 
-        let likeCount    = this.model.get('likeCount');
+        let likeCount = this.model.get('likeCount');
         let dislikeCount = this.model.get('dislikeCount');
 
         if (_liked) {
@@ -162,6 +158,6 @@ class Thumbs extends ItemView {
             dislikeCount
         });
     }
-}
+});
 
 export default Thumbs;
