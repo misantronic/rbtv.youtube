@@ -70,9 +70,7 @@ const PlaylistsController = Marionette.Object.extend({
         view.startLoading();
 
         collection.fetch({ silent: true })
-            .done(() => {
-                view.renderCollection(true);
-            });
+            .done(() => view.renderCollection(true));
     },
 
     _fetchPlaylistItems(playlistId) {
