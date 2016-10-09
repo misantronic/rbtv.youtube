@@ -156,7 +156,7 @@ const SearchForm = LayoutView.extend({
 
                 const tagCollection = this.model.get('tags');
 
-                if (tagCollection.length > 0) {
+                if (tagCollection && tagCollection.length > 0) {
                     tagCollection.remove(tagCollection.last());
                 }
                 break;
