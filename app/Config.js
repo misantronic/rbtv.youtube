@@ -29,6 +29,7 @@ export default {
 
     navigation: new Collection([
         { title: 'Übersicht', route: 'activities' },
-        { title: 'Playlists', route: 'playlists' }
+        { title: 'Playlists', route: 'playlists' },
+        { title: 'Shows', route: 'shows' }
     ])
 };

@@ -3,24 +3,17 @@ import $ from 'jquery';
 import {history} from 'backbone';
 
 import app from './application';
+import controllers from './controllers';
 
-import playlistsController from './modules/playlists/controller';
-import activitiesController from './modules/activities/controller';
-import videosController from './modules/videos/controller';
-import youtubeController from './modules/youtube/controller';
-
-// Router
-import './modules/playlists/router';
-import './modules/activities/router';
-import './modules/videos/router';
+import './routes';
 
 const initControllers = function () {
     const mainRegion = app.getRegion('main');
-    
-    playlistsController.init(mainRegion);
-    activitiesController.init(mainRegion);
-    videosController.init(mainRegion);
-    youtubeController.init();
+
+    // Initialize all controllers
+    _.each(controllers, controller => {
+        controller.init(mainRegion);
+    });
 };
 
 const getFragments = function () {
@@ -38,19 +31,20 @@ app.listenTo(app, 'start', function () {
 
     history.start();
 
-    app.navigate();
-
     const rootFragment = getRootFragment();
 
     if (rootFragment === 'standalone') {
-        $('html').addClass('is-'+ rootFragment);
+        $('html').addClass('is-' + rootFragment);
 
         return;
     }
 
-    app.initBreadcrumb();
-    app.initNavigation();
-    app.detectAdBlock();
+    app
+        .initBreadcrumb()
+        .initNavigation()
+        .detectAdBlock();
+
+    app.navigate();
 });
 
 app.start();

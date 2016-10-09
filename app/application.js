@@ -50,7 +50,7 @@ const App = Application.extend({
     navigate(route, options = {}) {
         route = route || history.getFragment() || 'activities';
         options = _.extend({ trigger: true }, options);
-        
+
         history.navigate(route, options);
     },
 
@@ -65,6 +65,8 @@ const App = Application.extend({
 
     initNavigation() {
         this.getRegion('navigation').show(new NavigationLayout());
+
+        return this;
     },
 
     initBreadcrumb() {
@@ -72,6 +74,8 @@ const App = Application.extend({
         const breadcrumbRegion = this.getRegion('breadcrumb');
 
         breadcrumbConroller.init(breadcrumbRegion);
+
+        return this;
     },
 
     detectAdBlock() {
@@ -82,6 +86,8 @@ const App = Application.extend({
             // detected
             this.getRegion('adBlock').$el.show();
         });
+
+        return this;
     }
 });
 
