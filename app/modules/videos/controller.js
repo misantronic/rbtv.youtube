@@ -17,14 +17,14 @@ const VideosController = Marionette.Object.extend({
 
     initVideo(videoId) {
         /** @type {VideoModel} */
-        let videoModel;
+        let model;
 
         // TODO: this is a workaround, find a better way to solve this
         // Is true when the video-route is initially called. when clicked on an item in a playlist, the value is false
         if (this._region.$el.find('.layout-video').length === 0) {
-            videoModel = new VideoModel();
+            model = new VideoModel();
 
-            this._videoLayout = new VideoLayout({ videoModel });
+            this._videoLayout = new VideoLayout({ model });
 
             // const interval = setInterval(() => {
             //     console.log(interval, $('.region-videoplayer').height());
@@ -34,15 +34,15 @@ const VideosController = Marionette.Object.extend({
 
             // Update breadcrumb
             this.listenTo(
-                videoModel,
+                model,
                 'change:title',
                 (noop, title) => channels.breadcrumb.push({ title, type: 'video' })
             );
         } else {
-            videoModel = this._videoLayout.model;
+            model = this._videoLayout.model;
         }
 
-        videoModel.set('id', videoId);
+        model.set('id', videoId);
     }
 });
 
