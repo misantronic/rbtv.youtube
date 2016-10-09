@@ -111,5 +111,11 @@ export default [
         title: 'Let\'s Play',
         expr: /^let/i,
         channel: 'lp'
+    },
+    {
+        title: 'B.E.A.R.D.S',
+        expr: /^b\.*e\.*a\.*r\.*d\.*s/i,
+        channel: 'rbtv',
+        playlistId: 'PLsksxTH4pR3Kk6Uz2NCG4QAjhKy4y8T50'
     }
 ];
