@@ -3,6 +3,7 @@ var timeout     = require('connect-timeout');
 var compression = require('compression');
 var bodyParser  = require('body-parser');
 var api         = require('./api/api');
+var allowCors   = require('./allowCors');
 
 var publicPath = __dirname + '/../public';
 
@@ -10,6 +11,7 @@ var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
+app.use(allowCors);
 app.use(timeout('60s'));
 app.use(compression());
 app.use(express.static(publicPath));
