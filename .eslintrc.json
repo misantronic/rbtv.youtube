@@ -4,9 +4,15 @@
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 6,
-        "sourceType": "module"
+        "sourceType": "module",
+        "jsx": true
     },
+    "plugins": [
+        "react"
+    ],
     "rules": {
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
         "comma-dangle": [
             2,
             "never"
@@ -88,7 +94,12 @@
             }
         ],
         "no-undef-init": 2,
-        "no-unused-vars": 2,
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "React"
+            }
+        ],
         "comma-spacing": [
             2,
             {
@@ -146,6 +157,9 @@
             }
         ],
         "no-var": 2,
-        "object-shorthand": ["error", "always"]
+        "object-shorthand": [
+            "error",
+            "always"
+        ]
     }
 }
