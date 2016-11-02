@@ -18,11 +18,11 @@ class Item extends Component {
 
     render() {
         const item = this.props.item;
-        const videoId = item.contentDetails.upload.videoId;
-        const thumb = item.snippet.thumbnails.high.url;
-        const description = item.snippet.description;
-        const title = item.snippet.title;
-        const publishedAt = moment(item.snippet.publishedAt);
+        const videoId = item.get('videoId');
+        const thumb = item.get('thumbnails').high.url;
+        const description = item.get('description');
+        const title = item.get('title');
+        const publishedAt = moment(item.get('publishedAt'));
 
         const className = this._getClassName();
 

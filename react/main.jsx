@@ -3,21 +3,18 @@ const render = require('react-dom').render;
 const $ = require('jquery');
 const VideoList = require('./components/VideoList/List');
 
-import Config from '../app/Config';
 import Activities from '../app/modules/activities/models/Activities';
+import Config from '../app/Config';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../assets/css/application.scss';
 import '../assets/css/components.scss';
 
-const collection = new Activities();
+const actvities = new Activities();
 
-collection
-    .setChannelId(Config.channelRBTV)
-    .fetch()
-    .then(activities => {
-        render(
-            <VideoList items={activities.items}/>,
-            $('.app')[0]
-        );
-    });
+actvities.setChannelId(Config.channelRBTV);
+
+render(
+    <VideoList collection={actvities}/>,
+    $('.app').find('.container')[0]
+);
