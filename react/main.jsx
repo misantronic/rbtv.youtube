@@ -1,20 +1,18 @@
 const React = require('react');
 const render = require('react-dom').render;
 const $ = require('jquery');
-const VideoList = require('./components/VideoList/List');
+const Activities = require('./modules/Activities');
 
-import Activities from '../app/modules/activities/models/Activities';
-import Config from '../app/Config';
+import {Router, Route, hashHistory} from 'react-router';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../assets/css/application.scss';
 import '../assets/css/components.scss';
 
-const actvities = new Activities();
-
-actvities.setChannelId(Config.channelRBTV);
-
-render(
-    <VideoList collection={actvities}/>,
+render((
+        <Router history={hashHistory}>
+            <Route path="/" component={Activities}/>
+        </Router>
+    ),
     $('.app').find('.container')[0]
 );
