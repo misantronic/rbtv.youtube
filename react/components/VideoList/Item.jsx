@@ -1,9 +1,9 @@
-const React = require('react');
-const Component = React.Component;
-const moment = require('moment');
+import React from 'react';
+import {Component} from 'react';
+import moment from 'moment';
 
-const Link = require('./Thumb');
-const Caption = require('./Caption');
+import Thumb from './Thumb';
+import Caption from './Caption';
 
 class Item extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class Item extends Component {
         return (
             <div key={item.id} className={className} onClick={this._onClick}>
                 <div className="thumbnail">
-                    <Link videoId={videoId} thumb={thumb} publishedAt={publishedAt}/>
+                    <Thumb videoId={videoId} thumb={thumb} publishedAt={publishedAt}/>
                     <Caption videoId={videoId} description={description} title={title}/>
                 </div>
             </div>
@@ -55,4 +55,4 @@ class Item extends Component {
     }
 }
 
-module.exports = Item;
+export default Item;

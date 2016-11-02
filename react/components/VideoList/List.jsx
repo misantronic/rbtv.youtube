@@ -1,8 +1,8 @@
-const Backbone = require('backbone');
-const $ = require('jquery');
-const React = require('react');
-const Component = React.Component;
-const Item = require('./Item');
+import React from 'react';
+import Backbone from 'backbone';
+import $ from 'jquery';
+import {Component} from 'react';
+import Item from './Item';
 
 class List extends Component {
     constructor(props) {
@@ -73,4 +73,4 @@ class List extends Component {
     }
 }
 
-module.exports = List;
+export default List;

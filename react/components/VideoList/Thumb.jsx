@@ -1,6 +1,6 @@
-const React = require('react');
+import React from 'react';
 
-module.exports = function Thumb(props) {
+export default function Thumb(props) {
     const videoId = props.videoId;
     const thumb = props.thumb;
     const publishedAt = props.publishedAt;
