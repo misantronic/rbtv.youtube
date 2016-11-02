@@ -10,18 +10,18 @@ class Activities extends Component {
     constructor(props) {
         super(props);
 
-        const actvities = new Collection();
+        const activities = new Collection();
 
-        actvities.setChannelId(Config.channelRBTV);
+        activities.setChannelId(Config.channelRBTV);
 
-        this.actvities = actvities;
+        this.activities = activities;
     }
 
     render() {
         return (
             <div>
                 <Nav/>
-                <VideoList collection={this.actvities}/>
+                <VideoList collection={this.activities}/>
             </div>
         );
     }
