@@ -9,10 +9,9 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../assets/css/application.scss';
 import '../assets/css/components.scss';
 
-render((
-        <Router history={hashHistory}>
-            <Route path="/" component={Activities}/>
-        </Router>
-    ),
+render(
+    <Router history={hashHistory}>
+        <Route path="/" component={Activities}/>
+    </Router>,
     $('.app').find('.container')[0]
 );
