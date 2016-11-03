@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
-import VideoList from './../components/VideoList/List';
+import VideoList from '../components/VideoList/VideoList';
 import Search from './../components/Search/Search';
 import Collection from '../../app/modules/search/models/SearchResults';
 import Config from '../../app/Config';

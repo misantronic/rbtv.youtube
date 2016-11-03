@@ -5,7 +5,7 @@ import moment from 'moment';
 import Thumb from './Thumb';
 import Caption from './Caption';
 
-class Item extends Component {
+class VideoListItem extends Component {
     render() {
         const item = this.props.item;
         const index = this.props.index;
@@ -26,4 +26,4 @@ class Item extends Component {
     }
 }
 
-export default Item;
+export default VideoListItem;

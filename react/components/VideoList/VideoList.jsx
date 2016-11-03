@@ -2,17 +2,22 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'underscore';
 import {Component} from 'react';
-import Item from './Item';
+import Item from './VideoListItem';
+import Collection from '../../../app/modules/search/models/SearchResults';
 
-class List extends Component {
+class VideoList extends Component {
     constructor(props) {
         super(props);
 
+        this._validateProps();
+
+        const collection = this.props.collection;
+
         this.state = {
-            collection: this.props.collection.clone()
+            collection: collection.clone()
         };
 
-        this._refresh = _.debounce(this._fetch, 350);
+        this._refresh = _.debounce(() => this._fetch(true), 350);
     }
 
     render() {
@@ -25,12 +30,6 @@ class List extends Component {
                 {collection.map((item, i) => <Item key={item.id} item={item} index={i}/>)}
             </div>
         );
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this._shouldInvalidate(nextProps)) {
-            this.state.collection.reset();
-        }
     }
 
     componentDidMount() {
@@ -47,13 +46,29 @@ class List extends Component {
      * Private methods
      */
 
+    _validateProps() {
+        const collection = this.props.collection;
+
+        if (!collection) {
+            throw new Error('Please provide a collection.');
+        }
+
+        if (!(collection instanceof Collection)) {
+            throw new Error('collection must be an instance of /app/modules/search/models/SearchResults');
+        }
+    }
+
     _shouldInvalidate(props) {
         return props.search !== this.props.search ||
             props.channel !== this.props.channel;
     }
 
-    _fetch() {
+    _fetch(reset = false) {
         const collection = this.state.collection;
+
+        if(reset) {
+            collection.reset();
+        }
 
         collection.setQ(this.props.search);
         collection.setChannelId(this.props.channel);
@@ -101,4 +116,4 @@ class List extends Component {
     }
 }
 
-export default List;
+export default VideoList;
