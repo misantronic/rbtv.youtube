@@ -1,6 +1,6 @@
 import React from 'react';
-import Backbone from 'backbone';
 import $ from 'jquery';
+import _ from 'underscore';
 import {Component} from 'react';
 import Item from './Item';
 
@@ -9,10 +9,10 @@ class List extends Component {
         super(props);
 
         this.state = {
-            collection: new Backbone.Collection()
+            collection: this.props.collection.clone()
         };
 
-        this.fetch();
+        this._refresh = _.debounce(this._fetch, 350);
     }
 
     render() {
@@ -22,32 +22,60 @@ class List extends Component {
 
         return (
             <div className="activities-items items row">
-                {
-                    collection.map((item, i) =>
-                        <Item key={item.id} item={item} index={i}/>
-                    )
-                }
+                {collection.map((item, i) => <Item key={item.id} item={item} index={i}/>)}
             </div>
         );
     }
 
-    fetch() {
-        const collection = this.props.collection;
-
-        const token = collection.getNextPageToken();
-
-        if (token) {
-            this._killScroll();
+    componentWillReceiveProps(nextProps) {
+        if (this._shouldInvalidate(nextProps)) {
+            this.state.collection.reset();
         }
+    }
 
-        collection
-            .fetch()
-            .then(() => this.setState({ collection }));
+    componentDidMount() {
+        this._fetch();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this._shouldInvalidate(prevProps)) {
+            this._refresh();
+        }
     }
 
     /**
      * Private methods
      */
+
+    _shouldInvalidate(props) {
+        return props.search !== this.props.search ||
+            props.channel !== this.props.channel;
+    }
+
+    _fetch() {
+        const collection = this.state.collection;
+
+        collection.setQ(this.props.search);
+        collection.setChannelId(this.props.channel);
+
+        collection
+            .fetch()
+            .then(() => this.forceUpdate());
+    }
+
+    _fetchNext() {
+        const collection = this.state.collection;
+
+        const token = collection.getNextPageToken();
+
+        if (token) {
+            this._killScroll();
+
+            collection.setNextPageToken(token);
+        }
+
+        this._fetch();
+    }
 
     _initScroll() {
         this._killScroll();
@@ -68,7 +96,7 @@ class List extends Component {
         const y = window.scrollY;
 
         if (y >= maxY) {
-            this.fetch();
+            this._fetchNext();
         }
     }
 }

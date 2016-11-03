@@ -76,6 +76,14 @@ const SearchResults = Collection.extend({
         this._nextPageToken = null;
 
         return this.models;
+    },
+
+    reset() {
+        this._nextPageToken = null;
+        this._channelId = null;
+        this._q = null;
+
+        return Collection.prototype.reset.apply(this, arguments);
     }
 });
 

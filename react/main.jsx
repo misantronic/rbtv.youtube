@@ -4,6 +4,7 @@ import {Router, Route, hashHistory, IndexRoute} from 'react-router';
 import $ from 'jquery';
 
 import Activities from './modules/Activities';
+import Video from './modules/Video';
 import App from './modules/App';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -16,6 +17,7 @@ render(
             <IndexRoute component={Activities}/>
 
             <Route path="/activities" component={Activities}/>
+            <Route path="/video/:id" component={Video}/>
         </Route>
     </Router>,
     $('.app').find('.container')[0]

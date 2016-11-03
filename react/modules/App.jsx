@@ -3,10 +3,10 @@ import Nav from './Nav';
 
 export default function App(props) {
     return (
-        <div>
+        <div className="module-app">
             <h1>rbtv.youtube</h1>
             <Nav/>
             {props.children}
         </div>
     );
-};
+}
