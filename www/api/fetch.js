@@ -38,7 +38,7 @@ function request(config) {
 
         cache.get(cacheConfig)
             .then(value => {
-                if (value) {
+                if (!_.isEmpty(_.omit(value, 'items')) && value.items) {
                     resolvePromise(value, true);
                     return;
                 }

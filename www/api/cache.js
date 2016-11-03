@@ -98,17 +98,18 @@ module.exports = {
 
         // Push items to redis
         if (items) {
-            var list = _.map(items, item => {
-                return JSON.stringify(item);
-            });
+            var list = _.map(items, item => JSON.stringify(item));
 
             var identifierItems = this.rk2(identifier);
 
             pipeline = redis.pipeline();
 
-            // Pipe items to pipeline
+            // Remove list
+            pipeline.ltrim(identifierItems, 1, 0);
+
+            // Pipe items to list
             _.each(items, item => {
-                pipeline.rpush(this.rk2(identifier), JSON.stringify(item));
+                pipeline.rpush(identifierItems, JSON.stringify(item));
             });
 
             pipeline.exec();
