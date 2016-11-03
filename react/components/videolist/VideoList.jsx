@@ -3,6 +3,7 @@ import $ from 'jquery';
 import _ from 'underscore';
 import {Component} from 'react';
 import Item from './VideoListItem';
+import Loader from './../loader/Loader';
 import Collection from '../../../app/modules/search/models/SearchResults';
 
 class VideoList extends Component {
@@ -11,14 +12,24 @@ class VideoList extends Component {
 
         this._validateProps();
 
-        const collection = this.props.collection;
+        const collection = this.props.collection.clone();
 
         this.state = {
-            collection: collection.clone()
+            collection,
+            loading: false
         };
 
         this._refresh = _.debounce(() => this._fetch(true), 350);
+
+        _.bindAll(this, '_onCollectionRequest', '_onCollectionSync');
+
+        collection.listenTo(collection, 'request', this._onCollectionRequest);
+        collection.listenTo(collection, 'sync', this._onCollectionSync);
     }
+
+    /**
+     * Lifecycle methods
+     */
 
     render() {
         const collection = this.state.collection;
@@ -26,8 +37,9 @@ class VideoList extends Component {
         this._initScroll();
 
         return (
-            <div className="activities-items items row">
+            <div className={'items' + (this.state.loading ? ' is-loading' : '')}>
                 {collection.map((item, i) => <Item key={item.id} item={item} index={i}/>)}
+                <Loader />
             </div>
         );
     }
@@ -39,6 +51,15 @@ class VideoList extends Component {
     componentDidUpdate(prevProps) {
         if (this._shouldInvalidate(prevProps)) {
             this._refresh();
+        }
+    }
+
+    componentWillUnmount() {
+        const collection = this.state.collection;
+
+        if (collection) {
+            collection.stopListening('request');
+            collection.stopListening('sync');
         }
     }
 
@@ -66,7 +87,7 @@ class VideoList extends Component {
     _fetch(reset = false) {
         const collection = this.state.collection;
 
-        if(reset) {
+        if (reset) {
             collection.reset();
         }
 
@@ -113,6 +134,14 @@ class VideoList extends Component {
         if (y >= maxY) {
             this._fetchNext();
         }
+    }
+
+    _onCollectionRequest() {
+        this.setState({ loading: true });
+    }
+
+    _onCollectionSync() {
+        this.setState({ loading: false });
     }
 }
 

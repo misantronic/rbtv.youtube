@@ -10,6 +10,7 @@ import App from './modules/App';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../assets/css/application.scss';
 import '../assets/css/components.scss';
+import '../assets/css/react/_package.scss';
 
 render(
     <Router history={hashHistory}>

@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'underscore';
 import {Component} from 'react';
 import Config from '../../../app/Config';
 
@@ -6,9 +7,7 @@ class Search extends Component {
     constructor(props) {
         super(props);
 
-        this._onChange = this._onChange.bind(this);
-        this._onChannelRBTV = this._onChannelRBTV.bind(this);
-        this._onChannelLP = this._onChannelLP.bind(this);
+        _.bindAll(this, '_onChange', '_onChannelRBTV', '_onChannelLP');
 
         this.state = {
             value: '',

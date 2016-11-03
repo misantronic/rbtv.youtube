@@ -16,7 +16,7 @@ class VideoListItem extends Component {
         const publishedAt = moment(item.get('publishedAt'));
 
         return (
-            <div key={item.id} className={'item col-xs-12 col-sm-4 collection-item collection-item-t-' + index}>
+            <div key={item.id} className="item">
                 <div className="thumbnail">
                     <Thumb videoId={videoId} thumb={thumb} publishedAt={publishedAt}/>
                     <Caption videoId={videoId} description={description} title={title}/>

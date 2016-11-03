@@ -1,7 +1,7 @@
 import React from 'react';
 import {Component} from 'react';
-import VideoList from '../components/VideoList/VideoList';
-import Search from './../components/Search/Search';
+import VideoList from '../components/videolist/VideoList';
+import Search from '../components/search/Search';
 import Collection from '../../app/modules/search/models/SearchResults';
 import Config from '../../app/Config';
 
