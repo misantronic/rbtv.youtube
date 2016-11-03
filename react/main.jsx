@@ -7,9 +7,7 @@ import Activities from './modules/Activities';
 import Video from './modules/Video';
 import App from './modules/App';
 
-import '../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../assets/css/application.scss';
-import '../assets/css/components.scss';
+import '../assets/css/react/_deps.scss';
 import '../assets/css/react/_package.scss';
 
 render(

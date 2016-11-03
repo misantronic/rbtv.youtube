@@ -3,8 +3,8 @@
 @import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid';
 
 .items {
-    position: relative;
     @extend .row;
+    position: relative;
 
     .item {
         @extend .col-xs-12;
