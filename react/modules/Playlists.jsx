@@ -1,12 +1,12 @@
 import React from 'react';
 import {Component} from 'react';
 import _ from 'underscore';
-import VideoList from '../components/videolist/VideoList';
+import Playlists from '../components/playlists/Playlists';
 import Search from '../components/search/Search';
-import Collection from '../../app/modules/search/models/SearchResults';
+import Collection from '../../app/modules/playlists/models/Playlists';
 import Config from '../../app/Config';
 
-class Activities extends Component {
+class PlaylistsModule extends Component {
     constructor(props) {
         super(props);
 
@@ -25,16 +25,15 @@ class Activities extends Component {
         const stateChannel = this.state.channel;
 
         return (
-            <div className="module-activities">
+            <div className="module-playlists">
                 <Search
                     value={stateSearch}
                     onSearch={this._onSearch}
-                    onChannel={this._onSearchChannel} />
-                <VideoList
+                    onChannel={this._onSearchChannel}/>
+                <Playlists
                     collection={this.searchCollection}
                     channel={stateChannel}
-                    search={stateSearch}
-                />
+                    search={stateSearch}/>
             </div>
         );
     }
@@ -48,4 +47,4 @@ class Activities extends Component {
     }
 }
 
-export default Activities;
+export default PlaylistsModule;

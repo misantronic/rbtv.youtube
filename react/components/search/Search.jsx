@@ -11,7 +11,8 @@ class Search extends Component {
 
         this.state = {
             value: '',
-            channel: Config.channelRBTV
+            channel: Config.channelRBTV,
+            placeholder: this._getPlaceholder()
         };
     }
 
@@ -28,27 +29,60 @@ class Search extends Component {
         }
 
         return (
-            <div className="component-search">
-                <div className="search-container">
-                    <div className="search-label-container">
-                        <label className="search-label">
-                            <input className="form-control search" type="text" value={this.state.value || this.props.value} onChange={this._onChange}/>
-                        </label>
-                    </div>
-                    <div className="btn-group filter-buttons" role="group">
-                        <button type="button" className={classNameRBTV} onClick={this._onChannelRBTV}>
-                            <span className="hidden-xs">Rocket Beans TV</span>
-                            <span className="visible-xs-inline">RBTV</span>
-                        </button>
-                        <button type="button" className={classNameLP} onClick={this._onChannelLP}>
-                            <span className="hidden-xs">Let`s Play</span>
-                            <span className="visible-xs-inline">LP</span>
-                        </button>
-                    </div>
+            <div className="component-search search-container">
+                <div className="search-label-container">
+                    <label className="search-label">
+                        <input className="form-control search" type="text" placeholder={this.state.placeholder} value={this.state.value || this.props.value} onChange={this._onChange}/>
+                    </label>
+                </div>
+                <div className="btn-group filter-buttons" role="group">
+                    <button type="button" className={classNameRBTV} onClick={this._onChannelRBTV}>
+                        <span className="hidden-xs">Rocket Beans TV</span>
+                        <span className="visible-xs-inline">RBTV</span>
+                    </button>
+                    <button type="button" className={classNameLP} onClick={this._onChannelLP}>
+                        <span className="hidden-xs">Let`s Play</span>
+                        <span className="visible-xs-inline">LP</span>
+                    </button>
                 </div>
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this._stateHasChanged(prevState, 'channel')) {
+            this._setPlaceholder();
+        }
+    }
+
+    /**
+     * Private methods
+     */
+
+    _setPlaceholder() {
+        this.setState({ placeholder: this._getPlaceholder() });
+    }
+
+    _getPlaceholder() {
+        const channel = this.state ? this.state.channel : Config.channelRBTV;
+
+        switch (channel) {
+            case Config.channelRBTV:
+                return 'Rocketbeans TV durchsuchen...';
+            case Config.channelLP:
+                return 'Let\'s Plays durchsuchen...';
+            default:
+                return 'Suche...'
+        }
+    }
+
+    _stateHasChanged(prevState, prop) {
+        return prevState[prop] !== this.state[prop];
+    }
+
+    /**
+     * Event handler
+     */
 
     _onChange(e) {
         const value = e.target.value;
@@ -60,7 +94,7 @@ class Search extends Component {
         }
     }
 
-    _onChannelRBTV(e) {
+    _onChannelRBTV() {
         const channel = Config.channelRBTV;
 
         this.setState({ channel });
@@ -70,7 +104,7 @@ class Search extends Component {
         }
     }
 
-    _onChannelLP(e) {
+    _onChannelLP() {
         const channel = Config.channelLP;
 
         this.setState({ channel: Config.channelLP });

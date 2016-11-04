@@ -69,6 +69,45 @@ const Playlists = Collection.extend({
 
             this.add(models);
         }
+    },
+
+    filterBy({ search, channelRBTV, channelLP, limit, add }) {
+        if (!this._allModels) {
+            this._allModels = this.models;
+        }
+
+        if (!this._limit) {
+            this._limit = 0;
+        }
+
+        if (add) {
+            limit += this._limit;
+
+            this._limit = limit;
+        } else {
+            this._limit = 0;
+        }
+
+        const models = _.filter(this._allModels, model => {
+            const channelId = model.get('channelId');
+            const title = model.get('title');
+
+            if (!channelRBTV && !channelLP) {
+                return false;
+            }
+
+            if (channelRBTV && !channelLP && channelId !== Config.channelRBTV) {
+                return false;
+            }
+
+            if (channelLP && !channelRBTV && channelId !== Config.channelLP) {
+                return false;
+            }
+
+            return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+        });
+
+        this.models = _.offset(models, 0, limit);
     }
 });
 

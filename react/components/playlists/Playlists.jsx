@@ -2,11 +2,12 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'underscore';
 import {Component} from 'react';
-import Item from './VideoListItem';
+import Item from './PlaylistsItem';
 import Loader from './../loader/Loader';
-import Collection from '../../../app/modules/search/models/SearchResults';
+import Collection from '../../../app/modules/playlists/models/Playlists';
+import Config from '../../../app/Config';
 
-class VideoList extends Component {
+class Playlists extends Component {
     constructor(props) {
         super(props);
 
@@ -18,8 +19,6 @@ class VideoList extends Component {
             collection,
             loading: false
         };
-
-        this._refresh = _.debounce(() => this._fetch(true), 350);
 
         _.bindAll(this, '_onCollectionRequest', '_onCollectionSync');
 
@@ -35,7 +34,7 @@ class VideoList extends Component {
         const collection = this.state.collection;
 
         return (
-            <div className={'component-videolist items' + (this.state.loading ? ' is-loading' : '')}>
+            <div className={'component-playlists items' + (this.state.loading ? ' is-loading' : '')}>
                 {collection.map((item, i) => <Item key={item.id} item={item} index={i}/>)}
                 <Loader />
             </div>
@@ -48,7 +47,7 @@ class VideoList extends Component {
 
     componentDidUpdate(prevProps) {
         if (this._shouldInvalidate(prevProps)) {
-            this._refresh();
+            this._search();
         }
     }
 
@@ -75,7 +74,7 @@ class VideoList extends Component {
         }
 
         if (!(collection instanceof Collection)) {
-            throw new Error('collection must be an instance of /app/modules/search/models/SearchResults');
+            throw new Error('collection must be an instance of /app/modules/playlists/models/Playlists');
         }
     }
 
@@ -84,40 +83,37 @@ class VideoList extends Component {
             props.channel !== this.props.channel;
     }
 
-    _fetch(reset = false) {
+    _fetch() {
         const collection = this.state.collection;
-
-        if (reset) {
-            collection.reset();
-        }
 
         collection
-            .setQ(this.props.search)
-            .setChannelId(this.props.channel)
             .fetch()
-            .then(() => this.forceUpdate());
+            .then(() => this._search());
     }
 
-    _fetchNext() {
+    _search(add = false) {
         const collection = this.state.collection;
 
-        const token = collection.getNextPageToken();
+        collection.filterBy({
+            search: this.props.search,
+            channelRBTV: this.props.channel === Config.channelRBTV,
+            channelLP: this.props.channel === Config.channelLP,
+            limit: 21,
+            add
+        });
 
-        if (token) {
-            collection.setNextPageToken(token);
-
-            this._fetch();
-        }
+        this.forceUpdate();
+        this._initScroll();
     }
 
     _initScroll() {
         this._killScroll();
 
-        $(window).on('scroll.activities', this._onScroll.bind(this));
+        $(window).on('scroll.playlists', this._onScroll.bind(this));
     }
 
     _killScroll() {
-        $(window).off('scroll.activities');
+        $(window).off('scroll.playlists');
     }
 
     /**
@@ -129,13 +125,11 @@ class VideoList extends Component {
         const y = window.scrollY;
 
         if (y >= maxY) {
-            this._fetchNext();
+            this._search(true);
         }
     }
 
     _onCollectionRequest() {
-        this._killScroll();
-
         this.setState({ loading: true });
     }
 
@@ -146,4 +140,4 @@ class VideoList extends Component {
     }
 }
 
-export default VideoList;
+export default Playlists;

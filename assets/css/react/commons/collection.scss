@@ -1,0 +1,31 @@
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid';
+
+.items {
+    @extend .row;
+    position: relative;
+
+    .item {
+        @extend .col-xs-12;
+        @extend .col-sm-4;
+
+        > .thumbnail {
+            @media (min-width: $screen-xs-min) {
+                height: 410px;
+            }
+
+            @media (min-width: $screen-sm-min) {
+                height: 225px;
+            }
+
+            @media (min-width: $screen-md-min) {
+                height: 280px;
+            }
+
+            @media (min-width: $screen-lg-min) {
+                height: 330px;
+            }
+        }
+    }
+}
