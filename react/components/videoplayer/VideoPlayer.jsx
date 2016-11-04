@@ -2,24 +2,32 @@ import React from 'react';
 import {Component} from 'react';
 import $ from 'jquery';
 
-class PlayerComponent extends Component {
+class VideoPlayerComponent extends Component {
     constructor(props) {
         super(props);
 
-        this._containerId = 'yt-video-container';
+        this._ytContainerId = 'yt-video-container';
+
         this.state = {};
     }
 
     render() {
+        this.container = null;
+
         return (
-            <div className="video-player">
-                <div id={this._containerId}/>
+            <div ref={el => this.container = $(el)} className="video-player">
+                <div id={this._ytContainerId}/>
             </div>
         );
     }
 
     componentDidMount() {
-        this._YTPlayer = new YT.Player(this._containerId, {
+        this._createPlayer();
+        this._setSize();
+    }
+
+    _createPlayer() {
+        this._YTPlayer = new YT.Player(this._ytContainerId, {
             width: '100%',
             height: '100%',
             videoId: this.props.id
@@ -31,12 +39,10 @@ class PlayerComponent extends Component {
             //     start: currentTime
             // }
         });
-
-        this._setSize();
     }
 
     _setSize() {
-        const $el = $('.video-player');
+        const $el = this.container;
 
         let width = $el.css('width', '100%').width();
         let height = width * 0.51;
@@ -50,4 +56,4 @@ class PlayerComponent extends Component {
     }
 }
 
-export default PlayerComponent;
+export default VideoPlayerComponent;

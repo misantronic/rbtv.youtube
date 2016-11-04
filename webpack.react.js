@@ -5,10 +5,24 @@ var webpack = require('webpack');
 var NODE_ENV = process.env.NODE_ENV;
 
 module.exports = {
-    entry: [
-        'babel-polyfill',
-        './react/main.jsx'
-    ],
+    entry: {
+        vendor: [
+            'babel-polyfill',
+            'jquery',
+            'underscore',
+            'backbone',
+            'moment',
+            'react',
+            'react-dom',
+            'react-router'
+        ],
+        application: __dirname + '/react/main.jsx'
+    },
+
+    // entry: [
+    //     'babel-polyfill',
+    //     './react/main.jsx'
+    // ],
 
     output: {
         path: __dirname + '/public',
@@ -30,6 +44,16 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.optimize.DedupePlugin(),
+
+        new webpack.ProvidePlugin({
+            _: 'underscore'
+        }),
+
+        new webpack.optimize.OccurenceOrderPlugin(true),
+
+        new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
+
         new HtmlWebpackPlugin({
             template: __dirname + '/app/application.ejs',
             filename: 'index.html',
