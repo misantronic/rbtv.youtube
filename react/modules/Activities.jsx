@@ -6,7 +6,7 @@ import Search from '../components/search/Search';
 import Collection from '../../app/modules/search/models/SearchResults';
 import Config from '../../app/Config';
 
-class Activities extends Component {
+class ActivitiesModule extends Component {
     constructor(props) {
         super(props);
 
@@ -48,4 +48,4 @@ class Activities extends Component {
     }
 }
 
-export default Activities;
+export default ActivitiesModule;

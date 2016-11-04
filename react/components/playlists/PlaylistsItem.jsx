@@ -1,7 +1,7 @@
 import React from 'react';
 import {Component} from 'react';
 
-class PlaylistsItem extends Component {
+class PlaylistItemComponent extends Component {
     render() {
         const item = this.props.item;
         const index = this.props.index;
@@ -31,4 +31,4 @@ class PlaylistsItem extends Component {
     }
 }
 
-export default PlaylistsItem;
+export default PlaylistItemComponent;

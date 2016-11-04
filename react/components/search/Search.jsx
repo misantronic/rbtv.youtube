@@ -3,7 +3,7 @@ import _ from 'underscore';
 import {Component} from 'react';
 import Config from '../../../app/Config';
 
-class Search extends Component {
+class SearchComponent extends Component {
     constructor(props) {
         super(props);
 
@@ -115,4 +115,4 @@ class Search extends Component {
     }
 }
 
-export default Search;
+export default SearchComponent;

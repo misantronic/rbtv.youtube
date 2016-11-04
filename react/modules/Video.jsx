@@ -2,7 +2,7 @@ import React from 'react';
 import {Component} from 'react';
 import VideoPlayer from '../components/videoplayer/Player';
 
-class Video extends Component {
+class VideoModule extends Component {
     constructor(props) {
         super(props);
 
@@ -20,4 +20,4 @@ class Video extends Component {
     }
 }
 
-export default Video;
+export default VideoModule;

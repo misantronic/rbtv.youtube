@@ -2,7 +2,7 @@ import React from 'react';
 import {Component} from 'react';
 import $ from 'jquery';
 
-class Player extends Component {
+class PlayerComponent extends Component {
     constructor(props) {
         super(props);
 
@@ -50,4 +50,4 @@ class Player extends Component {
     }
 }
 
-export default Player;
+export default PlayerComponent;

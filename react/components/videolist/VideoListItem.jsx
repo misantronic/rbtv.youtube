@@ -2,7 +2,7 @@ import React from 'react';
 import {Component} from 'react';
 import moment from 'moment';
 
-class VideoListItem extends Component {
+class VideoListItemComponent extends Component {
     render() {
         const item = this.props.item;
         const index = this.props.index;
@@ -32,4 +32,4 @@ class VideoListItem extends Component {
     }
 }
 
-export default VideoListItem;
+export default VideoListItemComponent;

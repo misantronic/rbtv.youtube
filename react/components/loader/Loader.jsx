@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Loader() {
+export default function LoaderComponent() {
     return (
         <div className="component-loader loader js-loader">
             <div className="sk-fading-circle">

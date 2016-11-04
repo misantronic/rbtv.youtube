@@ -7,7 +7,7 @@ import Loader from './../loader/Loader';
 import Collection from '../../../app/modules/playlists/models/Playlists';
 import Config from '../../../app/Config';
 
-class Playlists extends Component {
+class PlaylistsComponent extends Component {
     constructor(props) {
         super(props);
 
@@ -140,4 +140,4 @@ class Playlists extends Component {
     }
 }
 
-export default Playlists;
+export default PlaylistsComponent;
