@@ -8,6 +8,7 @@ const Video = Model.extend({
     defaults() {
         return {
             id: 0,
+            videoId: 0,
             etag: null,
             kind: null,
             channelId: null,
@@ -72,6 +73,7 @@ const Video = Model.extend({
 
         return {
             id: response.id,
+            videoId: response.id,
             etag: response.etag,
             kind: response.kind,
             channelId: response.snippet.channelId,

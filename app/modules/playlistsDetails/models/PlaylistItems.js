@@ -1,21 +1,19 @@
 import _ from 'underscore';
 import {Collection} from 'backbone';
 import Config from '../../../Config';
-import {props} from '../../decorators';
 import PlaylistItemModel from './PlaylistItem';
 
-class PlaylistItems extends Collection {
-    @props({
-        model: PlaylistItemModel,
+const PlaylistItems = Collection.extend({
 
-        url() {
-            return Config.endpoints.playlistItems + '?playlistId=' + this._playlistId;
-        }
-    })
+    model: PlaylistItemModel,
 
-    set playlistId(val) {
+    url() {
+        return Config.endpoints.playlistItems + '?playlistId=' + this._playlistId;
+    },
+
+    setPlaylistId(val) {
         this._playlistId = val;
-    }
+    },
 
     /** @returns {PlaylistItem} */
     getNextPlaylistItem(videoId) {
@@ -23,16 +21,16 @@ class PlaylistItems extends Collection {
         const index = this.indexOf(model) + 1;
 
         return this.at(index);
-    }
+    },
 
     /** @returns {PlaylistItem} */
     getCurrentPlaylistItem(videoId) {
         return this.findWhere({ videoId });
-    }
+    },
 
     parse(response) {
         return response.items;
-    }
+    },
 
     search({ search, date }) {
         if (!this._allModels) {
@@ -56,6 +54,6 @@ class PlaylistItems extends Collection {
             })
         );
     }
-}
+});
 
 export default PlaylistItems;

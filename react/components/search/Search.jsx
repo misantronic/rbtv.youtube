@@ -72,7 +72,7 @@ class SearchComponent extends Component {
             case Config.channelLP:
                 return 'Let\'s Plays durchsuchen...';
             default:
-                return 'Suche...'
+                return 'Suche...';
         }
     }
 

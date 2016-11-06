@@ -1,0 +1,21 @@
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.btn-watch-later {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: $gray-light;
+    display: flex;
+    padding: 6px;
+    margin: 0;
+    border: none;
+    color: #fff;
+
+    &:focus {
+        outline: none;
+    }
+
+    &.is-active {
+        background-color: $brand-success;
+    }
+}

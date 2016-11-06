@@ -19,11 +19,6 @@ module.exports = {
         application: __dirname + '/react/main.jsx'
     },
 
-    // entry: [
-    //     'babel-polyfill',
-    //     './react/main.jsx'
-    // ],
-
     output: {
         path: __dirname + '/public',
         filename: '[name].js'

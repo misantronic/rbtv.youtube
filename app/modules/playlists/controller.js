@@ -76,7 +76,7 @@ const PlaylistsController = Marionette.Object.extend({
     _fetchPlaylistItems(playlistId) {
         const collection = new PlaylistItemsCollection();
 
-        collection.playlistId = playlistId;
+        collection.setPlaylistId(playlistId);
 
         return collection.fetch();
     }

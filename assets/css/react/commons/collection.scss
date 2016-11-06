@@ -11,6 +11,8 @@
         @extend .col-sm-4;
 
         > .thumbnail {
+            position: relative;
+
             @media (min-width: $screen-xs-min) {
                 height: 410px;
             }
@@ -25,6 +27,16 @@
 
             @media (min-width: $screen-lg-min) {
                 height: 330px;
+            }
+
+            .title {
+                display: flex;
+
+                > .link {
+                    width: 100%;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
             }
         }
     }

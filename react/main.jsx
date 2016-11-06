@@ -5,6 +5,8 @@ import $ from 'jquery';
 
 import Activities from './modules/Activities';
 import Playlists from './modules/Playlists';
+import Playlist from './modules/Playlist';
+import WatchLater from './modules/WatchLater';
 import Video from './modules/Video';
 import App from './modules/App';
 
@@ -20,6 +22,8 @@ render(
 
             <Route path="/activities" component={Activities}/>
             <Route path="/playlists" component={Playlists}/>
+            <Route path="/playlists/:id" component={Playlist}/>
+            <Route path="/watchlater" component={WatchLater}/>
             <Route path="/video/:id" component={Video}/>
         </Route>
     </Router>,

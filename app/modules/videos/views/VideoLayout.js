@@ -158,7 +158,7 @@ const VideoLayout = LayoutView.extend({
         if (collection.length === 0) {
             this._playlistItemsView.loading = true;
 
-            collection.playlistId = playlistId;
+            collection.setPlaylistId(playlistId);
 
             // Check cache for playlistItems
             return this.collection.fetch()

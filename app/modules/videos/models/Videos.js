@@ -24,6 +24,15 @@ const Videos = Collection.extend({
 
     initialize() {
         this.setVideoIds([]);
+    },
+
+    clone() {
+        var cloned = Collection.prototype.clone.call(this);
+
+        // Copy props
+        cloned._videoIds = this._videoIds.slice(0);
+
+        return cloned;
     }
 });
 

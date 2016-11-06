@@ -1,0 +1,23 @@
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.nav-pills > li {
+    margin-right: 5px;
+
+    &.nav-item-watchlater {
+        float: right;
+    }
+
+    > a {
+        padding: 5px 15px;
+
+        &.active {
+            color: #fff;
+            background-color: $brand-primary;
+
+            span.badge {
+                color: $brand-primary;
+                background-color: #fff
+            }
+        }
+    }
+}

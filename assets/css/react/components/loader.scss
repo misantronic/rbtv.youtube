@@ -1,5 +1,7 @@
 .loader {
-    top: 20px;
+    position: static;
+    margin: 0 auto;
+    width: 40px;
 
     .is-loading & {
         display: block;
