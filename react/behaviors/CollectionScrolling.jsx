@@ -46,7 +46,7 @@ export default function (Component, method) {
         }
 
         _killScroll() {
-            $(window).off('scroll');
+            $(window).off('scroll', this._onScroll);
         }
 
         /**
