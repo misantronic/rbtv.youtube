@@ -109,7 +109,7 @@ const Playlists = Collection.extend({
 
         this.models = _.offset(models, 0, limit);
 
-        if(add) {
+        if (add) {
             this.trigger('sync');
         }
     }

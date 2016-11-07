@@ -2,69 +2,111 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'underscore';
 
-export default function (Component, method) {
-    return class CollectionScrolling extends React.Component {
+class CollectionScrolling extends React.Component {
 
-        constructor(props) {
-            super(props);
+    constructor(props) {
+        super(props);
 
-            _.bindAll(this, 'componentHasRef', '_onScroll', '_onCollectionSync');
+        _.bindAll(this, '_onScroll', '_onCollectionSync');
+
+        const collection = this.props.collection;
+
+        collection.listenTo(collection, 'sync', this._onCollectionSync);
+    }
+
+    render() {
+        if (this.props.container) {
+            this.$container = $(this.props.container);
         }
 
-        render() {
-            return <Component ref={this.componentHasRef} {...this.props} {...this.state}/>;
+        return this.props.children;
+    }
+
+    componentDidMount() {
+        this._initScroll();
+    }
+
+    componentWillUnmount() {
+        this._killScroll();
+
+        const collection = this.props.collection;
+
+        collection.stopListening(collection, 'sync', this._onCollectionSync);
+    }
+
+    _initScroll() {
+        this._killScroll();
+
+        const $container = this.props.container ? $(this.props.container) : $(window);
+
+        $container.on('scroll', this._onScroll);
+    }
+
+    _killScroll() {
+        const $container = this.props.container ? $(this.props.container) : $(window);
+
+        $container.off('scroll', this._onScroll);
+    }
+
+    _update() {
+        let limit = Number(this.props.limit) || 10;
+        const collection = this.props.collection;
+
+        if (!collection._allModels) {
+            collection._allModels = collection.models;
         }
 
-        componentDidMount() {
-            this._initScroll();
+        if (!this._limit) {
+            this._limit = 0;
         }
 
-        componentHasRef(component) {
-            if (!component) return;
+        limit += this._limit;
 
-            this.view = component.view || component;
+        this._limit = limit;
 
-            const collection = this.view.state.collection;
+        collection.models = _.offset(collection._allModels, 0, limit);
 
-            collection.listenTo(collection, 'sync', this._onCollectionSync);
+        collection.trigger('react:update');
+
+        this._initScroll();
+    }
+
+    /**
+     * Event handler
+     */
+
+    _onScroll() {
+        let maxY = 0;
+        let y = 0;
+
+        if (this.$container) {
+            maxY = this.$container[0].scrollHeight - this.$container.height();
+            y = this.$container[0].scrollTop;
+        } else {
+            maxY = $(document).height() - window.innerHeight;
+            y = window.scrollY;
         }
 
-        componentWillUnmount() {
+        maxY -= 800;
+
+        if (y >= maxY) {
             this._killScroll();
 
-            const collection = this.view.state.collection;
-
-            if (collection) {
-                collection.stopListening(collection, 'sync', this._onCollectionSync);
+            if (this.props.onUpdate) {
+                this.props.onUpdate();
+            } else {
+                this._update();
             }
         }
+    }
 
-        _initScroll() {
-            this._killScroll();
-
-            $(window).on('scroll', this._onScroll);
+    _onCollectionSync() {
+        if (!this.props.onUpdate) {
+            this._update();
         }
 
-        _killScroll() {
-            $(window).off('scroll', this._onScroll);
-        }
+        this._initScroll();
+    }
+}
 
-        /**
-         * Event handler
-         */
-
-        _onScroll() {
-            const maxY = $(document).height() - window.innerHeight - 800;
-            const y = window.scrollY;
-
-            if (y >= maxY) {
-                this._killScroll();
-                this.view[method].call(this.view);
-            }
-        }
-
-        _onCollectionSync() {
-            this._initScroll();
-        }
-    };
-};
+export default CollectionScrolling;

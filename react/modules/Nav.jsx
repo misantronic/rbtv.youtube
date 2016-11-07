@@ -17,7 +17,7 @@ class NavModule extends Component {
     render() {
         return (
             <div className="module-nav">
-                <ul className="nav nav-pills" style={{ marginBottom: 30 }}>
+                <ul className="nav nav-pills">
                     <li className="nav-item"><IndexLink to="/" activeClassName="active">Übersicht</IndexLink></li>
                     <li className="nav-item"><Link to="/playlists" activeClassName="active">Playlists</Link></li>
                     {/*<li><Link to="/shows" activeClassName="active">Shows</Link></li>*/}

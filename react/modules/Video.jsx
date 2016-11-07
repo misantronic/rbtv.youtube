@@ -7,7 +7,7 @@ class VideoModule extends Component {
         super(props);
 
         this.state = {
-            videoId: this.props.routeParams.id
+            videoId: null
         };
     }
 

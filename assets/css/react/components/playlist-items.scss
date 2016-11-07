@@ -1,0 +1,30 @@
+.component-playlist-items {
+    display: flex;
+    flex-direction: column;
+    width: 425px;
+    height: 400px;
+    overflow: auto;
+
+    .playlist-item {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 5px;
+        height: 68px;
+
+        &:hover {
+            background-color: #EEE;
+        }
+
+        .image {
+            background-repeat: no-repeat;
+            background-size: 100%;
+            flex: 0 0 120px;
+            position: relative;
+        }
+
+        .title {
+            padding: 2px 10px;
+            cursor: pointer;
+        }
+    }
+}

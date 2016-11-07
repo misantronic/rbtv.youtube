@@ -11,6 +11,14 @@
     border: none;
     color: #fff;
 
+    &.is-small {
+        bottom: 5px;
+        right: 5px;
+        top: auto;
+        font-size: 12px;
+        padding: 3px;
+    }
+
     &:focus {
         outline: none;
     }

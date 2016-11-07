@@ -1,8 +1,7 @@
 import React from 'react';
-import {Component} from 'react';
-import $ from 'jquery';
+    import $ from 'jquery';
 
-class VideoPlayerComponent extends Component {
+class VideoPlayerComponent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -26,6 +25,12 @@ class VideoPlayerComponent extends Component {
         this._setSize();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this._propHasChanged(prevProps, 'id')) {
+            this._updatePlayer();
+        }
+    }
+
     _createPlayer() {
         this._YTPlayer = new YT.Player(this._ytContainerId, {
             width: '100%',
@@ -41,6 +46,10 @@ class VideoPlayerComponent extends Component {
         });
     }
 
+    _updatePlayer() {
+        this._YTPlayer.loadVideoById(this.props.id, /* currentTime: */ 0);
+    }
+
     _setSize() {
         const $el = this.container;
 
@@ -53,6 +62,10 @@ class VideoPlayerComponent extends Component {
         }
 
         $el.css({ width, height });
+    }
+
+    _propHasChanged(prevProps, prop) {
+        return prevProps[prop] !== this.props[prop];
     }
 }
 

@@ -18,7 +18,7 @@ class ButtonWatchLater extends Component {
 
     render() {
         return (
-            <button className={'btn-watch-later' + (this.state.active ? ' is-active' : '')} title="Watch later" onClick={this._onWatchLater}>
+            <button className={'btn-watch-later' + (this.state.active ? ' is-active' : '') + (this.props.size ? ' is-'+ this.props.size : '')} title="Watch later" onClick={this._onWatchLater}>
                 <span className={'glyphicon glyphicon-' + (this.state.active ? 'ok' : 'time')}></span>
             </button>
         );

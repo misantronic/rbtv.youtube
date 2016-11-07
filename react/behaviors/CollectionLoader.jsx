@@ -2,51 +2,47 @@ import React from 'react';
 import _ from 'underscore';
 import Loader from './../components/loader/Loader';
 
-export default function (Component) {
-    return class CollectionLoader extends React.Component {
-        constructor(props) {
-            super(props);
+class CollectionLoader extends React.Component {
+    constructor(props) {
+        super(props);
 
-            this.state = {
-                loading: false
-            };
+        this.state = {
+            loading: false
+        };
 
-            _.bindAll(this, '_onCollectionRequest', '_onCollectionSync', 'componentHasRef');
-        }
+        _.bindAll(this, '_onCollectionRequest', '_onCollectionSync');
 
-        render() {
-            return <div className={'collection-loader-behavior' + (this.state.loading ? ' is-loading' : '')}>
-                <Component ref={this.componentHasRef} {...this.props} {...this.state}/>
+        const collection = this.props.collection;
+
+        collection.listenTo(collection, 'request', this._onCollectionRequest);
+        collection.listenTo(collection, 'sync', this._onCollectionSync);
+    }
+
+    render() {
+        return (
+            <div className={'collection-loader-behavior' + (this.state.loading ? ' is-loading' : '')}>
+                {this.props.children}
                 <Loader/>
-            </div>;
+            </div>
+        );
+    }
+
+    componentWillUnmount() {
+        const collection = this.props.collection;
+
+        if (collection) {
+            collection.stopListening('request', this._onCollectionRequest);
+            collection.stopListening('sync', this._onCollectionSync);
         }
+    }
 
-        componentHasRef(component) {
-            if (!component) return;
+    _onCollectionRequest() {
+        this.setState({ loading: true });
+    }
 
-            this.view = component.view || component;
+    _onCollectionSync() {
+        this.setState({ loading: false });
+    }
+}
 
-            const collection = this.view.state.collection;
-
-            collection.listenTo(collection, 'request', this._onCollectionRequest);
-            collection.listenTo(collection, 'sync', this._onCollectionSync);
-        }
-
-        componentWillUnmount() {
-            const collection = this.view.state.collection;
-
-            if (collection) {
-                collection.stopListening('request', this._onCollectionRequest);
-                collection.stopListening('sync', this._onCollectionSync);
-            }
-        }
-
-        _onCollectionRequest() {
-            this.setState({ loading: true });
-        }
-
-        _onCollectionSync() {
-            this.setState({ loading: false });
-        }
-    };
-};
+export default CollectionLoader;

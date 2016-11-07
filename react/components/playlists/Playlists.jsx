@@ -1,13 +1,16 @@
 import React from 'react';
-import {Component} from 'react';
-import Item from './PlaylistsItem';
+import _ from 'underscore';
 import Config from '../../../app/Config';
-import collectionLoader from '../../behaviors/CollectionLoader';
-import collectionScrolling from '../../behaviors/CollectionScrolling';
+import CollectionLoader from '../../behaviors/CollectionLoader';
+import CollectionScrolling from '../../behaviors/CollectionScrolling';
+import ThumbComponent from '../commons/Thumb';
+import ButtonWatchLater from '../commons/ButtonWatchLater';
 
-class PlaylistsComponent extends Component {
+class PlaylistsComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        _.bindAll(this, '_onFetchNext');
 
         const collection = this.props.collection.clone();
 
@@ -22,14 +25,37 @@ class PlaylistsComponent extends Component {
         const collection = this.state.collection;
 
         return (
-            <div className="component-playlists items">
-                {collection.map((item, i) => <Item key={item.id} item={item} index={i}/>)}
-            </div>
+            <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
+                <CollectionLoader collection={collection}>
+                    <div className="component-playlists items">
+                        {collection.map(function (item) {
+                            const id = item.id;
+                            const title = item.get('title');
+                            const desc = item.get('description');
+                            const image = item.get('thumbnails').high.url;
+                            const itemCount = item.get('itemCount');
+
+                            return (
+                                <div key={id} className="item">
+                                    <ThumbComponent
+                                        link={'#/playlists/' + id}
+                                        title={title}
+                                        description={desc}
+                                        image={image}
+                                        badge={<span className="badge">{itemCount}</span>}>
+                                        <ButtonWatchLater id={id} type="playlist"/>
+                                    </ThumbComponent>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </CollectionLoader>
+            </CollectionScrolling>
         );
     }
 
     componentDidMount() {
-        _.delay(() => this._fetch(), 32);
+        this._fetch();
     }
 
     componentDidUpdate(prevProps) {
@@ -69,12 +95,9 @@ class PlaylistsComponent extends Component {
         this.forceUpdate();
     }
 
-    _append() {
+    _onFetchNext() {
         this._search(true);
     }
 }
-
-PlaylistsComponent = collectionLoader(PlaylistsComponent);
-PlaylistsComponent = collectionScrolling(PlaylistsComponent, '_append');
 
 export default PlaylistsComponent;
