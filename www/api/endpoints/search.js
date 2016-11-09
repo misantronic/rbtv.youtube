@@ -1,5 +1,5 @@
-var fetch = require('./../fetch');
-var cache = require('../cache');
+const fetch = require('./../fetch');
+const cache = require('../cache');
 
 module.exports = function (req, res) {
     var query = {
@@ -22,7 +22,5 @@ module.exports = function (req, res) {
         )
     });
 
-    fetch(config).then(function (result) {
-        fetch.end(res, result.data);
-    });
+    fetch(config).then(result => fetch.end(res, result.data));
 };

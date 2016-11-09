@@ -9,6 +9,7 @@ import Playlist from './modules/Playlist';
 import WatchLater from './modules/WatchLater';
 import Video from './modules/Video';
 import App from './modules/App';
+import Live from './modules/Live';
 
 import '../app/overrides/underscore';
 
@@ -25,6 +26,7 @@ render(
             <Route path="/playlists/:id" component={Playlist}/>
             <Route path="/watchlater" component={WatchLater}/>
             <Route path="/video/:id" component={Video}/>
+            <Route path="/live/:id" component={Live}/>
         </Route>
     </Router>,
     $('.app').find('.container')[0]

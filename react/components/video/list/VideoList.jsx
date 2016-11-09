@@ -34,7 +34,7 @@ class VideoListComponent extends React.Component {
             <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
                 <CollectionLoader collection={collection}>
                     <div className="component-videolist items">
-                        {collection.map(function (item, i) {
+                        {collection.map(function (item) {
                             const videoId = item.get('videoId');
                             const image = item.get('thumbnails').high.url;
                             const description = item.get('description');
@@ -48,7 +48,7 @@ class VideoListComponent extends React.Component {
                                     <ThumbComponent image={image} title={title} description={description} link={'#/video/' + videoId}
                                                     labelLeft={<span className="publishedAt label label-default">{publishedAt.fromNow()}</span>}
                                                     labelRight={<span className="duration label label-default">{VideoModel.humanizeDuration(duration)}</span>}>
-                                        <BtnWatchLater id={videoId} type="video"/>
+                                        <BtnWatchLater id={videoId} type="video" />
                                     </ThumbComponent>
                                 </div>
                             );

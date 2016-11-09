@@ -12,6 +12,9 @@ module.exports = {
             'underscore',
             'backbone',
             'moment',
+            __dirname + '/node_modules/bootstrap/js/tooltip',
+            __dirname + '/node_modules/bootstrap/js/collapse',
+            __dirname + '/node_modules/bootstrap/js/transition',
             'react',
             'react-dom',
             'react-router'

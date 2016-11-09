@@ -3,6 +3,18 @@
 
     h1 {
         font-size: 26px;
+        height: 28px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         margin: 0 0 20px;
+    }
+
+    .details-wrapper {
+        margin-bottom: 20px;
+
+        .row {
+            margin-bottom: 15px;
+        }
     }
 }

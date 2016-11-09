@@ -1,5 +1,5 @@
 import React from 'react';
-import {Component} from 'react';
+import _ from 'underscore';
 import watchlist from '../utils/watchlist';
 import VideoCollection from '../../app/modules/videos/models/Videos';
 import PlaylistCollection from '../../app/modules/playlists/models/Playlists';
@@ -7,7 +7,7 @@ import VideoList  from '../components/video/list/VideoList';
 import Playlists  from '../components/playlists/Playlists';
 import Config from '../../app/Config';
 
-class WatchLaterModule extends Component {
+class WatchLaterModule extends React.Component {
     constructor(props) {
         super(props);
 
