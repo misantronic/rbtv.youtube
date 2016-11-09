@@ -27,7 +27,7 @@ const Videos = Collection.extend({
     },
 
     clone() {
-        var cloned = Collection.prototype.clone.call(this);
+        const cloned = Collection.prototype.clone.call(this);
 
         // Copy props
         cloned._videoIds = this._videoIds.slice(0);

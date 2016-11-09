@@ -1,3 +1,4 @@
+@import "modules/app";
 @import "modules/playlist";
 @import "modules/playlists";
 @import "commons/collection";
@@ -6,5 +7,6 @@
 @import "components/nav";
 @import "components/videolist";
 @import "components/videoplayer";
+@import "components/videodetails";
 @import "components/playlists";
 @import "components/playlist-items";

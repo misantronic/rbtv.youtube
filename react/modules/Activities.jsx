@@ -1,23 +1,24 @@
 import React from 'react';
 import {Component} from 'react';
 import _ from 'underscore';
-import VideoList from '../components/videolist/VideoList';
+import VideoList from '../components/video/list/VideoList';
 import Search from '../components/search/Search';
-import Collection from '../../app/modules/search/models/SearchResults';
+import SearchCollection from '../../app/modules/search/models/SearchResults';
 import Config from '../../app/Config';
 
 class ActivitiesModule extends Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onSearch', '_onSearchChannel');
+        _.bindAll(this, '_onSearch', '_onSearchChannel', '_onCollectionSync');
 
         this.state = {
             search: '',
             channel: Config.channelRBTV
         };
 
-        this.searchCollection = new Collection();
+        this.searchCollection = new SearchCollection();
+        this.searchCollection.listenTo(this.searchCollection, 'sync', this._onCollectionSync);
     }
 
     render() {
@@ -45,6 +46,10 @@ class ActivitiesModule extends Component {
 
     _onSearchChannel(channel) {
         this.setState({ channel });
+    }
+
+    _onCollectionSync() {
+
     }
 }
 

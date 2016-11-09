@@ -1,0 +1,11 @@
+.module-app {
+    > header {
+        display: flex;
+        margin: 10px 0 20px;
+        justify-content: space-between;
+
+        > h1 {
+            margin: 0;
+        }
+    }
+}

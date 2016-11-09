@@ -7,10 +7,11 @@ class CollectionScrolling extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onScroll', '_onCollectionSync');
+        _.bindAll(this, '_onScroll', '_onCollectionSync', '_onCollectionRequest');
 
         const collection = this.props.collection;
 
+        collection.listenTo(collection, 'request', this._onCollectionRequest);
         collection.listenTo(collection, 'sync', this._onCollectionSync);
     }
 
@@ -31,6 +32,7 @@ class CollectionScrolling extends React.Component {
 
         const collection = this.props.collection;
 
+        collection.stopListening(collection, 'request', this._onCollectionRequest);
         collection.stopListening(collection, 'sync', this._onCollectionSync);
     }
 
@@ -76,6 +78,8 @@ class CollectionScrolling extends React.Component {
      */
 
     _onScroll() {
+        if (this.state.request) return false;
+
         let maxY = 0;
         let y = 0;
 
@@ -100,7 +104,13 @@ class CollectionScrolling extends React.Component {
         }
     }
 
+    _onCollectionRequest() {
+        this.setState({ request: true });
+    }
+
     _onCollectionSync() {
+        this.setState({ request: false });
+
         if (!this.props.onUpdate) {
             this._update();
         }

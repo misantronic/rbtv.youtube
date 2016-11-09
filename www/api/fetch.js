@@ -1,8 +1,8 @@
-var _       = require('underscore');
-var https   = require('https');
-var param   = require('node-jquery-param');
+var _ = require('underscore');
+var https = require('https');
+var param = require('node-jquery-param');
 var Promise = require('promise');
-var cache   = require('./cache');
+var cache = require('./cache');
 
 var key = 'AIzaSyD0WjzJ5761EemQ-lVor5er2JLR3PJGsGk';
 
@@ -13,20 +13,20 @@ function Config(options) {
 /** @type {CacheConfig} */
 Config.prototype.cacheConfig = null;
 Config.prototype.endpoint = null;
-Config.prototype.query    = null;
+Config.prototype.query = null;
 
 /**
  * @param {Config} config
  * @return {Promise}
  */
 function request(config) {
-    var endpoint    = config.endpoint;
-    var query       = config.query;
+    var endpoint = config.endpoint;
+    var query = config.query;
     var cacheConfig = config.cacheConfig;
 
     return new Promise(function (resolve, reject) {
         function resolvePromise(data, fromCache) {
-            if(_.isString(data)) {
+            if (_.isString(data)) {
                 data = JSON.parse(data);
             }
 
@@ -90,7 +90,7 @@ function request(config) {
  * @param {String} items
  */
 request.end = function (response, items) {
-    if(_.isObject(items)) {
+    if (_.isObject(items)) {
         items = JSON.stringify(items);
     }
 

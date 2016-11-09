@@ -1,17 +1,16 @@
 var db = require('../../db');
 
-module.exports = db.model('Videos', new db.Schema({
+module.exports = db.model('Playlists', new db.Schema({
     _id: String,
     id: String,
     kind: String,
     etag: String,
     expires: { type: Date, default: Date.now },
     snippet: {
-        categoryId: String,
+        channelTitle: String,
         channelId: String,
         title: String,
         description: String,
-        tags: [],
         publishedAt: { type: Date, default: Date.now },
         thumbnails: {
             default: {
@@ -42,17 +41,6 @@ module.exports = db.model('Videos', new db.Schema({
         }
     },
     contentDetails: {
-        caption: String,
-        definition: String,
-        dimension: String,
-        duration: String,
-        licensedContent: Boolean
-    },
-    statistics: {
-        viewCount: Number,
-        likeCount: Number,
-        dislikeCount: Number,
-        favoriteCount: Number,
-        commentCount: Number
+        itemCount: Number
     }
 }));

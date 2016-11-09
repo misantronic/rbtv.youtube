@@ -4,7 +4,7 @@ import Config from '../../../app/Config';
 import CollectionLoader from '../../behaviors/CollectionLoader';
 import CollectionScrolling from '../../behaviors/CollectionScrolling';
 import ThumbComponent from '../commons/Thumb';
-import ButtonWatchLater from '../commons/ButtonWatchLater';
+import BtnWatchLater from '../commons/BtnWatchLater';
 
 class PlaylistsComponent extends React.Component {
     constructor(props) {
@@ -12,9 +12,16 @@ class PlaylistsComponent extends React.Component {
 
         _.bindAll(this, '_onFetchNext');
 
-        const collection = this.props.collection.clone();
+        const collection = this.props.collection;
+        const scrolling = this.props.scrolling;
+        const limit = this.props.limit;
+        const channels = this.props.channels;
 
-        this.state = { collection };
+        this.state = {
+            collection: collection.clone(),
+            limit: scrolling === Infinity ? limit : Infinity,
+            channels
+        };
     }
 
     /**
@@ -43,7 +50,7 @@ class PlaylistsComponent extends React.Component {
                                         description={desc}
                                         image={image}
                                         badge={<span className="badge">{itemCount}</span>}>
-                                        <ButtonWatchLater id={id} type="playlist"/>
+                                        <BtnWatchLater id={id} type="playlist"/>
                                     </ThumbComponent>
                                 </div>
                             );
@@ -83,12 +90,17 @@ class PlaylistsComponent extends React.Component {
 
     _search(add = false) {
         const collection = this.state.collection;
+        const channels = this.state.channels.slice(0);
+
+        if (channels.length === 0) {
+            channels.push(this.props.channel);
+        }
 
         collection.filterBy({
             search: this.props.search,
-            channelRBTV: this.props.channel === Config.channelRBTV,
-            channelLP: this.props.channel === Config.channelLP,
-            limit: 21,
+            channelRBTV: _.contains(channels, Config.channelRBTV),
+            channelLP: _.contains(channels, Config.channelLP),
+            limit: this.state.limit,
             add
         });
 
@@ -96,8 +108,18 @@ class PlaylistsComponent extends React.Component {
     }
 
     _onFetchNext() {
-        this._search(true);
+        if (this.props.scrolling === Infinity) {
+            this._search(true);
+        }
     }
 }
+
+PlaylistsComponent.defaultProps = {
+    search: '',
+    channel: Config.channelRBTV,
+    channels: [],
+    limit: 21,
+    scrolling: Infinity
+};
 
 export default PlaylistsComponent;

@@ -3,7 +3,7 @@ import {Component} from 'react';
 import _ from 'underscore';
 import watchlist from '../../utils/watchlist';
 
-class ButtonWatchLater extends Component {
+class BtnWatchLater extends Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +19,7 @@ class ButtonWatchLater extends Component {
     render() {
         return (
             <button className={'btn-watch-later' + (this.state.active ? ' is-active' : '') + (this.props.size ? ' is-'+ this.props.size : '')} title="Watch later" onClick={this._onWatchLater}>
-                <span className={'glyphicon glyphicon-' + (this.state.active ? 'ok' : 'time')}></span>
+                <span className="glyphicon glyphicon-time"></span>
             </button>
         );
     }
@@ -40,4 +40,4 @@ class ButtonWatchLater extends Component {
     }
 }
 
-export default ButtonWatchLater;
+export default BtnWatchLater;

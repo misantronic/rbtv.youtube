@@ -1,33 +1,72 @@
 import React from 'react';
 import CollectionLoader from '../../behaviors/CollectionLoader';
 import CollectionScrolling from '../../behaviors/CollectionScrolling';
-import ButtonWatchLater from './../commons/ButtonWatchLater';
+import BtnWatchLater from '../commons/BtnWatchLater';
 
-export default function PlaylistItemsComponent(props) {
-    const collection = props.collection;
-    const onItemSelected = props.onItemSelected || function () {
+class PlaylistItemsComponent extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: null
         };
+    }
 
-    return (
-        <div className="component-playlist-items">
-            <CollectionScrolling collection={collection} limit="30" container=".component-playlist-items">
-                <CollectionLoader collection={collection}>
-                    {collection.map(function (item) {
-                        const videoId = item.get('videoId');
-                        const title = item.get('title');
-                        const image = item.get('thumbnails').medium.url;
+    componentDidUpdate(prevProps) {
+        if (this._propHasChanged(prevProps, 'id')) {
+            this._selectItem();
+        }
+    }
 
-                        return (
-                            <div key={item.id} className="playlist-item">
-                                <div className="image" style={{ backgroundImage: 'url(' + image + ')' }}>
-                                    <ButtonWatchLater id={videoId} size="small"/>
+    render() {
+        const collection = this.props.collection;
+        const self = this;
+
+        return (
+            <div className="component-playlist-items">
+                <CollectionScrolling collection={collection} limit="30" container=".component-playlist-items">
+                    <CollectionLoader collection={collection}>
+                        {collection.map(function (item) {
+                            const videoId = item.get('videoId');
+                            const title = item.get('title');
+                            const image = item.get('thumbnails').medium.url;
+
+                            return (
+                                <div key={item.id} className={'playlist-item' + (self.state.id === videoId ? ' is-active' : '')}>
+                                    <div className="image" style={{ backgroundImage: 'url(' + image + ')' }}>
+                                        <BtnWatchLater id={videoId} size="small"/>
+                                    </div>
+                                    <div className="title" onClick={() => self._onItemSelected(item)}>{title}</div>
                                 </div>
-                                <div className="title" onClick={() => onItemSelected(item)}>{title}</div>
-                            </div>
-                        );
-                    })}
-                </CollectionLoader>
-            </CollectionScrolling>
-        </div>
-    );
+                            );
+                        })}
+                    </CollectionLoader>
+                </CollectionScrolling>
+            </div>
+        );
+    }
+
+    _propHasChanged(prevProps, prop) {
+        return prevProps[prop] !== this.props[prop];
+    }
+
+    _selectItem(item = null) {
+        if (!item) {
+            const collection = this.props.collection;
+
+            item = collection.findWhere({ videoId: this.props.id });
+        }
+
+        this.setState({ id: item.get('videoId') });
+    }
+
+    _onItemSelected(item) {
+        this._selectItem(item);
+
+        if (this.props.onItemSelected) {
+            this.props.onItemSelected(item);
+        }
+    }
 }
+
+export default PlaylistItemsComponent;

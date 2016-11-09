@@ -1,14 +1,15 @@
 @import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
 
 .module-nav {
-    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
 }
 
 .nav-pills > li {
     margin-right: 5px;
 
-    &.nav-item-watchlater {
-        float: right;
+    &:last-child {
+        margin-right: 0;
     }
 
     > a {

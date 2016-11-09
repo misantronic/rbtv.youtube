@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import $ from 'jquery';
 import {Collection} from 'backbone';
 import Config from '../../../Config';
 import PlaylistModel from './Playlist';
@@ -14,12 +15,43 @@ const Playlists = Collection.extend({
 
     comparator: 'title',
 
+    _playlistIds: [],
     _displayResults: defaultResults,
 
-    url: Config.endpoints.playlists,
+    url() {
+        let param = '';
+
+        if (this._playlistIds.length) {
+            param = '?' +
+                $.param([
+                    { name: 'id', value: this._playlistIds.join(',') }
+                ]);
+        }
+
+        return Config.endpoints.playlists + param;
+    },
 
     parse(response) {
         return response.items;
+    },
+
+    clone() {
+        const cloned = Collection.prototype.clone.call(this);
+
+        // Copy props
+        cloned._playlistIds = this._playlistIds.slice(0);
+
+        return cloned;
+    },
+
+    /**
+     * @param {Array} val
+     * @returns {Videos}
+     */
+    setPlaylistIds(val) {
+        this._playlistIds = val;
+
+        return this;
     },
 
     search({ search, rbtv, lp, increaseResults, resetResults }) {

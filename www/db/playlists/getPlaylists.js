@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 var Promise = require('promise');
-var Model = require('./models/Video');
+var Model = require('./models/Playlist');
 
 /**
  *
@@ -20,8 +20,8 @@ module.exports = function (ids, fromCache) {
             var now = moment();
 
             // Check videoIds in mongoDB
-            _.each(ids, function (videoId) {
-                Model.findById(videoId, function (err, model) {
+            _.each(ids, function (playlistId) {
+                Model.findById(playlistId, function (err, model) {
                     if (model) {
                         var expires = moment(model.expires);
 
@@ -30,10 +30,10 @@ module.exports = function (ids, fromCache) {
                                 _.omit(model.toObject(), '__v', '_id')
                             );
                         } else {
-                            itemsNotFound.push(videoId);
+                            itemsNotFound.push(playlistId);
                         }
                     } else {
-                        itemsNotFound.push(videoId);
+                        itemsNotFound.push(playlistId);
                     }
 
                     if (++cnt >= num) {

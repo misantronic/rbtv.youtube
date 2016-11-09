@@ -2,13 +2,14 @@ import React from 'react';
 import _ from 'underscore';
 import Collection from '../../app/modules/playlistsDetails/models/PlaylistItems';
 import PlaylistItems from '../components/playlists/PlaylistItems';
-import VideoPlayer from '../components/videoplayer/VideoPlayer';
+import VideoDetails from '../components/video/details/VideoDetails';
+import VideoPlayer from '../components/video/player/VideoPlayer';
 
 class PlaylistModule extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onItemSelected');
+        _.bindAll(this, '_selectItem');
 
         const collection = new Collection();
         const playlistId = this.props.routeParams.id;
@@ -18,6 +19,7 @@ class PlaylistModule extends React.Component {
         this.state = {
             collection,
             playlistId,
+            autoplay: false,
             videoId: null
         };
 
@@ -26,11 +28,23 @@ class PlaylistModule extends React.Component {
 
     render() {
         const collection = this.state.collection;
+        const videoId = this.state.videoId;
 
         return (
             <div className="module-playlist">
-                <VideoPlayer id={this.state.videoId} />
-                <PlaylistItems collection={collection} onItemSelected={this._onItemSelected} />
+                <div className="row">
+                    <div className="col-xs-12">
+                        <VideoPlayer id={videoId} autoplay={this.state.autoplay}/>
+                    </div>
+                </div>
+                <div className="row details-wrapper">
+                    <div className="col-sm-7 col-xs-12">
+                        <VideoDetails id={videoId}/>
+                    </div>
+                    <div className="col-sm-5 col-xs-12">
+                        <PlaylistItems id={videoId} collection={collection} onItemSelected={item => this._selectItem(item)}/>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -38,15 +52,22 @@ class PlaylistModule extends React.Component {
     componentDidMount() {
         const collection = this.state.collection;
 
-        collection.fetch();
+        collection
+            .fetch()
+            .then(() => this._selectItem());
     }
 
-    _onItemSelected(item) {
-        const videoId = item.get('videoId');
+    _selectItem(item = null, autoplay = false) {
+        const collection = this.state.collection;
 
-        console.log('videoId', videoId);
+        if (!item) {
+            item = collection.first();
+        }
 
-        this.setState({ videoId });
+        this.setState({
+            autoplay,
+            videoId: item.get('videoId')
+        });
     }
 }
 

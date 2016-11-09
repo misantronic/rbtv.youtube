@@ -1,3 +1,5 @@
 .component-playlists {
-
+    &.items .item > .thumbnail .title > .link {
+        padding-right: 30px;
+    }
 }

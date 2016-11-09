@@ -4,14 +4,12 @@ import Config from '../../../Config';
 import $ from 'jquery';
 
 const SearchResults = Collection.extend({
-    constructor(...args) {
-        Collection.apply(this, args);
+    model: SearchResult,
 
-        this.model = SearchResult;
-
-        this._q                = '';
-        this._relatedToVideoId = '';
-    },
+    _q: '',
+    _relatedToVideoId: '',
+    _nextPageToken: null,
+    _fetchedItems: [],
 
     /** @returns {PlaylistItem} */
     getNextPlaylistItem(videoId) {
@@ -24,6 +22,10 @@ const SearchResults = Collection.extend({
     /** @returns {PlaylistItem} */
     getCurrentPlaylistItem(videoId) {
         return this.findWhere({ videoId });
+    },
+
+    getFetchedItems() {
+        return this._fetchedItems || [];
     },
 
     setChannelId(val) {
@@ -65,12 +67,16 @@ const SearchResults = Collection.extend({
     parse(response) {
         this._nextPageToken = response.nextPageToken;
 
-        if (response.items) {
-            if (response.items.length === 0) {
+        const items = response.items;
+
+        if (items) {
+            if (items.length === 0) {
                 this._nextPageToken = null;
             }
 
-            return this.models.concat(response.items);
+            this._fetchedItems = _.map(items, item => new SearchResult(item, { parse: true }));
+
+            return this.models.concat(items);
         }
 
         this._nextPageToken = null;
@@ -80,6 +86,7 @@ const SearchResults = Collection.extend({
 
     reset() {
         this._nextPageToken = null;
+        this._fetchedItems = null;
         this._channelId = null;
         this._q = null;
 
