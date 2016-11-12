@@ -9,7 +9,7 @@
     .playlist-item {
         display: flex;
         flex-direction: row;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
         height: 68px;
 
         &:hover {
@@ -26,6 +26,7 @@
             background-size: 100%;
             flex: 0 0 120px;
             position: relative;
+            margin: 2px;
         }
 
         .title {

@@ -1,9 +1,11 @@
 import React from 'react';
 import _ from 'underscore';
+import moment from 'moment';
+import storage from '../../../utils/storage';
 import CollectionLoader from '../../../behaviors/CollectionLoader';
 import CollectionScrolling from '../../../behaviors/CollectionScrolling';
-import moment from 'moment';
 import ThumbComponent from '../../commons/Thumb';
+// import TagsComponent from '../../tags/Tags';
 import BtnWatchLater from '../../commons/BtnWatchLater';
 import VideoCollection from '../../../../app/modules/videos/models/Videos';
 import VideoModel from '../../../../app/modules/videos/models/Video';
@@ -41,14 +43,34 @@ class VideoListComponent extends React.Component {
                             const title = item.get('title');
                             const publishedAt = moment(item.get('publishedAt'));
 
-                            const duration = this.state['duration.' + videoId];
+                            const videoModel = this.state['video.' + videoId];
+                            const videoInfo = storage.getVideoInfo(videoId);
+                            let duration = '00:00';
+                            let tags = [];
+                            let itemClassName = 'item';
+
+                            if (videoModel) {
+                                duration = VideoModel.humanizeDuration(videoModel.get('duration'));
+                                tags = videoModel.get('tags');
+                            }
+
+                            if (videoInfo.watched) {
+                                itemClassName += ' is-watched';
+                            }
+
+                            {/*let p = 0;*/}
+
+                            {/*if (videoInfo.currentTime && videoModel) {*/}
+                                {/*p = Math.round(videoInfo.currentTime / videoModel.get('duration').asSeconds() * 100);*/}
+                            {/*}*/}
 
                             return (
-                                <div className="item" key={item.id}>
+                                <div className={itemClassName} key={item.id}>
                                     <ThumbComponent image={image} title={title} description={description} link={'#/video/' + videoId}
-                                                    labelLeft={<span className="publishedAt label label-default">{publishedAt.fromNow()}</span>}
-                                                    labelRight={<span className="duration label label-default">{VideoModel.humanizeDuration(duration)}</span>}>
-                                        <BtnWatchLater id={videoId} type="video" />
+                                                    labelLeft={<span className="duration label label-default">{duration}</span>}
+                                                    labelRight={<span className="publishedAt label label-default">{publishedAt.fromNow()}</span>}>
+                                        <BtnWatchLater id={videoId} type="video"/>
+                                        {/*<TagsComponent tags={tags} />*/}
                                     </ThumbComponent>
                                 </div>
                             );
@@ -111,7 +133,7 @@ class VideoListComponent extends React.Component {
             .fetch()
             .then(() =>
                 videoCollection.each(videoModel =>
-                    this.setState({ ['duration.' + videoModel.id]: videoModel.get('duration') })
+                    this.setState({ ['video.' + videoModel.id]: videoModel })
                 )
             );
     }

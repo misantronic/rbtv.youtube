@@ -1,14 +1,17 @@
 import React from 'react';
 import VideoModel from '../../../../app/modules/videos/models/Video';
 import VideoPlayer from '../player/VideoPlayer';
+import Thumbs from './Thumbs';
 import numbers from '../../../utils/numbers';
 
 class VideoDetailsComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        const id = props.id;
+
         this.state = {
-            videoModel: new VideoModel({ id: this.props.id })
+            videoModel: new VideoModel({ id })
         };
     }
 
@@ -22,9 +25,8 @@ class VideoDetailsComponent extends React.Component {
         const title = model.get('title');
         const desc = model.get('description');
         const publishedAt = model.get('publishedAt');
-        const views = model.get('statistics').viewCount;
-
-        console.log(model.toJSON());
+        const statistics = model.get('statistics');
+        const views = statistics.viewCount;
 
         return (
             <div className="component-videodetails">
@@ -41,11 +43,12 @@ class VideoDetailsComponent extends React.Component {
                 <div className="row details-wrapper">
                     <div className="col-sm-7 col-xs-12">
                         <div className="row">
-                            <div className="col-xs-6">
-                                Published on {publishedAt && publishedAt.format('LL')}
+                            <div className="col-xs-8">
+                                <h4>Published on {publishedAt && publishedAt.format('LL')}</h4>
                             </div>
-                            <div className="col-xs-6 text-right">
-                                {numbers.format(views)} views
+                            <div className="col-xs-4 text-right">
+                                <h4 className="views">{numbers.format(views)} views</h4>
+                                <Thumbs statistics={statistics} id={videoId}/>
                             </div>
                         </div>
                         <div className="row">
@@ -87,7 +90,13 @@ class VideoDetailsComponent extends React.Component {
 
         if (id) {
             model.set({ id });
-            model[method]().then(() => this.forceUpdate());
+            model[method]().then(() => {
+                this.forceUpdate();
+
+                if (this.props.onFetch) {
+                    this.props.onFetch(model);
+                }
+            });
         }
     }
 }

@@ -10,8 +10,8 @@ class SearchComponent extends Component {
         _.bindAll(this, '_onChange', '_onChannelRBTV', '_onChannelLP');
 
         this.state = {
-            value: '',
-            channel: Config.channelRBTV,
+            value: props.value || '',
+            channel: props.channel || Config.channelRBTV,
             placeholder: this._getPlaceholder()
         };
     }

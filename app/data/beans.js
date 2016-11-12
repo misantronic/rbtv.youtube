@@ -44,5 +44,8 @@ export default [
     { title: 'Aurel', expr: /^au/i },
     { title: 'Florentin', expr: /^fl/i },
     { title: 'Wolf', expr: /^wo/i },
-    { title: 'Anne', expr: /^an/i }
+    { title: 'Anne', expr: /^an/i },
+    { title: 'Andreas', expr: /^an/i },
+    { title: 'Timo', expr: /^ti/i },
+    { title: 'Donnie', expr: /^do/i }
 ];

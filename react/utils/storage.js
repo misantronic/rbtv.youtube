@@ -21,6 +21,16 @@ const storage = {
         }
 
         localStorage.setItem(key, value);
+    },
+
+    update: function (key, props) {
+        const keyValue = this.get(key) || {};
+
+        this.set(key, _.extend(keyValue, props));
+    },
+
+    getVideoInfo: function (videoId) {
+        return this.get(`${videoId}.info`) || {};
     }
 };
 

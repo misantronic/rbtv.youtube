@@ -45,7 +45,7 @@ module.exports = function (req, res) {
                     // Save/Update videos in mongoDB
                     _.each(result.data.items, function (item) {
                         item._id = item.id;
-                        item.expires = moment().add(7, 'days').toDate();
+                        item.expires = moment().add(3, 'hours').toDate();
 
                         dbSaveVideo(item);
                     });

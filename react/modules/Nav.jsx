@@ -1,6 +1,7 @@
 import React from 'react';
 import {Component} from 'react';
 import {Link, IndexLink} from 'react-router';
+import Config from '../../app/Config';
 import watchlist from '../utils/watchlist';
 
 class NavModule extends Component {
@@ -20,7 +21,7 @@ class NavModule extends Component {
                 <ul className="nav nav-pills">
                     <li className="nav-item"><IndexLink to="/" activeClassName="active">Übersicht</IndexLink></li>
                     <li className="nav-item"><Link to="/playlists" activeClassName="active">Playlists</Link></li>
-                    <li className="nav-item"><Link to="/live/rzCDzR8eR7o" activeClassName="active">Live</Link></li>
+                    <li className="nav-item"><Link to={'/live/'+ Config.liveId} activeClassName="active">Live</Link></li>
                     {/*<li><Link to="/shows" activeClassName="active">Shows</Link></li>*/}
                     <li className="nav-item nav-item-watchlater">
                         <Link to="/watchlater" activeClassName="active">

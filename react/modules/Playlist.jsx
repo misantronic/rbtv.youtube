@@ -8,18 +8,20 @@ class PlaylistModule extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_selectItem');
+        _.bindAll(this, '_selectItem', '_onFetch');
 
         const collection = new Collection();
         const playlistId = this.props.routeParams.id;
+        const videoId = this.props.routeParams.videoId;
+        const autoplay = false;
 
         collection.setPlaylistId(playlistId);
 
         this.state = {
             collection,
             playlistId,
-            autoplay: false,
-            videoId: null
+            autoplay,
+            videoId
         };
 
         collection.listenTo(collection, 'react:update', () => this.forceUpdate());
@@ -32,31 +34,36 @@ class PlaylistModule extends React.Component {
         return (
             <div className="module-playlist">
                 <VideoDetails id={videoId}>
-                    <PlaylistItems id={videoId} collection={collection} onItemSelected={item => this._selectItem(item)}/>
+                    <PlaylistItems id={videoId} collection={collection} onFetch={this._onFetch} onItemSelected={item => this._selectItem(item)}/>
                 </VideoDetails>
             </div>
         );
     }
 
-    componentDidMount() {
-        const collection = this.state.collection;
-
-        collection
-            .fetch()
-            .then(() => this._selectItem());
-    }
-
     _selectItem(item = null, autoplay = false) {
         const collection = this.state.collection;
+        const playlistId = this.state.playlistId;
 
         if (!item) {
             item = collection.first();
         }
 
+        const videoId = item.get('videoId');
+
         this.setState({
             autoplay,
-            videoId: item.get('videoId')
+            videoId
         });
+
+        this.props.router.push(`playlists/${playlistId}/video/${videoId}`);
+    }
+
+    _onFetch(collection) {
+        const videoId = this.state.videoId;
+
+        if (!videoId) {
+            this._selectItem(collection.first());
+        }
     }
 }
 

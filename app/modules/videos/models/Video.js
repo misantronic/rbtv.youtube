@@ -71,6 +71,27 @@ const Video = Model.extend({
             response = response[0];
         }
 
+        // add first names
+        const tags = response.snippet.tags;
+
+        _.each(tags, tag => {
+            // Special cases
+            if (tag.toLowerCase() === 'daniel budiman') {
+                tags.push('budi');
+            }
+
+            // Special cases
+            if (tag.toLowerCase() === 'eddy') {
+                tags.push('etienne');
+            }
+
+            const tagsArr = tag.split(' ');
+
+            if (tagsArr.length > 1) {
+                tags.push(tagsArr[0]);
+            }
+        });
+
         return {
             id: response.id,
             videoId: response.id,
@@ -80,7 +101,7 @@ const Video = Model.extend({
             description: response.snippet.description,
             publishedAt: moment(response.snippet.publishedAt),
             thumbnails: response.snippet.thumbnails,
-            tags: response.snippet.tags,
+            tags,
             title: response.snippet.title,
             duration: moment.duration(response.contentDetails.duration),
             statistics: response.statistics

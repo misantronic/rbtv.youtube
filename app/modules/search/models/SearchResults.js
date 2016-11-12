@@ -67,12 +67,16 @@ const SearchResults = Collection.extend({
     parse(response) {
         this._nextPageToken = response.nextPageToken;
 
-        const items = response.items;
+        let items = response.items;
 
         if (items) {
             if (items.length === 0) {
                 this._nextPageToken = null;
             }
+
+            // Filter out items which are already in collection
+            // This might happen due to cache-isues
+            items = _.filter(items, item => !_.find(this.models, model => model.get('videoId') === item.id.videoId));
 
             this._fetchedItems = _.map(items, item => new SearchResult(item, { parse: true }));
 
@@ -89,8 +93,22 @@ const SearchResults = Collection.extend({
         this._fetchedItems = null;
         this._channelId = null;
         this._q = null;
+        this._relatedToVideoId = null;
 
         return Collection.prototype.reset.apply(this, arguments);
+    },
+
+    clone() {
+        const cloned = Collection.prototype.clone.call(this);
+
+        // Copy props
+        cloned._nextPageToken = this._nextPageToken;
+        cloned._fetchedItems = this._fetchedItems;
+        cloned._channelId = this._channelId;
+        cloned._relatedToVideoId = this._relatedToVideoId;
+        cloned._q = this._q;
+
+        return cloned;
     }
 });
 

@@ -12,6 +12,7 @@
 
         > .thumbnail {
             position: relative;
+            background: #FFF;
 
             @media (min-width: $screen-xs-min) {
                 height: 410px;
@@ -37,6 +38,25 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
+            }
+        }
+
+        &.is-watched {
+            > .thumbnail > .link:before {
+                content: 'watched';
+                position: absolute;
+                left: 5px;
+                top: 5px;
+                text-transform: uppercase;
+                background: $gray-light;
+                color: #FFF;
+                padding: 3px 3px 1px 3px;
+                font-size: 10px;
+                z-index: 10;
+            }
+
+            .thumb {
+                opacity: 0.7;
             }
         }
     }

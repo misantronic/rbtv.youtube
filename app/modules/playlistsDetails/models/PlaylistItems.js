@@ -28,6 +28,15 @@ const PlaylistItems = Collection.extend({
         return this.findWhere({ videoId });
     },
 
+    clone() {
+        const cloned = Collection.prototype.clone.call(this);
+
+        // Copy props
+        cloned._playlistId = this._playlistId;
+
+        return cloned;
+    },
+
     parse(response) {
         return response.items;
     },

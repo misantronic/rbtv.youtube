@@ -1,0 +1,35 @@
+@import '../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.component-thumbs {
+    display: flex;
+    justify-content: flex-end;
+
+    > button {
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+
+        .count-likes,
+        .count-dislikes {
+            margin-left: 5px;
+        }
+
+        .icon-thumbs-down {
+            transform: translateY(3px);
+        }
+    }
+
+    .btn-like {
+        margin-right: 5px;
+    }
+
+    .btn-like,
+    .btn-dislike {
+        color: $gray-light;
+
+        &.is-active {
+            color: $gray-base;
+        }
+    }
+}

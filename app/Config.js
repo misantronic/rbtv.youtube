@@ -27,6 +27,8 @@ export default {
 
     channelLP: 'UCtSP1OA6jO4quIGLae7Fb4g',
 
+    liveId: 'rzCDzR8eR7o',
+
     navigation: new Collection([
         { title: 'Übersicht', route: 'activities' },
         { title: 'Playlists', route: 'playlists' },

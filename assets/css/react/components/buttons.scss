@@ -19,11 +19,13 @@
         padding: 3px;
     }
 
-    &:focus {
-        outline: none;
-    }
-
     &.is-active {
         background-color: $brand-success;
+    }
+}
+
+button {
+    &:focus {
+        outline: none;
     }
 }

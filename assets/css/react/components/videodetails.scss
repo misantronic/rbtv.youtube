@@ -10,11 +10,19 @@
         margin: 0 0 20px;
     }
 
+    h4 {
+        margin: 0;
+    }
+
     .details-wrapper {
         margin-bottom: 20px;
 
         .row {
             margin-bottom: 15px;
+        }
+
+        .component-thumbs {
+            margin-top: 5px;
         }
     }
 }

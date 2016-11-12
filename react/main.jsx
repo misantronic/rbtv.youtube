@@ -24,6 +24,7 @@ render(
             <Route path="/activities" component={Activities}/>
             <Route path="/playlists" component={Playlists}/>
             <Route path="/playlists/:id" component={Playlist}/>
+            <Route path="/playlists/:id/video/:videoId" component={Playlist}/>
             <Route path="/watchlater" component={WatchLater}/>
             <Route path="/video/:id" component={Video}/>
             <Route path="/live/:id" component={Live}/>

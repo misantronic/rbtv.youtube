@@ -142,17 +142,19 @@ class Controller extends Marionette.Object {
         if (this.data) {
             Deferred.resolve();
         } else {
-            gapi.auth.authorize({
-                'client_id': clientId,
-                scope,
-                immediate
-            }, () => {
-                this._data = gapi.auth.getToken();
+            if(gapi && gapi.auth && gapi.auth.authorize) {
+                gapi.auth.authorize({
+                    'client_id': clientId,
+                    scope,
+                    immediate
+                }, () => {
+                    this._data = gapi.auth.getToken();
 
-                localStorage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
+                    localStorage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
 
-                Deferred.resolve();
-            });
+                    Deferred.resolve();
+                });
+            }
         }
 
         return Deferred.promise();
