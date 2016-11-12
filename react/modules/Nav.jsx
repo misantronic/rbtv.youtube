@@ -1,10 +1,10 @@
-import React from 'react';
-import {Component} from 'react';
-import {Link, IndexLink} from 'react-router';
-import Config from '../../app/Config';
-import watchlist from '../utils/watchlist';
+const React = require('react');
+const Link = require('react-router').Link;
+const IndexLink = require('react-router').IndexLink;
+const Config = require('../Config');
+const watchlist = require('../utils/watchlist');
 
-class NavModule extends Component {
+class NavModule extends React.Component {
     constructor(props) {
         super(props);
 
@@ -42,5 +42,5 @@ class NavModule extends Component {
     }
 }
 
-export default NavModule;
+module.exports = NavModule;
 

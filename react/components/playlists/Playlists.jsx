@@ -1,10 +1,10 @@
-import React from 'react';
-import _ from 'underscore';
-import Config from '../../../app/Config';
-import CollectionLoader from '../../behaviors/CollectionLoader';
-import CollectionScrolling from '../../behaviors/CollectionScrolling';
-import ThumbComponent from '../commons/Thumb';
-import BtnWatchLater from '../commons/BtnWatchLater';
+const React = require('react');
+const _ = require('underscore');
+const Config = require('../../Config');
+const CollectionLoader = require('../../behaviors/CollectionLoader');
+const CollectionScrolling = require('../../behaviors/CollectionScrolling');
+const ThumbComponent = require('../commons/Thumb');
+const BtnWatchLater = require('../commons/BtnWatchLater');
 
 class PlaylistsComponent extends React.Component {
     constructor(props) {
@@ -122,4 +122,4 @@ PlaylistsComponent.defaultProps = {
     scrolling: Infinity
 };
 
-export default PlaylistsComponent;
+module.exports = PlaylistsComponent;

@@ -1,8 +1,8 @@
-import React from 'react';
-import _ from 'underscore';
-import Collection from '../../app/modules/playlistsDetails/models/PlaylistItems';
-import PlaylistItems from '../components/playlists/PlaylistItems';
-import VideoDetails from '../components/video/details/VideoDetails';
+const React = require('react');
+const _ = require('underscore');
+const Collection = require('../models/PlaylistItems');
+const PlaylistItems = require('../components/playlists/PlaylistItems');
+const VideoDetails = require('../components/video/details/VideoDetails');
 
 class PlaylistModule extends React.Component {
     constructor(props) {
@@ -67,4 +67,4 @@ class PlaylistModule extends React.Component {
     }
 }
 
-export default PlaylistModule;
+module.exports = PlaylistModule;

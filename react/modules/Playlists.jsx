@@ -1,12 +1,11 @@
-import React from 'react';
-import {Component} from 'react';
-import _ from 'underscore';
-import Playlists from '../components/playlists/Playlists';
-import Search from '../components/search/Search';
-import Collection from '../../app/modules/playlists/models/Playlists';
-import Config from '../../app/Config';
+const React = require('react');
+const _ = require('underscore');
+const Playlists = require('../components/playlists/Playlists');
+const Search = require('../components/search/Search');
+const Collection = require('../models/Playlists');
+const Config = require('../Config');
 
-class PlaylistsModule extends Component {
+class PlaylistsModule extends React.Component {
     constructor(props) {
         super(props);
 
@@ -47,4 +46,4 @@ class PlaylistsModule extends Component {
     }
 }
 
-export default PlaylistsModule;
+module.exports = PlaylistsModule;

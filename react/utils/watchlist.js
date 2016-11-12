@@ -1,6 +1,6 @@
-import _ from 'underscore';
-import {Events} from 'backbone';
-import storage from './storage';
+const _ = require('underscore');
+const Events = require('backbone').Events;
+const storage = require('./storage');
 
 const watchlist = {
     getList(type = null) {
@@ -45,4 +45,4 @@ const watchlist = {
     }
 };
 
-export default _.extend(watchlist, Events);
+module.exports = _.extend(watchlist, Events);

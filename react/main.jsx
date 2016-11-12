@@ -1,20 +1,23 @@
-import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, hashHistory, IndexRoute} from 'react-router';
-import $ from 'jquery';
+const React = require('react');
+const render = require('react-dom').render;
+const Router = require('react-router').Router;
+const Route = require('react-router').Route;
+const hashHistory = require('react-router').hashHistory;
+const IndexRoute = require('react-router').IndexRoute;
+const $ = require('jquery');
 
-import Activities from './modules/Activities';
-import Playlists from './modules/Playlists';
-import Playlist from './modules/Playlist';
-import WatchLater from './modules/WatchLater';
-import Video from './modules/Video';
-import App from './modules/App';
-import Live from './modules/Live';
+const Activities = require('./modules/Activities');
+const Playlists = require('./modules/Playlists');
+const Playlist = require('./modules/Playlist');
+const WatchLater = require('./modules/WatchLater');
+const Video = require('./modules/Video');
+const App = require('./modules/App');
+const Live = require('./modules/Live');
 
-import '../app/overrides/underscore';
+require('../app/overrides/underscore');
 
-import '../assets/css/react/_deps.scss';
-import '../assets/css/react/_package.scss';
+require('../assets/css/react/_deps.scss');
+require('../assets/css/react/_package.scss');
 
 render(
     <Router history={hashHistory}>

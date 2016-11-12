@@ -1,8 +1,8 @@
-import React from 'react';
-import Config from '../../../app/Config';
-import CollectionLoader from '../../behaviors/CollectionLoader';
-import CollectionScrolling from '../../behaviors/CollectionScrolling';
-import BtnWatchLater from '../commons/BtnWatchLater';
+const React = require('react');
+const Config = require('../../Config');
+const CollectionLoader = require('../../behaviors/CollectionLoader');
+const CollectionScrolling = require('../../behaviors/CollectionScrolling');
+const BtnWatchLater = require('../commons/BtnWatchLater');
 
 class PlaylistItemsComponent extends React.Component {
     constructor(props) {
@@ -100,4 +100,4 @@ class PlaylistItemsComponent extends React.Component {
     }
 }
 
-export default PlaylistItemsComponent;
+module.exports = PlaylistItemsComponent;

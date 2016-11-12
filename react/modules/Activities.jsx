@@ -1,19 +1,18 @@
-import React from 'react';
-import {Component} from 'react';
-import _ from 'underscore';
-import VideoList from '../components/video/list/VideoList';
-import Search from '../components/search/Search';
-import SearchCollection from '../../app/modules/search/models/SearchResults';
-import Config from '../../app/Config';
-import storage from '../utils/storage';
+const React = require('react');
+const _ = require('underscore');
+const VideoList = require('../components/video/list/VideoList');
+const Search = require('../components/search/Search');
+const SearchCollection = require('../models/SearchResults');
+const Config = require('../Config');
+const storage = require('../utils/storage');
 
-class ActivitiesModule extends Component {
+class ActivitiesModule extends React.Component {
     constructor(props) {
         super(props);
 
         _.bindAll(this, '_onSearch', '_onSearchChannel', '_onCollectionSync', '_onFilterUpdate');
 
-       const filter = storage.get('activities.filter');
+        const filter = storage.get('activities.filter');
 
         this.state = {
             search: filter.search || '',
@@ -34,7 +33,7 @@ class ActivitiesModule extends Component {
                     value={stateSearch}
                     channel={stateChannel}
                     onSearch={this._onSearch}
-                    onChannel={this._onSearchChannel} />
+                    onChannel={this._onSearchChannel}/>
                 <VideoList
                     collection={this.searchCollection}
                     channel={stateChannel}
@@ -64,4 +63,4 @@ class ActivitiesModule extends Component {
     }
 }
 
-export default ActivitiesModule;
+module.exports = ActivitiesModule;

@@ -1,6 +1,6 @@
-import React from 'react';
-import $ from 'jquery';
-import _ from 'underscore';
+const React = require('react');
+const $ = require('jquery');
+const _ = require('underscore');
 
 class CollectionScrolling extends React.Component {
 
@@ -119,4 +119,4 @@ class CollectionScrolling extends React.Component {
     }
 }
 
-export default CollectionScrolling;
+module.exports = CollectionScrolling;

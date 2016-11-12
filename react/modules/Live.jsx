@@ -1,9 +1,8 @@
-import React from 'react';
-import {Component} from 'react';
-import VideoDetails from '../components/video/details/VideoDetails';
-import Chat from '../components/video/chat/Chat';
+const React = require('react');
+const VideoDetails = require('../components/video/details/VideoDetails');
+const Chat = require('../components/video/chat/Chat');
 
-class VideoModule extends Component {
+class VideoModule extends React.Component {
     constructor(props) {
         super(props);
 
@@ -25,4 +24,4 @@ class VideoModule extends Component {
     }
 }
 
-export default VideoModule;
+module.exports = VideoModule;

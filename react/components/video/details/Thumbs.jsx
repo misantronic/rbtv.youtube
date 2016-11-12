@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'underscore';
-import youtubeController from '../../../../app/modules/youtube/controller';
+const React = require('react');
+const _ = require('underscore');
+const youtubeController = require('../../../utils/youtubeController');
 
 class ThumbsComponent extends React.Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class ThumbsComponent extends React.Component {
      */
 
     render() {
-        const statistics = this.state.statistics
+        const statistics = this.state.statistics;
 
         return (
             <div className="component-thumbs">
@@ -130,4 +130,4 @@ class ThumbsComponent extends React.Component {
     }
 }
 
-export default ThumbsComponent;
+module.exports = ThumbsComponent;

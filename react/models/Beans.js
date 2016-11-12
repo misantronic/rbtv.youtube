@@ -1,11 +1,11 @@
-import {Collection, Model} from 'backbone';
-import beans from '../../app/data/beans';
+const backbone = require('backbone');
+const beans = require('../data/beans');
 
-const BeanModel = Model.extend({
+const BeanModel = backbone.Model.extend({
 
 });
 
-export default Collection.extend({
+module.exports = backbone.Collection.extend({
     model: BeanModel,
 
     initialize() {

@@ -1,8 +1,8 @@
-import React from 'react';
-import VideoModel from '../../../../app/modules/videos/models/Video';
-import VideoPlayer from '../player/VideoPlayer';
-import Thumbs from './Thumbs';
-import numbers from '../../../utils/numbers';
+const React = require('react');
+const VideoModel = require('../../../models/Video');
+const VideoPlayer = require('../player/VideoPlayer');
+const Thumbs = require('./Thumbs');
+const numbers = require('../../../utils/numbers');
 
 class VideoDetailsComponent extends React.Component {
     constructor(props) {
@@ -105,4 +105,4 @@ VideoDetailsComponent.defaultProps = {
     fromCache: true
 };
 
-export default VideoDetailsComponent;
+module.exports = VideoDetailsComponent;

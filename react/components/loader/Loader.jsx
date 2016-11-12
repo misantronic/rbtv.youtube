@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default function LoaderComponent() {
+module.exports = function LoaderComponent() {
     return (
         <div className="component-loader loader js-loader">
             <div className="sk-fading-circle">
@@ -19,4 +19,4 @@ export default function LoaderComponent() {
             </div>
         </div>
     );
-}
+};

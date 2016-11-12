@@ -1,14 +1,14 @@
-import React from 'react';
-import _ from 'underscore';
-import moment from 'moment';
-import storage from '../../../utils/storage';
-import CollectionLoader from '../../../behaviors/CollectionLoader';
-import CollectionScrolling from '../../../behaviors/CollectionScrolling';
-import ThumbComponent from '../../commons/Thumb';
-// import TagsComponent from '../../tags/Tags';
-import BtnWatchLater from '../../commons/BtnWatchLater';
-import VideoCollection from '../../../../app/modules/videos/models/Videos';
-import VideoModel from '../../../../app/modules/videos/models/Video';
+const React = require('react');
+const _ = require('underscore');
+const moment = require('moment');
+const storage = require('../../../utils/storage');
+const CollectionLoader = require('../../../behaviors/CollectionLoader');
+const CollectionScrolling = require('../../../behaviors/CollectionScrolling');
+const ThumbComponent = require('../../commons/Thumb');
+// const TagsComponent = require('../../tags/Tags');
+const BtnWatchLater = require('../../commons/BtnWatchLater');
+const VideoCollection = require('../../../models/Videos');
+const VideoModel = require('../../../models/Video');
 
 class VideoListComponent extends React.Component {
     constructor(props) {
@@ -159,4 +159,4 @@ class VideoListComponent extends React.Component {
     }
 }
 
-export default VideoListComponent;
+module.exports = VideoListComponent;

@@ -1,7 +1,7 @@
-import React from 'react';
-import Nav from './Nav';
+const React = require('react');
+const Nav = require('./Nav');
 
-export default function AppModule(props) {
+module.exports = function AppModule(props) {
     return (
         <div className="module-app">
             <header>

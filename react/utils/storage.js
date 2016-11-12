@@ -34,4 +34,4 @@ const storage = {
     }
 };
 
-export default storage;
+module.exports = storage;

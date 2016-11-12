@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'underscore';
-import Loader from './../components/loader/Loader';
+const React = require('react');
+const _ = require('underscore');
+const Loader = require('./../components/loader/Loader');
 
 class CollectionLoader extends React.Component {
     constructor(props) {
@@ -45,4 +45,4 @@ class CollectionLoader extends React.Component {
     }
 }
 
-export default CollectionLoader;
+module.exports = CollectionLoader;

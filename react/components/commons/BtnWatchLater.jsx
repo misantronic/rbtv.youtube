@@ -1,9 +1,8 @@
-import React from 'react';
-import {Component} from 'react';
-import _ from 'underscore';
-import watchlist from '../../utils/watchlist';
+const React = require('react');
+const _ = require('underscore');
+const watchlist = require('../../utils/watchlist');
 
-class BtnWatchLater extends Component {
+class BtnWatchLater extends React.Component {
     constructor(props) {
         super(props);
 
@@ -44,4 +43,4 @@ class BtnWatchLater extends Component {
     }
 }
 
-export default BtnWatchLater;
+module.exports = BtnWatchLater;

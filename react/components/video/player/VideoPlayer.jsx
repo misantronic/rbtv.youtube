@@ -1,7 +1,7 @@
-import React from 'react';
-import $ from 'jquery';
-import _ from 'underscore';
-import storage from '../../../utils/storage';
+const React = require('react');
+const $ = require('jquery');
+const _ = require('underscore');
+const storage = require('../../../utils/storage');
 
 class VideoPlayerComponent extends React.Component {
     constructor(props) {
@@ -70,8 +70,6 @@ class VideoPlayerComponent extends React.Component {
                 start: this.props.currentTime
             }
         });
-
-        console.log(this._YTPlayer);
     }
 
     _updatePlayer() {
@@ -167,4 +165,4 @@ VideoPlayerComponent.defaultProps = {
     autoplay: false
 };
 
-export default VideoPlayerComponent;
+module.exports = VideoPlayerComponent;

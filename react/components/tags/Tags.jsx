@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'underscore';
-import Beans from '../../models/Beans';
+const React = require('react');
+const _ = require('underscore');
+const Beans = require('../../models/Beans');
 
 class TagsComponent extends React.Component {
     constructor(props) {
@@ -27,4 +27,4 @@ TagsComponent.defaultProps = {
     tags: []
 };
 
-export default TagsComponent;
+module.exports = TagsComponent;

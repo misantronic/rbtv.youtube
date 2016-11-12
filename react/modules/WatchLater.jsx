@@ -1,11 +1,11 @@
-import React from 'react';
-import _ from 'underscore';
-import watchlist from '../utils/watchlist';
-import VideoCollection from '../../app/modules/videos/models/Videos';
-import PlaylistCollection from '../../app/modules/playlists/models/Playlists';
-import VideoList  from '../components/video/list/VideoList';
-import Playlists  from '../components/playlists/Playlists';
-import Config from '../../app/Config';
+const React = require('react');
+const _ = require('underscore');
+const watchlist = require('../utils/watchlist');
+const VideoCollection = require('../models/Videos');
+const PlaylistCollection = require('../models/Playlists');
+const VideoList = require('../components/video/list/VideoList');
+const Playlists = require('../components/playlists/Playlists');
+const Config = require('../Config');
 
 class WatchLaterModule extends React.Component {
     constructor(props) {
@@ -38,4 +38,4 @@ class WatchLaterModule extends React.Component {
     }
 }
 
-export default WatchLaterModule;
+module.exports = WatchLaterModule;

@@ -1,9 +1,8 @@
-import React from 'react';
-import _ from 'underscore';
-import {Component} from 'react';
-import Config from '../../../app/Config';
+const React = require('react');
+const _ = require('underscore');
+const Config = require('../../Config');
 
-class SearchComponent extends Component {
+class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -115,4 +114,4 @@ class SearchComponent extends Component {
     }
 }
 
-export default SearchComponent;
+module.exports = SearchComponent;

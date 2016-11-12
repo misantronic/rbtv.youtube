@@ -1,4 +1,4 @@
-import React from 'react';
+const React = require('react');
 
 class ThumbComponent extends React.Component {
     render() {
@@ -26,4 +26,4 @@ class ThumbComponent extends React.Component {
     }
 }
 
-export default ThumbComponent;
+module.exports = ThumbComponent;
