@@ -1,10 +1,13 @@
 const React = require('react');
 const _ = require('underscore');
-const Beans = require('../../models/Beans');
+const $ = require('jquery');
+const Beans = require('../../models/BeansCollection');
 
 class TagsComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        _.bindAll(this, '_onClick');
     }
 
     render() {
@@ -17,9 +20,23 @@ class TagsComponent extends React.Component {
 
         return (
             <div className="component-tags">
-                {names.map((name, i) => <span key={i}>{name}</span>)}
+                {names.map((name, i) =>
+                    <span className="label label-primary"
+                          key={i}
+                          onClick={this._onClick}>
+                        {name.substr(0, 1).toUpperCase() + name.substr(1)}
+                    </span>)
+                }
             </div>
         );
+    }
+
+    _onClick(e) {
+        const val = $(e.target).text();
+
+        if (this.props.onTagSelect) {
+            this.props.onTagSelect(val);
+        }
     }
 }
 

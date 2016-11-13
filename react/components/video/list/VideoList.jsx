@@ -1,20 +1,21 @@
 const React = require('react');
 const _ = require('underscore');
 const moment = require('moment');
+const Backbone = require('backbone');
 const storage = require('../../../utils/storage');
 const CollectionLoader = require('../../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../../behaviors/CollectionScrolling');
 const ThumbComponent = require('../../commons/Thumb');
-// const TagsComponent = require('../../tags/Tags');
+const TagsComponent = require('../../tags/Tags');
 const BtnWatchLater = require('../../commons/BtnWatchLater');
-const VideoCollection = require('../../../models/Videos');
-const VideoModel = require('../../../models/Video');
+const VideoCollection = require('../../../models/VideosCollection');
+const VideoModel = require('../../../models/VideoModel');
 
 class VideoListComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onCollectionUpdate', '_onFetchNext');
+        _.bindAll(this, '_onCollectionUpdate', '_onFetchNext', '_onTagSelect');
 
         const collection = this.props.collection.clone();
 
@@ -58,19 +59,13 @@ class VideoListComponent extends React.Component {
                                 itemClassName += ' is-watched';
                             }
 
-                            {/*let p = 0;*/}
-
-                            {/*if (videoInfo.currentTime && videoModel) {*/}
-                                {/*p = Math.round(videoInfo.currentTime / videoModel.get('duration').asSeconds() * 100);*/}
-                            {/*}*/}
-
                             return (
                                 <div className={itemClassName} key={item.id}>
                                     <ThumbComponent image={image} title={title} description={description} link={'#/video/' + videoId}
                                                     labelLeft={<span className="duration label label-default">{duration}</span>}
                                                     labelRight={<span className="publishedAt label label-default">{publishedAt.fromNow()}</span>}>
                                         <BtnWatchLater id={videoId} type="video"/>
-                                        {/*<TagsComponent tags={tags} />*/}
+                                        <TagsComponent tags={tags} onTagSelect={this._onTagSelect}/>
                                     </ThumbComponent>
                                 </div>
                             );
@@ -157,6 +152,18 @@ class VideoListComponent extends React.Component {
     _onCollectionUpdate() {
         this.forceUpdate();
     }
+
+    _onTagSelect(tagValue) {
+        if (this.props.onTagSelect) {
+            this.props.onTagSelect(tagValue);
+        }
+    }
 }
+
+VideoListComponent.propTypes = {
+    collection: React.PropTypes.object,
+    channel: React.PropTypes.string,
+    search: React.PropTypes.string
+};
 
 module.exports = VideoListComponent;

@@ -1,7 +1,7 @@
 import _ from 'underscore';
 import {Collection} from 'backbone';
 import Config from '../Config';
-import PlaylistItemModel from './PlaylistItem';
+import PlaylistItemModel from './PlaylistItemModel';
 
 const PlaylistItems = Collection.extend({
 

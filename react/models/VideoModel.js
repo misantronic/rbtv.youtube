@@ -85,6 +85,11 @@ const Video = Model.extend({
                 tags.push('etienne');
             }
 
+            // Special cases
+            if (tag.toLowerCase() === 'flo') {
+                tags.push('florian');
+            }
+
             const tagsArr = tag.split(' ');
 
             if (tagsArr.length > 1) {

@@ -1,4 +1,4 @@
-import SearchResults from './SearchResults';
+import SearchResults from './SearchResultsCollection';
 import Config from '../Config';
 import $ from 'jquery';
 

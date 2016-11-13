@@ -2,7 +2,7 @@ const React = require('react');
 const _ = require('underscore');
 const Playlists = require('../components/playlists/Playlists');
 const Search = require('../components/search/Search');
-const Collection = require('../models/Playlists');
+const Collection = require('../models/PlaylistsCollection');
 const Config = require('../Config');
 
 class PlaylistsModule extends React.Component {

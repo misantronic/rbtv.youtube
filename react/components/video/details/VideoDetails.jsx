@@ -1,5 +1,5 @@
 const React = require('react');
-const VideoModel = require('../../../models/Video');
+const VideoModel = require('../../../models/VideoModel');
 const VideoPlayer = require('../player/VideoPlayer');
 const Thumbs = require('./Thumbs');
 const numbers = require('../../../utils/numbers');

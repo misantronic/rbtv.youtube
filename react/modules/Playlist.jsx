@@ -1,6 +1,6 @@
 const React = require('react');
 const _ = require('underscore');
-const Collection = require('../models/PlaylistItems');
+const Collection = require('../models/PlaylistItemsCollection');
 const PlaylistItems = require('../components/playlists/PlaylistItems');
 const VideoDetails = require('../components/video/details/VideoDetails');
 

@@ -1,0 +1,10 @@
+.component-tags {
+    display: flex;
+    justify-content: flex-end;
+
+    > .label {
+        margin-left: 4px;
+        opacity: 0.75;
+        cursor: pointer;
+    }
+}

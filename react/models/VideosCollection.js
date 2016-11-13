@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import {Collection} from 'backbone';
 import Config from '../Config';
-import VideoModel from './Video';
+import VideoModel from './VideoModel';
 
 const Videos = Collection.extend({
     model: VideoModel,

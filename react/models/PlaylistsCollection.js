@@ -2,7 +2,7 @@ import _ from 'underscore';
 import $ from 'jquery';
 import {Collection} from 'backbone';
 import Config from '../Config';
-import PlaylistModel from './Playlist';
+import PlaylistModel from './PlaylistModel';
 
 const defaultResults = 24;
 

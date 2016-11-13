@@ -2,7 +2,7 @@ const React = require('react');
 const _ = require('underscore');
 const VideoList = require('../components/video/list/VideoList');
 const Search = require('../components/search/Search');
-const SearchCollection = require('../models/SearchResults');
+const SearchCollection = require('../models/SearchResultsCollection');
 const Config = require('../Config');
 const storage = require('../utils/storage');
 
@@ -10,7 +10,7 @@ class ActivitiesModule extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onSearch', '_onSearchChannel', '_onCollectionSync', '_onFilterUpdate');
+        _.bindAll(this, '_onSearch', '_onSearchChannel', '_onFilterUpdate', '_onTagSelect');
 
         const filter = storage.get('activities.filter');
 
@@ -20,7 +20,6 @@ class ActivitiesModule extends React.Component {
         };
 
         this.searchCollection = new SearchCollection();
-        this.searchCollection.listenTo(this.searchCollection, 'sync', this._onCollectionSync);
     }
 
     render() {
@@ -29,16 +28,10 @@ class ActivitiesModule extends React.Component {
 
         return (
             <div className="module-activities">
-                <Search
-                    value={stateSearch}
-                    channel={stateChannel}
-                    onSearch={this._onSearch}
-                    onChannel={this._onSearchChannel}/>
-                <VideoList
-                    collection={this.searchCollection}
-                    channel={stateChannel}
-                    search={stateSearch}
-                />
+                <Search value={stateSearch} channel={stateChannel}
+                        onSearch={this._onSearch} onChannel={this._onSearchChannel}/>
+                <VideoList collection={this.searchCollection} onTagSelect={this._onTagSelect}
+                           channel={stateChannel} search={stateSearch}/>
             </div>
         );
     }
@@ -58,8 +51,8 @@ class ActivitiesModule extends React.Component {
         });
     }
 
-    _onCollectionSync() {
-
+    _onTagSelect(tagValue) {
+        this.setState({ search: tagValue });
     }
 }
 

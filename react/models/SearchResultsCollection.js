@@ -1,5 +1,5 @@
 import {Collection} from 'backbone';
-import SearchResult from './SearchResult';
+import SearchResult from './SearchResultModel';
 import Config from '../Config';
 import $ from 'jquery';
 
