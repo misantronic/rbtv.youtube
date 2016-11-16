@@ -21,8 +21,6 @@ class VideoListComponent extends React.Component {
 
         this.state = { collection };
 
-        this._refresh = _.debounce(() => this._fetch(true), 350);
-
         collection.listenTo(collection, 'sync reset', this._onCollectionUpdate);
     }
 
@@ -82,7 +80,7 @@ class VideoListComponent extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (this._shouldInvalidate(prevProps)) {
-            this._refresh();
+            this._fetch(true);
         }
     }
 
@@ -123,14 +121,20 @@ class VideoListComponent extends React.Component {
         const fetchedItems = collection.getFetchedItems ? collection.getFetchedItems() : collection;
         const videoIds = fetchedItems.map(item => item.get('videoId'));
 
+        if (videoIds.length === 0) return;
+
         videoCollection.setVideoIds(videoIds);
         videoCollection
             .fetch()
-            .then(() =>
-                videoCollection.each(videoModel =>
-                    this.setState({ ['video.' + videoModel.id]: videoModel })
-                )
-            );
+            .then(() => {
+                this.setState(
+                    videoCollection.reduce(function (memo, videoModel) {
+                        memo['video.' + videoModel.id] = videoModel;
+
+                        return memo;
+                    }, {})
+                );
+            });
     }
 
     _onFetchNext() {

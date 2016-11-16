@@ -3,6 +3,7 @@ const _ = require('underscore');
 const VideoList = require('../components/video/list/VideoList');
 const Search = require('../components/search/Search');
 const SearchCollection = require('../models/SearchResultsCollection');
+const AutocompleteCollection = require('../models/AutocompleteCollection');
 const Config = require('../Config');
 const storage = require('../utils/storage');
 
@@ -10,7 +11,7 @@ class ActivitiesModule extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onSearch', '_onSearchChannel', '_onFilterUpdate', '_onTagSelect');
+        _.bindAll(this, '_onSearch', '_onSearchChannel', '_onFilterUpdate');
 
         const filter = storage.get('activities.filter');
 
@@ -20,6 +21,7 @@ class ActivitiesModule extends React.Component {
         };
 
         this.searchCollection = new SearchCollection();
+        this.autocompleteCollection = new AutocompleteCollection();
     }
 
     render() {
@@ -28,16 +30,15 @@ class ActivitiesModule extends React.Component {
 
         return (
             <div className="module-activities">
-                <Search value={stateSearch} channel={stateChannel}
+                <Search value={stateSearch} channel={stateChannel} autocomplete={this.autocompleteCollection}
                         onSearch={this._onSearch} onChannel={this._onSearchChannel}/>
-                <VideoList collection={this.searchCollection} onTagSelect={this._onTagSelect}
-                           channel={stateChannel} search={stateSearch}/>
+                <VideoList collection={this.searchCollection} channel={stateChannel} search={stateSearch}/>
             </div>
         );
     }
 
-    _onSearch(search) {
-        this.setState({ search }, this._onFilterUpdate);
+    _onSearch(search, channel = this.state.channel) {
+        this.setState({ search, channel }, this._onFilterUpdate);
     }
 
     _onSearchChannel(channel) {
@@ -49,10 +50,6 @@ class ActivitiesModule extends React.Component {
             search: this.state.search,
             channel: this.state.channel
         });
-    }
-
-    _onTagSelect(tagValue) {
-        this.setState({ search: tagValue });
     }
 }
 

@@ -18,7 +18,9 @@ class ThumbComponent extends React.Component {
                         <a className="link" href={this.props.link} title={this.props.title}>{this.props.title}</a>
                         {badge}
                     </h3>
-                    <p className="description">{this.props.description}</p>
+                    <p className="description">
+                        {this.props.description.split('\n').map((item, i) => <span key={i}>{item}<br/></span>)}
+                    </p>
                 </div>
                 {this.props.children}
             </div>

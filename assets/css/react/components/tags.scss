@@ -1,10 +1,15 @@
 .component-tags {
     display: flex;
     justify-content: flex-end;
+    overflow: hidden;
 
     > .label {
         margin-left: 4px;
         opacity: 0.75;
         cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 }
