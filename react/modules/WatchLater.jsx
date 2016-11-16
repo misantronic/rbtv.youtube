@@ -5,6 +5,7 @@ const VideoCollection = require('../models/VideosCollection');
 const PlaylistCollection = require('../models/PlaylistsCollection');
 const VideoList = require('../components/video/list/VideoList');
 const Playlists = require('../components/playlists/Playlists');
+const BtnToTop = require('../components/commons/BtnToTop');
 const Config = require('../Config');
 
 class WatchLaterModule extends React.Component {
@@ -33,6 +34,7 @@ class WatchLaterModule extends React.Component {
                 <VideoList collection={this.videoCollection}/>
                 <h2>Playlist</h2>
                 <Playlists collection={this.playlistCollection} channels={channels} scrolling="false"/>
+                <BtnToTop/>
             </div>
         );
     }

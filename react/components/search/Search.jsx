@@ -135,9 +135,21 @@ class SearchComponent extends React.Component {
         const value = e.target.value;
 
         if (e.keyCode === 9) {
+            if(this.autocomplete.search(value)) {
+                e.preventDefault();
+            }
+        }
+
+        if (e.keyCode === 38) {
             e.preventDefault();
 
-            this.autocomplete.search(value);
+            this.autocomplete.prev();
+        }
+
+        if (e.keyCode === 40) {
+            e.preventDefault();
+
+            this.autocomplete.next();
         }
     }
 

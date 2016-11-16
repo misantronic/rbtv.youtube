@@ -1,5 +1,4 @@
 const React = require('react');
-const _ = require('underscore');
 const $ = require('jquery');
 
 class AutocompleteComponent extends React.Component {
@@ -7,8 +6,11 @@ class AutocompleteComponent extends React.Component {
         super(props);
 
         this.state = {
-            channel: null,
-            value: ''
+            search: '',     // search base-value from outside
+            channel: null,  // the channel being recommended
+            value: '',      // the value completing the search-value
+            index: 0,       // the current index in items
+            items: []       // filtered results of the search
         };
     }
 
@@ -19,13 +21,15 @@ class AutocompleteComponent extends React.Component {
         return (
             <div className="component-autocomplete"
                  ref={el => this.$autocomplete = $(el)}>
-                <span>{this.state.value}</span>
+                <span className={this.state.items.length > 1 ? 'is-cycling' : ''}>{this.state.value}</span>
                 <canvas ref={el => this.canvas = el} width="700" height="30"></canvas>
             </div>
         );
     }
 
     search(value) {
+        if (!this.state.value) return false;
+
         const search = value + this.state.value;
         const channel = this.state.channel;
 
@@ -34,26 +38,42 @@ class AutocompleteComponent extends React.Component {
 
             this.setState({ value: '' });
         }
+
+        return true;
     }
 
-    update(search) {
+    update(search = this.state.search) {
         let autocompleteItem = null;
+        let items = [];
+        let stateObj = {
+            index: 0,
+            value: '',
+            search: '',
+            channel: null,
+            items: []
+        };
 
         if (search !== '') {
-            const autocomplete = this.props.items.filter(item => new RegExp(search, 'i').test(item.get('title')));
+            items = this.props.items.filter(item => new RegExp('^' + search, 'i').test(item.get('title')));
 
-            autocompleteItem = _.first(autocomplete);
+            autocompleteItem = items[this.state.index];
         }
 
         const value = autocompleteItem ? autocompleteItem.get('title').replace(new RegExp(search, 'i'), '') : '';
         const channel = autocompleteItem ? autocompleteItem.get('channel') : null;
 
-        this.setState({ value, channel });
-
         if (this.$autocomplete) {
             this.$autocomplete.hide();
 
-            if (this.canvas && search.length > 2) {
+            if (this.canvas && search.length >= 2) {
+                stateObj = {
+                    search,
+                    value,
+                    channel,
+                    items,
+                    index: this.state.index
+                };
+
                 const ctx = this.canvas.getContext('2d');
 
                 ctx.clearRect(0, 0, 700, 30);
@@ -67,8 +87,27 @@ class AutocompleteComponent extends React.Component {
                     .show();
             }
         }
+
+        this.setState(stateObj);
     }
 
+    next() {
+        const items = this.state.items;
+        let index = this.state.index + 1;
+
+        if (!items[index]) index = 0;
+
+        this.setState({ index }, () => this.update());
+    }
+
+    prev() {
+        const items = this.state.items;
+        let index = this.state.index - 1;
+
+        if (!items[index]) index = items.length - 1;
+
+        this.setState({ index }, () => this.update());
+    }
 }
 
 module.exports = AutocompleteComponent;

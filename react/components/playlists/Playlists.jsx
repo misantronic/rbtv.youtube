@@ -1,5 +1,6 @@
 const React = require('react');
 const _ = require('underscore');
+const $ = require('jquery');
 const Config = require('../../Config');
 const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
@@ -10,7 +11,7 @@ class PlaylistsComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onFetchNext');
+        _.bindAll(this, '_onFetchNext', '_onItem');
 
         const collection = this.props.collection;
         const scrolling = this.props.scrolling;
@@ -30,20 +31,26 @@ class PlaylistsComponent extends React.Component {
 
     render() {
         const collection = this.state.collection;
+        let counter = 0;
 
         return (
             <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
                 <CollectionLoader collection={collection}>
                     <div className="component-playlists items">
-                        {collection.map(function (item) {
+                        {collection.map(function (item, i) {
+                            if (i % 20 === 0) counter = 0;
+
                             const id = item.id;
                             const title = item.get('title');
                             const desc = item.get('description');
                             const image = item.get('thumbnails').high.url;
                             const itemCount = item.get('itemCount');
+                            const className = 'item is-transparent item-t-' + counter;
+
+                            counter++;
 
                             return (
-                                <div key={id} className="item">
+                                <div key={id} className={className} ref={this._onItem}>
                                     <ThumbComponent
                                         link={'#/playlists/' + id}
                                         title={title}
@@ -54,7 +61,7 @@ class PlaylistsComponent extends React.Component {
                                     </ThumbComponent>
                                 </div>
                             );
-                        })}
+                        }, this)}
                     </div>
                 </CollectionLoader>
             </CollectionScrolling>
@@ -111,6 +118,10 @@ class PlaylistsComponent extends React.Component {
         if (this.props.scrolling === Infinity) {
             this._search(true);
         }
+    }
+
+    _onItem(el) {
+        _.delay(() => $(el).removeClass('is-transparent'), 0);
     }
 }
 

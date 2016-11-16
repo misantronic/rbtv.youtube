@@ -13,4 +13,21 @@
         left: -700px;
         top: -30px;
     }
+
+    .is-cycling {
+        &:after {
+            content: "\E252";
+            position: relative;
+            display: inline-block;
+            font-family: 'Glyphicons Halflings';
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            left: 4px;
+            top: -1px;
+            font-size: 8px;
+        }
+    }
 }

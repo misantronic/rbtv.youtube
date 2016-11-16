@@ -10,6 +10,39 @@
         @extend .col-xs-12;
         @extend .col-sm-4;
 
+        opacity: 1;
+        transition: opacity 150ms linear 850ms;
+
+        // Generate transition-step delays
+        @for $i from 0 through 8 {
+            &.item-t-#{$i} {
+                transition-delay: $i * 60ms;
+            }
+        }
+
+        &.is-transparent {
+            opacity: 0;
+        }
+
+        &.is-watched {
+            > .thumbnail > .link:before {
+                content: 'watched';
+                position: absolute;
+                left: 5px;
+                top: 5px;
+                text-transform: uppercase;
+                background: $gray-light;
+                color: #FFF;
+                padding: 3px 3px 1px 3px;
+                font-size: 10px;
+                z-index: 10;
+            }
+
+            .thumb {
+                opacity: 0.7;
+            }
+        }
+
         > .thumbnail {
             position: relative;
             background: #FFF;
@@ -43,25 +76,6 @@
 
             .description {
                 margin: 0;
-            }
-        }
-
-        &.is-watched {
-            > .thumbnail > .link:before {
-                content: 'watched';
-                position: absolute;
-                left: 5px;
-                top: 5px;
-                text-transform: uppercase;
-                background: $gray-light;
-                color: #FFF;
-                padding: 3px 3px 1px 3px;
-                font-size: 10px;
-                z-index: 10;
-            }
-
-            .thumb {
-                opacity: 0.7;
             }
         }
     }

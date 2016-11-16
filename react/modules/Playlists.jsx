@@ -2,6 +2,7 @@ const React = require('react');
 const _ = require('underscore');
 const Playlists = require('../components/playlists/Playlists');
 const Search = require('../components/search/Search');
+const BtnToTop = require('../components/commons/BtnToTop');
 const Collection = require('../models/PlaylistsCollection');
 const Config = require('../Config');
 
@@ -33,6 +34,7 @@ class PlaylistsModule extends React.Component {
                     collection={this.searchCollection}
                     channel={stateChannel}
                     search={stateSearch}/>
+                <BtnToTop/>
             </div>
         );
     }

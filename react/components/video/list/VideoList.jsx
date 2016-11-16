@@ -1,7 +1,7 @@
 const React = require('react');
 const _ = require('underscore');
+const $ = require('jquery');
 const moment = require('moment');
-const Backbone = require('backbone');
 const storage = require('../../../utils/storage');
 const CollectionLoader = require('../../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../../behaviors/CollectionScrolling');
@@ -15,7 +15,7 @@ class VideoListComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onCollectionUpdate', '_onFetchNext', '_onTagSelect');
+        _.bindAll(this, '_onCollectionUpdate', '_onFetchNext', '_onTagSelect', '_onItem');
 
         const collection = this.props.collection.clone();
 
@@ -30,12 +30,15 @@ class VideoListComponent extends React.Component {
 
     render() {
         const collection = this.state.collection;
+        let counter = 0;
 
         return (
             <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
                 <CollectionLoader collection={collection}>
                     <div className="component-videolist items">
-                        {collection.map(function (item) {
+                        {collection.map(function (item, i) {
+                            if (i % 30 === 0) counter = 0;
+
                             const videoId = item.get('videoId');
                             const image = item.get('thumbnails').high.url;
                             const description = item.get('description');
@@ -46,7 +49,7 @@ class VideoListComponent extends React.Component {
                             const videoInfo = storage.getVideoInfo(videoId);
                             let duration = '00:00';
                             let tags = [];
-                            let itemClassName = 'item';
+                            let itemClassName = 'item is-transparent item-t-' + counter;
 
                             if (videoModel) {
                                 duration = VideoModel.humanizeDuration(videoModel.get('duration'));
@@ -57,8 +60,10 @@ class VideoListComponent extends React.Component {
                                 itemClassName += ' is-watched';
                             }
 
+                            counter++;
+
                             return (
-                                <div className={itemClassName} key={item.id}>
+                                <div className={itemClassName} key={item.id} ref={this._onItem}>
                                     <ThumbComponent image={image} title={title} description={description} link={'#/video/' + videoId}
                                                     labelLeft={<span className="duration label label-default">{duration}</span>}
                                                     labelRight={<span className="publishedAt label label-default">{publishedAt.fromNow()}</span>}>
@@ -151,6 +156,10 @@ class VideoListComponent extends React.Component {
 
             this._fetch();
         }
+    }
+
+    _onItem(el) {
+        _.delay(() => $(el).removeClass('is-transparent'), 0);
     }
 
     _onCollectionUpdate() {

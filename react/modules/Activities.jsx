@@ -2,6 +2,7 @@ const React = require('react');
 const _ = require('underscore');
 const VideoList = require('../components/video/list/VideoList');
 const Search = require('../components/search/Search');
+const BtnToTop = require('../components/commons/BtnToTop');
 const SearchCollection = require('../models/SearchResultsCollection');
 const AutocompleteCollection = require('../models/AutocompleteCollection');
 const Config = require('../Config');
@@ -33,6 +34,7 @@ class ActivitiesModule extends React.Component {
                 <Search value={stateSearch} channel={stateChannel} autocomplete={this.autocompleteCollection}
                         onSearch={this._onSearch} onChannel={this._onSearchChannel}/>
                 <VideoList collection={this.searchCollection} channel={stateChannel} search={stateSearch}/>
+                <BtnToTop/>
             </div>
         );
     }
