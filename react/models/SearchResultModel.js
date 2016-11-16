@@ -20,11 +20,14 @@ const SearchResult = Model.extend({
     },
 
     parse(response) {
+        const id = response.contentDetails ? response.contentDetails.upload.videoId : response.id.videoId;
+        const kind = response.kind || response.id.kind;
+
         return {
-            id: response.id.videoId,
+            id,
+            kind,
+            videoId : id,
             etag: response.etag,
-            kind: response.id.kind,
-            videoId: response.id.videoId,
             channelId: response.snippet.channelId,
             description: response.snippet.description,
             publishedAt: moment(response.snippet.publishedAt),

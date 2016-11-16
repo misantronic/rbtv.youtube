@@ -57,9 +57,16 @@ const SearchResults = Collection.extend({
     },
 
     url() {
-        return Config.endpoints.search + '?' + $.param([
+        const q = this._q;
+        let endpoint = Config.endpoints.search;
+
+        if (q === '') {
+            endpoint = Config.endpoints.activities;
+        }
+
+        return endpoint + '?' + $.param([
                 { name: 'channelId', value: this._channelId },
-                { name: 'q', value: this._q },
+                { name: 'q', value: q },
                 { name: 'pageToken', value: this._nextPageToken }
             ]);
     },

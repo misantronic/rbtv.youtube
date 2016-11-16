@@ -3,7 +3,7 @@ var cache = require('../cache');
 
 module.exports = function (req, res) {
     var query = {
-        part: 'snippet,contentDetails',
+        part: 'snippet,contentDetails,id',
         maxResults: 30,
         channelId: req.query.channelId,
         pageToken: req.query.pageToken
