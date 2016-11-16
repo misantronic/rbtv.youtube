@@ -3,7 +3,7 @@ const Config = require('../Config');
 module.exports = [
     {
         title: 'MoinMoin',
-        expr: /^#{0,1}moi/i,
+        expr: /^moi/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3KZe3wbmAP2Tgn6rfhbDlBH'
     },
@@ -57,7 +57,7 @@ module.exports = [
     },
     {
         title: 'Panelz',
-        expr: /^panel/i,
+        expr: /^pan/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3I8ImSEa98WCr73iu3vjpn4'
     },
@@ -69,25 +69,25 @@ module.exports = [
     },
     {
         title: 'TheraThiel',
-        expr: /^th{0,1}er+a/i,
+        expr: /^ther/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3J1z9gC0kp9l7TfwSCSjCfe'
     },
     {
         title: 'Bohndesliga',
-        expr: /^bohn|fu(ss|ß)ball/i,
+        expr: /^bohn/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3IDcHQVTbGpfEdNexUFy_pb'
     },
     {
         title: 'Spiele mit Bart',
-        expr: /^spiele|bart/i,
+        expr: /^spiele/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3Ilo0vc3S5owjkmUV6XtH6T'
     },
     {
         title: 'RBTV News',
-        expr: /^news|rbtv/i,
+        expr: /^rbtv/i,
         channel: Config.channelRBTV,
         playlistId: 'PLsksxTH4pR3JVqDJW3C92GaX_mEwiAAKK'
     },

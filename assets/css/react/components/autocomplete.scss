@@ -6,4 +6,11 @@
     align-items: center;
     color: #CCC;
     pointer-events: none;
+
+    canvas {
+        display: none;
+        position: fixed;
+        left: -700px;
+        top: -30px;
+    }
 }
