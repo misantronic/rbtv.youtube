@@ -4,12 +4,12 @@ const _ = require('underscore');
 
 class CollectionScrolling extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         _.bindAll(this, '_onScroll', '_onCollectionSync', '_onCollectionRequest');
 
-        const collection = this.props.collection;
+        const collection = this.context.collection;
 
         collection.listenTo(collection, 'request', this._onCollectionRequest);
         collection.listenTo(collection, 'sync', this._onCollectionSync);
@@ -30,7 +30,7 @@ class CollectionScrolling extends React.Component {
     componentWillUnmount() {
         this._killScroll();
 
-        const collection = this.props.collection;
+        const collection = this.context.collection;
 
         collection.stopListening(collection, 'request', this._onCollectionRequest);
         collection.stopListening(collection, 'sync', this._onCollectionSync);
@@ -52,7 +52,7 @@ class CollectionScrolling extends React.Component {
 
     _update() {
         let limit = Number(this.props.limit) || 10;
-        const collection = this.props.collection;
+        const collection = this.context.collection;
 
         if (!collection._allModels) {
             collection._allModels = collection.models;
@@ -118,5 +118,9 @@ class CollectionScrolling extends React.Component {
         this._initScroll();
     }
 }
+
+CollectionScrolling.contextTypes = {
+    collection: React.PropTypes.object
+};
 
 module.exports = CollectionScrolling;

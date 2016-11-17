@@ -29,12 +29,16 @@ class PlaylistsComponent extends React.Component {
      * Lifecycle methods
      */
 
+    getChildContext() {
+        return { collection: this.state.collection };
+    }
+
     render() {
         const collection = this.state.collection;
 
         return (
-            <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
-                <CollectionLoader collection={collection}>
+            <CollectionScrolling onUpdate={this._onFetchNext}>
+                <CollectionLoader>
                     <div className="component-playlists items">
                         {collection.map(function (item, i) {
                             const id = item.id;
@@ -123,6 +127,10 @@ PlaylistsComponent.defaultProps = {
     channels: [],
     limit: 21,
     scrolling: Infinity
+};
+
+PlaylistsComponent.childContextTypes = {
+    collection: React.PropTypes.object
 };
 
 module.exports = PlaylistsComponent;

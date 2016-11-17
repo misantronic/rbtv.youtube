@@ -28,13 +28,17 @@ class VideoListComponent extends React.Component {
      * Lifecycle methods
      */
 
+    getChildContext() {
+        return { collection: this.state.collection };
+    }
+
     render() {
         const collection = this.state.collection;
         let counter = 0;
 
         return (
-            <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
-                <CollectionLoader collection={collection}>
+            <CollectionScrolling onUpdate={this._onFetchNext}>
+                <CollectionLoader>
                     <div className="component-videolist items">
                         {collection.map(function (item, i) {
                             if (i % 30 === 0) counter = 0;
@@ -177,6 +181,10 @@ VideoListComponent.propTypes = {
     collection: React.PropTypes.object,
     channel: React.PropTypes.string,
     search: React.PropTypes.string
+};
+
+VideoListComponent.childContextTypes = {
+    collection: React.PropTypes.object
 };
 
 module.exports = VideoListComponent;

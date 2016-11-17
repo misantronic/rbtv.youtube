@@ -3,8 +3,8 @@ const _ = require('underscore');
 const Loader = require('./../components/loader/Loader');
 
 class CollectionLoader extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             loading: false
@@ -12,7 +12,7 @@ class CollectionLoader extends React.Component {
 
         _.bindAll(this, '_onCollectionRequest', '_onCollectionSync');
 
-        const collection = this.props.collection;
+        const collection = this.context.collection;
 
         collection.listenTo(collection, 'request', this._onCollectionRequest);
         collection.listenTo(collection, 'sync', this._onCollectionSync);
@@ -28,7 +28,7 @@ class CollectionLoader extends React.Component {
     }
 
     componentWillUnmount() {
-        const collection = this.props.collection;
+        const collection = this.context.collection;
 
         if (collection) {
             collection.stopListening('request', this._onCollectionRequest);
@@ -44,5 +44,9 @@ class CollectionLoader extends React.Component {
         this.setState({ loading: false });
     }
 }
+
+CollectionLoader.contextTypes = {
+    collection: React.PropTypes.object
+};
 
 module.exports = CollectionLoader;
