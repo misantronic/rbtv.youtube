@@ -11,7 +11,7 @@ class PlaylistsComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onFetchNext', '_onItem');
+        _.bindAll(this, '_onFetchNext');
 
         const collection = this.props.collection;
         const scrolling = this.props.scrolling;
@@ -19,7 +19,7 @@ class PlaylistsComponent extends React.Component {
         const channels = this.props.channels;
 
         this.state = {
-            collection: collection.clone(),
+            collection,
             limit: scrolling === Infinity ? limit : Infinity,
             channels
         };
@@ -31,26 +31,21 @@ class PlaylistsComponent extends React.Component {
 
     render() {
         const collection = this.state.collection;
-        let counter = 0;
 
         return (
             <CollectionScrolling collection={collection} onUpdate={this._onFetchNext}>
                 <CollectionLoader collection={collection}>
                     <div className="component-playlists items">
                         {collection.map(function (item, i) {
-                            if (i % 20 === 0) counter = 0;
-
                             const id = item.id;
                             const title = item.get('title');
                             const desc = item.get('description');
                             const image = item.get('thumbnails').high.url;
                             const itemCount = item.get('itemCount');
-                            const className = 'item is-transparent item-t-' + counter;
-
-                            counter++;
+                            const className = 'item';
 
                             return (
-                                <div key={id} className={className} ref={this._onItem}>
+                                <div key={id} className={className}>
                                     <ThumbComponent
                                         link={'#/playlists/' + id}
                                         title={title}
@@ -107,6 +102,7 @@ class PlaylistsComponent extends React.Component {
             search: this.props.search,
             channelRBTV: _.contains(channels, Config.channelRBTV),
             channelLP: _.contains(channels, Config.channelLP),
+            channelG2: _.contains(channels, Config.channelG2),
             limit: this.state.limit,
             add
         });
@@ -118,10 +114,6 @@ class PlaylistsComponent extends React.Component {
         if (this.props.scrolling === Infinity) {
             this._search(true);
         }
-    }
-
-    _onItem(el) {
-        _.delay(() => $(el).removeClass('is-transparent'), 0);
     }
 }
 

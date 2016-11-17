@@ -1,5 +1,6 @@
 var fetch = require('../fetch');
 var cache = require('../cache');
+var _ = require('underscore');
 
 module.exports = function (req, res) {
     var query = {
@@ -20,6 +21,8 @@ module.exports = function (req, res) {
     });
 
     fetch(config).then(function (result) {
+        result.data.items = _.filter(result.data.items, item => item.snippet.type === 'upload');
+
         fetch.end(res, result.data);
     });
 };

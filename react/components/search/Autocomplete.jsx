@@ -10,7 +10,8 @@ class AutocompleteComponent extends React.Component {
             channel: null,  // the channel being recommended
             value: '',      // the value completing the search-value
             index: 0,       // the current index in items
-            items: []       // filtered results of the search
+            items: [],      // filtered results of the search
+            locked: false
         };
     }
 
@@ -27,6 +28,34 @@ class AutocompleteComponent extends React.Component {
         );
     }
 
+    /** @returns {boolean} */
+    hasValue() {
+        return !!this.state.value;
+    }
+
+    isLocked() {
+        return this.state.locked;
+    }
+
+    reset() {
+        this.setState({
+            index: 0,
+            value: '',
+            search: '',
+            channel: null,
+            isCycling: false,
+            items: []
+        });
+    }
+
+    lock() {
+        this.setState({ locked: true });
+    }
+
+    unlock() {
+        this.setState({ locked: false });
+    }
+
     search(value) {
         if (!this.state.value) return false;
 
@@ -36,7 +65,7 @@ class AutocompleteComponent extends React.Component {
         if (value) {
             this.props.onSelect(search, channel);
 
-            this.setState({ value: '' });
+            this.reset();
         }
 
         return true;
@@ -45,13 +74,7 @@ class AutocompleteComponent extends React.Component {
     update(search = this.state.search) {
         let autocompleteItem = null;
         let items = [];
-        let stateObj = {
-            index: 0,
-            value: '',
-            search: '',
-            channel: null,
-            items: []
-        };
+        let stateObj = false;
 
         if (search !== '') {
             items = this.props.items.filter(item => new RegExp('^' + search, 'i').test(item.get('title')));
@@ -60,7 +83,7 @@ class AutocompleteComponent extends React.Component {
         }
 
         const value = autocompleteItem ? autocompleteItem.get('title').replace(new RegExp(search, 'i'), '') : '';
-        const channel = autocompleteItem ? autocompleteItem.get('channel') : null;
+        const channel = autocompleteItem ? autocompleteItem.get('channel') || autocompleteItem.get('channelId') : null;
 
         if (this.$autocomplete) {
             this.$autocomplete.hide();
@@ -88,7 +111,9 @@ class AutocompleteComponent extends React.Component {
             }
         }
 
-        this.setState(stateObj);
+        stateObj
+            ? this.setState(stateObj)
+            : this.reset();
     }
 
     next() {

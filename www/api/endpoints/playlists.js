@@ -66,9 +66,10 @@ module.exports = function (req, res) {
                 // Fetch all playlists
                 Promise.all([
                     initRequest('UCQvTDmHza8erxZqDkjQ4bQQ'),
-                    initRequest('UCtSP1OA6jO4quIGLae7Fb4g')
+                    initRequest('UCtSP1OA6jO4quIGLae7Fb4g'),
+                    initRequest('UCFBapHA35loZ3KZwT_z3BsQ')
                 ]).then(requestResult => {
-                    output.items = output.items.concat(requestResult[0], requestResult[1]);
+                    output.items = output.items.concat(requestResult[0], requestResult[1], requestResult[2]);
 
                     var outputStr = JSON.stringify(output);
 

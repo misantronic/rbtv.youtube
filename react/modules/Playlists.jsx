@@ -18,6 +18,11 @@ class PlaylistsModule extends React.Component {
         };
 
         this.searchCollection = new Collection();
+        this.autocompleteCollection = new Collection();
+
+        this.searchCollection.listenTo(this.searchCollection, 'sync', () => {
+            this.autocompleteCollection.reset(this.searchCollection.models);
+        });
     }
 
     render() {
@@ -29,7 +34,8 @@ class PlaylistsModule extends React.Component {
                 <Search
                     value={stateSearch}
                     onSearch={this._onSearch}
-                    onChannel={this._onSearchChannel}/>
+                    onChannel={this._onSearchChannel}
+                    autocomplete={this.autocompleteCollection}/>
                 <Playlists
                     collection={this.searchCollection}
                     channel={stateChannel}
@@ -39,8 +45,8 @@ class PlaylistsModule extends React.Component {
         );
     }
 
-    _onSearch(search) {
-        this.setState({ search });
+    _onSearch(search, channel = this.state.channel) {
+        this.setState({ search, channel });
     }
 
     _onSearchChannel(channel) {

@@ -8,7 +8,7 @@ class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onChange', '_onChannelRBTV', '_onChannelLP', '_onSubmit', '_onKeyDown', '_onSelectAutocomplete');
+        _.bindAll(this, '_onChange', '_onChannelRBTV', '_onChannelLP', '_onChannelG2', '_onSubmit', '_onKeyDown', '_onSelectAutocomplete');
 
         this._searchTimeout = 0;
 
@@ -22,6 +22,7 @@ class SearchComponent extends React.Component {
     render() {
         let classNameRBTV = 'btn btn-default';
         let classNameLP = 'btn btn-default';
+        let classNameG2 = 'btn btn-default';
 
         if (this.state.channel === Config.channelRBTV) {
             classNameRBTV += ' active';
@@ -29,6 +30,10 @@ class SearchComponent extends React.Component {
 
         if (this.state.channel === Config.channelLP) {
             classNameLP += ' active';
+        }
+
+        if (this.state.channel === Config.channelG2) {
+            classNameG2 += ' active';
         }
 
         /** @type {AutocompleteComponent} */
@@ -57,6 +62,10 @@ class SearchComponent extends React.Component {
                     <button type="button" className={classNameLP} onClick={this._onChannelLP}>
                         <span className="hidden-xs">Let`s Play</span>
                         <span className="visible-xs-inline">LP</span>
+                    </button>
+                    <button type="button" className={classNameG2} onClick={this._onChannelG2}>
+                        <span className="hidden-xs">Game Two</span>
+                        <span className="visible-xs-inline">G2</span>
                     </button>
                 </div>
             </form>
@@ -99,6 +108,8 @@ class SearchComponent extends React.Component {
                 return 'Rocketbeans TV durchsuchen...';
             case Config.channelLP:
                 return 'Let\'s Plays durchsuchen...';
+            case Config.channelG2:
+                return 'Game Two durchsuchen...';
             default:
                 return 'Suche...';
         }
@@ -122,8 +133,10 @@ class SearchComponent extends React.Component {
         // Update state
         this.setState({ value });
 
-        // Update autocomplete
-        this.autocomplete.update(value);
+        if (!this.autocomplete.isLocked()) {
+            // Update autocomplete
+            this.autocomplete.update(value);
+        }
 
         // Refetch when value is empty
         if (value === '') {
@@ -133,23 +146,35 @@ class SearchComponent extends React.Component {
 
     _onKeyDown(e) {
         const value = e.target.value;
+        const keyCode = e.keyCode;
 
-        if (e.keyCode === 9) {
-            if(this.autocomplete.search(value)) {
+        if (keyCode === 9) { // tab
+            if (this.autocomplete.search(value)) {
                 e.preventDefault();
             }
         }
 
-        if (e.keyCode === 38) {
+        if (keyCode === 38) { // key up
             e.preventDefault();
 
             this.autocomplete.prev();
         }
 
-        if (e.keyCode === 40) {
+        if (keyCode === 40) { // key down
             e.preventDefault();
 
             this.autocomplete.next();
+        }
+
+        if (keyCode === 8) { // backspace
+            this.autocomplete.reset();
+            this.autocomplete.lock();
+
+            if (this.autocomplete.hasValue()) {
+                e.preventDefault();
+            }
+        } else {
+            this.autocomplete.unlock();
         }
     }
 
@@ -160,13 +185,15 @@ class SearchComponent extends React.Component {
             stateObj.channel = channel;
         }
 
-        this.setState(stateObj);
-
-        this._search(value, channel, 0);
+        this.setState(stateObj, () => this._search(value, channel, 0));
     }
 
     _onSubmit(e) {
-        this._search(this.state.value);
+        const value = this.state.value;
+
+        this.autocomplete.hasValue()
+            ? this.autocomplete.search(value)
+            : this._search(value);
 
         e.preventDefault();
     }
@@ -183,6 +210,16 @@ class SearchComponent extends React.Component {
 
     _onChannelLP() {
         const channel = Config.channelLP;
+
+        this.setState({ channel });
+
+        if (this.props.onChannel) {
+            this.props.onChannel(channel);
+        }
+    }
+
+    _onChannelG2() {
+        const channel = Config.channelG2;
 
         this.setState({ channel });
 

@@ -54,56 +54,7 @@ const Playlists = Collection.extend({
         return this;
     },
 
-    search({ search, rbtv, lp, increaseResults, resetResults }) {
-        if (!this._allModels) {
-            this._allModels = this.models;
-        }
-
-        let models = _.filter(this._allModels, model => {
-            const channelId = model.get('channelId');
-            const title = model.get('title');
-
-            if (!rbtv && !lp) {
-                return false;
-            }
-
-            if (rbtv && !lp && channelId !== Config.channelRBTV) {
-                return false;
-            }
-
-            if (lp && !rbtv && channelId !== Config.channelLP) {
-                return false;
-            }
-
-            return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
-        });
-
-        if (increaseResults) {
-            this._displayResults += defaultResults;
-        }
-
-        if (resetResults) {
-            this._displayResults = defaultResults;
-        }
-
-        const prevNumModels = this.models.length;
-
-        // Reset collection when not increasing
-        if (!increaseResults) {
-            this.reset();
-        }
-
-        // Add models to collection if:
-        // 1. collection is normally filtered
-        // 2. number of models is increased while scrolling
-        if (!increaseResults || increaseResults && models.length !== prevNumModels) {
-            models = _.offset(models, 0, this._displayResults);
-
-            this.add(models);
-        }
-    },
-
-    filterBy({ search, channelRBTV, channelLP, limit, add }) {
+    filterBy({ search, channelRBTV, channelLP, channelG2, limit, add }) {
         if (!this._allModels) {
             this._allModels = this.models;
         }
@@ -124,15 +75,19 @@ const Playlists = Collection.extend({
             const channelId = model.get('channelId');
             const title = model.get('title');
 
-            if (!channelRBTV && !channelLP) {
+            if (!channelRBTV && !channelLP && !channelG2) {
                 return false;
             }
 
-            if (channelRBTV && !channelLP && channelId !== Config.channelRBTV) {
+            if (channelRBTV && !channelLP && !channelG2 && channelId !== Config.channelRBTV) {
                 return false;
             }
 
-            if (channelLP && !channelRBTV && channelId !== Config.channelLP) {
+            if (channelLP && !channelRBTV && !channelG2 && channelId !== Config.channelLP) {
+                return false;
+            }
+
+            if (channelG2 && !channelRBTV && !channelLP && channelId !== Config.channelG2) {
                 return false;
             }
 

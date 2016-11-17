@@ -131,5 +131,16 @@ module.exports = [
         expr: /^te/i,
         channel: Config.channelLP,
         playlistId: 'PLfU2RMxoOiSCT4dEz-KxCi7kqiN6YQnCS'
+    },
+    {
+        title: 'Wir müssen reden',
+        expr: /^wi/i,
+        channel: Config.channelRBTV,
+        playlistId: 'PLsksxTH4pR3K77xBcusJB9hmjUyodWdUo'
+    },
+    {
+        title: 'Game Two',
+        expr: /^ga/i,
+        channel: Config.channelG2
     }
 ];
