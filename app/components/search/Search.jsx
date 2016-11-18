@@ -1,4 +1,5 @@
 const React = require('react');
+const Select = require('react-select');
 const _ = require('underscore');
 const $ = require('jquery');
 const Config = require('../../Config');
@@ -22,6 +23,7 @@ class SearchComponent extends React.Component {
     render() {
         /** @type {AutocompleteComponent} */
         this.autocomplete = null;
+        this.select = null;
 
         return (
             <form className="component-search search-container" onSubmit={this._onSubmit}>
@@ -38,16 +40,13 @@ class SearchComponent extends React.Component {
                             onSelect={this._onSelectAutocomplete}/>
                     </label>
                 </div>
-                <div className="btn-group filter-buttons" role="group">
-                    {_.map(Config.channels, function (channel) {
-                        return (
-                            <button key={channel.id} type="button" className={'btn btn-default' + (this.state.channel === channel.id ? ' active' : '')} onClick={() => this._onChannelSelect(channel)}>
-                                <span className="hidden-xs">{channel.name}</span>
-                                <span className="visible-xs-inline">{channel.short}</span>
-                            </button>
-                        );
-                    }, this)}
-                </div>
+                <Select
+                    clearable={false}
+                    searchable={false}
+                    value={this.state.channel}
+                    options={_.map(Config.channels, channel => ({ value: channel.id, label: channel.name }))}
+                    onChange={this._onChannelSelect}
+                />
             </form>
         );
     }
@@ -174,11 +173,13 @@ class SearchComponent extends React.Component {
         e.preventDefault();
     }
 
-    _onChannelSelect(channel) {
-        this.setState({ channel: channel.id });
+    _onChannelSelect(option) {
+        const channelId = option.value;
+
+        this.setState({ channel: channelId });
 
         if (this.props.onChannel) {
-            this.props.onChannel(channel.id);
+            this.props.onChannel(channelId);
         }
     }
 }

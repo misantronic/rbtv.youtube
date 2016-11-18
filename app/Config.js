@@ -39,6 +39,11 @@ module.exports = {
             name: 'Game Two',
             short: 'G2',
             id: 'UCFBapHA35loZ3KZwT_z3BsQ'
+        },
+        sc: {
+            name: 'Inside PlayStation',
+            short: 'Inside PS',
+            id: 'UCP6gDeEEOVpKgzywJ8pfiRw'
         }
     },
 

@@ -17,7 +17,8 @@ module.exports = {
             __dirname + '/node_modules/bootstrap/js/transition',
             'react',
             'react-dom',
-            'react-router'
+            'react-router',
+            'react-select'
         ],
         application: __dirname + '/app/main.jsx'
     },

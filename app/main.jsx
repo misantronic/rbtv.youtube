@@ -17,6 +17,7 @@ const Live = require('./modules/Live');
 require('./utils/youtubeController').init();
 require('./overrides/underscore');
 
+require('react-select/dist/react-select.css');
 require('../assets/css/react/_deps.scss');
 require('../assets/css/react/_package.scss');
 

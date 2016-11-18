@@ -1,0 +1,13 @@
+.Select {
+    flex: 0 0 160px;
+}
+
+.Select-control {
+    border-radius: 0;
+    border-color: #CCC;
+
+    .is-focused:not(.is-open) & {
+        box-shadow: none;
+        border-color: #CCC;
+    }
+}
