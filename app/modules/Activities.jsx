@@ -18,7 +18,7 @@ class ActivitiesModule extends React.Component {
 
         this.state = {
             search: filter.search || '',
-            channel: filter.channel || Config.channelRBTV
+            channel: filter.channel || Config.channels.rbtv.id
         };
 
         this.searchCollection = new SearchCollection();

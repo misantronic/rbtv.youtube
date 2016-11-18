@@ -1,8 +1,8 @@
-var HtmlWebpackPlugin  = require('html-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var webpack = require('webpack');
+const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
-var NODE_ENV = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV;
 
 module.exports = {
     entry: {
@@ -58,7 +58,12 @@ module.exports = {
             inject: true
         }),
 
-        new CleanWebpackPlugin(['public'])
+        new CleanWebpackPlugin(['public']),
+
+        new webpack.DefinePlugin({
+            LIVE_ID: JSON.stringify(process.env.LIVE_ID),
+            YT_KEY: JSON.stringify(process.env.YT_KEY)
+        })
     ],
 
     module: {

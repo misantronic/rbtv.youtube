@@ -21,7 +21,7 @@ class VideoDetailsComponent extends React.Component {
 
     render() {
         const model = this.state.videoModel;
-        const videoId = model.id;
+        const videoId = model.id || null;
         const title = model.get('title');
         const desc = model.get('description');
         const publishedAt = model.get('publishedAt');

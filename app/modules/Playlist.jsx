@@ -40,7 +40,21 @@ class PlaylistModule extends React.Component {
         );
     }
 
-    _selectItem(item = null, autoplay = false) {
+    componentDidUpdate(prevProps) {
+        const videoId = this.props.routeParams.videoId;
+
+        if (prevProps.routeParams.videoId !== videoId) {
+            this.setState({ videoId });
+        }
+    }
+
+    componentWillUnmount() {
+        const collection = this.state.collection;
+
+        collection.stopListening(collection, 'react:update');
+    }
+
+    _selectItem(item = null, autoplay = false, routerMethod = 'push') {
         const collection = this.state.collection;
         const playlistId = this.state.playlistId;
 
@@ -55,14 +69,14 @@ class PlaylistModule extends React.Component {
             videoId
         });
 
-        this.props.router.push(`playlists/${playlistId}/video/${videoId}`);
+        this.props.router[routerMethod](`playlists/${playlistId}/video/${videoId}`);
     }
 
     _onFetch(collection) {
         const videoId = this.state.videoId;
 
         if (!videoId) {
-            this._selectItem(collection.first());
+            this._selectItem(collection.first(), false, 'replace');
         }
     }
 }

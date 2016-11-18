@@ -2,7 +2,7 @@ const React = require('react');
 const _ = require('underscore');
 const watchlist = require('../utils/watchlist');
 const VideoCollection = require('../datasource/collections/VideosCollection');
-const PlaylistCollection = require('../datasource/models/PlaylistsCollection');
+const PlaylistCollection = require('../datasource/collections/PlaylistsCollection');
 const VideoList = require('../components/video/list/VideoList');
 const Playlists = require('../components/playlists/Playlists');
 const BtnToTop = require('../components/commons/BtnToTop');
@@ -24,8 +24,9 @@ class WatchLaterModule extends React.Component {
 
     render() {
         const channels = [
-            Config.channelRBTV,
-            Config.channelLP
+            Config.channels.rbtv.id,
+            Config.channels.lp.id,
+            Config.channels.g2.id
         ];
 
         return (

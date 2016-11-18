@@ -2,7 +2,7 @@ const _ = require('underscore');
 const $ = require('jquery');
 const Collection = require('backbone').Collection;
 const Config = require('../../Config');
-const PlaylistModel = require('./PlaylistModel');
+const PlaylistModel = require('./../models/PlaylistModel');
 
 const defaultResults = 24;
 
@@ -32,6 +32,8 @@ const Playlists = Collection.extend({
     },
 
     parse(response) {
+        this._allModels = null;
+
         return response.items;
     },
 
@@ -54,7 +56,7 @@ const Playlists = Collection.extend({
         return this;
     },
 
-    filterBy({ search, channelRBTV, channelLP, channelG2, limit, add }) {
+    filterBy({ search, channels, limit, add }) {
         if (!this._allModels) {
             this._allModels = this.models;
         }
@@ -75,26 +77,13 @@ const Playlists = Collection.extend({
             const channelId = model.get('channelId');
             const title = model.get('title');
 
-            if (!channelRBTV && !channelLP && !channelG2) {
-                return false;
-            }
-
-            if (channelRBTV && !channelLP && !channelG2 && channelId !== Config.channelRBTV) {
-                return false;
-            }
-
-            if (channelLP && !channelRBTV && !channelG2 && channelId !== Config.channelLP) {
-                return false;
-            }
-
-            if (channelG2 && !channelRBTV && !channelLP && channelId !== Config.channelG2) {
-                return false;
-            }
+            if (!_.contains(channels, channelId)) return false;
 
             return title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
         });
 
-        this.models = _.offset(models, 0, limit);
+        // this.models = _.offset(models, 0, limit);
+        this.reset(_.offset(models, 0, limit));
 
         if (add) {
             this.trigger('sync');

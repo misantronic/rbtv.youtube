@@ -1,11 +1,12 @@
-var _ = require('underscore');
-var param = require('node-jquery-param');
-var Promise = require('promise');
-var moment = require('moment');
-var fetch = require('./../fetch');
-var cache = require('../cache');
-var dbGetPlaylists = require('../../db/playlists/getPlaylists');
-var dbSavePlaylist = require('../../db/playlists/savePlaylist');
+const _ = require('underscore');
+const param = require('node-jquery-param');
+const Promise = require('promise');
+const moment = require('moment');
+const fetch = require('./../fetch');
+const cache = require('../cache');
+const Config = require('../../../app/Config');
+const dbGetPlaylists = require('../../db/playlists/getPlaylists');
+const dbSavePlaylist = require('../../db/playlists/savePlaylist');
 
 function initRequest(channelId) {
     var items = [];
@@ -14,7 +15,7 @@ function initRequest(channelId) {
         function performRequest(pageToken) {
             pageToken = pageToken || '';
 
-            var config = new fetch.Config({
+            const config = new fetch.Config({
                 endpoint: 'playlists',
                 query: {
                     part: 'snippet,contentDetails',
@@ -25,7 +26,7 @@ function initRequest(channelId) {
             });
 
             fetch(config).then(result => {
-                var data = result.data;
+                const data = result.data;
 
                 items = items.concat(data.items);
 
@@ -44,13 +45,13 @@ function initRequest(channelId) {
 
 module.exports = function (req, res) {
 
-    var output = { items: [] };
+    const output = { items: [] };
 
-    var playlistIds = req.query.id ? req.query.id.split(',') : null;
-    var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache === 'true';
+    const playlistIds = req.query.id ? req.query.id.split(',') : null;
+    const fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache === 'true';
 
     function getAllPlaylists() {
-        var cacheConfig = new cache.Config(
+        const cacheConfig = new cache.Config(
             cache.rk('playlists'),
             60 * 60 * 24
         );
@@ -63,15 +64,13 @@ module.exports = function (req, res) {
                     return;
                 }
 
-                // Fetch all playlists
-                Promise.all([
-                    initRequest('UCQvTDmHza8erxZqDkjQ4bQQ'),
-                    initRequest('UCtSP1OA6jO4quIGLae7Fb4g'),
-                    initRequest('UCFBapHA35loZ3KZwT_z3BsQ')
-                ]).then(requestResult => {
-                    output.items = output.items.concat(requestResult[0], requestResult[1], requestResult[2]);
+                const requests = _.map(Config.channels, channel => initRequest(channel.id));
 
-                    var outputStr = JSON.stringify(output);
+                // Fetch all playlists
+                Promise.all(requests).then(requestResult => {
+                    output.items = output.items.concat(...requestResult);
+
+                    const outputStr = JSON.stringify(output);
 
                     // Done
                     fetch.end(res, outputStr);
@@ -87,13 +86,13 @@ module.exports = function (req, res) {
 
         dbGetPlaylists(playlistIds, fromCache)
             .then(result => {
-                var itemsFromDB = result.itemsFromDB;
-                var itemsNotFound = result.itemsNotFound;
+                const itemsFromDB = result.itemsFromDB;
+                const itemsNotFound = result.itemsNotFound;
 
                 console.timeEnd('Mongo: getPlaylists()');
                 console.log('-> Found:', itemsFromDB.length + ', Not found:', itemsNotFound.length);
 
-                var config = new fetch.Config({
+                const config = new fetch.Config({
                     endpoint: 'playlists',
                     query: {
                         part: 'snippet,contentDetails,status',
@@ -110,7 +109,7 @@ module.exports = function (req, res) {
                 }
 
                 fetch(config).then(result => {
-                    var fromCache = result.fromCache;
+                    const fromCache = result.fromCache;
 
                     output.items = result.data.items.concat(itemsFromDB);
 

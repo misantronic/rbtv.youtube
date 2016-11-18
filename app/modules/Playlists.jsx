@@ -3,7 +3,7 @@ const _ = require('underscore');
 const Playlists = require('../components/playlists/Playlists');
 const Search = require('../components/search/Search');
 const BtnToTop = require('../components/commons/BtnToTop');
-const Collection = require('../datasource/models/PlaylistsCollection');
+const Collection = require('../datasource/collections/PlaylistsCollection');
 const Config = require('../Config');
 
 class PlaylistsModule extends React.Component {
@@ -14,15 +14,13 @@ class PlaylistsModule extends React.Component {
 
         this.state = {
             search: '',
-            channel: Config.channelRBTV
+            channel: Config.channels.rbtv.id
         };
 
         this.searchCollection = new Collection();
         this.autocompleteCollection = new Collection();
 
-        this.searchCollection.listenTo(this.searchCollection, 'sync', () => {
-            this.autocompleteCollection.reset(this.searchCollection.models);
-        });
+        this.searchCollection.listenTo(this.searchCollection, 'sync', () => this.autocompleteCollection.reset(this.searchCollection.models));
     }
 
     render() {
@@ -38,11 +36,15 @@ class PlaylistsModule extends React.Component {
                     autocomplete={this.autocompleteCollection}/>
                 <Playlists
                     collection={this.searchCollection}
-                    channel={stateChannel}
+                    channels={[stateChannel]}
                     search={stateSearch}/>
                 <BtnToTop/>
             </div>
         );
+    }
+
+    componentWillUnmount() {
+        this.searchCollection.stopListening(this.searchCollection, 'sync');
     }
 
     _onSearch(search, channel = this.state.channel) {

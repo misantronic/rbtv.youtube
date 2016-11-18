@@ -83,7 +83,7 @@ class PlaylistsComponent extends React.Component {
 
     _shouldInvalidate(props) {
         return props.search !== this.props.search ||
-            props.channel !== this.props.channel;
+            props.channels !== this.props.channels;
     }
 
     _fetch() {
@@ -96,17 +96,10 @@ class PlaylistsComponent extends React.Component {
 
     _search(add = false) {
         const collection = this.state.collection;
-        const channels = this.state.channels.slice(0);
-
-        if (channels.length === 0) {
-            channels.push(this.props.channel);
-        }
 
         collection.filterBy({
             search: this.props.search,
-            channelRBTV: _.contains(channels, Config.channelRBTV),
-            channelLP: _.contains(channels, Config.channelLP),
-            channelG2: _.contains(channels, Config.channelG2),
+            channels: this.props.channels,
             limit: this.state.limit,
             add
         });
@@ -123,8 +116,7 @@ class PlaylistsComponent extends React.Component {
 
 PlaylistsComponent.defaultProps = {
     search: '',
-    channel: Config.channelRBTV,
-    channels: [],
+    channels: [ Config.channels.rbtv.id ],
     limit: 21,
     scrolling: Infinity
 };

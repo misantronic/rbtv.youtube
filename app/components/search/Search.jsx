@@ -8,34 +8,18 @@ class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onChange', '_onChannelRBTV', '_onChannelLP', '_onChannelG2', '_onSubmit', '_onKeyDown', '_onSelectAutocomplete');
+        _.bindAll(this, '_onChange', '_onChannelSelect', '_onSubmit', '_onKeyDown', '_onSelectAutocomplete');
 
         this._searchTimeout = 0;
 
         this.state = {
             value: props.value || '',
-            channel: props.channel || Config.channelRBTV,
+            channel: props.channel || Config.channels.rbtv.id,
             placeholder: this._getPlaceholder()
         };
     }
 
     render() {
-        let classNameRBTV = 'btn btn-default';
-        let classNameLP = 'btn btn-default';
-        let classNameG2 = 'btn btn-default';
-
-        if (this.state.channel === Config.channelRBTV) {
-            classNameRBTV += ' active';
-        }
-
-        if (this.state.channel === Config.channelLP) {
-            classNameLP += ' active';
-        }
-
-        if (this.state.channel === Config.channelG2) {
-            classNameG2 += ' active';
-        }
-
         /** @type {AutocompleteComponent} */
         this.autocomplete = null;
 
@@ -55,18 +39,14 @@ class SearchComponent extends React.Component {
                     </label>
                 </div>
                 <div className="btn-group filter-buttons" role="group">
-                    <button type="button" className={classNameRBTV} onClick={this._onChannelRBTV}>
-                        <span className="hidden-xs">Rocket Beans TV</span>
-                        <span className="visible-xs-inline">RBTV</span>
-                    </button>
-                    <button type="button" className={classNameLP} onClick={this._onChannelLP}>
-                        <span className="hidden-xs">Let`s Play</span>
-                        <span className="visible-xs-inline">LP</span>
-                    </button>
-                    <button type="button" className={classNameG2} onClick={this._onChannelG2}>
-                        <span className="hidden-xs">Game Two</span>
-                        <span className="visible-xs-inline">G2</span>
-                    </button>
+                    {_.map(Config.channels, function (channel) {
+                        return (
+                            <button key={channel.id} type="button" className={'btn btn-default' + (this.state.channel === channel.id ? ' active' : '')} onClick={() => this._onChannelSelect(channel)}>
+                                <span className="hidden-xs">{channel.name}</span>
+                                <span className="visible-xs-inline">{channel.short}</span>
+                            </button>
+                        );
+                    }, this)}
                 </div>
             </form>
         );
@@ -101,18 +81,14 @@ class SearchComponent extends React.Component {
     }
 
     _getPlaceholder() {
-        const channel = this.state ? this.state.channel : Config.channelRBTV;
+        const id = this.state ? this.state.channel : Config.channels.rbtv.id;
+        const channel = _.findWhere(Config.channels, { id });
 
-        switch (channel) {
-            case Config.channelRBTV:
-                return 'Rocketbeans TV durchsuchen...';
-            case Config.channelLP:
-                return 'Let\'s Plays durchsuchen...';
-            case Config.channelG2:
-                return 'Game Two durchsuchen...';
-            default:
-                return 'Suche...';
+        if (channel) {
+            return channel.name + ' durchsuchen...';
         }
+
+        return 'Suche...';
     }
 
     _stateHasChanged(prevState, prop) {
@@ -198,33 +174,11 @@ class SearchComponent extends React.Component {
         e.preventDefault();
     }
 
-    _onChannelRBTV() {
-        const channel = Config.channelRBTV;
-
-        this.setState({ channel });
+    _onChannelSelect(channel) {
+        this.setState({ channel: channel.id });
 
         if (this.props.onChannel) {
-            this.props.onChannel(channel);
-        }
-    }
-
-    _onChannelLP() {
-        const channel = Config.channelLP;
-
-        this.setState({ channel });
-
-        if (this.props.onChannel) {
-            this.props.onChannel(channel);
-        }
-    }
-
-    _onChannelG2() {
-        const channel = Config.channelG2;
-
-        this.setState({ channel });
-
-        if (this.props.onChannel) {
-            this.props.onChannel(channel);
+            this.props.onChannel(channel.id);
         }
     }
 }
