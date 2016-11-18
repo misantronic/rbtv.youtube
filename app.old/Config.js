@@ -2,7 +2,7 @@ import {Collection} from 'backbone';
 
 const apiBaseUrl = '/api';
 
-module.exports = {
+export default {
     endpoints: {
         playlists: apiBaseUrl + '/playlists',
 
@@ -26,8 +26,6 @@ module.exports = {
     channelRBTV: 'UCQvTDmHza8erxZqDkjQ4bQQ',
 
     channelLP: 'UCtSP1OA6jO4quIGLae7Fb4g',
-
-    channelG2: 'UCFBapHA35loZ3KZwT_z3BsQ',
 
     liveId: 'rzCDzR8eR7o',
 

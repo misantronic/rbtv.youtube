@@ -15,7 +15,7 @@ module.exports = {
 			__dirname + '/node_modules/bootstrap/js/transition',
 			'fuckadblock'
 		],
-		application: __dirname + '/app/entry'
+		application: __dirname + '/app.old/entry'
 	},
 
 	output: {
@@ -69,7 +69,7 @@ module.exports = {
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
 		new HtmlWebpackPlugin({
-			template: __dirname + '/app/application.ejs',
+			template: __dirname + '/app.old/application.ejs',
 			filename: 'index.html',
 			inject: true
 		}),

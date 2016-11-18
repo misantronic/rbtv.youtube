@@ -19,7 +19,7 @@
 			background: rgba(255, 255, 255, 0.85);
 		}
 
-		&.is-loading .loader {
+		&.is-loading > .loader {
 			display: block;
 		}
 
@@ -40,7 +40,7 @@
 					margin-bottom: -33px;
 				}
 
-				> .publishedAt {
+				> .published-at {
 					position: absolute;
 					right: 10px;
 					bottom: 10px;

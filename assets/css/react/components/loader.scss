@@ -1,9 +1,9 @@
 .loader {
     position: static;
-    margin: 0 auto;
+    margin: 20px auto;
     width: 40px;
+}
 
-    .is-loading & {
-        display: block;
-    }
+.is-loading > .loader {
+    display: block;
 }

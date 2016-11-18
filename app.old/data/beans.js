@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     { title: 'Simon', expr: /^si/i },
     { title: 'Nils', expr: /^ni/i },
     { title: 'Budi', expr: /^bu/i },
@@ -47,7 +47,5 @@ module.exports = [
     { title: 'Anne', expr: /^an/i },
     { title: 'Andreas', expr: /^an/i },
     { title: 'Timo', expr: /^ti/i },
-    { title: 'Donnie', expr: /^do/i },
-    { title: 'Lisa', expr: /^li/i },
-    { title: 'Ingo', expr: /^in/i }
+    { title: 'Donnie', expr: /^do/i }
 ];

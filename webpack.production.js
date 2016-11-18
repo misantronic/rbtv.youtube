@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var webpackConfig = require('./webpack.config');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.react');
 
 webpackConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin({

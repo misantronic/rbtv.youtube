@@ -19,7 +19,7 @@ module.exports = {
             'react-dom',
             'react-router'
         ],
-        application: __dirname + '/react/main.jsx'
+        application: __dirname + '/app/main.jsx'
     },
 
     output: {
