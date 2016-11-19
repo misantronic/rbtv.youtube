@@ -14,6 +14,7 @@ module.exports = Collection.extend({
     _videoId: '',
 
     setParentId(val) {
+        this._pageToken = '';
         this._parentId = val;
     },
 
@@ -22,7 +23,7 @@ module.exports = Collection.extend({
     },
 
     parse(response) {
-        this._pageToken = response.nextPageToken || null;
+        this._pageToken = response.nextPageToken || '';
 
         return this.models.concat(response.items);
     }

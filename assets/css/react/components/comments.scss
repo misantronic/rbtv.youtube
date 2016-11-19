@@ -5,6 +5,11 @@
 .component-comment-item {
     display: flex;
     margin-bottom: 10px;
+    border-bottom: 1px solid #CCC;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
 
     .thumb {
         width: 50px;
@@ -30,20 +35,34 @@
 
     .reactions {
         display: flex;
-        margin-bottom: 10px;
+        margin-bottom: 7px;
         position: relative;
 
         .component-thumbs {
             margin-left: 10px;
+
+            .btn-like,
+            .btn-dislike {
+                pointer-events: none;
+            }
         }
 
-        .btn-replies {
+        .right {
+            display: flex;
             position: absolute;
             right: 0;
         }
+
+        .published-at {
+            margin-left: 10px;
+        }
     }
 
-    .replies {
-
+    .btn-replies {
+        margin-bottom: 15px;
+        text-align: center;
+        background: #DDD;
+        color: #333;
+        font-size: 12px;
     }
 }

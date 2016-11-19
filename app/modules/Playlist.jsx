@@ -3,6 +3,7 @@ const _ = require('underscore');
 const Collection = require('../datasource/collections/PlaylistItemsCollection');
 const PlaylistItems = require('../components/playlists/PlaylistItems');
 const VideoDetails = require('../components/video/details/VideoDetails');
+const CommentThreadsList = require('../components/comments/CommentThreadsList');
 
 class PlaylistModule extends React.Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class PlaylistModule extends React.Component {
                 <VideoDetails id={videoId}>
                     <PlaylistItems id={videoId} collection={collection} onFetch={this._onFetch} onItemSelected={item => this._selectItem(item)}/>
                 </VideoDetails>
+                <CommentThreadsList id={videoId}/>
             </div>
         );
     }

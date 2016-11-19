@@ -36,6 +36,17 @@ class CommentThreadsList extends React.Component {
         );
     }
 
+    componentDidUpdate(prevProps) {
+        const id = this.props.id;
+
+        if (prevProps.id !== id) {
+            const collection = this.state.collection;
+
+            collection.reset();
+            collection.setVideoId(id);
+        }
+    }
+
     _fetch() {
         const collection = this.state.collection;
 

@@ -1,4 +1,5 @@
 const React = require('react');
+const _ = require('underscore');
 const ThumbsComponent = require('../video/details/Thumbs');
 const CommentList = require('./CommentList');
 const CommentsCollection = require('../../datasource/collections/CommentsCollection');
@@ -10,11 +11,16 @@ class CommentItemComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        _.bindAll(this, '_onToggleReplies');
+
         const repliesCollection = new CommentsCollection();
 
         repliesCollection.setParentId(props.item.id);
 
-        this.state = { repliesCollection };
+        this.state = {
+            repliesCollection,
+            showReplies: false
+        };
     }
 
     getChildContext() {
@@ -39,24 +45,38 @@ class CommentItemComponent extends React.Component {
                 <div className="content">
                     <div className="body">
                         <p dangerouslySetInnerHTML={{ __html: text }}></p>
-                        <a href={authorChannel} target="_blank">{author}</a>
-                        <span className="published-at">{publishedAt.fromNow()}</span>
                     </div>
                     <div className="reactions">
                         <a href="#">Reply</a>
                         <ThumbsComponent statistics={{ likeCount, dislikeCount }}/>
-                        <a href="#" className="btn-replies" onClick={this._onShowReplies.bind(this)} style={{ display: numReplies ? 'block' : 'none' }}>show {numReplies} replies</a>
+                        <div className="right">
+                            <a href={authorChannel} target="_blank">{author}</a>
+                            <span className="published-at">{publishedAt.fromNow()}</span>
+                        </div>
                     </div>
+                    <a href="#" className="btn-replies"
+                       onClick={this._onToggleReplies}
+                       style={{ display: numReplies ? 'block' : 'none' }}>
+                        {this.state.showReplies ? 'hide' : 'show'} {numReplies} replies
+                    </a>
                     <CommentList />
                 </div>
             </div>
         );
     }
 
-    _onShowReplies(e) {
+    _onToggleReplies(e) {
+        const showReplies = this.state.showReplies;
         const repliesCollection = this.state.repliesCollection;
 
-        repliesCollection.fetch();
+        this.setState({ showReplies: !showReplies }, () => {
+            if (showReplies) {
+                repliesCollection.reset();
+                this.forceUpdate();
+            } else {
+                repliesCollection.fetch();
+            }
+        });
 
         e.preventDefault();
     }
