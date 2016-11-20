@@ -20,7 +20,7 @@ class PlaylistsModule extends React.Component {
         this.searchCollection = new Collection();
         this.autocompleteCollection = new Collection();
 
-        this.searchCollection.listenTo(this.searchCollection, 'sync', () => this.autocompleteCollection.reset(this.searchCollection.models));
+        this.searchCollection.on('sync', () => this.autocompleteCollection.reset(this.searchCollection.models));
     }
 
     render() {
@@ -44,7 +44,7 @@ class PlaylistsModule extends React.Component {
     }
 
     componentWillUnmount() {
-        this.searchCollection.stopListening(this.searchCollection, 'sync');
+        this.searchCollection.off('sync');
     }
 
     _onSearch(search, channel = this.state.channel) {

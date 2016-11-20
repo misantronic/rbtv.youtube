@@ -19,7 +19,9 @@ module.exports = {
 
         commentThreads: apiBaseUrl + '/commentThreads',
 
-        comments: apiBaseUrl + '/comments'
+        comments: apiBaseUrl + '/comments',
+
+        cacheInvalidate: apiBaseUrl + '/cache.invalidate'
     },
 
     key: env.YT_KEY,

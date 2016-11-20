@@ -24,6 +24,16 @@
     }
 }
 
+.btn-context-menu {
+    border: none;
+    background: none;
+
+    > span {
+        pointer-events: none;
+    }
+}
+
+.btn,
 button {
     &:focus {
         outline: none;

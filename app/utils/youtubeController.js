@@ -1,6 +1,6 @@
-import _ from 'underscore';
-import $ from 'jquery';
-import Config from '../Config';
+const _ = require('underscore');
+const $ = require('jquery');
+const Config = require('../Config');
 const storage = require('../utils/storage');
 
 const baseURL = 'https://www.googleapis.com/youtube/v3';
@@ -10,22 +10,26 @@ const endpoints = {
     playlists: baseURL + '/playlists',
     rate: baseURL + '/videos/rate',
     comments: baseURL + '/comments',
-    commentThreads: baseURL + '/commentThreads'
+    commentThreads: baseURL + '/commentThreads',
+    channels: baseURL + '/channels'
 };
 
 const authorizedEndpoints = [
     endpoints.getRating,
     endpoints.rate,
     endpoints.commentThreads,
-    endpoints.comments
+    endpoints.comments,
+    endpoints.channels
 ];
 
 const clientId = '41722713665-rmnr2sd8u0g5s2ait1el7ec36fgm50mq.apps.googleusercontent.com';
 
 const scope = [
-    'https://www.googleapis.com/auth/youtubepartner',
-    'https://www.googleapis.com/auth/youtube',
-    'https://www.googleapis.com/auth/youtube.force-ssl'
+    'https://www.googleapis.com/auth/youtube.force-ssl',
+    'https://www.googleapis.com/auth/youtube.readonly'
+    // 'https://www.googleapis.com/auth/youtubepartner',
+    // 'https://www.googleapis.com/auth/youtube',
+    // 'https://www.googleapis.com/auth/youtubepartner-channel-audit'
 ];
 
 module.exports = {
@@ -50,77 +54,109 @@ module.exports = {
     /**
      * @param {'like'|'dislike'|'none'} rating
      * @param videoId
-     * @param {Boolean} retryOnFail
      */
-    addRating(rating, videoId, retryOnFail = true) {
-        return this._authorize()
-            .then(() =>
-                $.post(endpoints.rate, {
-                    id: videoId,
-                    rating
-                })
-                    .then(() => rating)
-                    .fail(result => {
-                        if (retryOnFail && result.status === 401) {
-                            this._reAuthorize().then(() => {
-                                this.addRating(rating, videoId, false);
-                            });
-                        }
-                    })
-            );
+    addRating(rating, videoId) {
+        const url = endpoints.rate +'?id='+ videoId +'&rating='+ rating;
+
+        return this._request(url, 'POST')
+            .then(() => rating);
     },
 
-    getRating(videoId, callback, retryOnFail = true) {
-        if (this._data) {
-            return $.get(endpoints.getRating, { id: videoId })
-                .then(result => result.items[0].rating)
-                .fail(result => {
-                    if (retryOnFail && result.status === 401) {
-                        this._reAuthorize().then(() => {
-                            this.getRating(videoId, callback, false);
-                        });
-                    }
-                })
-                .done(callback);
-        }
+    getRating(videoId) {
+        const url = `${endpoints.getRating}?id=${videoId}`;
 
-        return $.Deferred().resolve(null).promise();
+        return this._request(url)
+            .then(data => data.items[0].rating);
     },
 
-    fetchPlaylistName(playlistId) {
-        return $.get(`${endpoints.playlists}?part=snippet&id=${playlistId}&maxResults=1&fields=items%2Fsnippet%2Ftitle&key=${Config.key}`)
-            .then(data => data.items[0]['snippet'].title);
+    getChannelInfo() {
+        const url = `${this.endpoints.channels}?part=id&mine=true&maxResults=1&key=${Config.key}`;
+
+        return this._request(url, 'GET')
+            .then(data => {
+                const myChannelInfo = data.items[0];
+
+                storage.set('ytMyChannel', myChannelInfo);
+
+                return myChannelInfo;
+            });
     },
 
     /**
-     * @param {Comment|CommentThread} commentModel
-     * @param {Function} callback
-     * @param {Boolean} retryOnFail
+     * @param {CommentModel|CommentThreadModel} commentModel
      * @returns {Promise}
      */
-    addComment(commentModel, callback, retryOnFail = true) {
-        return this._authorize()
-            .then(() => {
-                const payload = commentModel.getPayload();
+    addComment(commentModel) {
+        const url = commentModel.urlRoot + '?part=snippet';
+        const data = commentModel.getPayload();
 
-                if (this._data) {
-                    return $.ajax({
-                        url: commentModel.urlRoot + '?part=snippet',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: JSON.stringify(payload),
-                        contentType: 'application/json'
-                    })
+        return this._request(url, 'POST', data);
+    },
+
+    /**
+     * @param {CommentModel|CommentThreadModel} commentModel
+     * @returns {Promise}
+     */
+    updateComment(commentModel) {
+        const url = endpoints.comments + '?part=snippet';
+        const data = commentModel.getPayload();
+
+        return this._request(url, 'PUT', data);
+    },
+
+    /**
+     * @param {CommentModel|CommentThreadModel} commentModel
+     * @returns {Promise}
+     */
+    removeComment(commentModel) {
+        const url = endpoints.comments + '?id=' + commentModel.id;
+
+        return this._request(url, 'DELETE');
+    },
+
+    invalidateComments(key) {
+        const url = `${Config.endpoints.cacheInvalidate}/?key=${key}`;
+
+        return this._request(url);
+    },
+
+    /**
+     * Private methods
+     */
+
+    /**
+     *
+     * @param {String} url
+     * @param {'GET'|'PUT'|'POST'|'DELETE'} [type]
+     * @param {Object} [data]
+     * @private
+     */
+    _request(url, type = 'GET', data = null) {
+        const self = this;
+
+        const fn = function (retryOnFail = true) {
+            return self._authorize().then(() => {
+                if (self._data) {
+                    return $
+                        .ajax({
+                            url,
+                            type,
+                            data: data ? JSON.stringify(data) : null,
+                            dataType: 'json',
+                            contentType: 'application/json'
+                        })
                         .fail(result => {
                             if (retryOnFail && result.status === 401) {
-                                this._reAuthorize().then(() => {
-                                    this.addComment(commentModel, callback, false);
+                                self._reAuthorize().then(() => {
+                                    return fn(false);
                                 });
                             }
-                        })
-                        .done(callback);
+                        });
                 }
             });
+        };
+
+        return fn();
     },
 
     /**
@@ -128,25 +164,22 @@ module.exports = {
      * @private
      */
     _authorize(immediate = false) {
-        const self = this;
         const Deferred = $.Deferred();
 
         if (this._data) {
             Deferred.resolve();
         } else {
-            if (gapi && gapi.auth && gapi.auth.authorize) {
-                gapi.auth.authorize({
-                    'client_id': clientId,
-                    scope,
-                    immediate
-                }, () => {
-                    this._data = gapi.auth.getToken();
+            gapi.auth.authorize({
+                'client_id': clientId,
+                scope,
+                immediate
+            }, () => {
+                this._data = gapi.auth.getToken();
 
-                    storage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
+                storage.set('ytAccess', _.omit(this._data, 'g-oauth-window'));
 
-                    Deferred.resolve();
-                });
-            }
+                Deferred.resolve();
+            });
         }
 
         return Deferred.promise();

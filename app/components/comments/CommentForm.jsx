@@ -1,0 +1,95 @@
+const React = require('react');
+const _ = require('underscore');
+const $ = require('jquery');
+const youtubeController = require('../../utils/youtubeController');
+const Config = require('../../Config');
+
+/**
+ * @class CommentFormComponent
+ */
+class CommentFormComponent extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+
+        _.bindAll(this, '_onSubmit', '_onTextChange', '_onKeyUp');
+
+        const model = this.props.model.clone();
+        const snippet = model.get('snippet');
+
+        this.state = {
+            model,
+            loading: false,
+            text: snippet.textOriginal || snippet.textDisplay
+        };
+    }
+
+    render() {
+        const loading = this.state.loading;
+
+        return (
+            <form className="component-comment-form" onSubmit={this._onSubmit}>
+                <textarea disabled={loading} className="form-control" value={this.state.text} onChange={this._onTextChange} onKeyUp={this._onKeyUp}></textarea>
+                <button disabled={loading} type="submit" className="btn btn-primary">Send</button>
+            </form>
+        );
+    }
+
+    _onTextChange(e) {
+        const text = e.target.value;
+        /** @type {Object} */
+        const snippet = this.state.model.get('snippet');
+
+        snippet.textOriginal = text;
+        snippet.textDisplay = text;
+
+        this.setState({ text });
+    }
+
+    _onSubmit(e) {
+        e.preventDefault();
+
+        this.setState({ loading: true }, () => {
+            const method = this.props.method;
+
+            youtubeController[method](this.state.model)
+                .then(data => {
+                    this.setState({
+                        loading: false,
+                        text: ''
+                    });
+
+                    $.when([
+                        youtubeController.invalidateComments(`commentThreads.${this.context.videoId}`),
+                        youtubeController.invalidateComments(`comments.${this.context.videoId}`)
+                    ]).done(() => {
+                        if (this.props.onComment) {
+                            this.props.onComment(data);
+                        }
+                    });
+                });
+        });
+    }
+
+    _onKeyUp(e) {
+        if (e.keyCode === 27) { // esc
+            this.setState({
+                loading: false,
+                text: ''
+            });
+
+            if (this.props.onAbort) {
+                this.props.onAbort();
+            }
+        }
+    }
+}
+
+CommentFormComponent.defaultProps = {
+    method: 'addComment'
+};
+
+CommentFormComponent.contextTypes = {
+    videoId: React.PropTypes.string
+};
+
+module.exports = CommentFormComponent;

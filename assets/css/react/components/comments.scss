@@ -22,14 +22,12 @@
     }
 
     .body {
+        display: flex;
         margin-bottom: 10px;
 
-        .published-at {
-            margin-left: 10px;
-        }
-
-        p {
-            margin-bottom: 5px;
+        :first-child {
+            flex: 1;
+            margin-bottom: 0;
         }
     }
 
@@ -54,15 +52,26 @@
         }
 
         .published-at {
-            margin-left: 10px;
+            margin-left: 1px;
         }
     }
 
     .btn-replies {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         text-align: center;
         background: #DDD;
         color: #333;
         font-size: 12px;
+        display: block;
+    }
+}
+
+.component-comment-form {
+    display: flex;
+    margin-bottom: 20px;
+
+    > textarea {
+        flex: 1;
+        margin-right: 10px;
     }
 }

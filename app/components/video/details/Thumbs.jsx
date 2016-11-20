@@ -66,12 +66,14 @@ class ThumbsComponent extends React.Component {
      */
 
     _getRating() {
-        youtubeController.getRating(this.props.id, rating => {
-            this.setState({
-                liked: rating === 'like',
-                disliked: rating === 'dislike'
+        youtubeController
+            .getRating(this.props.id)
+            .then(rating => {
+                this.setState({
+                    liked: rating === 'like',
+                    disliked: rating === 'dislike'
+                });
             });
-        });
     }
 
     _propHasChanged(prevProps, prop) {

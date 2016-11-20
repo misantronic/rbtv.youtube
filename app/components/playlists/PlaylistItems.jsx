@@ -24,8 +24,8 @@ class PlaylistItemsComponent extends React.Component {
 
         // Listen to collection-scrolling updates
         // TODO: find a way to perform this automatically
-        collection.stopListening(collection, 'react:update');
-        collection.listenTo(collection, 'react:update', () => this.forceUpdate());
+        collection.off('react:update');
+        collection.on('react:update', () => this.forceUpdate());
 
         return (
             <div className="component-playlist-items">

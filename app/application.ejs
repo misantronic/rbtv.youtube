@@ -26,5 +26,12 @@
 </div>
 </body>
 </html>
-<script src="https://apis.google.com/js/client.js?onload=onGoogleClientLoad"></script>
+<script src="https://apis.google.com/js/client.js"></script>
+<script>
+    gapi.load('client', function () {
+        if (window['onGoogleClientLoad']) {
+            window['onGoogleClientLoad']();
+        }
+    });
+</script>
 <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>

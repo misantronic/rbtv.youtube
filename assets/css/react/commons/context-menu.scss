@@ -1,0 +1,14 @@
+.iw-cm-menu {
+    background: #FFF;
+    transform: translateY(2px);
+    box-shadow: none;
+
+    li {
+        padding: 5px 25px;
+
+        &.iw-mSelected {
+            background: #CCC;
+            color: #000;
+        }
+    }
+}

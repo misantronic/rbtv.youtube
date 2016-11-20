@@ -23,14 +23,18 @@ const storage = {
         localStorage.setItem(key, value);
     },
 
-    update: function (key, props) {
+    update(key, props) {
         const keyValue = this.get(key) || {};
 
         this.set(key, _.extend(keyValue, props));
     },
 
-    getVideoInfo: function (videoId) {
+    getVideoInfo(videoId) {
         return this.get(`${videoId}.info`) || {};
+    },
+
+    getMyChannelInfo() {
+        return this.get('ytMyChannel') || {};
     }
 };
 

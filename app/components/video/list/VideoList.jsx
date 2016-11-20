@@ -21,7 +21,7 @@ class VideoListComponent extends React.Component {
 
         this.state = { collection };
 
-        collection.listenTo(collection, 'sync reset', this._onCollectionUpdate);
+        collection.on('sync reset', this._onCollectionUpdate);
     }
 
     /**
@@ -96,7 +96,15 @@ class VideoListComponent extends React.Component {
     componentWillUnmount() {
         const collection = this.state.collection;
 
-        collection.stopListening(collection, 'sync reset', this._onCollectionUpdate);
+        collection.off('sync reset', this._onCollectionUpdate);
+
+        if (this._collectionXHR) {
+            this._collectionXHR.abort();
+        }
+
+        if (this._videoCollectionXHR) {
+            this._videoCollectionXHR.abort();
+        }
     }
 
     /**
@@ -118,9 +126,8 @@ class VideoListComponent extends React.Component {
         if (collection.setQ) collection.setQ(this.props.search);
         if (collection.setChannelId) collection.setChannelId(this.props.channel);
 
-        collection
-            .fetch()
-            .then(() => this._fetchVideos());
+        this._collectionXHR = collection.fetch();
+        this._collectionXHR.then(() => this._fetchVideos());
     }
 
     _fetchVideos() {
@@ -133,30 +140,30 @@ class VideoListComponent extends React.Component {
         if (videoIds.length === 0) return;
 
         videoCollection.setVideoIds(videoIds);
-        videoCollection
-            .fetch()
-            .then(() => {
-                this.setState(
-                    videoCollection.reduce(function (memo, videoModel) {
-                        memo['video.' + videoModel.id] = videoModel;
 
-                        return memo;
-                    }, {})
-                );
-            });
+        this._videoCollectionXHR = videoCollection.fetch();
+        this._videoCollectionXHR.then(() => {
+            this.setState(
+                videoCollection.reduce(function (memo, videoModel) {
+                    memo['video.' + videoModel.id] = videoModel;
+
+                    return memo;
+                }, {})
+            );
+        });
     }
 
     _onFetchNext() {
         const collection = this.state.collection;
 
-        if (!collection.getNextPageToken || !collection.setNextPageToken) {
+        if (!collection.getPageToken || !collection.setPageToken) {
             return;
         }
 
-        const token = collection.getNextPageToken();
+        const token = collection.getPageToken();
 
         if (token) {
-            collection.setNextPageToken(token);
+            collection.setPageToken(token);
 
             this._fetch();
         }

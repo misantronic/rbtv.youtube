@@ -12,7 +12,7 @@ class NavModule extends React.Component {
             countWatchlist: watchlist.getList().length
         };
 
-        watchlist.listenTo(watchlist, 'added removed', this._onWatchlistChanged.bind(this));
+        watchlist.on('added removed', this._onWatchlistChanged.bind(this));
     }
 
     render() {
@@ -34,7 +34,7 @@ class NavModule extends React.Component {
     }
 
     componentWillUnmount() {
-        watchlist.stopListening(watchlist, 'added removed');
+        watchlist.off('added removed');
     }
 
     _onWatchlistChanged() {

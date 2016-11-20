@@ -17,8 +17,8 @@ class CollectionLoader extends React.Component {
 
         const collection = this.context.collection;
 
-        collection.listenTo(collection, 'request', this._onCollectionRequest);
-        collection.listenTo(collection, 'sync', this._onCollectionSync);
+        collection.on('request', this._onCollectionRequest);
+        collection.on('sync', this._onCollectionSync);
     }
 
     render() {

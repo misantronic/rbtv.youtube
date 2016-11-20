@@ -10,7 +10,7 @@ class CommentList extends React.Component {
 
         const collection = this.context.collection;
 
-        collection.listenTo(collection, 'sync', () => this.forceUpdate());
+        collection.on('sync', () => this.forceUpdate());
     }
 
     render() {
@@ -29,7 +29,7 @@ class CommentList extends React.Component {
     componentWillUnmount() {
         const collection = this.context.collection;
 
-        collection.stopListening(collection, 'sync');
+        collection.off('sync');
     }
 }
 

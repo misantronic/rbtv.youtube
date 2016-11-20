@@ -1,3 +1,4 @@
+const _ = require('underscore');
 const youtubeController = require('../../utils/youtubeController');
 const CommentModel = require('./CommentModel');
 
@@ -12,6 +13,7 @@ module.exports = CommentModel.extend({
         const snippet = this.get('snippet');
 
         return {
+            id: this.id,
             snippet: {
                 channelId: snippet.channelId,
                 videoId: snippet.videoId,

@@ -46,6 +46,15 @@ module.exports = Model.extend({
         return response;
     },
 
+    clone() {
+        const clonedModel = Model.prototype.clone.call(this);
+
+        // Clone snippet
+        clonedModel.set('snippet', _.clone(clonedModel.get('snippet')));
+
+        return clonedModel;
+    },
+
     reset() {
         this.set(_.result(this, 'defaults'));
     },
@@ -55,9 +64,10 @@ module.exports = Model.extend({
         const snippet = this.get('snippet');
 
         return {
+            id: this.id,
             snippet: {
                 parentId: snippet.parentId,
-                textOriginal: snippet.textOriginal
+                textOriginal: snippet.textOriginal || snippet.textDisplay
             }
         };
     },

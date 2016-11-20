@@ -150,6 +150,18 @@ module.exports = {
         }
     },
 
+    delete: function (pattern) {
+        redis.keys(pattern + '*').then(function (keys) {
+            const pipeline = redis.pipeline();
+
+            keys.forEach(function (key) {
+                pipeline.del(key);
+            });
+
+            return pipeline.exec();
+        });
+    },
+
     Config: CacheConfig,
 
     rk: function () {

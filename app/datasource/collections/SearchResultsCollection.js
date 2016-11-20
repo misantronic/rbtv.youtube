@@ -34,7 +34,7 @@ const SearchResults = Collection.extend({
         return this;
     },
 
-    setNextPageToken(val) {
+    setPageToken(val) {
         this._nextPageToken = val;
 
         return this;
@@ -52,7 +52,7 @@ const SearchResults = Collection.extend({
         return this;
     },
 
-    getNextPageToken() {
+    getPageToken() {
         return this._nextPageToken;
     },
 

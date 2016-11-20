@@ -15,6 +15,7 @@ module.exports = {
             __dirname + '/node_modules/bootstrap/js/tooltip',
             __dirname + '/node_modules/bootstrap/js/collapse',
             __dirname + '/node_modules/bootstrap/js/transition',
+            'contextMenu',
             'react',
             'react-dom',
             'react-router',
@@ -84,6 +85,10 @@ module.exports = {
                         'react'
                     ]
                 }
+            },
+            {
+                test: /contextMenu\/contextMenu\.js/,
+                loader: 'imports?jQuery=jquery'
             }
         ],
         noParse: /\.min\.js/

@@ -6,13 +6,12 @@ module.exports = Collection.extend({
 
     model: CommentThreadModel,
 
+    _pageToken: '',
+    _videoId: '',
+
     url() {
         return `${Config.endpoints.commentThreads}?videoId=${this._videoId}&pageToken=${this._pageToken}`;
     },
-
-    _pageToken: '',
-
-    _videoId: '',
 
     setVideoId(val) {
         this._pageToken = '';
@@ -24,7 +23,7 @@ module.exports = Collection.extend({
     },
 
     parse(response) {
-        this._pageToken = response.nextPageToken || '';
+        this._pageToken = response.nextPageToken || null;
 
         return this.models.concat(response.items);
     }

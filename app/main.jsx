@@ -18,22 +18,25 @@ require('./utils/youtubeController').init();
 require('./overrides/underscore');
 
 require('react-select/dist/react-select.css');
+require('contextMenu/contextMenu.css');
 require('../assets/css/react/_deps.scss');
 require('../assets/css/react/_package.scss');
 
-render(
-    <Router history={hashHistory}>
-        <Route path="/" component={App}>
-            <IndexRoute component={Activities}/>
+window.onGoogleClientLoad = function () {
+    render(
+        <Router history={hashHistory}>
+            <Route path="/" component={App}>
+                <IndexRoute component={Activities}/>
 
-            <Route path="/activities" component={Activities}/>
-            <Route path="/playlists" component={Playlists}/>
-            <Route path="/playlists/:id" component={Playlist}/>
-            <Route path="/playlists/:id/video/:videoId" component={Playlist}/>
-            <Route path="/watchlater" component={WatchLater}/>
-            <Route path="/video/:id" component={Video}/>
-            <Route path="/live/:id" component={Live}/>
-        </Route>
-    </Router>,
-    $('.app').find('.container')[0]
-);
+                <Route path="/activities" component={Activities}/>
+                <Route path="/playlists" component={Playlists}/>
+                <Route path="/playlists/:id" component={Playlist}/>
+                <Route path="/playlists/:id/video/:videoId" component={Playlist}/>
+                <Route path="/watchlater" component={WatchLater}/>
+                <Route path="/video/:id" component={Video}/>
+                <Route path="/live/:id" component={Live}/>
+            </Route>
+        </Router>,
+        $('.app').find('.container')[0]
+    );
+}.bind(this);

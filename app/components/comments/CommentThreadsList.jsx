@@ -2,7 +2,6 @@ const React = require('react');
 const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
 const CommentItemComponent = require('./CommentItem');
-const CommentThreadsCollection = require('../../datasource/collections/CommentThreadsCollection');
 
 /**
  * @class CommentThreadsList
@@ -11,22 +10,26 @@ class CommentThreadsList extends React.Component {
     constructor(props) {
         super(props);
 
-        const collection = new CommentThreadsCollection();
+        const collection = this.props.collection;
 
         collection.setVideoId(props.id);
+        collection.on('react:update remove', () => this.forceUpdate());
 
         this.state = { collection };
     }
 
     getChildContext() {
-        return { collection: this.state.collection };
+        return {
+            collection: this.state.collection,
+            videoId: this.props.id
+        };
     }
 
     render() {
         const collection = this.state.collection;
 
         return (
-            <CollectionScrolling onUpdate={this._fetch.bind(this)}>
+            <CollectionScrolling onUpdate={() => this._fetch()}>
                 <CollectionLoader>
                     <div className="component-comment-threads-list">
                         {collection.map(item => <CommentItemComponent key={item.id} item={item}/>)}
@@ -47,6 +50,13 @@ class CommentThreadsList extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        const collection = this.state.collection;
+
+        collection.off('react:update');
+        collection.off('remove');
+    }
+
     _fetch() {
         const collection = this.state.collection;
 
@@ -57,7 +67,8 @@ class CommentThreadsList extends React.Component {
 }
 
 CommentThreadsList.childContextTypes = {
-    collection: React.PropTypes.object
+    collection: React.PropTypes.object,
+    videoId: React.PropTypes.string
 };
 
 module.exports = CommentThreadsList;

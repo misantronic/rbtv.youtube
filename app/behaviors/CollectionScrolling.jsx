@@ -18,8 +18,8 @@ class CollectionScrolling extends React.Component {
 
         const collection = this.context.collection;
 
-        collection.listenTo(collection, 'request', this._onCollectionRequest);
-        collection.listenTo(collection, 'sync', this._onCollectionSync);
+        collection.on('request', this._onCollectionRequest);
+        collection.on('sync', this._onCollectionSync);
     }
 
     render() {
@@ -39,8 +39,8 @@ class CollectionScrolling extends React.Component {
 
         const collection = this.context.collection;
 
-        collection.stopListening(collection, 'request', this._onCollectionRequest);
-        collection.stopListening(collection, 'sync', this._onCollectionSync);
+        collection.off('request', this._onCollectionRequest);
+        collection.off('sync', this._onCollectionSync);
     }
 
     _initScroll() {
@@ -104,7 +104,15 @@ class CollectionScrolling extends React.Component {
             this._killScroll();
 
             if (this.props.onUpdate) {
-                this.props.onUpdate();
+                if (this.context.collection.getPageToken) {
+                    const token = this.context.collection.getPageToken();
+
+                    if (!_.isNull(token)) {
+                        this.props.onUpdate();
+                    }
+                } else {
+                    this.props.onUpdate();
+                }
             } else {
                 this._update();
             }
