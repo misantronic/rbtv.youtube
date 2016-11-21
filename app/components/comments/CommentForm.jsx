@@ -5,9 +5,9 @@ const youtubeController = require('../../utils/youtubeController');
 const Config = require('../../Config');
 
 /**
- * @class CommentFormComponent
+ * @class CommentForm
  */
-class CommentFormComponent extends React.Component {
+class CommentForm extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -84,12 +84,12 @@ class CommentFormComponent extends React.Component {
     }
 }
 
-CommentFormComponent.defaultProps = {
+CommentForm.defaultProps = {
     method: 'addComment'
 };
 
-CommentFormComponent.contextTypes = {
+CommentForm.contextTypes = {
     videoId: React.PropTypes.string
 };
 
-module.exports = CommentFormComponent;
+module.exports = CommentForm;

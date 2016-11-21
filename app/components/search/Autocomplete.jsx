@@ -1,7 +1,7 @@
 const React = require('react');
 const $ = require('jquery');
 
-class AutocompleteComponent extends React.Component {
+class Autocomplete extends React.Component {
     constructor(props) {
         super(props);
 
@@ -135,4 +135,4 @@ class AutocompleteComponent extends React.Component {
     }
 }
 
-module.exports = AutocompleteComponent;
+module.exports = Autocomplete;

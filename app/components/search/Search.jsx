@@ -3,9 +3,9 @@ const Select = require('react-select');
 const _ = require('underscore');
 const $ = require('jquery');
 const Config = require('../../Config');
-const AutocompleteComponent = require('./Autocomplete');
+const Autocomplete = require('./Autocomplete');
 
-class SearchComponent extends React.Component {
+class Search extends React.Component {
     constructor(props) {
         super(props);
 
@@ -21,7 +21,7 @@ class SearchComponent extends React.Component {
     }
 
     render() {
-        /** @type {AutocompleteComponent} */
+        /** @type {Autocomplete} */
         this.autocomplete = null;
         this.select = null;
 
@@ -34,7 +34,7 @@ class SearchComponent extends React.Component {
                                placeholder={this.state.placeholder}
                                value={this.state.value}
                                onChange={this._onChange} onKeyDown={this._onKeyDown}/>
-                        <AutocompleteComponent
+                        <Autocomplete
                             items={this.props.autocomplete}
                             ref={el => this.autocomplete = el}
                             onSelect={this._onSelectAutocomplete}/>
@@ -184,4 +184,4 @@ class SearchComponent extends React.Component {
     }
 }
 
-module.exports = SearchComponent;
+module.exports = Search;

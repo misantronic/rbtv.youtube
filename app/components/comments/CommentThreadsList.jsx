@@ -1,7 +1,7 @@
 const React = require('react');
 const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
-const CommentItemComponent = require('./CommentItem');
+const CommentItem = require('./CommentItem');
 
 /**
  * @class CommentThreadsList
@@ -32,7 +32,7 @@ class CommentThreadsList extends React.Component {
             <CollectionScrolling onUpdate={() => this._fetch()}>
                 <CollectionLoader>
                     <div className="component-comment-threads-list">
-                        {collection.map(item => <CommentItemComponent key={item.id} item={item}/>)}
+                        {collection.map(item => <CommentItem key={item.id} item={item}/>)}
                     </div>
                 </CollectionLoader>
             </CollectionScrolling>

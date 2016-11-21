@@ -4,7 +4,7 @@ const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
 const BtnWatchLater = require('../commons/BtnWatchLater');
 
-class PlaylistItemsComponent extends React.Component {
+class PlaylistItems extends React.Component {
     constructor(props) {
         super(props);
 
@@ -104,8 +104,8 @@ class PlaylistItemsComponent extends React.Component {
     }
 }
 
-PlaylistItemsComponent.childContextTypes = {
+PlaylistItems.childContextTypes = {
     collection: React.PropTypes.object
 };
 
-module.exports = PlaylistItemsComponent;
+module.exports = PlaylistItems;

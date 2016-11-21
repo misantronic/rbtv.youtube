@@ -1,9 +1,9 @@
 const React = require('react');
 
 /**
- * @class ThumbnailComponent
+ * @class Thumbnail
  */
-class ThumbnailComponent extends React.Component {
+class Thumbnail extends React.Component {
     render() {
         const labelLeft = this.props.labelLeft || '';
         const labelRight = this.props.labelRight || '';
@@ -31,4 +31,4 @@ class ThumbnailComponent extends React.Component {
     }
 }
 
-module.exports = ThumbnailComponent;
+module.exports = Thumbnail;

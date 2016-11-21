@@ -3,7 +3,7 @@ const $ = require('jquery');
 const _ = require('underscore');
 const storage = require('../../../utils/storage');
 
-class VideoPlayerComponent extends React.Component {
+class VideoPlayer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -160,9 +160,9 @@ class VideoPlayerComponent extends React.Component {
     }
 }
 
-VideoPlayerComponent.defaultProps = {
+VideoPlayer.defaultProps = {
     currentTime: 0,
     autoplay: false
 };
 
-module.exports = VideoPlayerComponent;
+module.exports = VideoPlayer;

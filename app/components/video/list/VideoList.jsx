@@ -5,13 +5,13 @@ const moment = require('moment');
 const storage = require('../../../utils/storage');
 const CollectionLoader = require('../../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../../behaviors/CollectionScrolling');
-const ThumbComponent = require('../../commons/Thumbnail');
-const TagsComponent = require('../../tags/Tags');
+const Thumb = require('../../commons/Thumbnail');
+const Tags = require('../../tags/Tags');
 const BtnWatchLater = require('../../commons/BtnWatchLater');
 const VideoCollection = require('../../../datasource/collections/VideosCollection');
 const VideoModel = require('../../../datasource/models/VideoModel');
 
-class VideoListComponent extends React.Component {
+class VideoList extends React.Component {
     constructor(props) {
         super(props);
 
@@ -68,12 +68,12 @@ class VideoListComponent extends React.Component {
 
                             return (
                                 <div className={itemClassName} key={item.id} ref={this._onItem}>
-                                    <ThumbComponent image={image} title={title} description={description} link={'#/video/' + videoId}
+                                    <Thumb image={image} title={title} description={description} link={'#/video/' + videoId}
                                                     labelLeft={<span className="duration label label-default">{duration}</span>}
                                                     labelRight={<span className="published-at label label-default">{publishedAt.fromNow()}</span>}>
                                         <BtnWatchLater id={videoId} type="video"/>
-                                        <TagsComponent tags={tags} onTagSelect={this._onTagSelect}/>
-                                    </ThumbComponent>
+                                        <Tags tags={tags} onTagSelect={this._onTagSelect}/>
+                                    </Thumb>
                                 </div>
                             );
                         }, this)}
@@ -184,14 +184,14 @@ class VideoListComponent extends React.Component {
     }
 }
 
-VideoListComponent.propTypes = {
+VideoList.propTypes = {
     collection: React.PropTypes.object,
     channel: React.PropTypes.string,
     search: React.PropTypes.string
 };
 
-VideoListComponent.childContextTypes = {
+VideoList.childContextTypes = {
     collection: React.PropTypes.object
 };
 
-module.exports = VideoListComponent;
+module.exports = VideoList;

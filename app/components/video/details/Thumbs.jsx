@@ -3,9 +3,9 @@ const _ = require('underscore');
 const youtubeController = require('../../../utils/youtubeController');
 
 /**
- * @class ThumbsComponent
+ * @class Thumbs
  */
-class ThumbsComponent extends React.Component {
+class Thumbs extends React.Component {
     constructor(props) {
         super(props);
 
@@ -136,11 +136,11 @@ class ThumbsComponent extends React.Component {
     }
 }
 
-ThumbsComponent.propTypes = {
+Thumbs.propTypes = {
     id: React.PropTypes.string,
     statistics: React.PropTypes.object,
     liked: React.PropTypes.bool,
     disliked: React.PropTypes.bool
 };
 
-module.exports = ThumbsComponent;
+module.exports = Thumbs;

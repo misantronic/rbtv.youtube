@@ -14,13 +14,13 @@ class CommentList extends React.Component {
     }
 
     render() {
-        const CommentItemComponent = require('./CommentItem');
+        const CommentItem = require('./CommentItem');
         const collection = this.context.collection;
 
         return (
             <CollectionLoader>
                 <div className="component-comment-list">
-                    {collection.map(item => <CommentItemComponent key={item.id} item={item}/>)}
+                    {collection.map(item => <CommentItem key={item.id} item={item}/>)}
                 </div>
             </CollectionLoader>
         );

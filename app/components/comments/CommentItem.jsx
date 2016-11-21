@@ -1,6 +1,6 @@
 const React = require('react');
 const _ = require('underscore');
-const ThumbsComponent = require('../video/details/Thumbs');
+const Thumbs = require('../video/details/Thumbs');
 const CommentList = require('./CommentList');
 const CommentForm = require('./CommentForm');
 const CommentsCollection = require('../../datasource/collections/CommentsCollection');
@@ -10,9 +10,9 @@ const storage = require('../../utils/storage');
 const youtubeController = require('../../utils/youtubeController');
 
 /**
- * @class CommentItemComponent
+ * @class CommentItem
  */
-class CommentItemComponent extends React.Component {
+class CommentItem extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -83,7 +83,7 @@ class CommentItemComponent extends React.Component {
                     </div>
                     <div className="reactions">
                         <a href="#" onClick={this._onClickReply}>Reply</a>
-                        <ThumbsComponent statistics={{ likeCount, dislikeCount }}/>
+                        <Thumbs statistics={{ likeCount, dislikeCount }}/>
                         <div className="right">
                             <a href={authorChannel} target="_blank">{author}</a>
                             <span className="published-at">, {publishedAt.fromNow()}</span>
@@ -154,20 +154,20 @@ class CommentItemComponent extends React.Component {
     }
 }
 
-CommentItemComponent.defaultProps = {
+CommentItem.defaultProps = {
     editing: false
 };
 
-CommentItemComponent.contextTypes = {
+CommentItem.contextTypes = {
     videoId: React.PropTypes.string
 };
 
-CommentItemComponent.childContextTypes = {
+CommentItem.childContextTypes = {
     collection: React.PropTypes.object
 };
 
-CommentItemComponent.propTypes = {
+CommentItem.propTypes = {
     item: React.PropTypes.object
 };
 
-module.exports = CommentItemComponent;
+module.exports = CommentItem;

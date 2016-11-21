@@ -4,7 +4,7 @@ const VideoPlayer = require('../player/VideoPlayer');
 const Thumbs = require('./Thumbs');
 const numbers = require('../../../utils/numbers');
 
-class VideoDetailsComponent extends React.Component {
+class VideoDetails extends React.Component {
     constructor(props) {
         super(props);
 
@@ -101,8 +101,8 @@ class VideoDetailsComponent extends React.Component {
     }
 }
 
-VideoDetailsComponent.defaultProps = {
+VideoDetails.defaultProps = {
     fromCache: true
 };
 
-module.exports = VideoDetailsComponent;
+module.exports = VideoDetails;

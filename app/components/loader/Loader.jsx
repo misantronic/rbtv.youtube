@@ -1,6 +1,6 @@
 const React = require('react');
 
-module.exports = function LoaderComponent() {
+module.exports = function Loader() {
     return (
         <div className="component-loader loader js-loader">
             <div className="sk-fading-circle">

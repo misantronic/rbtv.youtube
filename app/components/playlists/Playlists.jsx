@@ -4,10 +4,10 @@ const $ = require('jquery');
 const Config = require('../../Config');
 const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
-const ThumbComponent = require('../commons/Thumbnail');
+const Thumb = require('../commons/Thumbnail');
 const BtnWatchLater = require('../commons/BtnWatchLater');
 
-class PlaylistsComponent extends React.Component {
+class Playlists extends React.Component {
     constructor(props) {
         super(props);
 
@@ -50,14 +50,14 @@ class PlaylistsComponent extends React.Component {
 
                             return (
                                 <div key={id} className={className}>
-                                    <ThumbComponent
+                                    <Thumb
                                         link={'#/playlists/' + id}
                                         title={title}
                                         description={desc}
                                         image={image}
                                         badge={<span className="badge">{itemCount}</span>}>
                                         <BtnWatchLater id={id} type="playlist"/>
-                                    </ThumbComponent>
+                                    </Thumb>
                                 </div>
                             );
                         }, this)}
@@ -114,15 +114,15 @@ class PlaylistsComponent extends React.Component {
     }
 }
 
-PlaylistsComponent.defaultProps = {
+Playlists.defaultProps = {
     search: '',
     channels: [ Config.channels.rbtv.id ],
     limit: 21,
     scrolling: Infinity
 };
 
-PlaylistsComponent.childContextTypes = {
+Playlists.childContextTypes = {
     collection: React.PropTypes.object
 };
 
-module.exports = PlaylistsComponent;
+module.exports = Playlists;
