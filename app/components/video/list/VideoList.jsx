@@ -37,7 +37,7 @@ class VideoList extends React.Component {
         let counter = 0;
 
         return (
-            <CollectionScrolling onUpdate={this._onFetchNext}>
+            <CollectionScrolling uid={this.props.uid} onUpdate={this._onFetchNext}>
                 <CollectionLoader>
                     <div className="component-videolist items">
                         {collection.map(function (item, i) {
@@ -69,8 +69,8 @@ class VideoList extends React.Component {
                             return (
                                 <div className={itemClassName} key={item.id} ref={this._onItem}>
                                     <Thumb image={image} title={title} description={description} link={'#/video/' + videoId}
-                                                    labelLeft={<span className="duration label label-default">{duration}</span>}
-                                                    labelRight={<span className="published-at label label-default">{publishedAt.fromNow()}</span>}>
+                                           labelLeft={<span className="duration label label-default">{duration}</span>}
+                                           labelRight={<span className="published-at label label-default">{publishedAt.fromNow()}</span>}>
                                         <BtnWatchLater id={videoId} type="video"/>
                                         <Tags tags={tags} onTagSelect={this._onTagSelect}/>
                                     </Thumb>
@@ -178,16 +178,25 @@ class VideoList extends React.Component {
     }
 
     _onTagSelect(tagValue) {
-        if (this.props.onTagSelect) {
-            this.props.onTagSelect(tagValue);
-        }
+        this.props.onTagSelect(tagValue);
+    }
+
+    _onScroll(...args) {
+        this.props.onScroll(...args);
     }
 }
 
 VideoList.propTypes = {
     collection: React.PropTypes.object,
     channel: React.PropTypes.string,
-    search: React.PropTypes.string
+    search: React.PropTypes.string,
+    onScroll: React.PropTypes.func,
+    onTagSelect: React.PropTypes.func
+};
+
+VideoList.defaultProps = {
+    onScroll: _.noop,
+    onTagSelect: _.noop
 };
 
 VideoList.childContextTypes = {

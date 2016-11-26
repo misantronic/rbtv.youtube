@@ -34,7 +34,7 @@ class Playlists extends React.Component {
         const collection = this.state.collection;
 
         return (
-            <CollectionScrolling onUpdate={this._onFetchNext}>
+            <CollectionScrolling uid={this.props.uid} onUpdate={this._onFetchNext}>
                 <CollectionLoader>
                     <div className="component-playlists items">
                         {collection.map(function (item, i) {
@@ -73,6 +73,12 @@ class Playlists extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if(this._xhr) {
+            this._xhr.abort();
+        }
+    }
+
     /**
      * Private methods
      */
@@ -85,9 +91,8 @@ class Playlists extends React.Component {
     _fetch() {
         const collection = this.state.collection;
 
-        collection
-            .fetch()
-            .then(() => this._search());
+        this._xhr = collection.fetch();
+        this._xhr.then(() => this._search());
     }
 
     _search(add = false) {

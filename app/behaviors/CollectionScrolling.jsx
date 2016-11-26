@@ -1,6 +1,7 @@
 const React = require('react');
 const $ = require('jquery');
 const _ = require('underscore');
+const storage = require('../utils/storage');
 
 /**
  * @class CollectionScrolling
@@ -20,6 +21,14 @@ class CollectionScrolling extends React.Component {
 
         collection.on('request', this._onCollectionRequest);
         collection.on('sync', this._onCollectionSync);
+
+        this._updateStorage = _.debounce(y => {
+            if (this.props.uid) {
+                const expires = new Date().getTime() + 1000 * 60 * 3; // 3 minutes
+
+                storage.update('scrolling', { [this.props.uid]: y, expires });
+            }
+        }, 128);
     }
 
     render() {
@@ -32,6 +41,7 @@ class CollectionScrolling extends React.Component {
 
     componentDidMount() {
         this._initScroll();
+        this._checkStorageScrolling();
     }
 
     componentWillUnmount() {
@@ -41,6 +51,8 @@ class CollectionScrolling extends React.Component {
 
         collection.off('request', this._onCollectionRequest);
         collection.off('sync', this._onCollectionSync);
+
+        this._resetStorageScrolling();
     }
 
     _initScroll() {
@@ -80,6 +92,37 @@ class CollectionScrolling extends React.Component {
         this._initScroll();
     }
 
+    _checkStorageScrolling() {
+        if (!this.props.uid) return false;
+
+        const scrolling = storage.get('scrolling') || {};
+        const expires = scrolling.expires;
+        const y = scrolling[this.props.uid] || null;
+
+        // Check if scrolling-value has expires
+        if (new Date(expires) < new Date()) {
+            storage.remove('scrolling');
+
+            return false;
+        }
+
+        if (y === null) return false;
+
+
+        const $container = this.$container ? this.$container : $('body');
+
+        $container.css('min-height', y + innerHeight);
+        scrollTo(0, y);
+
+        return true;
+    }
+
+    _resetStorageScrolling() {
+        const $container = this.$container ? this.$container : $('body');
+
+        $container.removeAttr('style');
+    }
+
     /**
      * Event handler
      */
@@ -117,6 +160,8 @@ class CollectionScrolling extends React.Component {
                 this._update();
             }
         }
+
+        this._updateStorage(y);
     }
 
     _onCollectionRequest() {
@@ -131,8 +176,15 @@ class CollectionScrolling extends React.Component {
         }
 
         this._initScroll();
+        _.delay(() => this._onScroll(), 16);
     }
 }
+
+CollectionScrolling.propTypes = {
+    container: React.PropTypes.string,
+    onUpdate: React.PropTypes.func,
+    uid: React.PropTypes.string
+};
 
 CollectionScrolling.contextTypes = {
     collection: React.PropTypes.object

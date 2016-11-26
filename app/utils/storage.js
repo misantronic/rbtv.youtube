@@ -23,6 +23,10 @@ const storage = {
         localStorage.setItem(key, value);
     },
 
+    remove(key) {
+        localStorage.removeItem(key);
+    },
+
     update(key, props) {
         const keyValue = this.get(key) || {};
 

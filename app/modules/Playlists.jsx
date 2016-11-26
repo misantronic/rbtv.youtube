@@ -35,6 +35,7 @@ class PlaylistsModule extends React.Component {
                     onChannel={this._onSearchChannel}
                     autocomplete={this.autocompleteCollection}/>
                 <Playlists
+                    uid="playlists.playlists"
                     collection={this.searchCollection}
                     channels={[stateChannel]}
                     search={stateSearch}/>

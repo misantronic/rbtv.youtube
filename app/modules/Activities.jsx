@@ -1,5 +1,6 @@
 const React = require('react');
 const _ = require('underscore');
+const $ = require('jquery');
 const VideoList = require('../components/video/list/VideoList');
 const Search = require('../components/search/Search');
 const BtnToTop = require('../components/commons/BtnToTop');
@@ -17,12 +18,11 @@ class ActivitiesModule extends React.Component {
         const filter = storage.get('activities.filter');
 
         this.state = {
+            collection: new SearchCollection(),
+            autocompleteCollection: new AutocompleteCollection(),
             search: filter.search || '',
             channel: filter.channel || Config.channels.rbtv.id
         };
-
-        this.searchCollection = new SearchCollection();
-        this.autocompleteCollection = new AutocompleteCollection();
     }
 
     render() {
@@ -31,9 +31,9 @@ class ActivitiesModule extends React.Component {
 
         return (
             <div className="module-activities">
-                <Search value={stateSearch} channel={stateChannel} autocomplete={this.autocompleteCollection}
+                <Search value={stateSearch} channel={stateChannel} autocomplete={this.state.autocompleteCollection}
                         onSearch={this._onSearch} onChannel={this._onSearchChannel}/>
-                <VideoList collection={this.searchCollection} channel={stateChannel} search={stateSearch}/>
+                <VideoList uid="activities.videolist" collection={this.state.collection} channel={stateChannel} search={stateSearch}/>
                 <BtnToTop/>
             </div>
         );
