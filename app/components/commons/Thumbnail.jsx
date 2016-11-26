@@ -5,9 +5,7 @@ const React = require('react');
  */
 class Thumbnail extends React.Component {
     render() {
-        const labelLeft = this.props.labelLeft || '';
-        const labelRight = this.props.labelRight || '';
-        const badge = this.props.badge || '';
+        const { labelLeft, labelRight, badge } = this.props;
 
         return (
             <div className="thumbnail">
@@ -29,6 +27,12 @@ class Thumbnail extends React.Component {
             </div>
         );
     }
+}
+
+Thumbnail.defaultProps = {
+    labelLeft: '',
+    labelRight: '',
+    badge: ''
 }
 
 module.exports = Thumbnail;

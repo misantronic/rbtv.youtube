@@ -1,6 +1,6 @@
 {
   "name": "rbtv.youtube",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A YouTube-Alternative for Rocket Beans TV.",
   "main": "index.js",
   "scripts": {
@@ -64,5 +64,8 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/misantronic/rbtv.youtube.git"
+  },
+  "engines": {
+    "node": "6.8.1"
   }
 }

@@ -13,10 +13,7 @@ class Playlists extends React.Component {
 
         _.bindAll(this, '_onFetchNext');
 
-        const collection = this.props.collection;
-        const scrolling = this.props.scrolling;
-        const limit = this.props.limit;
-        const channels = this.props.channels;
+        const { collection, scrolling, limit, channels } = this.props;
 
         this.state = {
             collection,
@@ -46,10 +43,9 @@ class Playlists extends React.Component {
                             const desc = item.get('description');
                             const image = item.get('thumbnails').high.url;
                             const itemCount = item.get('itemCount');
-                            const className = 'item';
 
                             return (
-                                <div key={id} className={className}>
+                                <div key={id} className="item">
                                     <Thumb
                                         link={'#/playlists/' + id}
                                         title={title}
@@ -116,7 +112,7 @@ class Playlists extends React.Component {
 
 Playlists.defaultProps = {
     search: '',
-    channels: [ Config.channels.rbtv.id ],
+    channels: [Config.channels.rbtv.id],
     limit: 21,
     scrolling: Infinity
 };

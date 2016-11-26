@@ -3,15 +3,17 @@ const $ = require('jquery');
 const Config = require('../Config');
 const storage = require('../utils/storage');
 
-const baseURL = 'https://www.googleapis.com/youtube/v3';
+const ytBaseURL = 'https://www.googleapis.com/youtube/v3';
+const calBaseURL = 'https://www.googleapis.com/calendar/v3';
 
 const endpoints = {
-    getRating: baseURL + '/videos/getRating',
-    playlists: baseURL + '/playlists',
-    rate: baseURL + '/videos/rate',
-    comments: baseURL + '/comments',
-    commentThreads: baseURL + '/commentThreads',
-    channels: baseURL + '/channels'
+    getRating: ytBaseURL + '/videos/getRating',
+    playlists: ytBaseURL + '/playlists',
+    rate: ytBaseURL + '/videos/rate',
+    comments: ytBaseURL + '/comments',
+    commentThreads: ytBaseURL + '/commentThreads',
+    channels: ytBaseURL + '/channels',
+    calendar: calBaseURL +'/calendars'
 };
 
 const authorizedEndpoints = [
@@ -118,6 +120,15 @@ module.exports = {
         const url = `${Config.endpoints.cacheInvalidate}/?key=${key}`;
 
         return this._request(url);
+    },
+
+    getCalendarEvents() {
+        const url = `${endpoints.calendar}/5aj6musne0k96vbqlu43p8lgs0@group.calendar.google.com/events?singleEvents=true&key=AIzaSyDuvVKkFRcNd8LgtKfXJ4HZ3gWYcV-tTMU`;
+
+        this._request(url, 'GET')
+            .done(function () {
+                console.log(arguments);
+            });
     },
 
     /**

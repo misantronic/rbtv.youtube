@@ -1,16 +1,16 @@
-var fetch = require('../fetch');
-var cache = require('../cache');
+const fetch = require('../fetch');
+const cache = require('../cache');
 
 module.exports = function (req, res) {
-    var query = {
+    const query = {
         part: 'snippet',
-        maxResults: 10,
+        maxResults: 15,
         order: 'relevance',
         videoId: req.query.videoId,
         pageToken: req.query.pageToken
     };
 
-    var config = new fetch.Config({
+    const config = new fetch.Config({
         response: res,
         endpoint: 'commentThreads',
         query: query,
@@ -20,7 +20,5 @@ module.exports = function (req, res) {
         )
     });
 
-    fetch(config).then(function (result) {
-        fetch.end(res, result.data);
-    });
+    fetch(config).then(result => fetch.end(res, result.data));
 };

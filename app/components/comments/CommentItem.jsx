@@ -53,14 +53,18 @@ class CommentItem extends React.Component {
 
         const item = this.props.item;
         const snippet = item.get('snippet');
-        const image = snippet.authorProfileImageUrl;
-        const author = snippet.authorDisplayName;
-        const authorChannel = snippet.authorChannelUrl;
+
+        const {
+            authorProfileImageUrl,
+            authorDisplayName,
+            authorChannelUrl,
+            textDisplay,
+            publishedAt,
+            totalReplyCount,
+            likeCount
+        } = snippet;
+
         const authorChannelId = snippet.authorChannelId.value;
-        const text = snippet.textDisplay;
-        const publishedAt = snippet.publishedAt;
-        const numReplies = snippet.totalReplyCount;
-        const likeCount = snippet.likeCount;
         const dislikeCount = null;
 
         const channelInfo = storage.getMyChannelInfo();
@@ -69,12 +73,12 @@ class CommentItem extends React.Component {
 
         return (
             <div className="component-comment-item">
-                <img className="thumb" src={image} alt={author}/>
+                <img className="thumb" src={authorProfileImageUrl} alt={authorDisplayName}/>
                 <div className="content">
                     <div className="body">
                         { isEditing
                             ? <CommentForm model={commentModel} method="updateComment" onComment={this._onUpdateSuccess} onAbort={this._onUpdateAbort}/>
-                            : <p dangerouslySetInnerHTML={{ __html: text }}></p>
+                            : <p dangerouslySetInnerHTML={{ __html: textDisplay }}></p>
                         }
                         { isMine
                             ? <BtnContextMenu menu={this.getContextMenu()}/>
@@ -85,13 +89,13 @@ class CommentItem extends React.Component {
                         <a href="#" onClick={this._onClickReply}>Reply</a>
                         <Thumbs statistics={{ likeCount, dislikeCount }}/>
                         <div className="right">
-                            <a href={authorChannel} target="_blank">{author}</a>
+                            <a href={authorChannelUrl} target="_blank">{authorDisplayName}</a>
                             <span className="published-at">, {publishedAt.fromNow()}</span>
                         </div>
                     </div>
                     {
-                        numReplies
-                            ? <a href="#" className="btn-replies" onClick={this._onToggleReplies}>{this.state.showReplies ? 'hide' : 'show'} {numReplies} replies</a>
+                        totalReplyCount
+                            ? <a href="#" className="btn-replies" onClick={this._onToggleReplies}>{this.state.showReplies ? 'hide' : 'show'} {totalReplyCount} replies</a>
                             : null
                     }
                     <CommentList />

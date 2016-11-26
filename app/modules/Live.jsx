@@ -16,7 +16,7 @@ class VideoModule extends React.Component {
 
         return (
             <div className="module-video">
-                <VideoDetails id={videoId} fromCache={false}>
+                <VideoDetails id={videoId} fromCache={false} liveStreamingDetails={true}>
                     <Chat id={videoId}/>
                 </VideoDetails>
             </div>

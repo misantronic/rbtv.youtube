@@ -1,9 +1,10 @@
-var _     = require('underscore');
-var fetch = require('./../fetch');
-var cache = require('../cache');
+const _ = require('underscore');
+const fetch = require('./../fetch');
+const cache = require('../cache');
+const Config = require('../../../app/Config');
 
 module.exports = function (req, res) {
-    var query = {
+    const query = {
         part: 'snippet',
         maxResults: 6,
         type: 'video',
@@ -15,7 +16,7 @@ module.exports = function (req, res) {
         channelId: req.query.channelId
     };
 
-    var config = new fetch.Config({
+    const config = new fetch.Config({
         response: res,
         endpoint: 'search',
         query: query,
@@ -28,9 +29,13 @@ module.exports = function (req, res) {
     fetch(config).then(function (result) {
         // Filter data
         // TODO: Do this before caching data
-        result.data.items = _.filter(result.data.items, item => {
-            return item.snippet.channelId === 'UCQvTDmHza8erxZqDkjQ4bQQ' || item.snippet.channelId === 'UCtSP1OA6jO4quIGLae7Fb4g';
-        });
+        result.data.items = _.filter(
+            result.data.items,
+            item => _.filter(
+                Config.channels,
+                channel => channel.id === item.snippet.channelId
+            ).length
+        );
 
         fetch.end(res, result.data);
     });

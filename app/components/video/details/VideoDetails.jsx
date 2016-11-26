@@ -5,13 +5,14 @@ const Thumbs = require('./Thumbs');
 const numbers = require('../../../utils/numbers');
 
 class VideoDetails extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
-        const id = props.id;
+        const { id, seekTo } = props;
 
         this.state = {
-            videoModel: new VideoModel({ id })
+            videoModel: new VideoModel({ id }),
+            seekTo
         };
     }
 
@@ -21,18 +22,23 @@ class VideoDetails extends React.Component {
 
     render() {
         const model = this.state.videoModel;
+
         const videoId = model.id || null;
-        const title = model.get('title');
-        const desc = model.get('description');
-        const publishedAt = model.get('publishedAt');
-        const statistics = model.get('statistics');
-        const views = statistics.viewCount;
+        const { title, description, publishedAt, statistics, liveStreamingDetails } = model.attributes;
+
+        let viewers = '';
+
+        if (liveStreamingDetails) {
+            viewers = `${numbers.format(liveStreamingDetails.concurrentViewers)} viewers`;
+        } else {
+            viewers = `${numbers.format(statistics.viewCount)} views`;
+        }
 
         return (
             <div className="component-videodetails">
                 <div className="row">
                     <div className="col-xs-12">
-                        <VideoPlayer id={videoId} autoplay={this.state.autoplay}/>
+                        <VideoPlayer id={videoId} autoplay={this.state.autoplay} seekTo={this.props.seekTo}/>
                     </div>
                 </div>
                 <div className="row">
@@ -47,13 +53,13 @@ class VideoDetails extends React.Component {
                                 <h4>Published on {publishedAt && publishedAt.format('LL')}</h4>
                             </div>
                             <div className="col-xs-4 text-right">
-                                <h4 className="views">{numbers.format(views)} views</h4>
+                                <h4 className="views">{viewers}</h4>
                                 <Thumbs statistics={statistics} id={videoId}/>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-xs-12">
-                                {desc.split('\n').map((item, i) => <span key={i}>{item}<br/></span>)}
+                                {description.split('\n').map((item, i) => <span key={i}>{item}<br/></span>)}
                             </div>
                         </div>
                     </div>
@@ -73,6 +79,10 @@ class VideoDetails extends React.Component {
         if (this._propHasChanged(prevProps, 'id')) {
             this._fetch();
         }
+
+        if (this._propHasChanged(prevProps, 'seekTo')) {
+            this.setState({ seekTo: this.props.seekTo });
+        }
     }
 
     /**
@@ -84,13 +94,12 @@ class VideoDetails extends React.Component {
     }
 
     _fetch() {
-        const id = this.props.id;
+        const { id, fromCache, liveStreamingDetails } = this.props;
         const model = this.state.videoModel;
-        const method = this.props.fromCache ? 'fetch' : 'fetchLive';
 
         if (id) {
             model.set({ id });
-            model[method]().then(() => {
+            model.fetch({ fromCache, liveStreamingDetails }).then(() => {
                 this.forceUpdate();
 
                 if (this.props.onFetch) {
@@ -102,7 +111,8 @@ class VideoDetails extends React.Component {
 }
 
 VideoDetails.defaultProps = {
-    fromCache: true
+    fromCache: true,
+    liveStreamingDetails: false
 };
 
 module.exports = VideoDetails;

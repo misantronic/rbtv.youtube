@@ -11,17 +11,10 @@ class Thumbs extends React.Component {
 
         _.bindAll(this, '_onLike', '_onDislike', '_onRated');
 
-        /** @type {{likeCount: Number, dislikeCount: Number}} */
-        const statistics = props.statistics;
-        const id = props.id;
-        const liked = props.liked || false;
-        const disliked = props.disliked || false;
+        /** @var {{likeCount: Number, dislikeCount: Number}} statistics */
+        const { statistics, id, liked, disliked } = props;
 
-        this.state = {
-            liked,
-            disliked,
-            statistics
-        };
+        this.state = { liked, disliked, statistics };
 
         if (id) {
             this._getRating();
@@ -135,6 +128,11 @@ class Thumbs extends React.Component {
         });
     }
 }
+
+Thumbs.defaultProps = {
+    liked: false,
+    disliked: false
+};
 
 Thumbs.propTypes = {
     id: React.PropTypes.string,

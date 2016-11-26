@@ -1,30 +1,39 @@
-var _ = require('underscore');
-var moment = require('moment');
-var Promise = require('promise');
-var fetch = require('./../fetch');
-var cache = require('../cache');
-var VideoModel = require('../../db/videos/models/Video');
-var dbSaveVideo = require('../../db/videos/saveVideo');
-var dbGetVideos = require('../../db/videos/getVideos');
+const _ = require('underscore');
+const moment = require('moment');
+const Promise = require('promise');
+const fetch = require('./../fetch');
+const cache = require('../cache');
+const VideoModel = require('../../db/videos/models/Video');
+const dbSaveVideo = require('../../db/videos/saveVideo');
+const dbGetVideos = require('../../db/videos/getVideos');
 
 module.exports = function (req, res) {
-    var videoIds = req.query.id.split(',');
-    var fromCache = _.isUndefined(req.query.fromCache) ? true : req.query.fromCache === 'true';
+    let { id, fromCache, liveStreamingDetails } = req.query;
+
+    fromCache = fromCache === 'true';
+    liveStreamingDetails = liveStreamingDetails === 'true';
+
+    const videoIds = id.split(',');
+    let part = 'snippet,contentDetails,statistics';
+
+    if (liveStreamingDetails) {
+        part += ',liveStreamingDetails';
+    }
 
     console.time('Mongo: getVideos()');
 
     dbGetVideos(videoIds, fromCache)
         .then(result => {
-            var itemsFromDB = result.itemsFromDB;
-            var itemsNotFound = result.itemsNotFound;
+            const itemsFromDB = result.itemsFromDB;
+            const itemsNotFound = result.itemsNotFound;
 
             console.timeEnd('Mongo: getVideos()');
             console.log('-> Found:', itemsFromDB.length + ', Not found:', itemsNotFound.length);
 
-            var config = new fetch.Config({
+            const config = new fetch.Config({
                 endpoint: 'videos',
                 query: {
-                    part: 'snippet,contentDetails,statistics',
+                    part,
                     maxResults: 50,
                     id: itemsNotFound.join(',')
                 }
@@ -36,8 +45,8 @@ module.exports = function (req, res) {
             }
 
             fetch(config).then(result => {
-                var fromCache = result.fromCache;
-                var items = result.data.items.concat(itemsFromDB);
+                const fromCache = result.fromCache;
+                const items = result.data.items.concat(itemsFromDB);
 
                 fetch.end(res, items);
 

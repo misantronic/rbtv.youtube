@@ -1,3 +1,5 @@
+const $ = require('jquery');
+const moment = require('moment');
 const React = require('react');
 const CollectionLoader = require('../../behaviors/CollectionLoader');
 const CollectionScrolling = require('../../behaviors/CollectionScrolling');
@@ -31,7 +33,7 @@ class CommentThreadsList extends React.Component {
         return (
             <CollectionScrolling onUpdate={() => this._fetch()}>
                 <CollectionLoader>
-                    <div className="component-comment-threads-list">
+                    <div className="component-comment-threads-list" ref={this._onEl.bind(this)}>
                         {collection.map(item => <CommentItem key={item.id} item={item}/>)}
                     </div>
                 </CollectionLoader>
@@ -64,7 +66,37 @@ class CommentThreadsList extends React.Component {
             .fetch()
             .then(() => this.forceUpdate());
     }
+
+    _onEl(el) {
+        if (el) {
+            const $el = $(el);
+
+            $el.off('click').on('click', '.ot-anchor', e => {
+                const $target = $(e.target);
+                const href = $target.attr('href');
+                const regEx = /^https*:\/\/www\.youtube\.com\/watch\?v=(?:.*?)&t=(.*)$/i;
+
+                if (regEx.test(href)) {
+                    href.replace(regEx, (str, time) => {
+                        const duration = moment.duration('PT' + time.toUpperCase());
+
+                        if (this.props.onSeek) {
+                            this.props.onSeek(duration);
+                        }
+                    });
+
+                    return false;
+                }
+            });
+        }
+    }
 }
+
+CommentThreadsList.propTypes = {
+    collection: React.PropTypes.object,
+    id: React.PropTypes.string,
+    onSeek: React.PropTypes.func
+};
 
 CommentThreadsList.childContextTypes = {
     collection: React.PropTypes.object,

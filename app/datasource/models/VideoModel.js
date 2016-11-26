@@ -59,10 +59,12 @@ const Video = Model.extend({
         }
 
         const fromCache = _.isUndefined(this._fromCache) ? true : this._fromCache;
+        const liveStreamingDetails = this._liveStreamingDetails || false;
 
         return Config.endpoints.videos + '?' + $.param([
                 { name: 'id', value: this.id },
-                { name: 'fromCache', value: fromCache }
+                { name: 'fromCache', value: fromCache },
+                { name: 'liveStreamingDetails', value: liveStreamingDetails }
             ]);
     },
 
@@ -109,16 +111,20 @@ const Video = Model.extend({
             tags,
             title: response.snippet.title,
             duration: moment.duration(response.contentDetails.duration),
-            statistics: response.statistics
+            statistics: response.statistics,
+            liveStreamingDetails: response.liveStreamingDetails
         };
     },
 
-    fetchLive() {
-        this._fromCache = false;
+    fetch(options = { fromCache: false, liveStreamingDetails: false }) {
+        this._fromCache = options.fromCache;
+        this._liveStreamingDetails = options.liveStreamingDetails;
 
-        return this.fetch().then(() => {
-            this._fromCache = true;
-        });
+        return Model.prototype
+            .fetch.call(this, options)
+            .then(() => {
+                this._fromCache = true;
+            });
     }
 });
 

@@ -13,20 +13,22 @@ class VideoModule extends React.Component {
     constructor(props) {
         super(props);
 
-        _.bindAll(this, '_onFetch', '_onItemSelected', '_onComment');
+        _.bindAll(this, '_onFetch', '_onItemSelected', '_onComment', '_onVideoSeek');
 
         const videoId = this.props.routeParams.id;
         const collection = new Collection();
         const commentThreadsCollection = new CommentThreadsCollection();
         const channelId = '';
         const autoplay = false;
+        const seekTo = null;
 
         this.state = {
             collection,
             commentThreadsCollection,
             autoplay,
             channelId,
-            videoId
+            videoId,
+            seekTo
         };
 
         collection.on('react:update', () => this.forceUpdate());
@@ -42,6 +44,7 @@ class VideoModule extends React.Component {
         const videoId = this.state.videoId;
         const channelId = this.state.channelId;
         const collection = this.state.collection;
+        const seekTo = this.state.seekTo;
         const commentThreadsCollection = this.state.commentThreadsCollection;
         const commentThreadModel = new CommentTreadModel({
             snippet: {
@@ -53,11 +56,11 @@ class VideoModule extends React.Component {
 
         return (
             <div className="module-video">
-                <VideoDetails id={videoId} onFetch={this._onFetch}>
+                <VideoDetails id={videoId} onFetch={this._onFetch} seekTo={seekTo}>
                     <PlaylistItems id={videoId} collection={collection} onItemSelected={this._onItemSelected}/>
                 </VideoDetails>
                 <CommentForm model={commentThreadModel} onComment={this._onComment}/>
-                <CommentThreadsList collection={commentThreadsCollection} id={videoId}/>
+                <CommentThreadsList collection={commentThreadsCollection} id={videoId} onSeek={this._onVideoSeek}/>
             </div>
         );
     }
@@ -102,10 +105,15 @@ class VideoModule extends React.Component {
         commentThreadsCollection.add(commentData, { at: 0 });
         commentThreadsCollection.trigger('react:update');
     }
+
+    _onVideoSeek(duration) {
+        this.setState({ seekTo: duration });
+    }
 }
 
 VideoModule.childContextTypes = {
-    videoId: React.PropTypes.string
+    videoId: React.PropTypes.string,
+    seekTo: React.PropTypes.object
 };
 
 module.exports = VideoModule;

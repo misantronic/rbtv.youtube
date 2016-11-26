@@ -4,8 +4,8 @@ const _ = require('underscore');
 const storage = require('../../../utils/storage');
 
 class VideoPlayer extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         _.bindAll(this, '_onReady', '_onStateChange', '_onResize', '_onYT');
 
@@ -48,6 +48,10 @@ class VideoPlayer extends React.Component {
         if (this._propHasChanged(prevProps, 'id') || this._propHasChanged(prevProps, 'autoplay')) {
             this._updatePlayer();
         }
+
+        if (this._propHasChanged(prevProps, 'seekTo')) {
+            this._seekTo(this.props.seekTo);
+        }
     }
 
     componentWillUnmount() {
@@ -81,6 +85,18 @@ class VideoPlayer extends React.Component {
         this._YTPlayer[method](videoId, this.state.currentTime);
     }
 
+    /**
+     * @param {moment.duration} value
+     * @private
+     */
+    _seekTo(value) {
+        const seconds = value.as('seconds');
+
+        this._YTPlayer.seekTo(seconds);
+        this._scrollTo();
+        this._YTPlayer.playVideo();
+    }
+
     _setSize() {
         const $el = this.container;
 
@@ -93,6 +109,10 @@ class VideoPlayer extends React.Component {
         }
 
         $el.css({ width, height });
+    }
+
+    _scrollTo() {
+        $('html, body').animate({ scrollTop: 0 }, 500);
     }
 
     _setWatched() {
