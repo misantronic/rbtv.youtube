@@ -13,7 +13,7 @@ const endpoints = {
     comments: ytBaseURL + '/comments',
     commentThreads: ytBaseURL + '/commentThreads',
     channels: ytBaseURL + '/channels',
-    calendar: calBaseURL +'/calendars'
+    calendar: calBaseURL + '/calendars'
 };
 
 const authorizedEndpoints = [
@@ -58,7 +58,7 @@ module.exports = {
      * @param videoId
      */
     addRating(rating, videoId) {
-        const url = endpoints.rate +'?id='+ videoId +'&rating='+ rating;
+        const url = endpoints.rate + '?id=' + videoId + '&rating=' + rating;
 
         return this._request(url, 'POST')
             .then(() => rating);
@@ -66,9 +66,11 @@ module.exports = {
 
     getRating(videoId) {
         const url = `${endpoints.getRating}?id=${videoId}`;
+        const xhr = this._request(url);
 
-        return this._request(url)
-            .then(data => data.items[0].rating);
+        xhr.then(data => data.items[0].rating);
+
+        return xhr;
     },
 
     getChannelInfo() {
@@ -122,15 +124,6 @@ module.exports = {
         return this._request(url);
     },
 
-    getCalendarEvents() {
-        const url = `${endpoints.calendar}/5aj6musne0k96vbqlu43p8lgs0@group.calendar.google.com/events?singleEvents=true&key=AIzaSyDuvVKkFRcNd8LgtKfXJ4HZ3gWYcV-tTMU`;
-
-        this._request(url, 'GET')
-            .done(function () {
-                console.log(arguments);
-            });
-    },
-
     /**
      * Private methods
      */
@@ -148,21 +141,23 @@ module.exports = {
         const fn = function (retryOnFail = true) {
             return self._authorize().then(() => {
                 if (self._data) {
-                    return $
-                        .ajax({
-                            url,
-                            type,
-                            data: data ? JSON.stringify(data) : null,
-                            dataType: 'json',
-                            contentType: 'application/json'
-                        })
-                        .fail(result => {
-                            if (retryOnFail && result.status === 401) {
-                                self._reAuthorize().then(() => {
-                                    return fn(false);
-                                });
-                            }
-                        });
+                    const xhr = $.ajax({
+                        url,
+                        type,
+                        data: data ? JSON.stringify(data) : null,
+                        dataType: 'json',
+                        contentType: 'application/json'
+                    });
+
+                    xhr.fail(result => {
+                        if (retryOnFail && result.status === 401) {
+                            self._reAuthorize().then(() => {
+                                return fn(false);
+                            });
+                        }
+                    });
+
+                    return xhr;
                 }
             });
         };

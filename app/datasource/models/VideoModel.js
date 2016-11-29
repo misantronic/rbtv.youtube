@@ -116,15 +116,11 @@ const Video = Model.extend({
         };
     },
 
-    fetch(options = { fromCache: false, liveStreamingDetails: false }) {
+    fetch(options = { fromCache: true, liveStreamingDetails: false }) {
         this._fromCache = options.fromCache;
         this._liveStreamingDetails = options.liveStreamingDetails;
 
-        return Model.prototype
-            .fetch.call(this, options)
-            .then(() => {
-                this._fromCache = true;
-            });
+        return Model.prototype.fetch.call(this, options);
     }
 });
 

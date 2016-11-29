@@ -1,0 +1,142 @@
+.component-timetable {
+    display: flex;
+    flex-direction: column;
+
+    .week-header {
+        display: flex;
+        padding-left: 20px;
+
+        .week-header-day {
+            padding: 0 20px;
+            flex: 1;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
+    }
+
+    .week-content {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        position: relative;
+
+        .week {
+            display: flex;
+            flex: 1;
+        }
+
+        .week-hours {
+            margin-right: 10px;
+
+            .week-hour {
+                height: 100px;
+            }
+        }
+    }
+
+    .hour-line {
+        .half-hour,
+        .hour {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #CCC;
+        }
+
+        .half-hour {
+            background: #EEE;
+        }
+    }
+}
+
+.component-timetable-day {
+    flex: 1;
+    height: 1400px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.component-timetable-event {
+    width: calc(100% - 10px);
+    padding: 5px;
+    margin: 0 5px;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    box-sizing: border-box;
+    border: 1px solid #FFF;
+    transform: translateY(1px);
+    display: flex;
+
+    &.is-premiere {
+        color: #FFF;
+        background: #337ab7;
+
+        .date {
+            background: #31638e;
+            color: #FFF;
+        }
+    }
+
+    &.is-live {
+        color: #FFF;
+        background: #c9302c;
+
+        .date {
+            background: #962623;
+            color: #FFF;
+        }
+    }
+
+    .date {
+        float: left;
+        background: #FFF;
+        color: #111;
+        margin: 0 5px 0 0;
+        flex: 0 0 38px;
+        border-radius: 0;
+    }
+
+    .content {
+        flex: 1;
+    }
+
+    .title {
+        font-size: 14px;
+        margin: 0 0 5px;
+        padding-top: 2px;
+    }
+
+    .description {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    &.is-short {
+        padding: 2px 5px;
+
+        .title {
+            font-size: 10px;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            align-items: center;
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .date {
+            font-size: 10px;
+            height: 100%;
+            align-items: center;
+            display: flex;
+        }
+
+        .description {
+            display: none;
+        }
+    }
+}

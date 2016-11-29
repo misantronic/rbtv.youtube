@@ -29,6 +29,9 @@ class NavModule extends React.Component {
                     <li className="nav-item">
                         <Link to={'/live/' + Config.liveId} activeClassName="active" onClick={this._onClickLink}>Live</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="/timetable" activeClassName="active" onClick={this._onClickLink}>Wochenplan</Link>
+                    </li>
                     <li className="nav-item nav-item-watchlater">
                         <Link to="/watchlater" activeClassName="active" onClick={this._onClickLink}>
                             Watch later <span className="badge">{this.state.countWatchlist}</span>

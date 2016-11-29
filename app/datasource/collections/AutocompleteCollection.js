@@ -1,6 +1,6 @@
 const Backbone = require('backbone');
-const beans = require('../../data/beans');
-const shows = require('../../data/shows');
+const beans = require('../beans');
+const shows = require('../shows');
 
 const data = beans.concat(shows);
 

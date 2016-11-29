@@ -85,6 +85,12 @@ class VideoDetails extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this._xhr) {
+            this._xhr.abort();
+        }
+    }
+
     /**
      * Private methods
      */
@@ -99,7 +105,8 @@ class VideoDetails extends React.Component {
 
         if (id) {
             model.set({ id });
-            model.fetch({ fromCache, liveStreamingDetails }).then(() => {
+            this._xhr = model.fetch({ fromCache, liveStreamingDetails });
+            this._xhr.then(() => {
                 this.forceUpdate();
 
                 if (this.props.onFetch) {

@@ -2,7 +2,7 @@ const React = require('react');
 
 module.exports = function Loader() {
     return (
-        <div className="component-loader loader">
+        <div className="component-loader">
             <div className="sk-fading-circle">
                 <div className="sk-circle1 sk-circle"></div>
                 <div className="sk-circle2 sk-circle"></div>

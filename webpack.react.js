@@ -31,8 +31,8 @@ module.exports = {
 
     resolve: {
         modulesDirectories: [
-            'node_modules',
-            'react'
+            'app',
+            'node_modules'
         ],
         extensions: [
             '',

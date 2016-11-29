@@ -16,7 +16,7 @@ module.exports = function (req, res) {
         query: query,
         cacheConfig: new cache.Config(
             cache.rk('activities', query.channelId, query.pageToken, query.maxResults),
-            60 * 5 // 5 mins
+            60 * 15 // 5 mins
         )
     });
 

@@ -13,6 +13,7 @@ const WatchLater = require('./modules/WatchLater');
 const Video = require('./modules/Video');
 const App = require('./modules/App');
 const Live = require('./modules/Live');
+const Timetable = require('./modules/Timetable');
 
 require('./utils/youtubeController').init();
 require('./overrides/underscore');
@@ -35,6 +36,7 @@ window.onGoogleClientLoad = function () {
                 <Route path="/watchlater" component={WatchLater}/>
                 <Route path="/video/:id" component={Video}/>
                 <Route path="/live/:id" component={Live}/>
+                <Route path="/timetable" component={Timetable}/>
             </Route>
         </Router>,
         $('.app').find('.container')[0]

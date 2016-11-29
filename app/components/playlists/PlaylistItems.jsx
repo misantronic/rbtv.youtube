@@ -69,6 +69,12 @@ class PlaylistItems extends React.Component {
         this._fetch();
     }
 
+    compoentnWillUnmount() {
+        if (this._xhr) {
+            this._xhr.abort();
+        }
+    }
+
     _propHasChanged(prevProps, prop) {
         return prevProps[prop] !== this.props[prop];
     }
@@ -76,7 +82,8 @@ class PlaylistItems extends React.Component {
     _fetch() {
         const collection = this.state.collection;
 
-        collection.fetch().then(() => {
+        this._xhr = collection.fetch();
+        this._xhr.then(() => {
             this.forceUpdate();
 
             if (this.props.onFetch) {

@@ -57,14 +57,17 @@ class CommentThreadsList extends React.Component {
 
         collection.off('react:update');
         collection.off('remove');
+
+        if (this._xhr) {
+            this._xhr.abort();
+        }
     }
 
     _fetch() {
         const collection = this.state.collection;
 
-        collection
-            .fetch()
-            .then(() => this.forceUpdate());
+        this._xhr = collection.fetch();
+        this._xhr.then(() => this.forceUpdate());
     }
 
     _onEl(el) {

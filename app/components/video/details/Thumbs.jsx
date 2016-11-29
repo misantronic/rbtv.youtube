@@ -54,19 +54,24 @@ class Thumbs extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this._ratingXhr && this._ratingXhr.abort) {
+            this._ratingXhr.abort();
+        }
+    }
+
     /**
      * Private methods
      */
 
     _getRating() {
-        youtubeController
-            .getRating(this.props.id)
-            .then(rating => {
-                this.setState({
-                    liked: rating === 'like',
-                    disliked: rating === 'dislike'
-                });
+        this._ratingXhr = youtubeController.getRating(this.props.id);
+        this._ratingXhr.then(rating => {
+            this.setState({
+                liked: rating === 'like',
+                disliked: rating === 'dislike'
             });
+        });
     }
 
     _propHasChanged(prevProps, prop) {

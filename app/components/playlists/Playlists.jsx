@@ -74,7 +74,7 @@ class Playlists extends React.Component {
     }
 
     componentWillUnmount() {
-        if(this._xhr) {
+        if (this._xhr) {
             this._xhr.abort();
         }
     }

@@ -1,5 +1,5 @@
 const backbone = require('backbone');
-const beans = require('../../data/beans');
+const beans = require('../beans');
 
 const BeanModel = backbone.Model.extend({
 

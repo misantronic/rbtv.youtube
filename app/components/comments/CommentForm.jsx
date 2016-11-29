@@ -34,6 +34,12 @@ class CommentForm extends React.Component {
         );
     }
 
+    componentWillUnmount() {
+        if (this._submitXhr) {
+            this._submitXhr.abort();
+        }
+    }
+
     _onTextChange(e) {
         const text = e.target.value;
         /** @type {Object} */
@@ -51,22 +57,22 @@ class CommentForm extends React.Component {
         this.setState({ loading: true }, () => {
             const method = this.props.method;
 
-            youtubeController[method](this.state.model)
-                .then(data => {
-                    this.setState({
-                        loading: false,
-                        text: ''
-                    });
-
-                    $.when([
-                        youtubeController.invalidateComments(`commentThreads.${this.context.videoId}`),
-                        youtubeController.invalidateComments(`comments.${this.context.videoId}`)
-                    ]).done(() => {
-                        if (this.props.onComment) {
-                            this.props.onComment(data);
-                        }
-                    });
+            this._submitXhr = youtubeController[method](this.state.model);
+            this._submitXhr.then(data => {
+                this.setState({
+                    loading: false,
+                    text: ''
                 });
+
+                $.when([
+                    youtubeController.invalidateComments(`commentThreads.${this.context.videoId}`),
+                    youtubeController.invalidateComments(`comments.${this.context.videoId}`)
+                ]).done(() => {
+                    if (this.props.onComment) {
+                        this.props.onComment(data);
+                    }
+                });
+            });
         });
     }
 

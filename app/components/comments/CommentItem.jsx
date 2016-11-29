@@ -104,6 +104,12 @@ class CommentItem extends React.Component {
         );
     }
 
+    componentWillUnmount() {
+        if (this._removeCommentXhr) {
+            this._removeCommentXhr.abort();
+        }
+    }
+
     _onToggleReplies(e) {
         const showReplies = this.state.showReplies;
         const repliesCollection = this.state.repliesCollection;
@@ -135,14 +141,13 @@ class CommentItem extends React.Component {
     _onClickDelete() {
         const item = this.props.item;
 
-        youtubeController
-            .removeComment(item)
-            .then(() => {
-                item.collection.remove(item);
+        this._removeCommentXhr = youtubeController.removeComment(item);
+        this._removeCommentXhr.then(() => {
+            item.collection.remove(item);
 
-                youtubeController.invalidateComments(`commentThreads.${this.context.videoId}`);
-                youtubeController.invalidateComments(`comments.${this.context.videoId}`);
-            });
+            youtubeController.invalidateComments(`commentThreads.${this.context.videoId}`);
+            youtubeController.invalidateComments(`comments.${this.context.videoId}`);
+        });
     }
 
     _onUpdateSuccess(attributes) {
