@@ -1,5 +1,6 @@
 const React = require('react');
 const $ = require('jquery');
+const Link = require('react-router').Link;
 
 class TimetableEventComponent extends React.Component {
     constructor(props) {
@@ -16,9 +17,11 @@ class TimetableEventComponent extends React.Component {
         const type = item.getType();
         const desc = item.getDescription();
         const start = item.get('start');
-        const end = item.get('end');
-
+        // const end = item.get('end');
         const className = 'component-timetable-event is-' + type;
+
+        const playlist = this.props.playlists.find(playlist => title.indexOf(playlist.get('title')) === 0);
+        const link = playlist ? <Link to={'playlists/' + playlist.id}>{title}</Link> : title;
 
         return (
             <div className={className} ref={this._onEl.bind(this)}>
@@ -28,7 +31,7 @@ class TimetableEventComponent extends React.Component {
                     {/*<time>{end.format('HH:mm')}</time>*/}
                 </label>
                 <div className="content">
-                    <h3 className="title">{title}</h3>
+                    <h3 className="title">{link}</h3>
                     <p className="description">{desc}</p>
                 </div>
             </div>

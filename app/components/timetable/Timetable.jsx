@@ -1,6 +1,6 @@
 const React = require('react');
-const Backbone = require('backbone');
 const CalendarCollection = require('../../datasource/collections/CalendarCollection');
+const PlaylistsCollection = require('../../datasource/collections/PlaylistsCollection');
 const TimetableDay = require('./TimetableDay');
 const Config = require('../../Config');
 
@@ -9,12 +9,14 @@ class TimetableComponent extends React.Component {
         super(props);
 
         this.state = {
-            collection: new CalendarCollection()
+            collection: new CalendarCollection(),
+            playlistsCollection: new PlaylistsCollection()
         };
     }
 
     render() {
         const collection = this.state.collection;
+        const playlistsCollection = this.state.playlistsCollection;
         let days = [];
 
         if (this.props.filter === 1) {
@@ -45,7 +47,6 @@ class TimetableComponent extends React.Component {
                         }
 
                         const start = event.get('start');
-
                         const weekDay = `${start.format('dddd')}, ${start.format('DD.MM')}`;
 
                         return <div key={event.id} className="week-header-day">{weekDay}</div>;
@@ -63,7 +64,7 @@ class TimetableComponent extends React.Component {
                             </div>
                         ))}
 
-                        {days.map((day, i) => <TimetableDay key={i} collection={day}/>)}
+                        {days.map((day, i) => <TimetableDay key={i} collection={day} playlists={playlistsCollection} />)}
                     </div>
                 </div>
             </div>
@@ -86,9 +87,13 @@ class TimetableComponent extends React.Component {
 
     _fetch() {
         const collection = this.state.collection;
+        const playlistsCollection = this.state.playlistsCollection;
 
         this._xhr = collection.fetch();
         this._xhr.done(() => this.forceUpdate());
+
+        this._playlistsXhr = playlistsCollection.fetch();
+        this._playlistsXhr.done(() => this.forceUpdate());
     }
 }
 

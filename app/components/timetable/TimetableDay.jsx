@@ -11,10 +11,11 @@ class TimetableDayComponent extends React.Component {
 
     render() {
         const collection = this.props.collection;
+        const playlists = this.props.playlists;
 
         return (
             <div className="component-timetable-day" ref={this._onEl.bind(this)}>
-                {collection.map(item => <TimetableEvent key={item.id} item={item}/>)}
+                {collection.map(item => <TimetableEvent key={item.id} item={item} playlists={playlists} />)}
             </div>
         );
     }
@@ -27,7 +28,8 @@ class TimetableDayComponent extends React.Component {
 }
 
 TimetableDayComponent.propTypes = {
-    collection: React.PropTypes.object
+    collection: React.PropTypes.object,
+    playlists: React.PropTypes.object
 };
 
 module.exports = TimetableDayComponent;

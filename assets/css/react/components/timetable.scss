@@ -107,6 +107,11 @@
         font-size: 14px;
         margin: 0 0 5px;
         padding-top: 2px;
+
+        > a {
+            color: #FFF;
+            text-decoration: underline;
+        }
     }
 
     .description {

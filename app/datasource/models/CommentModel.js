@@ -41,7 +41,7 @@ module.exports = Model.extend({
     },
 
     parse(response) {
-        response.snippet = this._parseSnippet(response.snippet);
+        response.snippet = this._parseSnippet(response.snippet || {});
 
         return response;
     },
