@@ -1,9 +1,9 @@
-const React = require('react');
+import React from 'react';
 const Link = require('react-router').Link;
 const IndexLink = require('react-router').IndexLink;
-const Config = require('../Config');
-const watchlist = require('../utils/watchlist');
-const storage = require('../utils/storage');
+import Config from '../../Config';
+import watchlist from '../../utils/watchlist';
+import storage from '../../utils/storage';
 
 class NavModule extends React.Component {
     constructor(props) {

@@ -83,6 +83,10 @@ module.exports = {
                     presets: [
                         'es2015',
                         'react'
+                    ],
+                    plugins: [
+                        'transform-decorators-legacy',
+                        'transform-object-rest-spread'
                     ]
                 }
             },

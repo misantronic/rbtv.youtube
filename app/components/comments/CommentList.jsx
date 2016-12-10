@@ -1,5 +1,5 @@
-const React = require('react');
-const CollectionLoader = require('../../behaviors/CollectionLoader');
+import React from 'react';
+import CollectionLoader from '../../behaviors/CollectionLoader';
 
 /**
  * @class CommentList

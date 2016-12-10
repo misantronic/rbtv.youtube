@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 const Model = require('backbone').Model;
 
 /**

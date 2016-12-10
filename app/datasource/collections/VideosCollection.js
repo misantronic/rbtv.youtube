@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const Collection = require( 'backbone').Collection;
 const Config = require( '../../Config');
 const VideoModel = require( './../models/VideoModel');

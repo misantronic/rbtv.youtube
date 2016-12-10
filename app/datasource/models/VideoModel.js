@@ -1,8 +1,8 @@
-const _ = require('underscore');
-const $ = require('jquery');
-const moment = require('moment');
+import _ from 'underscore';
+import $ from 'jquery';
+import moment from 'moment';
 const Model = require('backbone').Model;
-const Config = require('../../Config');
+import Config from '../../Config';
 
 const Video = Model.extend({
     defaults() {

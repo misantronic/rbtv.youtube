@@ -1,8 +1,8 @@
-const React = require('react');
-const VideoModel = require('../../../datasource/models/VideoModel');
-const VideoPlayer = require('../player/VideoPlayer');
-const Thumbs = require('./Thumbs');
-const numbers = require('../../../utils/numbers');
+import React from 'react';
+import VideoModel from '../../../datasource/models/VideoModel';
+import VideoPlayer from '../player/VideoPlayer';
+import Thumbs from './Thumbs';
+import numbers from '../../../utils/numbers';
 
 class VideoDetails extends React.Component {
     constructor(props, context) {

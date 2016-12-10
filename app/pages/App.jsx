@@ -1,5 +1,5 @@
-const React = require('react');
-const Nav = require('./Nav');
+import React from 'react';
+import Nav from './../components/nav/Nav';
 
 module.exports = function AppModule(props) {
     return (
@@ -11,4 +11,4 @@ module.exports = function AppModule(props) {
             {props.children}
         </div>
     );
-}
+};

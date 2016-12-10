@@ -1,8 +1,8 @@
-const React = require('react');
-const Config = require('../../Config');
-const CollectionLoader = require('../../behaviors/CollectionLoader');
-const CollectionScrolling = require('../../behaviors/CollectionScrolling');
-const BtnWatchLater = require('../commons/BtnWatchLater');
+import React from 'react';
+import Config from '../../Config';
+import CollectionLoader from '../../behaviors/CollectionLoader';
+import CollectionScrolling from '../../behaviors/CollectionScrolling';
+import BtnWatchLater from '../commons/BtnWatchLater';
 
 class PlaylistItems extends React.Component {
     constructor(props) {

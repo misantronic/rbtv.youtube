@@ -1,7 +1,7 @@
-const _ = require('underscore');
+import _ from 'underscore';
 const Collection = require('backbone').Collection;
-const Config = require('../../Config');
-const PlaylistItemModel = require('./../models/PlaylistItemModel');
+import Config from '../../Config';
+import PlaylistItemModel from './../models/PlaylistItemModel';
 
 const PlaylistItems = Collection.extend({
 
@@ -15,7 +15,7 @@ const PlaylistItems = Collection.extend({
         this._playlistId = val;
     },
 
-    /** @returns {PlaylistItem} */
+    /** @returns {PlaylistListItem} */
     getNextPlaylistItem(videoId) {
         const model = this.getCurrentPlaylistItem(videoId);
         const index = this.indexOf(model) + 1;
@@ -23,7 +23,7 @@ const PlaylistItems = Collection.extend({
         return this.at(index);
     },
 
-    /** @returns {PlaylistItem} */
+    /** @returns {PlaylistListItem} */
     getCurrentPlaylistItem(videoId) {
         return this.findWhere({ videoId });
     },

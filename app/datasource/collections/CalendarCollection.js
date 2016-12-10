@@ -1,9 +1,9 @@
-const _ = require('underscore');
-const moment = require('moment');
+import _ from 'underscore';
+import moment from 'moment';
 const Collection = require('backbone').Collection;
-const youtubeController = require('../../utils/youtubeController');
-const Config = require('../../Config');
-const CalendarModel = require('./../models/CalendarModel');
+import youtubeController from '../../utils/youtubeController';
+import Config from '../../Config';
+import CalendarModel from './../models/CalendarModel';
 
 module.exports = Collection.extend({
 

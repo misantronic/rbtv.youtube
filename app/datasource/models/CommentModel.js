@@ -1,6 +1,6 @@
-const _ = require('underscore');
-const moment = require('moment');
-const youtubeController = require('../../utils/youtubeController');
+import _ from 'underscore';
+import moment from 'moment';
+import youtubeController from '../../utils/youtubeController';
 const Model = require('backbone').Model;
 
 module.exports = Model.extend({

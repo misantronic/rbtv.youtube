@@ -1,7 +1,7 @@
-const Collection = require('backbone').Collection;
-const SearchResult = require('./../models/SearchResultModel');
-const Config = require('../../Config');
-const $ = require('jquery');
+import {Collection} from 'backbone';
+import SearchResult from './../models/SearchResultModel';
+import Config from '../../Config';
+import $ from 'jquery';
 
 const SearchResults = Collection.extend({
     model: SearchResult,
@@ -11,7 +11,7 @@ const SearchResults = Collection.extend({
     _nextPageToken: null,
     _fetchedItems: [],
 
-    /** @returns {PlaylistItem} */
+    /** @returns {PlaylistListItem} */
     getNextPlaylistItem(videoId) {
         const model = this.getCurrentPlaylistItem(videoId);
         const index = this.indexOf(model) + 1;
@@ -19,7 +19,7 @@ const SearchResults = Collection.extend({
         return this.at(index);
     },
 
-    /** @returns {PlaylistItem} */
+    /** @returns {PlaylistListItem} */
     getCurrentPlaylistItem(videoId) {
         return this.findWhere({ videoId });
     },

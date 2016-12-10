@@ -1,6 +1,6 @@
-const React = require('react');
-const _ = require('underscore');
-const watchlist = require('../../utils/watchlist');
+import React from 'react';
+import _ from 'underscore';
+import watchlist from '../../utils/watchlist';
 
 /**
  * @class BtnWatchLater

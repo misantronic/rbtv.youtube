@@ -1,7 +1,7 @@
-const React = require('react');
-const _ = require('underscore');
-const $ = require('jquery');
-const Beans = require('../../datasource/collections/BeansCollection');
+import React from 'react';
+import _ from 'underscore';
+import $ from 'jquery';
+import Beans from '../../datasource/collections/BeansCollection';
 
 /**
  * @class Tags

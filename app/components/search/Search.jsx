@@ -1,9 +1,8 @@
-const React = require('react');
-const Select = require('react-select');
-const _ = require('underscore');
-const $ = require('jquery');
-const Config = require('../../Config');
-const Autocomplete = require('./Autocomplete');
+import React from 'react';
+import Select from 'react-select';
+import _ from 'underscore';
+import Config from '../../Config';
+import Autocomplete from './Autocomplete';
 
 class Search extends React.Component {
     constructor(props) {
@@ -14,16 +13,17 @@ class Search extends React.Component {
         this._searchTimeout = 0;
 
         this.state = {
-            value: props.value || '',
-            channel: props.channel || Config.channels.rbtv.id,
-            placeholder: this._getPlaceholder()
+            q: this.props.q
         };
     }
 
     render() {
         /** @type {Autocomplete} */
         this.autocomplete = null;
-        this.select = null;
+
+        const { channelId, autocomplete } = this.props;
+        const { q } = this.state;
+        const placeholder = this._getPlaceholder();
 
         return (
             <form className="component-search search-container" onSubmit={this._onSubmit}>
@@ -31,11 +31,11 @@ class Search extends React.Component {
                     <label className="search-label">
                         <input type="text"
                                className="form-control search"
-                               placeholder={this.state.placeholder}
-                               value={this.state.value}
+                               placeholder={placeholder}
+                               value={q}
                                onChange={this._onChange} onKeyDown={this._onKeyDown}/>
                         <Autocomplete
-                            items={this.props.autocomplete}
+                            items={autocomplete}
                             ref={el => this.autocomplete = el}
                             onSelect={this._onSelectAutocomplete}/>
                     </label>
@@ -43,44 +43,28 @@ class Search extends React.Component {
                 <Select
                     clearable={false}
                     searchable={false}
-                    value={this.state.channel}
-                    options={_.map(Config.channels, channel => ({ value: channel.id, label: channel.name }))}
+                    value={channelId}
+                    options={_.map(Config.channels, channelObj => ({ value: channelObj.id, label: channelObj.name }))}
                     onChange={this._onChannelSelect}
                 />
             </form>
         );
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this._stateHasChanged(prevState, 'channel')) {
-            this._setPlaceholder();
-        }
-
-        if (this._propHasChanged(prevProps, 'value')) {
-            this.setState({ value: this.props.value });
-        }
-    }
-
     /**
      * Private methods
      */
 
-    _search(value, channel = this.state.channel, delay = 32) {
-        if (this.props.onSearch) {
-            clearTimeout(this._searchTimeout);
+    _search(q, channelId = this.props.channelId, delay = 32) {
+        clearTimeout(this._searchTimeout);
 
-            this._searchTimeout = setTimeout(function () {
-                this.props.onSearch(value, channel);
-            }.bind(this), delay);
-        }
-    }
-
-    _setPlaceholder() {
-        this.setState({ placeholder: this._getPlaceholder() });
+        this._searchTimeout = setTimeout(() => {
+            this.props.onSearch(channelId, q);
+        }, delay);
     }
 
     _getPlaceholder() {
-        const id = this.state ? this.state.channel : Config.channels.rbtv.id;
+        const id = this.props.channelId;
         const channel = _.findWhere(Config.channels, { id });
 
         if (channel) {
@@ -90,32 +74,24 @@ class Search extends React.Component {
         return 'Suche...';
     }
 
-    _stateHasChanged(prevState, prop) {
-        return prevState[prop] !== this.state[prop];
-    }
-
-    _propHasChanged(prevProps, prop) {
-        return prevProps[prop] !== this.props[prop];
-    }
-
     /**
      * Event handler
      */
 
     _onChange(e) {
-        const value = e.target.value;
+        const q = e.target.value;
+        const { channelId } = this.props;
 
-        // Update state
-        this.setState({ value });
+        this.setState({ q });
 
         if (!this.autocomplete.isLocked()) {
             // Update autocomplete
-            this.autocomplete.update(value);
+            this.autocomplete.update(q);
         }
 
         // Refetch when value is empty
-        if (value === '') {
-            this._search(value, this.state.channel, 350);
+        if (q === '') {
+            this._search(q, channelId, 350);
         }
     }
 
@@ -153,35 +129,37 @@ class Search extends React.Component {
         }
     }
 
-    _onSelectAutocomplete(value, channel) {
-        const stateObj = { value };
-
-        if (channel) {
-            stateObj.channel = channel;
-        }
-
-        this.setState(stateObj, () => this._search(value, channel, 0));
+    _onSelectAutocomplete(q, channelId) {
+        this.setState({ q }, () => this._search(q, channelId, 0));
     }
 
     _onSubmit(e) {
-        const value = this.state.value;
+        const q = this.state.q;
 
         this.autocomplete.hasValue()
-            ? this.autocomplete.search(value)
-            : this._search(value);
+            ? this.autocomplete.search(q)
+            : this._search(q);
 
         e.preventDefault();
     }
 
     _onChannelSelect(option) {
+        const { q } = this.props;
         const channelId = option.value;
 
-        this.setState({ channel: channelId });
-
-        if (this.props.onChannel) {
-            this.props.onChannel(channelId);
-        }
+        this._search(q, channelId, 0);
     }
 }
 
-module.exports = Search;
+Search.defaultProps = {
+    onSearch: _.noop
+};
+
+Search.propTypes = {
+    q: React.PropTypes.string,
+    channelId: React.PropTypes.string,
+    autocomplete: React.PropTypes.array,
+    onSearch: React.PropTypes.func.isRequired
+};
+
+export default Search;

@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const moment = require('moment');
-const React = require('react');
-const CollectionLoader = require('../../behaviors/CollectionLoader');
-const CollectionScrolling = require('../../behaviors/CollectionScrolling');
-const CommentItem = require('./CommentItem');
+import $ from 'jquery';
+import moment from 'moment';
+import React from 'react';
+import CollectionLoader from '../../behaviors/CollectionLoader';
+import CollectionScrolling from '../../behaviors/CollectionScrolling';
+import CommentItem from './CommentItem';
 
 /**
  * @class CommentThreadsList

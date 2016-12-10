@@ -1,8 +1,8 @@
-const React = require('react');
-const _ = require('underscore');
-const $ = require('jquery');
-const youtubeController = require('../../utils/youtubeController');
-const Config = require('../../Config');
+import React from 'react';
+import _ from 'underscore';
+import $ from 'jquery';
+import youtubeController from '../../utils/youtubeController';
+import Config from '../../Config';
 
 /**
  * @class CommentForm

@@ -1,6 +1,6 @@
-const _ = require('underscore');
+import _ from 'underscore';
 const Events = require('backbone').Events;
-const storage = require('./storage');
+import storage from './storage';
 
 const watchlist = {
     getList(type = null) {

@@ -1,6 +1,6 @@
-const SearchResults = require('./SearchResultsCollection');
-const Config = require('../../Config');
-const $ = require('jquery');
+import SearchResults from './SearchResultsCollection';
+import Config from '../../Config';
+import $ from 'jquery';
 
 const RelatedResults = SearchResults.extend({
     url() {

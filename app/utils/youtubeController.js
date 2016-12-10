@@ -1,7 +1,7 @@
-const _ = require('underscore');
-const $ = require('jquery');
-const Config = require('../Config');
-const storage = require('../utils/storage');
+import _ from 'underscore';
+import $ from 'jquery';
+import Config from '../Config';
+import storage from '../utils/storage';
 
 const ytBaseURL = 'https://www.googleapis.com/youtube/v3';
 const calBaseURL = 'https://www.googleapis.com/calendar/v3';

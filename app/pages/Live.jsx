@@ -1,6 +1,6 @@
-const React = require('react');
-const VideoDetails = require('../components/video/details/VideoDetails');
-const Chat = require('../components/video/chat/Chat');
+import React from 'react';
+import VideoDetails from '../components/video/details/VideoDetails';
+import Chat from '../components/video/chat/Chat';
 
 class VideoModule extends React.Component {
     constructor(props) {

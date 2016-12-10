@@ -1,8 +1,8 @@
-const React = require('react');
-const CalendarCollection = require('../../datasource/collections/CalendarCollection');
-const PlaylistsCollection = require('../../datasource/collections/PlaylistsCollection');
-const TimetableDay = require('./TimetableDay');
-const Config = require('../../Config');
+import React from 'react';
+import CalendarCollection from '../../datasource/collections/CalendarCollection';
+import PlaylistsCollection from '../../datasource/collections/PlaylistsCollection';
+import TimetableDay from './TimetableDay';
+import Config from '../../Config';
 
 class TimetableComponent extends React.Component {
     constructor(props) {

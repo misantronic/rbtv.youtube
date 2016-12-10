@@ -1,8 +1,8 @@
-const _ = require('underscore');
-const $ = require('jquery');
+import _ from 'underscore';
+import $ from 'jquery';
 const Collection = require('backbone').Collection;
-const Config = require('../../Config');
-const PlaylistModel = require('./../models/PlaylistModel');
+import Config from '../../Config';
+import PlaylistModel from './../models/PlaylistModel';
 
 const defaultResults = 24;
 

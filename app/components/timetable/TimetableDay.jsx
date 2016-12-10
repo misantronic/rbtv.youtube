@@ -1,6 +1,6 @@
-const React = require('react');
-const $ = require('jquery');
-const TimetableEvent = require('./TimetableEvent');
+import React from 'react';
+import $ from 'jquery';
+import TimetableEvent from './TimetableEvent';
 
 class TimetableDayComponent extends React.Component {
     constructor(props) {

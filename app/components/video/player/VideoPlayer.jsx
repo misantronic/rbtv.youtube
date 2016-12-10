@@ -1,7 +1,7 @@
-const React = require('react');
-const $ = require('jquery');
-const _ = require('underscore');
-const storage = require('../../../utils/storage');
+import React from 'react';
+import $ from 'jquery';
+import _ from 'underscore';
+import storage from '../../../utils/storage';
 
 class VideoPlayer extends React.Component {
     constructor(props, context) {

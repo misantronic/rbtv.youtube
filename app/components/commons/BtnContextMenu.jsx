@@ -1,6 +1,6 @@
-const React = require('react');
-const _ = require('underscore');
-const $ = require('jquery');
+import React from 'react';
+import _ from 'underscore';
+import $ from 'jquery';
 
 /**
  * @class BtnContextMenu

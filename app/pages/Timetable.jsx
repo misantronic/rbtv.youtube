@@ -1,6 +1,6 @@
-const React = require('react');
-const Select = require('react-select');
-const TimetableComponent = require('../components/timetable/Timetable');
+import React from 'react';
+import Select from 'react-select';
+import TimetableComponent from '../components/timetable/Timetable';
 
 class TimetableModule extends React.Component {
     constructor(props) {

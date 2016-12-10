@@ -1,26 +1,17 @@
-const React = require('react');
-const $ = require('jquery');
-const _ = require('underscore');
-const storage = require('../utils/storage');
+import React from 'react';
+import $ from 'jquery';
+import _ from 'underscore';
+import storage from '../utils/storage';
 
 /**
  * @class CollectionScrolling
  */
 class CollectionScrolling extends React.Component {
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
-        _.bindAll(this, '_onScroll', '_onCollectionSync', '_onCollectionRequest');
-
-        this.state = {
-            request: false
-        };
-
-        const collection = this.context.collection;
-
-        collection.on('request', this._onCollectionRequest);
-        collection.on('sync', this._onCollectionSync);
+        _.bindAll(this, '_onScroll');
 
         this._updateStorage = _.debounce(y => {
             if (this.props.uid) {
@@ -44,14 +35,17 @@ class CollectionScrolling extends React.Component {
         this._checkStorageScrolling();
     }
 
+    componentDidUpdate(prevProps) {
+
+
+        if (prevProps.fetched === false && this.props.fetched === true) {
+            this._initScroll();
+            _.delay(this._onScroll, 16);
+        }
+    }
+
     componentWillUnmount() {
         this._killScroll();
-
-        const collection = this.context.collection;
-
-        collection.off('request', this._onCollectionRequest);
-        collection.off('sync', this._onCollectionSync);
-
         this._resetStorageScrolling();
     }
 
@@ -67,29 +61,6 @@ class CollectionScrolling extends React.Component {
         const $container = this.props.container ? $(this.props.container) : $(window);
 
         $container.off('scroll', this._onScroll);
-    }
-
-    _update() {
-        let limit = Number(this.props.limit) || 10;
-        const collection = this.context.collection;
-
-        if (!collection._allModels) {
-            collection._allModels = collection.models;
-        }
-
-        if (!this._limit) {
-            this._limit = 0;
-        }
-
-        limit += this._limit;
-
-        this._limit = limit;
-
-        collection.models = _.offset(collection._allModels, 0, limit);
-
-        collection.trigger('react:update');
-
-        this._initScroll();
     }
 
     _checkStorageScrolling() {
@@ -128,7 +99,7 @@ class CollectionScrolling extends React.Component {
      */
 
     _onScroll() {
-        if (this.state.request) return false;
+        if (this.props.loading) return false;
 
         let maxY = 0;
         let y = 0;
@@ -146,48 +117,23 @@ class CollectionScrolling extends React.Component {
         if (y >= maxY) {
             this._killScroll();
 
-            if (this.props.onUpdate) {
-                if (this.context.collection.getPageToken) {
-                    const token = this.context.collection.getPageToken();
-
-                    if (!_.isNull(token)) {
-                        this.props.onUpdate();
-                    }
-                } else {
-                    this.props.onUpdate();
-                }
-            } else {
-                this._update();
-            }
+            this.props.onUpdate();
         }
 
         this._updateStorage(y);
     }
-
-    _onCollectionRequest() {
-        this.setState({ request: true });
-    }
-
-    _onCollectionSync() {
-        this.setState({ request: false });
-
-        if (!this.props.onUpdate) {
-            this._update();
-        }
-
-        this._initScroll();
-        _.delay(() => this._onScroll(), 16);
-    }
 }
 
 CollectionScrolling.propTypes = {
+    loading: React.PropTypes.bool,
+    fetched: React.PropTypes.bool,
     container: React.PropTypes.string,
     onUpdate: React.PropTypes.func,
     uid: React.PropTypes.string
 };
 
-CollectionScrolling.contextTypes = {
-    collection: React.PropTypes.object
+CollectionScrolling.defaultProps = {
+    onUpdate: _.noop
 };
 
 module.exports = CollectionScrolling;

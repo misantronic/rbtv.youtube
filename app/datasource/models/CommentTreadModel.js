@@ -1,6 +1,6 @@
-const _ = require('underscore');
-const youtubeController = require('../../utils/youtubeController');
-const CommentModel = require('./CommentModel');
+import _ from 'underscore';
+import youtubeController from '../../utils/youtubeController';
+import CommentModel from './CommentModel';
 
 /**
  * @class CommentThreadModel

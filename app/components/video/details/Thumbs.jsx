@@ -1,6 +1,6 @@
-const React = require('react');
-const _ = require('underscore');
-const youtubeController = require('../../../utils/youtubeController');
+import React from 'react';
+import _ from 'underscore';
+import youtubeController from '../../../utils/youtubeController';
 
 /**
  * @class Thumbs

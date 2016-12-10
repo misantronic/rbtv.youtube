@@ -1,12 +1,12 @@
-const React = require('react');
-const _ = require('underscore');
-const watchlist = require('../utils/watchlist');
-const VideoCollection = require('../datasource/collections/VideosCollection');
-const PlaylistCollection = require('../datasource/collections/PlaylistsCollection');
-const VideoList = require('../components/video/list/VideoList');
-const Playlists = require('../components/playlists/Playlists');
-const BtnToTop = require('../components/commons/BtnToTop');
-const Config = require('../Config');
+import React from 'react';
+import _ from 'underscore';
+import watchlist from '../utils/watchlist';
+import VideoCollection from '../datasource/collections/VideosCollection';
+import PlaylistCollection from '../datasource/collections/PlaylistsCollection';
+import VideoList from '../components/list/ItemList';
+import Playlists from '../components/playlists/Playlists';
+import BtnToTop from '../components/commons/BtnToTop';
+import Config from '../Config';
 
 class WatchLaterModule extends React.Component {
     constructor(props) {

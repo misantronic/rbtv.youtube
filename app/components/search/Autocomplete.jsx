@@ -1,5 +1,5 @@
-const React = require('react');
-const $ = require('jquery');
+import React from 'react';
+import $ from 'jquery';
 
 class Autocomplete extends React.Component {
     constructor(props) {
@@ -77,13 +77,13 @@ class Autocomplete extends React.Component {
         let stateObj = false;
 
         if (search !== '') {
-            items = this.props.items.filter(item => new RegExp('^' + search, 'i').test(item.get('title')));
+            items = this.props.items.filter(item => new RegExp('^' + search, 'i').test(item.title));
 
             autocompleteItem = items[this.state.index];
         }
 
-        const value = autocompleteItem ? autocompleteItem.get('title').replace(new RegExp(search, 'i'), '') : '';
-        const channel = autocompleteItem ? autocompleteItem.get('channel') || autocompleteItem.get('channelId') : null;
+        const value = autocompleteItem ? autocompleteItem.title.replace(new RegExp(search, 'i'), '') : '';
+        const channel = autocompleteItem ? autocompleteItem.channel || autocompleteItem.channelId : null;
 
         if (this.$autocomplete) {
             this.$autocomplete.hide();
@@ -135,4 +135,4 @@ class Autocomplete extends React.Component {
     }
 }
 
-module.exports = Autocomplete;
+export default Autocomplete;

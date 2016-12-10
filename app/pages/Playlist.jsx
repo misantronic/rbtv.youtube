@@ -1,13 +1,13 @@
-const React = require('react');
-const _ = require('underscore');
-const Collection = require('../datasource/collections/PlaylistItemsCollection');
-const CommentTreadModel = require('../datasource/models/CommentTreadModel');
-const CommentThreadsCollection = require('../datasource/collections/CommentThreadsCollection');
-const PlaylistItems = require('../components/playlists/PlaylistItems');
-const VideoDetails = require('../components/video/details/VideoDetails');
-const CommentThreadsList = require('../components/comments/CommentThreadsList');
-const CommentForm = require('../components/comments/CommentForm');
-const youtubeController = require('../utils/youtubeController');
+import React from 'react';
+import _ from 'underscore';
+import Collection from '../datasource/collections/PlaylistItemsCollection';
+import CommentTreadModel from '../datasource/models/CommentTreadModel';
+import CommentThreadsCollection from '../datasource/collections/CommentThreadsCollection';
+import PlaylistItems from '../components/playlists/PlaylistItems';
+import VideoDetails from '../components/video/details/VideoDetails';
+import CommentThreadsList from '../components/comments/CommentThreadsList';
+import CommentForm from '../components/comments/CommentForm';
+import youtubeController from '../utils/youtubeController';
 
 class PlaylistModule extends React.Component {
     constructor(props) {

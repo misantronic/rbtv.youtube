@@ -1,19 +1,12 @@
-const React = require('react');
-const render = require('react-dom').render;
-const Router = require('react-router').Router;
-const Route = require('react-router').Route;
-const hashHistory = require('react-router').hashHistory;
-const IndexRoute = require('react-router').IndexRoute;
-const $ = require('jquery');
+import $ from 'jquery';
+import React from 'react';
 
-const Activities = require('./modules/Activities');
-const Playlists = require('./modules/Playlists');
-const Playlist = require('./modules/Playlist');
-const WatchLater = require('./modules/WatchLater');
-const Video = require('./modules/Video');
-const App = require('./modules/App');
-const Live = require('./modules/Live');
-const Timetable = require('./modules/Timetable');
+const { render } = require('react-dom');
+const { IndexRoute, Router, Route, hashHistory } = require('react-router');
+const { Provider } = require('react-redux');
+
+import pages from './pages';
+import store from './store';
 
 require('./utils/youtubeController').init();
 require('./overrides/underscore');
@@ -25,20 +18,22 @@ require('../assets/css/react/_package.scss');
 
 window.onGoogleClientLoad = function () {
     render(
-        <Router history={hashHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Activities}/>
+        <Provider store={store}>
+            <Router history={hashHistory}>
+                <Route path="/" component={pages.App}>
+                    <IndexRoute component={pages.Activities}/>
 
-                <Route path="/activities" component={Activities}/>
-                <Route path="/playlists" component={Playlists}/>
-                <Route path="/playlists/:id" component={Playlist}/>
-                <Route path="/playlists/:id/video/:videoId" component={Playlist}/>
-                <Route path="/watchlater" component={WatchLater}/>
-                <Route path="/video/:id" component={Video}/>
-                <Route path="/live/:id" component={Live}/>
-                <Route path="/timetable" component={Timetable}/>
-            </Route>
-        </Router>,
+                    <Route path="/activities" component={pages.Activities}/>
+                    <Route path="/playlists" component={pages.Playlists}/>
+                    <Route path="/playlists/:id" component={pages.Playlist}/>
+                    <Route path="/playlists/:id/video/:videoId" component={pages.Playlist}/>
+                    <Route path="/watchlater" component={pages.WatchLater}/>
+                    <Route path="/video/:id" component={pages.Video}/>
+                    <Route path="/live/:id" component={pages.Live}/>
+                    <Route path="/timetable" component={pages.Timetable}/>
+                </Route>
+            </Router>
+        </Provider>,
         $('.app').find('.container')[0]
     );
 }.bind(this);

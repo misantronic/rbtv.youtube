@@ -1,6 +1,6 @@
-const React = require('react');
-const $ = require('jquery');
-const Link = require('react-router').Link;
+import React from 'react';
+import $ from 'jquery';
+import {Link} from 'react-router';
 
 class TimetableEventComponent extends React.Component {
     constructor(props) {

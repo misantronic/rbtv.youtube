@@ -1,6 +1,6 @@
-const _ = require('underscore');
+import _ from 'underscore';
 
-const storage = {
+export default {
     get (key) {
         let item = localStorage.getItem(key);
 
@@ -41,5 +41,3 @@ const storage = {
         return this.get('ytMyChannel') || {};
     }
 };
-
-module.exports = storage;

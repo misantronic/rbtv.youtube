@@ -1,4 +1,4 @@
-const Config = require('Config');
+import Config from 'Config';
 
 module.exports = [
     {

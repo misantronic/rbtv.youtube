@@ -1,5 +1,5 @@
-const backbone = require('backbone');
-const beans = require('../beans');
+import backbone from 'backbone';
+import beans from '../beans';
 
 const BeanModel = backbone.Model.extend({
 

@@ -1,29 +1,29 @@
-const Collection = require('backbone').Collection;
-const Config = require('../../Config');
-const CommentThreadModel = require('./../models/CommentTreadModel');
+import {Collection} from 'backbone';
+import Config from '../../Config';
+import CommentThreadModel from './../models/CommentTreadModel';
 
 module.exports = Collection.extend({
 
     model: CommentThreadModel,
 
-    _pageToken: '',
+    _nextPageToken: '',
     _videoId: '',
 
     url() {
-        return `${Config.endpoints.commentThreads}?videoId=${this._videoId}&pageToken=${this._pageToken}`;
+        return `${Config.endpoints.commentThreads}?videoId=${this._videoId}&pageToken=${this._nextPageToken}`;
     },
 
     setVideoId(val) {
-        this._pageToken = '';
+        this._nextPageToken = '';
         this._videoId = val;
     },
 
     getPageToken() {
-        return this._pageToken;
+        return this._nextPageToken;
     },
 
     parse(response) {
-        this._pageToken = response.nextPageToken || null;
+        this._nextPageToken = response.nextPageToken || null;
 
         return this.models.concat(response.items);
     }

@@ -1,13 +1,13 @@
-const React = require('react');
-const _ = require('underscore');
-const Thumbs = require('../video/details/Thumbs');
-const CommentList = require('./CommentList');
-const CommentForm = require('./CommentForm');
-const CommentsCollection = require('../../datasource/collections/CommentsCollection');
-const CommentModel = require('../../datasource/models/CommentModel');
-const BtnContextMenu = require('../commons/BtnContextMenu');
-const storage = require('../../utils/storage');
-const youtubeController = require('../../utils/youtubeController');
+import React from 'react';
+import _ from 'underscore';
+import Thumbs from '../video/details/Thumbs';
+import CommentList from './CommentList';
+import CommentForm from './CommentForm';
+import CommentsCollection from '../../datasource/collections/CommentsCollection';
+import CommentModel from '../../datasource/models/CommentModel';
+import BtnContextMenu from '../commons/BtnContextMenu';
+import storage from '../../utils/storage';
+import youtubeController from '../../utils/youtubeController';
 
 /**
  * @class CommentItem
