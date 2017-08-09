@@ -1,6 +1,12 @@
 const fetch = require('./../fetch');
 const cache = require('../cache');
 
+function parseData(data) {
+    data.items = data.items.filter(item => item.id.kind !== 'youtube#channel');
+
+    return data;
+}
+
 module.exports = function (req, res) {
     var query = {
         part: 'snippet',
@@ -22,5 +28,5 @@ module.exports = function (req, res) {
         )
     });
 
-    fetch(config).then(result => fetch.end(res, result.data));
+    fetch(config).then(result => fetch.end(res, parseData(result.data)));
 };
