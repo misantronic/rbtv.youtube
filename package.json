@@ -74,6 +74,6 @@
         "url": "git://github.com/misantronic/rbtv.youtube.git"
     },
     "engines": {
-        "node": "6.8.1"
+        "node": "6.11.1"
     }
 }
